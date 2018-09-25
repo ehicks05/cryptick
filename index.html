@@ -18,6 +18,7 @@
         <div class="container">
             <p>
                 <span id="timeSince"></span>
+                <br><span id="socketStatus"></span>
             </p>
         </div>
     </div>
@@ -66,19 +67,33 @@
     var error = "";
     var currentTime = new Date();
     var lastUpdate = new Date();
+    var socketReadyState = 0;
+
     setInterval(function (args)
         {
             currentTime = new Date();
             var timeSinceLastUpdate = getTimeSinceLastUpdate(currentTime, lastUpdate);
 
+            socketReadyState = cbSocket.readyState;
+
+
             document.getElementById("time").innerText = currentTime.toLocaleTimeString();
             document.getElementById("timeSince").innerText = timeSinceLastUpdate;
+            document.getElementById("socketStatus").innerText = "socket " + getSocketStatus(socketReadyState);
 
         }, 100);
 
     function getTimeSinceLastUpdate(currentTime, lastUpdate)
     {
         return "Seconds since last update: " + Math.round(Math.max(currentTime - lastUpdate, 0) / 1000);
+    }
+
+    function getSocketStatus(readyState)
+    {
+        if (readyState === 0) return "connecting";
+        if (readyState === 1) return "open";
+        if (readyState === 2) return "closing";
+        if (readyState === 3) return "closed";
     }
 
 </script>
