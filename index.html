@@ -1,10 +1,16 @@
 <html>
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
 </head>
 <body>
 
-<div id="time"></div>
-<div id="price"></div>
+<section class="section">
+    <div class="container">
+        <div class="title is-1" id="price"></div>
+        <div class="subtitle is-3" id="time"></div>
+    </div>
+</section>
+
 
 <script>
     var subscribeMessage = {
@@ -26,14 +32,16 @@
     exampleSocket.onmessage = function (event) {
         console.log(event.data);
         var response = JSON.parse(event.data);
-        var time = response.time;
-        var price = response.price;
 
-        time = Date(time).toLocaleString();
-        document.getElementById("time").innerText = time;
+        var time = response.time;
+        var timeString = new Date(time).toLocaleTimeString();
+
+        var price = response.price;
+        price = "$" + Number.parseFloat(price).toFixed(2);
+
+        document.getElementById("time").innerText = timeString;
         document.getElementById("price").innerText = price;
     };
-
 
 </script>
 
