@@ -9,6 +9,7 @@
     <div class="container">
         <div style="font-size: 4em;" class="title is-1" id="price"></div>
         <div class="subtitle is-3" id="time"></div>
+        <div class="has-text-danger" id="error" style="display:none;"></div>
     </div>
 </section>
 
@@ -43,16 +44,26 @@
         console.log(event.data);
         var response = JSON.parse(event.data);
 
-        lastUpdate = new Date();
-        var timeSinceLastUpdate = getTimeSinceLastUpdate(currentTime, lastUpdate);
+        if (response.type === "ticker")
+        {
+            lastUpdate = new Date();
+            var timeSinceLastUpdate = getTimeSinceLastUpdate(currentTime, lastUpdate);
 
-        var price = response.price;
-        price = "$" + Number.parseFloat(price).toFixed(2);
+            var price = response.price;
+            price = "$" + Number.parseFloat(price).toFixed(2);
 
-        document.getElementById("timeSince").innerText = timeSinceLastUpdate;
-        document.getElementById("price").innerText = price;
+            document.getElementById("timeSince").innerText = timeSinceLastUpdate;
+            document.getElementById("price").innerText = price;
+        }
+        if (response.type === "error")
+        {
+            document.getElementById("error").style.display = "block";
+            document.getElementById("error").innerText = event.data;
+        }
+
     };
 
+    var error = "";
     var currentTime = new Date();
     var lastUpdate = new Date();
     setInterval(function (args)
