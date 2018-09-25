@@ -7,11 +7,20 @@
 
 <section class="section">
     <div class="container">
-        <div class="title is-1" id="price"></div>
+        <div style="font-size: 4em;" class="title is-1" id="price"></div>
         <div class="subtitle is-3" id="time"></div>
     </div>
 </section>
 
+<footer class="footer">
+    <div class="content">
+        <div class="container">
+            <p>
+                <span id="timeSince"></span>
+            </p>
+        </div>
+    </div>
+</footer>
 
 <script>
     var subscribeMessage = {
@@ -24,25 +33,42 @@
         ]
     };
 
-    var exampleSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
+    var cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
 
-    exampleSocket.onopen = function (event) {
-        exampleSocket.send(JSON.stringify(subscribeMessage));
+    cbSocket.onopen = function (event) {
+        cbSocket.send(JSON.stringify(subscribeMessage));
     };
 
-    exampleSocket.onmessage = function (event) {
+    cbSocket.onmessage = function (event) {
         console.log(event.data);
         var response = JSON.parse(event.data);
 
-        var time = response.time;
-        var timeString = new Date(time).toLocaleTimeString();
+        lastUpdate = new Date();
+        var timeSinceLastUpdate = getTimeSinceLastUpdate(currentTime, lastUpdate);
 
         var price = response.price;
         price = "$" + Number.parseFloat(price).toFixed(2);
 
-        document.getElementById("time").innerText = timeString;
+        document.getElementById("timeSince").innerText = timeSinceLastUpdate;
         document.getElementById("price").innerText = price;
     };
+
+    var currentTime = new Date();
+    var lastUpdate = new Date();
+    setInterval(function (args)
+        {
+            currentTime = new Date();
+            var timeSinceLastUpdate = getTimeSinceLastUpdate(currentTime, lastUpdate);
+
+            document.getElementById("time").innerText = currentTime.toLocaleTimeString();
+            document.getElementById("timeSince").innerText = timeSinceLastUpdate;
+
+        }, 100);
+
+    function getTimeSinceLastUpdate(currentTime, lastUpdate)
+    {
+        return "Seconds since last update: " + Math.round(Math.max(currentTime - lastUpdate, 0) / 1000);
+    }
 
 </script>
 
