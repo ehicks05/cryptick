@@ -35,36 +35,47 @@
         ]
     };
 
-    var cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
+    var cbSocket;
+    function connect()
+    {
+        cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
 
-    cbSocket.onopen = function (event) {
-        cbSocket.send(JSON.stringify(subscribeMessage));
-    };
+        cbSocket.onopen = function (event) {
+            cbSocket.send(JSON.stringify(subscribeMessage));
+        };
 
-    cbSocket.onmessage = function (event) {
-        console.log(event.data);
-        var response = JSON.parse(event.data);
+        cbSocket.onmessage = function (event) {
+            console.log(event.data);
+            var response = JSON.parse(event.data);
 
-        if (response.type === "ticker")
-        {
-            lastUpdate = new Date();
-            var timeSinceLastUpdate = getTimeSinceLastUpdate(currentTime, lastUpdate);
+            if (response.type === "ticker")
+            {
+                lastUpdate = new Date();
+                var timeSinceLastUpdate = getTimeSinceLastUpdate(currentTime, lastUpdate);
 
-            var price = response.price;
-            price = "$" + Number.parseFloat(price).toFixed(2);
+                var price = response.price;
+                price = "$" + Number.parseFloat(price).toFixed(2);
 
-            document.getElementById("timeSince").innerText = timeSinceLastUpdate;
-            document.getElementById("price").innerText = price;
-        }
-        if (response.type === "error")
-        {
-            document.getElementById("error").style.display = "block";
-            document.getElementById("error").innerText = event.data;
-        }
+                document.getElementById("timeSince").innerText = timeSinceLastUpdate;
+                document.getElementById("price").innerText = price;
+            }
+            if (response.type === "error")
+            {
+                document.getElementById("error").style.display = "block";
+                document.getElementById("error").innerText = event.data;
+            }
+        };
 
-    };
+        cbSocket.onclose = function (event) {
+            console.log('Socket is closed. Reconnect will be attempted in 1 second.', event.reason);
+            setTimeout(function() {
+                connect();
+            }, 1000);
+        };
+    }
 
-    var error = "";
+    connect();
+
     var currentTime = new Date();
     var lastUpdate = new Date();
     var socketReadyState = 0;
