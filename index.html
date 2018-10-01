@@ -2,6 +2,12 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
+
+    <style>
+        .red {color: red;transition: color .3s;}
+        .green {color: green;transition: color .3s;}
+    </style>
+
 </head>
 <body>
 
@@ -35,6 +41,8 @@
         ]
     };
 
+    var lastPrice = 0;
+
     var cbSocket;
     function connect()
     {
@@ -58,6 +66,9 @@
 
                 document.getElementById("timeSince").innerText = timeSinceLastUpdate;
                 document.getElementById("price").innerText = price;
+                flashPriceColorChange(price, document.getElementById("price"));
+
+                lastPrice = price;
             }
             if (response.type === "error")
             {
@@ -81,18 +92,18 @@
     var socketReadyState = 0;
 
     setInterval(function (args)
-        {
-            currentTime = new Date();
-            var timeSinceLastUpdate = getTimeSinceLastUpdate(currentTime, lastUpdate);
+    {
+        currentTime = new Date();
+        var timeSinceLastUpdate = getTimeSinceLastUpdate(currentTime, lastUpdate);
 
-            socketReadyState = cbSocket.readyState;
+        socketReadyState = cbSocket.readyState;
 
 
-            document.getElementById("time").innerText = currentTime.toLocaleTimeString();
-            document.getElementById("timeSince").innerText = timeSinceLastUpdate;
-            document.getElementById("socketStatus").innerText = "socket " + getSocketStatus(socketReadyState);
+        document.getElementById("time").innerText = currentTime.toLocaleTimeString();
+        document.getElementById("timeSince").innerText = timeSinceLastUpdate;
+        document.getElementById("socketStatus").innerText = "socket " + getSocketStatus(socketReadyState);
 
-        }, 100);
+    }, 100);
 
     function getTimeSinceLastUpdate(currentTime, lastUpdate)
     {
@@ -105,6 +116,16 @@
         if (readyState === 1) return "open";
         if (readyState === 2) return "closing";
         if (readyState === 3) return "closed";
+    }
+
+    function flashPriceColorChange(newPrice, priceElement)
+    {
+        if (newPrice > lastPrice)
+            priceElement.classList.add('green');
+        if (newPrice < lastPrice)
+            priceElement.classList.add('red');
+
+        setTimeout(() => priceElement.classList.remove('green', 'red'), 500)
     }
 
 </script>
