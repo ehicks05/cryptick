@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
+    <link id="styleLink" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
 
     <style>
         .red {color: red;transition: color .3s;}
@@ -25,12 +25,24 @@
             <p>
                 <span id="timeSince"></span>
                 <br><span id="socketStatus"></span>
+                <br><span id="lightBulb" style="cursor:pointer;">&#x1F4A1</span>
             </p>
         </div>
     </div>
 </footer>
 
 <script>
+
+    document.getElementById('lightBulb').addEventListener('click', function (e) {
+        var defaultURL = "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css";
+
+        var link = document.getElementById("styleLink"); //Fetch the link by its ID
+        if (link.getAttribute("href") === defaultURL)
+            link.setAttribute("href", "css/dark.css"); //Change its href attribute
+        else
+            link.setAttribute("href", defaultURL); //Change its href attribute
+    });
+
     var subscribeMessage = {
         "type": "subscribe",
         "product_ids": [
