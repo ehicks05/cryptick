@@ -5,35 +5,57 @@
 
     <style>
         .red {color: red;transition: color .3s;}
-        .green {color: green;transition: color .3s;}
+        .green {color: #00C000;transition: color .3s;}
     </style>
 
 </head>
 <body>
 
+<span id="lightBulb" style="cursor: pointer;">&#x1F4A1</span>
+
 <section class="section">
     <div class="container">
-        <div style="font-size: 4em;" class="title is-1" id="price"></div>
-        <div class="subtitle is-3" id="time"></div>
-        <div class="has-text-danger" id="error" style="display:none;"></div>
+        <header>BTC</header>
+        <div style="font-size: 4em;" class="title is-1" id="price-btc"></div>
+        <div class="subtitle is-3" id="time-btc"></div>
+        <div class="has-text-danger" id="error-btc" style="display:none;"></div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <p>
+                <span id="timeSince-btc"></span>
+                <br><span id="socketStatus-btc"></span>
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <header>ETH</header>
+        <div style="font-size: 4em;" class="title is-1" id="price-eth"></div>
+        <div class="subtitle is-3" id="time-eth"></div>
+        <div class="has-text-danger" id="error-eth" style="display:none;"/>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <p>
+                <span id="timeSince-eth"></span>
+                <br/><span id="socketStatus-eth"></span>
+            </p>
+        </div>
     </div>
 </section>
 
 <footer class="footer">
-    <div class="content">
-        <div class="container">
-            <p>
-                <span id="timeSince"></span>
-                <br><span id="socketStatus"></span>
-                <br><span id="lightBulb" style="cursor:pointer;">&#x1F4A1</span>
-            </p>
-        </div>
-    </div>
 </footer>
 
 <script>
 
-    document.getElementById('lightBulb').addEventListener('click', function (e) {
+    document.getElementById('lightBulb').addEventListener('click', function (e)
+    {
         var defaultURL = "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css";
 
         var link = document.getElementById("styleLink"); //Fetch the link by its ID
@@ -43,7 +65,7 @@
             link.setAttribute("href", defaultURL); //Change its href attribute
     });
 
-    var subscribeMessage = {
+    var subscribeMessageBTC = {
         "type": "subscribe",
         "product_ids": [
             "BTC-USD"
@@ -52,74 +74,102 @@
             "ticker"
         ]
     };
+    var bitcoinData = {
+        "lastPrice": 0,
+        "lastUpdate": 0,
+        "timeSinceId": "timeSince-btc",
+        "timeId": "time-btc",
+        "priceId": "price-btc",
+        "errorId": "error-btc",
+        "socketStatusId": "socketStatus-btc"
+    }
 
-    var lastPrice = 0;
+    var subscribeMessageETH = {
+        "type": "subscribe",
+        "product_ids": [
+            "ETH-USD"
+        ],
+        "channels": [
+            "ticker"
+        ]
+    };
+    var ethData = {
+        "lastPrice": 0,
+        "lastUpdate": 0,
+        "timeSinceId": "timeSince-eth",
+        "timeId": "time-eth",
+        "priceId": "price-eth",
+        "errorId": "error-eth",
+        "socketStatusId": "socketStatus-eth"
+    }
 
-    var cbSocket;
-    function connect()
+    var cbSocketBTC = new WebSocket("wss://ws-feed.pro.coinbase.com");
+    var cbSocketETH = new WebSocket("wss://ws-feed.pro.coinbase.com");
+
+    function connect(socket, subscribeMessage, cryptoElement)
     {
-        cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
+        socket.onopen = event => socket.send(JSON.stringify(subscribeMessage));
 
-        cbSocket.onopen = function (event) {
-            cbSocket.send(JSON.stringify(subscribeMessage));
-        };
-
-        cbSocket.onmessage = function (event) {
-            console.log(event.data);
+        socket.onmessage = event => {
+            // console.log(event.data);
+            // console.log(cryptoElement)
             var response = JSON.parse(event.data);
 
-            if (response.type === "ticker")
+            if (response.type === 'ticker')
             {
-                lastUpdate = new Date();
-                var timeSinceLastUpdate = getTimeSinceLastUpdate(currentTime, lastUpdate);
+                cryptoElement.lastUpdate = new Date();
 
                 var price = response.price;
                 price = "$" + Number.parseFloat(price).toFixed(2);
-
-                document.getElementById("timeSince").innerText = timeSinceLastUpdate;
-                document.getElementById("price").innerText = price;
-                flashPriceColorChange(price, document.getElementById("price"));
-
-                lastPrice = price;
+                flashPriceColorChange(price, cryptoElement.lastPrice, document.getElementById(cryptoElement.priceId));
+                cryptoElement.lastPrice = price;
+                document.getElementById(cryptoElement.priceId).innerText = price;
             }
             if (response.type === "error")
             {
-                document.getElementById("error").style.display = "block";
-                document.getElementById("error").innerText = event.data;
+                document.getElementById(cryptoElement.errorId).style.display = "block";
+                document.getElementById(cryptoElement.errorId).innerText = event.data;
             }
-        };
+        }
 
-        cbSocket.onclose = function (event) {
-            console.log('Socket is closed. Reconnect will be attempted in 1 second.', event.reason);
-            setTimeout(function() {
-                connect();
+        socket.onclose = event =>
+        {
+            console.log('Socket is closed.  Reconnect will be attempted in 1 second', event.reason);
+            setTimeout(() =>
+            {
+                connect(socket, subscribeMessage, cryptoElement)
             }, 1000);
-        };
+        }
     }
 
-    connect();
+    connect(cbSocketBTC, subscribeMessageBTC, bitcoinData);
+    connect(cbSocketETH, subscribeMessageETH, ethData);
 
     var currentTime = new Date();
-    var lastUpdate = new Date();
-    var socketReadyState = 0;
+    var socketReadyStateBTC = 0;
+    var socketReadyStateETH = 0;
 
     setInterval(function (args)
     {
         currentTime = new Date();
-        var timeSinceLastUpdate = getTimeSinceLastUpdate(currentTime, lastUpdate);
 
-        socketReadyState = cbSocket.readyState;
+        var timeSinceLastUpdateBTC = getTimeSinceLastUpdate(currentTime, bitcoinData.lastUpdate);
+        socketReadyStateBTC = cbSocketBTC.readyState;
+        document.getElementById(bitcoinData.timeId).innerText = currentTime.toLocaleTimeString();
+        document.getElementById(bitcoinData.timeSinceId).innerText = "Seconds since last update: " + timeSinceLastUpdateBTC;
+        document.getElementById(bitcoinData.socketStatusId).innerText = "socket " + getSocketStatus(socketReadyStateBTC);
 
-
-        document.getElementById("time").innerText = currentTime.toLocaleTimeString();
-        document.getElementById("timeSince").innerText = timeSinceLastUpdate;
-        document.getElementById("socketStatus").innerText = "socket " + getSocketStatus(socketReadyState);
+        var timeSinceLastUpdateETH = getTimeSinceLastUpdate(currentTime, ethData.lastUpdate);
+        socketReadyStateETH = cbSocketETH.readyState;
+        document.getElementById(ethData.timeId).innerText = currentTime.toLocaleTimeString();
+        document.getElementById(ethData.timeSinceId).innerText = "Seconds since last update: " + timeSinceLastUpdateETH;
+        document.getElementById(ethData.socketStatusId).innerText = "socket " + getSocketStatus(socketReadyStateETH);
 
     }, 100);
 
     function getTimeSinceLastUpdate(currentTime, lastUpdate)
     {
-        return "Seconds since last update: " + Math.round(Math.max(currentTime - lastUpdate, 0) / 1000);
+        return Math.round(Math.max(currentTime - lastUpdate, 0) / 1000);
     }
 
     function getSocketStatus(readyState)
@@ -130,7 +180,7 @@
         if (readyState === 3) return "closed";
     }
 
-    function flashPriceColorChange(newPrice, priceElement)
+    function flashPriceColorChange(newPrice, lastPrice, priceElement)
     {
         if (newPrice > lastPrice)
             priceElement.classList.add('green');
