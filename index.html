@@ -8,6 +8,23 @@
     <style>
         .red {color: red;transition: color .3s;}
         .green {color: #00C000;transition: color .3s;}
+
+        #btcGraphWrapper {
+            position: relative;
+        }
+
+        #btcGraphWrapper > canvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+        }
+
+        #btcGraphAreaWrapper {
+            width: 600px;
+            overflow-x: scroll;
+        }
+
     </style>
 
 </head>
@@ -25,7 +42,13 @@
             <br><span id="socketStatus-btc"></span>
         </p>
         <div class="has-text-danger" id="error-btc" style="display:none;"></div>
-        <canvas id="btcGraphContainer" width="300" height="200"></canvas>
+        <div id="btcGraphWrapper">
+            <div id="btcGraphAreaWrapper">
+                <div id="btcGraphAreaWrapper2">
+                    <canvas id="btcGraphContainer" width="300" height="200"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="content">
@@ -129,17 +152,8 @@
 
                 var price = response.price;
                 if (cryptoElement.name === 'btc')
-                {
-                    if (btcHistory.prices.length > 50)
-                    {
-                        btcHistory.prices.shift();
-                        btcHistory.times.shift();
-                    }
+                    updateBTCGraph(price, new Date().toLocaleTimeString());
 
-                    btcHistory.prices.push(price);
-                    btcHistory.times.push(new Date().toLocaleTimeString());
-                    console.log(btcHistory)
-                }
                 price = "$" + Number.parseFloat(price).toFixed(2);
                 flashPriceColorChange(price, cryptoElement.lastPrice, document.getElementById(cryptoElement.priceId));
                 cryptoElement.lastPrice = price;
@@ -210,73 +224,86 @@
         setTimeout(() => priceElement.classList.remove('green', 'red'), 500)
     }
 
-    setInterval(updateBTCGraph, 5000);
-    function updateBTCGraph()
+    function updateBTCGraph(newPrice, newTime)
     {
-        console.log('making graph now');
-        // console.log(btcHistory);
-        var graph = document.getElementById('btcGraphContainer').getContext('2d');
-        graph.innerHTML = '';
+        // if (btcConfig.data.datasets[0].data.length > 50)
+        //     btcConfig.data.datasets[0].data.shift();
+        // if (btcConfig.data.labels.length > 50)
+        //     btcConfig.data.labels.shift();
 
-        let min = Math.min(...btcHistory.prices);
-        let max = Math.max(...btcHistory.prices);
+        btcConfig.data.datasets[0].data.push(newPrice);
+        btcConfig.data.labels.push(newTime);
 
-        console.log(min);
-        console.log(max);
+        let min = Math.min(...btcConfig.data.datasets[0].data)-.25;
+        let max = Math.max(...btcConfig.data.datasets[0].data)+.25;
 
-        var config = {
-            type: 'line',
-            data:
-                {
-                    labels: btcHistory.times,
-                    datasets: [{
-                        label: "USD $",
-                        lineTension: 1,
-                        fill: false,
-                        data: btcHistory.prices,
-                        pointBorderWidth: 5,
-                    }]
-                },
-            options:
-                {
-                    responsive: true,
-                    title: {
-                        display: true,
-                        text: 'Bitcoin Price Graph'
-                    },
-                    hover: {
-                        mode: 'nearest',
-                        intersect: true,
-                    },
-                    scales: {
-                        yAxes: [{
-                            scaleLabel:
-                                {
-                                    display:true,
-                                    labelString: 'USD $'
-                                },
-                            ticks: {
-                                suggestedMin: min-3,
-                                suggestedMax: max+3
-                            }
-                        }],
-                        xAxes: [{
-                            display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Something'
-                            },
-                            ticks: {
-                                stepSize: 1,
-                                beginAtZero: true,
-                            }
-                        }]
-                    }
-                }
-        };
-
-        window.myLine = new Chart(graph, config);
+        btcConfig.options.scales.yAxes[0].ticks.suggestedMin = min;
+        btcConfig.options.scales.yAxes[0].ticks.suggestedaxn = max;
         window.myLine.update();
+    }
+
+    var graph = document.getElementById('btcGraphContainer').getContext('2d');
+    var btcConfig = {
+        type: 'line',
+        responsive: true,
+        maintainAspectRatio: false,
+        data:
+            {
+                labels: [],
+                datasets: [{
+                    label: "USD $",
+                    fill: false,
+                    lineTension: 0,
+                    data: [],
+                    pointBorderWidth: 5,
+                    pointBackgroundColor: '#9ab9ea',
+                    pointBorderColor: '#331530',
+                    borderColor: '#7ec631',
+                }]
+            },
+        options:
+            {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Bitcoin Price Graph'
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true,
+                },
+                scales: {
+                    yAxes: [{
+                        scaleLabel:
+                            {
+                                display:true,
+                                labelString: 'USD $'
+                            },
+                        ticks: {
+                            suggestedMin: 7000,
+                            suggestedMax: 4000,
+                            stepSize: .10
+                        }
+                    }],
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Something'
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            beginAtZero: true,
+                        }
+                    }]
+                }
+            }
+    };
+
+    createBTCGraph()
+    function createBTCGraph()
+    {
+        window.myLine = new Chart(graph, btcConfig);
     }
 
 </script>
