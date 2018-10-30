@@ -229,7 +229,7 @@
 
         ethConfig.options.scales.yAxes[0].ticks.suggestedMin = min;
         ethConfig.options.scales.yAxes[0].ticks.suggestedaxn = max;
-        window.myLine.update();
+        window.myLine2.update();
     }
 
     function updateBTCGraph(newPrice, newTime)
@@ -383,7 +383,7 @@
         window.myLine = new Chart(btcGraph, btcConfig);
 
         var ethGraph = document.getElementById('ethGraphContainer').getContext('2d');
-        window.myLine = new Chart(ethGraph, ethConfig);
+        window.myLine2 = new Chart(ethGraph, ethConfig);
     }
 
 </script>
