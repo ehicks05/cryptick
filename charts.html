@@ -1,0 +1,375 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link id="styleLink" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+    <style>
+        .red {color: red;transition: color .3s;}
+        .green {color: #00C000;transition: color .3s;}
+
+        #btcGraphWrapper, #ethGraphWrapper {
+            height: 300px;
+            width: 100%;
+            min-width: 100%;
+            /*overflow-x: scroll;*/
+        }
+
+        canvas {
+            padding: 10px;
+            position: relative;
+            /*overflow-x: scroll;*/
+            width: 100%;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<span id="lightBulb" style="cursor: pointer;">&#x1F4A1</span>
+<a href="index.html" style="cursor: pointer;">&#x1F3E0</a>
+
+<section class="section">
+    <div class="container">
+        <header>BTC</header>
+        <div style="font-size: 4em;" class="title is-1" id="price-btc"></div>
+        <div class="subtitle is-3" id="time-btc"></div>
+        <p>
+            <span id="timeSince-btc"></span>
+            <br><span id="socketStatus-btc"></span>
+        </p>
+        <div class="has-text-danger" id="error-btc" style="display:none;"></div>
+        <div id="btcGraphWrapper">
+            <canvas id="btcGraphContainer" width="300" height="200"></canvas>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <header>ETH</header>
+        <div style="font-size: 4em;" class="title is-1" id="price-eth"></div>
+        <div class="subtitle is-3" id="time-eth"></div>
+        <p>
+            <span id="timeSince-eth"></span>
+            <br/><span id="socketStatus-eth"></span>
+        </p>
+        <div class="has-text-danger" id="error-eth" style="display:none;"></div>
+        <div id="ethGraphWrapper">
+            <canvas id="ethGraphContainer" width="300" height="200"></canvas>
+        </div>
+    </div>
+</section>
+
+<script>
+
+    document.getElementById('lightBulb').addEventListener('click', function (e)
+    {
+        var defaultURL = "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css";
+
+        var link = document.getElementById("styleLink"); //Fetch the link by its ID
+        if (link.getAttribute("href") === defaultURL)
+            link.setAttribute("href", "css/dark.css"); //Change its href attribute
+        else
+            link.setAttribute("href", defaultURL); //Change its href attribute
+    });
+
+    var subscribeMessage = {
+        "type": "subscribe",
+        "product_ids": [
+            "BTC-USD",
+            "ETH-USD"
+
+        ],
+        "channels": [
+            "ticker"
+        ]
+    };
+    var bitcoinData = {
+        "name": "BTC-USD",
+        "lastPrice": 0,
+        "lastUpdate": 0,
+        "timeSinceId": "timeSince-btc",
+        "timeId": "time-btc",
+        "priceId": "price-btc",
+        "errorId": "error-btc",
+        "socketStatusId": "socketStatus-btc"
+    };
+
+    var ethData = {
+        "name": "ETH-USD",
+        "lastPrice": 0,
+        "lastUpdate": 0,
+        "timeSinceId": "timeSince-eth",
+        "timeId": "time-eth",
+        "priceId": "price-eth",
+        "errorId": "error-eth",
+        "socketStatusId": "socketStatus-eth"
+    };
+
+    var cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
+
+    function connect(socket, subscribeMessage)
+    {
+        socket.onopen = () => socket.send(JSON.stringify(subscribeMessage));
+
+        socket.onmessage = event => {
+            var response = JSON.parse(event.data);
+
+            if (response.type === 'ticker')
+            {
+                var cryptoElement = response.product_id === 'BTC-USD' ? bitcoinData : ethData;
+                cryptoElement.lastUpdate = new Date();
+
+                var price = response.price;
+                if (cryptoElement.name === 'BTC-USD')
+                    updateBTCGraph(price, new Date().toLocaleTimeString());
+                if (cryptoElement.name === 'ETH-USD')
+                    updateETHGraph(price, new Date().toLocaleTimeString());
+
+                price = "$" + Number.parseFloat(price).toFixed(2);
+                flashPriceColorChange(price, cryptoElement.lastPrice, document.getElementById(cryptoElement.priceId));
+                cryptoElement.lastPrice = price;
+                document.getElementById(cryptoElement.priceId).innerText = price;
+            }
+            if (response.type === "error")
+            {
+                document.getElementById(cryptoElement.errorId).style.display = "block";
+                document.getElementById(cryptoElement.errorId).innerText = event.data;
+            }
+        };
+
+        socket.onclose = event =>
+        {
+            console.log('Socket is closed.  Reconnect will be attempted in 1 second', event.reason);
+            setTimeout(() =>
+            {
+                connect(socket, subscribeMessage)
+            }, 1000);
+        }
+    }
+
+    connect(cbSocket, subscribeMessage);
+
+    var currentTime = new Date();
+    var socketReadyState = 0;
+
+    setInterval(() =>
+    {
+        currentTime = new Date();
+
+        var timeSinceLastUpdateBTC = getTimeSinceLastUpdate(currentTime, bitcoinData.lastUpdate);
+        socketReadyState = cbSocket.readyState;
+        document.getElementById(bitcoinData.timeId).innerText = currentTime.toLocaleTimeString();
+        document.getElementById(bitcoinData.timeSinceId).innerText = "Seconds since last update: " + timeSinceLastUpdateBTC;
+        document.getElementById(bitcoinData.socketStatusId).innerText = "socket " + getSocketStatus(socketReadyState);
+
+        var timeSinceLastUpdateETH = getTimeSinceLastUpdate(currentTime, ethData.lastUpdate);
+        document.getElementById(ethData.timeId).innerText = currentTime.toLocaleTimeString();
+        document.getElementById(ethData.timeSinceId).innerText = "Seconds since last update: " + timeSinceLastUpdateETH;
+        document.getElementById(ethData.socketStatusId).innerText = "socket " + getSocketStatus(socketReadyState);
+
+    }, 100);
+
+    function getTimeSinceLastUpdate(currentTime, lastUpdate)
+    {
+        return Math.round(Math.max(currentTime - lastUpdate, 0) / 1000);
+    }
+
+    function getSocketStatus(readyState)
+    {
+        if (readyState === 0) return "connecting";
+        if (readyState === 1) return "open";
+        if (readyState === 2) return "closing";
+        if (readyState === 3) return "closed";
+    }
+
+    function flashPriceColorChange(newPrice, lastPrice, priceElement)
+    {
+        if (newPrice > lastPrice)
+            priceElement.classList.add('green');
+        if (newPrice < lastPrice)
+            priceElement.classList.add('red');
+
+        setTimeout(() => priceElement.classList.remove('green', 'red'), 500)
+    }
+
+    function updateETHGraph(newPrice, newTime)
+    {
+        if (ethConfig.data.datasets[0].data.length > 50)
+            ethConfig.data.datasets[0].data.shift();
+        if (ethConfig.data.labels.length > 50)
+            ethConfig.data.labels.shift();
+
+        ethConfig.data.datasets[0].data.push(newPrice);
+        ethConfig.data.labels.push(newTime);
+
+        let min = Math.min(...ethConfig.data.datasets[0].data)-2;
+        let max = Math.max(...ethConfig.data.datasets[0].data)+2;
+        let range = 1 + max - min;
+        ethConfig.options.scales.yAxes[0].ticks.stepSize = range / 10;
+
+        console.log(`eth: ${min} - ${max} = ${Math.abs(min - max)}`);
+
+        ethConfig.options.scales.yAxes[0].ticks.suggestedMin = min;
+        ethConfig.options.scales.yAxes[0].ticks.suggestedaxn = max;
+        window.myLine2.update();
+    }
+
+    function updateBTCGraph(newPrice, newTime)
+    {
+        if (btcConfig.data.datasets[0].data.length > 50)
+            btcConfig.data.datasets[0].data.shift();
+        if (btcConfig.data.labels.length > 50)
+            btcConfig.data.labels.shift();
+
+        btcConfig.data.datasets[0].data.push(newPrice);
+        btcConfig.data.labels.push(newTime);
+
+        let min = Math.min(...btcConfig.data.datasets[0].data)-.25;
+        let max = Math.max(...btcConfig.data.datasets[0].data)+.25;
+        let range = 1 + max - min;
+        btcConfig.options.scales.yAxes[0].ticks.stepSize = range / 10;
+
+        console.log(`btc: ${min} - ${max} = ${Math.abs(min - max)}`);
+
+        btcConfig.options.scales.yAxes[0].ticks.suggestedMin = min;
+        btcConfig.options.scales.yAxes[0].ticks.suggestedaxn = max;
+        window.myLine.update();
+    }
+
+
+    var ethConfig = {
+        type: 'line',
+        response: true,
+        maintainAspectRatio: false,
+        data:
+            {
+                labels: [],
+                datasets: [{
+                    label: "USD $",
+                    fill: false,
+                    lineTension: 0,
+                    data: [],
+                    pointBorderWidth: 5,
+                    pointBackgroundColor: '#9ab9ea',
+                    pointBorderColor: '#331530',
+                    borderColor: '#7ec631',
+                }]
+            },
+        options:
+            {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: 'Etherium Price Graph'
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true,
+                },
+                scales: {
+                    yAxes: [{
+                        scaleLabel:
+                            {
+                                display:true,
+                                labelString: 'USD $'
+                            },
+                        ticks: {
+                            // suggestedMin: 100,
+                            // suggestedMax: 200,
+                            // stepSize: .10
+                        }
+                    }],
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Something'
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            beginAtZero: true,
+                        }
+                    }]
+                }
+            }
+    };
+
+    var btcConfig = {
+        type: 'line',
+        responsive: true,
+        maintainAspectRatio: false,
+        data:
+            {
+                labels: [],
+                datasets: [{
+                    label: "USD $",
+                    fill: false,
+                    lineTension: 0,
+                    data: [],
+                    pointBorderWidth: 5,
+                    pointBackgroundColor: '#9ab9ea',
+                    pointBorderColor: '#331530',
+                    borderColor: '#7ec631',
+                }]
+            },
+        options:
+            {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: 'Bitcoin Price Graph'
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true,
+                },
+                scales: {
+                    yAxes: [{
+                        scaleLabel:
+                            {
+                                display:true,
+                                labelString: 'USD $'
+                            },
+                        ticks: {
+                            // suggestedMin: 4000,
+                            // suggestedMax: 7000,
+                            // stepSize: .10
+                        }
+                    }],
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Something'
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            beginAtZero: true,
+                        }
+                    }]
+                }
+            }
+    };
+
+    setTimeout(createCharts, 1000);
+
+    createCharts();
+    function createCharts()
+    {
+        var btcGraph = document.getElementById('btcGraphContainer').getContext('2d');
+        window.myLine = new Chart(btcGraph, btcConfig);
+
+        var ethGraph = document.getElementById('ethGraphContainer').getContext('2d');
+        window.myLine2 = new Chart(ethGraph, ethConfig);
+    }
+
+</script>
+
+</body>
+</html>
