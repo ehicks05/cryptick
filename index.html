@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>bitcoin-price-ticker</title>
-    <link id="styleLink" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
+    <link id="styleLink" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css" />
 
     <style>
         .red {color: red;transition: color .3s;}
@@ -13,11 +13,6 @@
 
 </head>
 <body>
-
-<span id="lightBulb" style="cursor: pointer;">&#x1F4A1;</span>
-<a href="charts.html" style="cursor: pointer;">&#x1F4C8;</a>
-<span class="" id="time-btc"></span>
-<span class="" id="socket-status">&#x2753;</span>
 
 <section class="section">
     <div class="container">
@@ -41,15 +36,38 @@
     </div>
 </section>
 
+<footer class="footer">
+    <nav class="level">
+        <div class="level-item has-text-centered">
+            <span id="time-btc" style="padding-right: 1em;"></span>
+            <span id="socket-status" class="tag"></span>
+        </div>
+        <div class="level-item has-text-centered">
+            <div class="buttons">
+                <button class="button" id="lightBulb">&#x1F4A1;</button>
+                <a class="button" href="charts.html">
+                    &#x1F4C8;
+                </a>
+            </div>
+        </div>
+        <div class="level-item has-text-centered">
+            <span>
+                <a href="https://ehicks05.github.io/bitcoin-price-ticker/">Bitcoin Price Ticker</a> by <a href="https://ehicks.net">Eric Hicks</a>
+            </span>
+        </div>
+    </nav>
+</footer>
+
 <script>
 
     document.getElementById('lightBulb').addEventListener('click', function (e)
     {
-        const defaultURL = "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css";
+        const defaultURL = "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css";
+        const darkURL = 'https://unpkg.com/bulmaswatch/cyborg/bulmaswatch.min.css';
 
         const link = document.getElementById("styleLink"); // Fetch the link by its ID
         if (link.getAttribute("href") === defaultURL)
-            link.setAttribute("href", "css/dark.css"); // Change its href attribute
+            link.setAttribute("href", darkURL); // Change its href attribute
         else
             link.setAttribute("href", defaultURL); // Change its href attribute
     });
@@ -68,6 +86,7 @@
 
     const data = {
         currentTime: new Date(),
+        previousSocketReadyState: 0,
         socketReadyState: 0,
         socketReadyStateId: 'socket-status',
         btc : {
@@ -130,9 +149,15 @@
 
     setInterval(() =>
     {
-        data.socketReadyState = cbSocket.readyState;
-        document.getElementById(data.socketReadyStateId).innerText = getSocketStatusEmoji(data.socketReadyState);
-        document.getElementById(data.socketReadyStateId).title = getSocketStatus(data.socketReadyState);
+        if (cbSocket.readyState !== data.socketReadyState)
+        {
+            data.previousSocketReadyState = data.socketReadyState;
+            data.socketReadyState = cbSocket.readyState;
+            document.getElementById(data.socketReadyStateId).classList.remove(getSocketStatusClass(data.previousSocketReadyState));
+            document.getElementById(data.socketReadyStateId).classList.add(getSocketStatusClass(data.socketReadyState));
+            document.getElementById(data.socketReadyStateId).title = getSocketStatus(data.socketReadyState);
+            document.getElementById(data.socketReadyStateId).innerText = getSocketStatus(data.socketReadyState);
+        }
 
         data.currentTime = new Date();
         document.getElementById(data.btc.timeId).innerText = data.currentTime.toLocaleTimeString();
@@ -158,18 +183,18 @@
 
     function getSocketStatus(readyState)
     {
-        if (readyState === 0) return "socket connecting";
-        if (readyState === 1) return "socket open";
-        if (readyState === 2) return "socket closing";
-        if (readyState === 3) return "socket closed";
+        if (readyState === 0) return "Connecting";
+        if (readyState === 1) return "Connected";
+        if (readyState === 2) return "Closing";
+        if (readyState === 3) return "Closed";
     }
 
-    function getSocketStatusEmoji(readyState)
+    function getSocketStatusClass(readyState)
     {
-        if (readyState === 0) return String.fromCodePoint(0x2753);
-        if (readyState === 1) return String.fromCodePoint(0x2714);
-        if (readyState === 2) return String.fromCodePoint(0x2753);
-        if (readyState === 3) return String.fromCodePoint(0x274C);
+        if (readyState === 0) return "is-info";
+        if (readyState === 1) return "is-success";
+        if (readyState === 2) return "is-warning";
+        if (readyState === 3) return "is-danger";
     }
 
     function flashPriceColorChange(newPrice, lastPrice, priceElement)
