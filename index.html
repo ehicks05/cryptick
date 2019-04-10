@@ -123,6 +123,36 @@
         localStorage.setItem('theme', theme);
 
         applyTheme(theme);
+        new TradingView.widget(
+            {
+                "autosize": true,
+                "symbol": "COINBASE:BTCUSD",
+                "interval": "D",
+                "timezone": "America/New_York",
+                "theme": theme,
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "hide_legend": true,
+                "container_id": "tradingview_2d8dc"
+            }
+        );
+        new TradingView.widget(
+            {
+                "autosize": true,
+                "symbol": "COINBASE:ETHUSD",
+                "interval": "D",
+                "timezone": "America/New_York",
+                "theme": theme,
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "hide_legend": true,
+                "container_id": "tradingview_2d8de"
+            }
+        );
     }
 
     function applyTheme(theme)
