@@ -10,6 +10,7 @@
         .red {color: red;transition: color .3s;}
         .green {color: #00C000;transition: color .3s;}
         .section {padding-top: 12px;}
+        .footer {padding-bottom: 48px;}
     </style>
 
 </head>
@@ -19,14 +20,11 @@
     <div class="container">
         <header>BTC</header>
         <div style="font-size: 4em;" class="title is-1" id="price-btc"></div>
-        <p>
-            <span id="timeSince-btc"></span>
-        </p>
         <div class="has-text-danger" id="error-btc" style="display:none;"></div>
 
         <!-- TradingView Widget BEGIN -->
         <div class="tradingview-widget-container">
-            <div id="tradingview_2d8dc" style="height:400px;"></div>
+            <div id="tradingview_2d8dc" style="height:300px;"></div>
             <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/COINBASE-BTCUSD/" rel="noopener" target="_blank"><span class="blue-text">BTCUSD Chart</span></a> by TradingView</div>
             <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
             <script type="text/javascript">
@@ -56,17 +54,40 @@
     <div class="container">
         <header>ETH</header>
         <div style="font-size: 4em;" class="title is-1" id="price-eth"></div>
-        <p>
-            <span id="timeSince-eth"></span>
-        </p>
         <div class="has-text-danger" id="error-eth" style="display:none;"></div>
+
+        <!-- TradingView Widget BEGIN -->
+        <div class="tradingview-widget-container">
+            <div id="tradingview_2d8de" style="height:300px;"></div>
+            <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/COINBASE-BTCUSD/" rel="noopener" target="_blank"><span class="blue-text">BTCUSD Chart</span></a> by TradingView</div>
+            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+            <script type="text/javascript">
+                new TradingView.widget(
+                    {
+                        "autosize": true,
+                        "symbol": "COINBASE:ETHUSD",
+                        "interval": "D",
+                        "timezone": "America/New_York",
+                        "theme": "Light",
+                        "style": "1",
+                        "locale": "en",
+                        "toolbar_bg": "#f1f3f6",
+                        "enable_publishing": false,
+                        "hide_legend": true,
+                        "container_id": "tradingview_2d8de"
+                    }
+                );
+            </script>
+        </div>
+        <!-- TradingView Widget END -->
+
     </div>
 </section>
 
 <footer class="footer">
     <nav class="level">
         <div class="level-item has-text-centered">
-            <span id="time-btc" style="padding-right: 1em;"></span>
+            <span id="current-time" style="padding-right: 1em;"></span>
             <span id="socket-status" class="tag"></span>
         </div>
         <div class="level-item has-text-centered">
@@ -113,6 +134,7 @@
 
     const data = {
         currentTime: new Date(),
+        currentTimeId: 'current-time',
         previousSocketReadyState: 0,
         socketReadyState: 0,
         socketReadyStateId: 'socket-status',
@@ -120,8 +142,6 @@
             "name": "BTC-USD",
             "lastPrice": 0,
             "lastUpdate": 0,
-            "timeSinceId": "timeSince-btc",
-            "timeId": "time-btc",
             "priceId": "price-btc",
             "errorId": "error-btc",
         },
@@ -129,8 +149,6 @@
             "name": "ETH-USD",
             "lastPrice": 0,
             "lastUpdate": 0,
-            "timeSinceId": "timeSince-eth",
-            "timeId": "time-eth",
             "priceId": "price-eth",
             "errorId": "error-eth",
         }
@@ -143,14 +161,14 @@
         socket.onopen = () => socket.send(JSON.stringify(subscribeMessage));
 
         socket.onmessage = event => {
-            var response = JSON.parse(event.data);
+            const response = JSON.parse(event.data);
+            const cryptoElement = response.product_id === 'BTC-USD' ? data.btc : data.eth;
 
             if (response.type === 'ticker')
             {
-                var cryptoElement = response.product_id === 'BTC-USD' ? data.btc : data.eth;
                 cryptoElement.lastUpdate = new Date();
 
-                var price = "$" + Number.parseFloat(response.price).toFixed(2);
+                const price = "$" + Number.parseFloat(response.price).toFixed(2);
                 flashPriceColorChange(price, cryptoElement.lastPrice, document.getElementById(cryptoElement.priceId));
                 cryptoElement.lastPrice = price;
                 document.getElementById(cryptoElement.priceId).innerText = price;
@@ -187,13 +205,13 @@
         }
 
         data.currentTime = new Date();
-        document.getElementById(data.btc.timeId).innerText = data.currentTime.toLocaleTimeString();
+        document.getElementById(data.currentTimeId).innerText = data.currentTime.toLocaleTimeString();
 
-        var timeSinceLastUpdateBTC = getTimeSinceLastUpdate(data.currentTime, data.btc.lastUpdate);
-        document.getElementById(data.btc.timeSinceId).innerText = "Seconds since last update: " + timeSinceLastUpdateBTC;
+        const timeSinceLastUpdateBTC = getTimeSinceLastUpdate(data.currentTime, data.btc.lastUpdate);
+        document.getElementById(data.btc.priceId).title = "Seconds since last update: " + timeSinceLastUpdateBTC;
 
-        var timeSinceLastUpdateETH = getTimeSinceLastUpdate(data.currentTime, data.eth.lastUpdate);
-        document.getElementById(data.eth.timeSinceId).innerText = "Seconds since last update: " + timeSinceLastUpdateETH;
+        const timeSinceLastUpdateETH = getTimeSinceLastUpdate(data.currentTime, data.eth.lastUpdate);
+        document.getElementById(data.eth.priceId).title = "Seconds since last update: " + timeSinceLastUpdateETH;
 
     }, 100);
 
