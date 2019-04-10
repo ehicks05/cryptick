@@ -1,6 +1,9 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>bitcoin-price-ticker</title>
     <link id="styleLink" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
 
     <style>
@@ -11,17 +14,17 @@
 </head>
 <body>
 
-<span id="lightBulb" style="cursor: pointer;">&#x1F4A1</span>
-<a href="charts.html" style="cursor: pointer;">&#x1F4C8</a>
+<span id="lightBulb" style="cursor: pointer;">&#x1F4A1;</span>
+<a href="charts.html" style="cursor: pointer;">&#x1F4C8;</a>
+<span class="" id="time-btc"></span>
+<span class="" id="socket-status">&#x2753;</span>
 
 <section class="section">
     <div class="container">
         <header>BTC</header>
         <div style="font-size: 4em;" class="title is-1" id="price-btc"></div>
-        <div class="subtitle is-3" id="time-btc"></div>
         <p>
             <span id="timeSince-btc"></span>
-            <br><span id="socketStatus-btc"></span>
         </p>
         <div class="has-text-danger" id="error-btc" style="display:none;"></div>
     </div>
@@ -31,10 +34,8 @@
     <div class="container">
         <header>ETH</header>
         <div style="font-size: 4em;" class="title is-1" id="price-eth"></div>
-        <div class="subtitle is-3" id="time-eth"></div>
         <p>
             <span id="timeSince-eth"></span>
-            <br/><span id="socketStatus-eth"></span>
         </p>
         <div class="has-text-danger" id="error-eth" style="display:none;"></div>
     </div>
@@ -44,16 +45,16 @@
 
     document.getElementById('lightBulb').addEventListener('click', function (e)
     {
-        var defaultURL = "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css";
+        const defaultURL = "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css";
 
-        var link = document.getElementById("styleLink"); //Fetch the link by its ID
+        const link = document.getElementById("styleLink"); // Fetch the link by its ID
         if (link.getAttribute("href") === defaultURL)
-            link.setAttribute("href", "css/dark.css"); //Change its href attribute
+            link.setAttribute("href", "css/dark.css"); // Change its href attribute
         else
-            link.setAttribute("href", defaultURL); //Change its href attribute
+            link.setAttribute("href", defaultURL); // Change its href attribute
     });
 
-    var subscribeMessage = {
+    const subscribeMessage = {
         "type": "subscribe",
         "product_ids": [
             "BTC-USD",
@@ -64,29 +65,32 @@
             "ticker"
         ]
     };
-    var bitcoinData = {
-        "name": "BTC-USD",
-        "lastPrice": 0,
-        "lastUpdate": 0,
-        "timeSinceId": "timeSince-btc",
-        "timeId": "time-btc",
-        "priceId": "price-btc",
-        "errorId": "error-btc",
-        "socketStatusId": "socketStatus-btc"
+
+    const data = {
+        currentTime: new Date(),
+        socketReadyState: 0,
+        socketReadyStateId: 'socket-status',
+        btc : {
+            "name": "BTC-USD",
+            "lastPrice": 0,
+            "lastUpdate": 0,
+            "timeSinceId": "timeSince-btc",
+            "timeId": "time-btc",
+            "priceId": "price-btc",
+            "errorId": "error-btc",
+        },
+        eth: {
+            "name": "ETH-USD",
+            "lastPrice": 0,
+            "lastUpdate": 0,
+            "timeSinceId": "timeSince-eth",
+            "timeId": "time-eth",
+            "priceId": "price-eth",
+            "errorId": "error-eth",
+        }
     };
 
-    var ethData = {
-        "name": "ETH-USD",
-        "lastPrice": 0,
-        "lastUpdate": 0,
-        "timeSinceId": "timeSince-eth",
-        "timeId": "time-eth",
-        "priceId": "price-eth",
-        "errorId": "error-eth",
-        "socketStatusId": "socketStatus-eth"
-    };
-
-    var cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
+    const cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
 
     function connect(socket, subscribeMessage)
     {
@@ -97,7 +101,7 @@
 
             if (response.type === 'ticker')
             {
-                var cryptoElement = response.product_id === 'BTC-USD' ? bitcoinData : ethData;
+                var cryptoElement = response.product_id === 'BTC-USD' ? data.btc : data.eth;
                 cryptoElement.lastUpdate = new Date();
 
                 var price = "$" + Number.parseFloat(response.price).toFixed(2);
@@ -124,25 +128,28 @@
 
     connect(cbSocket, subscribeMessage);
 
-    var currentTime = new Date();
-    var socketReadyState = 0;
-
     setInterval(() =>
     {
-        currentTime = new Date();
+        data.socketReadyState = cbSocket.readyState;
+        document.getElementById(data.socketReadyStateId).innerText = getSocketStatusEmoji(data.socketReadyState);
+        document.getElementById(data.socketReadyStateId).title = getSocketStatus(data.socketReadyState);
 
-        var timeSinceLastUpdateBTC = getTimeSinceLastUpdate(currentTime, bitcoinData.lastUpdate);
-        socketReadyState = cbSocket.readyState;
-        document.getElementById(bitcoinData.timeId).innerText = currentTime.toLocaleTimeString();
-        document.getElementById(bitcoinData.timeSinceId).innerText = "Seconds since last update: " + timeSinceLastUpdateBTC;
-        document.getElementById(bitcoinData.socketStatusId).innerText = "socket " + getSocketStatus(socketReadyState);
+        data.currentTime = new Date();
+        document.getElementById(data.btc.timeId).innerText = data.currentTime.toLocaleTimeString();
 
-        var timeSinceLastUpdateETH = getTimeSinceLastUpdate(currentTime, ethData.lastUpdate);
-        document.getElementById(ethData.timeId).innerText = currentTime.toLocaleTimeString();
-        document.getElementById(ethData.timeSinceId).innerText = "Seconds since last update: " + timeSinceLastUpdateETH;
-        document.getElementById(ethData.socketStatusId).innerText = "socket " + getSocketStatus(socketReadyState);
+        var timeSinceLastUpdateBTC = getTimeSinceLastUpdate(data.currentTime, data.btc.lastUpdate);
+        document.getElementById(data.btc.timeSinceId).innerText = "Seconds since last update: " + timeSinceLastUpdateBTC;
+
+        var timeSinceLastUpdateETH = getTimeSinceLastUpdate(data.currentTime, data.eth.lastUpdate);
+        document.getElementById(data.eth.timeSinceId).innerText = "Seconds since last update: " + timeSinceLastUpdateETH;
 
     }, 100);
+
+    setInterval(() => {
+        if (getSocketStatus(data.socketReadyState) === 'closed')
+            connect(cbSocket, subscribeMessage);
+        }, 5000
+    );
 
     function getTimeSinceLastUpdate(currentTime, lastUpdate)
     {
@@ -151,10 +158,18 @@
 
     function getSocketStatus(readyState)
     {
-        if (readyState === 0) return "connecting";
-        if (readyState === 1) return "open";
-        if (readyState === 2) return "closing";
-        if (readyState === 3) return "closed";
+        if (readyState === 0) return "socket connecting";
+        if (readyState === 1) return "socket open";
+        if (readyState === 2) return "socket closing";
+        if (readyState === 3) return "socket closed";
+    }
+
+    function getSocketStatusEmoji(readyState)
+    {
+        if (readyState === 0) return String.fromCodePoint(0x2753);
+        if (readyState === 1) return String.fromCodePoint(0x2714);
+        if (readyState === 2) return String.fromCodePoint(0x2753);
+        if (readyState === 3) return String.fromCodePoint(0x274C);
     }
 
     function flashPriceColorChange(newPrice, lastPrice, priceElement)
