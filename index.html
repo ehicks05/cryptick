@@ -231,7 +231,7 @@
         }
     };
 
-    const cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
+    let cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
 
     function connect(socket, subscribeMessage)
     {
@@ -257,14 +257,7 @@
             }
         };
 
-        socket.onclose = event =>
-        {
-            console.log('Socket is closed.  Reconnect will be attempted in 1 second', event.reason);
-            setTimeout(() =>
-            {
-                connect(socket, subscribeMessage)
-            }, 1000);
-        }
+        socket.onclose = event => console.log('Socket onclose event has fired. Reason: ' + event.reason);
     }
 
     connect(cbSocket, subscribeMessage);
@@ -292,11 +285,16 @@
 
     }, 100);
 
-    setInterval(() => {
-        if (getSocketStatus(data.socketReadyState) === 'closed')
+    setInterval(checkConnection, 1000);
+
+    function checkConnection()
+    {
+        if (getSocketStatus(data.socketReadyState) === 'Closed')
+        {
+            cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
             connect(cbSocket, subscribeMessage);
-        }, 5000
-    );
+        }
+    }
 
     function getTimeSinceLastUpdate(currentTime, lastUpdate)
     {
