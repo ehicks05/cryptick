@@ -54,7 +54,7 @@
     </div>
 </section>
 
-<section class="section">
+<section class="section" id="ethSection">
     <div class="container">
         <header>ETH</header>
         <div style="font-size: 4em;" class="title is-1" id="price-eth"></div>
@@ -97,9 +97,8 @@
         <div class="level-item has-text-centered">
             <div class="buttons">
                 <button class="button" id="lightBulb">&#x1F4A1;</button>
-                <a class="button" href="charts.html">
-                    &#x1F4C8;
-                </a>
+                <a class="button" href="charts.html">&#x1F4C8;</a>
+                <button class="button" id="toggleEth">ETH</button>
             </div>
         </div>
         <div class="level-item has-text-centered">
@@ -113,9 +112,14 @@
 <script>
     if (!localStorage.getItem('theme'))
         localStorage.setItem('theme', 'Light');
+    if (!localStorage.getItem('showEth'))
+        localStorage.setItem('showEth', 'false');
 
     applyTheme();
+    applyShowEth();
+
     document.getElementById('lightBulb').addEventListener('click', toggleTheme);
+    document.getElementById('toggleEth').addEventListener('click', toggleEth);
 
     function toggleTheme(e)
     {
@@ -170,6 +174,28 @@
             link.setAttribute("href", defaultURL); // Change its href attribute
     }
 
+    function toggleEth(e)
+    {
+        let showEth = localStorage.getItem('showEth') === 'true' ? 'false' : 'true';
+        localStorage.setItem('showEth', showEth);
+
+        applyShowEth(showEth);
+    }
+
+    function applyShowEth(showEth)
+    {
+        if (showEth)
+            document.getElementById('toggleEth').classList.add('is-success');
+        else
+            document.getElementById('toggleEth').classList.remove('is-success');
+
+        const ethSection = document.getElementById('ethSection');
+        if (showEth === 'true')
+            ethSection.style.display = 'block';
+        else
+            ethSection.style.display = 'none';
+    }
+
     const subscribeMessage = {
         "type": "subscribe",
         "product_ids": [
@@ -188,6 +214,7 @@
         previousSocketReadyState: 0,
         socketReadyState: 0,
         socketReadyStateId: 'socket-status',
+        showEth: localStorage.getItem('showEth'),
         btc : {
             "name": "BTC-USD",
             "lastPrice": 0,
