@@ -97,7 +97,7 @@
         <div class="level-item has-text-centered">
             <div class="buttons">
                 <button class="button" id="lightBulb">&#x1F4A1;</button>
-                <a class="button" href="charts.html">&#x1F4C8;</a>
+                <button class="button" id="toggleCharts">&#x1F4C8;</button>
                 <button class="button" id="toggleEth">ETH</button>
             </div>
         </div>
@@ -114,12 +114,16 @@
         localStorage.setItem('theme', 'Light');
     if (!localStorage.getItem('showEth'))
         localStorage.setItem('showEth', 'false');
+    if (!localStorage.getItem('showCharts'))
+        localStorage.setItem('showCharts', 'true');
 
     applyTheme();
+    applyShowCharts();
     applyShowEth();
 
     document.getElementById('lightBulb').addEventListener('click', toggleTheme);
     document.getElementById('toggleEth').addEventListener('click', toggleEth);
+    document.getElementById('toggleCharts').addEventListener('click', toggleCharts);
 
     function toggleTheme(e)
     {
@@ -184,6 +188,9 @@
 
     function applyShowEth(showEth)
     {
+        if (!showEth)
+            showEth = localStorage.getItem('showEth');
+
         if (showEth === 'true')
             document.getElementById('toggleEth').classList.add('is-success');
         else
@@ -194,6 +201,33 @@
             ethSection.style.display = 'block';
         else
             ethSection.style.display = 'none';
+    }
+
+    function toggleCharts(e)
+    {
+        let showCharts = localStorage.getItem('showCharts') === 'true' ? 'false' : 'true';
+        localStorage.setItem('showCharts', showCharts);
+
+        applyShowCharts(showCharts);
+    }
+
+    function applyShowCharts(showCharts)
+    {
+        if (!showCharts)
+            showCharts = localStorage.getItem('showCharts');
+
+        if (showCharts === 'true')
+            document.getElementById('toggleCharts').classList.add('is-success');
+        else
+            document.getElementById('toggleCharts').classList.remove('is-success');
+
+        const charts = document.querySelectorAll('.tradingview-widget-container');
+        charts.forEach((chart) => {
+            if (showCharts === 'true')
+                chart.style.display = 'block';
+            else
+                chart.style.display = 'none';
+        });
     }
 
     const subscribeMessage = {
