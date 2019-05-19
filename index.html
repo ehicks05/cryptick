@@ -283,6 +283,9 @@
                 flashPriceColorChange(price, cryptoElement.lastPrice, document.getElementById(cryptoElement.priceId));
                 cryptoElement.lastPrice = price;
                 document.getElementById(cryptoElement.priceId).innerText = price;
+
+                if (response.product_id === 'BTC-USD')
+                    document.title = price + ' BTC-USD';
             }
             if (response.type === "error")
             {
@@ -306,6 +309,8 @@
             document.getElementById(data.socketReadyStateId).classList.add(getSocketStatusClass(data.socketReadyState));
             document.getElementById(data.socketReadyStateId).title = getSocketStatus(data.socketReadyState);
             document.getElementById(data.socketReadyStateId).innerText = getSocketStatus(data.socketReadyState);
+            
+            changeFavicon(getFavicon(data.socketReadyState));
         }
 
         data.currentTime = new Date();
@@ -351,6 +356,14 @@
         if (readyState === 3) return "is-danger";
     }
 
+    function getFavicon(readyState)
+    {
+        if (readyState === 0) return "yellow.ico";
+        if (readyState === 1) return "green.ico";
+        if (readyState === 2) return "yellow.ico";
+        if (readyState === 3) return "red.ico";
+    }
+
     function flashPriceColorChange(newPrice, lastPrice, priceElement)
     {
         if (newPrice > lastPrice)
@@ -359,6 +372,18 @@
             priceElement.classList.add('red');
 
         setTimeout(() => priceElement.classList.remove('green', 'red'), 500)
+    }
+
+    function changeFavicon(src) {
+        var link = document.createElement('link'),
+            oldLink = document.getElementById('dynamic-favicon');
+        link.id = 'dynamic-favicon';
+        link.rel = 'shortcut icon';
+        link.href = src;
+        if (oldLink) {
+            document.head.removeChild(oldLink);
+        }
+        document.head.appendChild(link);
     }
 
 </script>
