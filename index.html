@@ -11,6 +11,10 @@
         .green {color: #00C000;transition: color .3s;}
         .section {padding-top: 12px;}
         .footer {padding-bottom: 48px;}
+
+        /* font scaling from here: https://css-tricks.com/books/fundamental-css-tactics/scale-typography-screen-size/ */
+        .scalingFont {font-size: calc(48px + (300 - 48) * ((100vw - 300px) / (1900 - 300))) !important; }
+        .lesserScalingFont {font-size: calc(40px + (100 - 40) * ((100vw - 300px) / (1900 - 300))) !important; }
     </style>
 
 </head>
@@ -18,8 +22,8 @@
 
 <section class="section">
     <div class="container">
-        <header>BTC</header>
-        <div style="font-size: 4em;" class="title is-1" id="price-btc"></div>
+        <header class="lesserScalingFont">BTC</header>
+        <div class="title is-1 scalingFont" id="price-btc"></div>
         <div class="has-text-danger" id="error-btc" style="display:none;"></div>
 
         <!-- TradingView Widget BEGIN -->
@@ -56,8 +60,8 @@
 
 <section class="section" id="ethSection">
     <div class="container">
-        <header>ETH</header>
-        <div style="font-size: 4em;" class="title is-1" id="price-eth"></div>
+        <header class="lesserScalingFont">ETH</header>
+        <div class="title is-1 scalingFont" id="price-eth"></div>
         <div class="has-text-danger" id="error-eth" style="display:none;"></div>
 
         <!-- TradingView Widget BEGIN -->
@@ -358,10 +362,10 @@
 
     function getFavicon(readyState)
     {
-        if (readyState === 0) return "yellow.ico";
-        if (readyState === 1) return "green.ico";
-        if (readyState === 2) return "yellow.ico";
-        if (readyState === 3) return "red.ico";
+        if (readyState === 0) return "img/yellow.ico";
+        if (readyState === 1) return "img/green.ico";
+        if (readyState === 2) return "img/yellow.ico";
+        if (readyState === 3) return "img/red.ico";
     }
 
     function flashPriceColorChange(newPrice, lastPrice, priceElement)
