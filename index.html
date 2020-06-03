@@ -15,7 +15,10 @@
         .footer {padding-bottom: 48px;}
 
         /* font scaling from here: https://css-tricks.com/books/fundamental-css-tactics/scale-typography-screen-size/ */
-        .scalingFont {font-size: calc(60px + (420 - 60) * ((100vw - 320px) / (2000 - 320))) !important; }
+        .scalingFont-xl {font-size: calc(60px + 360 * ((100vw - 320px) / 1680)) !important; }
+        .scalingFont-l {font-size: calc(48px + 280 * ((100vw - 320px) / 1680)) !important; }
+        .scalingFont-m {font-size: calc(32px + 240 * ((100vw - 320px) / 1680)) !important; }
+        .scalingFont-s {font-size: calc(16px + 160 * ((100vw - 320px) / 1680)) !important; }
         .lesserScalingFont {font-size: calc(20px + (80 - 20) * ((100vw - 320px) / (2000 - 320))) !important; }
     </style>
 
@@ -108,6 +111,14 @@
             </div>
         </div>
         <div class="level-item has-text-centered">
+            <div class="buttons">
+                <button class="button font-size-button" id="fontSize-s">S</button>
+                <button class="button font-size-button" id="fontSize-m">M</button>
+                <button class="button font-size-button" id="fontSize-l">L</button>
+                <button class="button font-size-button" id="fontSize-xl">XL</button>
+            </div>
+        </div>
+        <div class="level-item has-text-centered">
             <span>
                 <a href="https://www.github.com/ehicks05/bitcoin-price-ticker/" target="_blank">Bitcoin Price Ticker</a> by <a href="https://ehicks.net">Eric Hicks</a>
             </span>
@@ -122,14 +133,19 @@
         localStorage.setItem('showEth', 'false');
     if (!localStorage.getItem('showCharts'))
         localStorage.setItem('showCharts', 'true');
+    if (!localStorage.getItem('fontSize'))
+        localStorage.setItem('fontSize', 'xl');
 
     applyTheme();
     applyShowCharts();
     applyShowEth();
+    applyFontSize();
 
     document.getElementById('lightBulb').addEventListener('click', toggleTheme);
     document.getElementById('toggleEth').addEventListener('click', toggleEth);
     document.getElementById('toggleCharts').addEventListener('click', toggleCharts);
+
+    document.querySelectorAll('.font-size-button').forEach(element => element.addEventListener('click', changeFontSize));
 
     function toggleTheme(e)
     {
@@ -182,6 +198,27 @@
             link.setAttribute("href", darkURL); // Change its href attribute
         else
             link.setAttribute("href", defaultURL); // Change its href attribute
+    }
+
+    function changeFontSize(e)
+    {
+        applyFontSize(e.target.id.replace('fontSize-', ''));
+    }
+
+    function applyFontSize(size)
+    {
+        if (!size)
+            size = localStorage.getItem('fontSize');
+
+        document.querySelectorAll('.scalingFont').forEach(el => {
+            ['xl', 'l', 'm', 's'].forEach(size => {
+                el.classList.remove('scalingFont-' + size);
+                document.getElementById('fontSize-' + size).classList.remove('is-success')
+            });
+
+            el.classList.add('scalingFont-' + size);
+            document.getElementById('fontSize-' + size).classList.add('is-success')
+        });
     }
 
     function toggleEth(e)
