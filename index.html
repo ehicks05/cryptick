@@ -43,36 +43,6 @@
         <header class="lesserScalingFont">BTC</header>
         <div class="title is-1 scalingFont" id="price-btc"></div>
         <div class="has-text-danger" id="error-btc" style="display:none;"></div>
-
-        <!-- TradingView Widget BEGIN -->
-        <div class="tradingview-widget-container">
-            <div id="tradingview_2d8dc" style="height:300px;"></div>
-            <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/COINBASE-BTCUSD/" rel="noopener" target="_blank"><span class="blue-text">BTCUSD Chart</span></a> by TradingView</div>
-            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-            <script type="text/javascript">
-                let theme = localStorage.getItem('theme');
-                if (!theme)
-                    theme = 'Light';
-
-                new TradingView.widget(
-                    {
-                        "autosize": true,
-                        "symbol": "COINBASE:BTCUSD",
-                        "interval": "D",
-                        "timezone": "America/New_York",
-                        "theme": theme,
-                        "style": "1",
-                        "locale": "en",
-                        "toolbar_bg": "#f1f3f6",
-                        "enable_publishing": false,
-                        "hide_legend": true,
-                        "container_id": "tradingview_2d8dc"
-                    }
-                );
-            </script>
-        </div>
-        <!-- TradingView Widget END -->
-
     </div>
 </section>
 
@@ -81,32 +51,6 @@
         <header class="lesserScalingFont">ETH</header>
         <div class="title is-1 scalingFont" id="price-eth"></div>
         <div class="has-text-danger" id="error-eth" style="display:none;"></div>
-
-        <!-- TradingView Widget BEGIN -->
-        <div class="tradingview-widget-container">
-            <div id="tradingview_2d8de" style="height:300px;"></div>
-            <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/COINBASE-BTCUSD/" rel="noopener" target="_blank"><span class="blue-text">BTCUSD Chart</span></a> by TradingView</div>
-            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-            <script type="text/javascript">
-                new TradingView.widget(
-                    {
-                        "autosize": true,
-                        "symbol": "COINBASE:ETHUSD",
-                        "interval": "D",
-                        "timezone": "America/New_York",
-                        "theme": theme,
-                        "style": "1",
-                        "locale": "en",
-                        "toolbar_bg": "#f1f3f6",
-                        "enable_publishing": false,
-                        "hide_legend": true,
-                        "container_id": "tradingview_2d8de"
-                    }
-                );
-            </script>
-        </div>
-        <!-- TradingView Widget END -->
-
     </div>
 </section>
 
@@ -119,7 +63,6 @@
         <div class="level-item has-text-centered">
             <div class="buttons">
                 <button class="button" id="lightBulb">&#x1F4A1;</button>
-                <button class="button" id="toggleCharts">&#x1F4C8;</button>
                 <button class="button" id="toggleEth">ETH</button>
             </div>
         </div>
@@ -144,20 +87,15 @@
         localStorage.setItem('theme', 'Light');
     if (!localStorage.getItem('showEth'))
         localStorage.setItem('showEth', 'false');
-    if (!localStorage.getItem('showCharts'))
-        localStorage.setItem('showCharts', 'true');
     if (!localStorage.getItem('fontSize'))
         localStorage.setItem('fontSize', 'l');
 
     applyTheme();
-    applyShowCharts();
     applyShowEth();
     applyFontSize();
 
     document.getElementById('lightBulb').addEventListener('click', toggleTheme);
     document.getElementById('toggleEth').addEventListener('click', toggleEth);
-    document.getElementById('toggleCharts').addEventListener('click', toggleCharts);
-
     document.querySelectorAll('.font-size-button').forEach(element => element.addEventListener('click', changeFontSize));
 
     function toggleTheme(e)
@@ -166,36 +104,6 @@
         localStorage.setItem('theme', theme);
 
         applyTheme(theme);
-        new TradingView.widget(
-            {
-                "autosize": true,
-                "symbol": "COINBASE:BTCUSD",
-                "interval": "D",
-                "timezone": "America/New_York",
-                "theme": theme,
-                "style": "1",
-                "locale": "en",
-                "toolbar_bg": "#f1f3f6",
-                "enable_publishing": false,
-                "hide_legend": true,
-                "container_id": "tradingview_2d8dc"
-            }
-        );
-        new TradingView.widget(
-            {
-                "autosize": true,
-                "symbol": "COINBASE:ETHUSD",
-                "interval": "D",
-                "timezone": "America/New_York",
-                "theme": theme,
-                "style": "1",
-                "locale": "en",
-                "toolbar_bg": "#f1f3f6",
-                "enable_publishing": false,
-                "hide_legend": true,
-                "container_id": "tradingview_2d8de"
-            }
-        );
     }
 
     function applyTheme(theme)
@@ -258,33 +166,6 @@
             ethSection.style.display = 'block';
         else
             ethSection.style.display = 'none';
-    }
-
-    function toggleCharts(e)
-    {
-        let showCharts = localStorage.getItem('showCharts') === 'true' ? 'false' : 'true';
-        localStorage.setItem('showCharts', showCharts);
-
-        applyShowCharts(showCharts);
-    }
-
-    function applyShowCharts(showCharts)
-    {
-        if (!showCharts)
-            showCharts = localStorage.getItem('showCharts');
-
-        if (showCharts === 'true')
-            document.getElementById('toggleCharts').classList.add('is-success');
-        else
-            document.getElementById('toggleCharts').classList.remove('is-success');
-
-        const charts = document.querySelectorAll('.tradingview-widget-container');
-        charts.forEach((chart) => {
-            if (showCharts === 'true')
-                chart.style.display = 'block';
-            else
-                chart.style.display = 'none';
-        });
     }
 
     const subscribeMessage = {
