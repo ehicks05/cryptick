@@ -9,8 +9,21 @@
     
     <style>
         /*body {font-family: 'Roboto', sans-serif;}*/
-        .red {color: red;transition: color .3s;}
-        .green {color: #00C000;transition: color .3s;}
+        .red {animation: down 1s;}
+        .green {animation: up 1s;}
+
+        @keyframes up {
+            0% {background-color: transparent;}
+            50% {background-color: rgba(0, 200, 0, .5);}
+            100% {background-color: transparent;}
+        }
+
+        @keyframes down {
+            0% {background-color: transparent;}
+            50% {background-color: rgba(200, 0, 0, .5);}
+            100% {background-color: transparent;}
+        }
+
         .section {padding-top: 12px;}
         .footer {padding-bottom: 48px;}
 
