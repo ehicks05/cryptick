@@ -147,7 +147,7 @@
     if (!localStorage.getItem('showCharts'))
         localStorage.setItem('showCharts', 'true');
     if (!localStorage.getItem('fontSize'))
-        localStorage.setItem('fontSize', 'xl');
+        localStorage.setItem('fontSize', 'l');
 
     applyTheme();
     applyShowCharts();
@@ -222,6 +222,7 @@
     {
         if (!size)
             size = localStorage.getItem('fontSize');
+        localStorage.setItem('fontSize', size);
 
         document.querySelectorAll('.scalingFont').forEach(el => {
             ['xl', 'l', 'm', 's'].forEach(size => {
