@@ -336,10 +336,10 @@
             {
                 cryptoElement.lastUpdate = new Date();
 
-                const price = "$" + Number.parseFloat(response.price).toFixed(2);
+                const price = Number.parseFloat(response.price);
                 flashPriceColorChange(price, cryptoElement.lastPrice, document.getElementById(cryptoElement.priceId));
                 cryptoElement.lastPrice = price;
-                document.getElementById(cryptoElement.priceId).innerText = price;
+                document.getElementById(cryptoElement.priceId).innerText = Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
 
                 if (response.product_id === 'BTC-USD')
                     document.title = price + ' BTC-USD';
