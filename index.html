@@ -161,11 +161,7 @@
         else
             document.getElementById('toggleEth').classList.remove('is-success');
 
-        const ethSection = document.getElementById('ethSection');
-        if (showEth === 'true')
-            ethSection.style.display = 'block';
-        else
-            ethSection.style.display = 'none';
+        document.getElementById('ethSection').style.display = showEth === 'true' ? 'block' : 'none';
     }
 
     const subscribeMessage = {
@@ -173,7 +169,6 @@
         "product_ids": [
             "BTC-USD",
             "ETH-USD"
-
         ],
         "channels": [
             "ticker"
@@ -243,12 +238,11 @@
         {
             data.previousSocketReadyState = data.socketReadyState;
             data.socketReadyState = cbSocket.readyState;
-            document.getElementById(data.socketReadyStateId).classList.remove(getSocketStatusClass(data.previousSocketReadyState));
-            document.getElementById(data.socketReadyStateId).classList.add(getSocketStatusClass(data.socketReadyState));
-            document.getElementById(data.socketReadyStateId).title = getSocketStatus(data.socketReadyState);
-            document.getElementById(data.socketReadyStateId).innerText = getSocketStatus(data.socketReadyState);
+            document.getElementById(data.socketReadyStateId).classList.remove(SOCKET_STATUSES[data.previousSocketReadyState].class);
+            document.getElementById(data.socketReadyStateId).classList.add(SOCKET_STATUSES[data.socketReadyState].class);
+            document.getElementById(data.socketReadyStateId).innerText = SOCKET_STATUSES[data.socketReadyState].name;
             
-            changeFavicon(getFavicon(data.socketReadyState));
+            changeFavicon(SOCKET_STATUSES[data.socketReadyState].favicon);
         }
 
         data.currentTime = new Date();
@@ -266,7 +260,7 @@
 
     function checkConnection()
     {
-        if (getSocketStatus(data.socketReadyState) === 'Closed')
+        if (SOCKET_STATUSES[data.socketReadyState].name === 'Closed')
         {
             cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
             connect(cbSocket, subscribeMessage);
@@ -278,28 +272,11 @@
         return Math.round(Math.max(currentTime - lastUpdate, 0) / 1000);
     }
 
-    function getSocketStatus(readyState)
-    {
-        if (readyState === 0) return "Connecting";
-        if (readyState === 1) return "Connected";
-        if (readyState === 2) return "Closing";
-        if (readyState === 3) return "Closed";
-    }
-
-    function getSocketStatusClass(readyState)
-    {
-        if (readyState === 0) return "is-info";
-        if (readyState === 1) return "is-success";
-        if (readyState === 2) return "is-warning";
-        if (readyState === 3) return "is-danger";
-    }
-
-    function getFavicon(readyState)
-    {
-        if (readyState === 0) return "img/yellow.ico";
-        if (readyState === 1) return "img/green.ico";
-        if (readyState === 2) return "img/yellow.ico";
-        if (readyState === 3) return "img/red.ico";
+    const SOCKET_STATUSES = {
+        0: { name: 'Connecting', class: 'is-info', favicon: 'img/yellow.ico' },
+        1: { name: 'Connected', class: 'is-success', favicon: 'img/green.ico' },
+        2: { name: 'Closing', class: 'is-warning', favicon: 'img/yellow.ico' },
+        3: { name: 'Closed', class: 'is-danger', favicon: 'img/red.ico' },
     }
 
     function flashPriceColorChange(newPrice, lastPrice, priceElement)
