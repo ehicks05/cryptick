@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>bitcoin-price-ticker</title>
-    <link id="styleLink" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.0/css/bulma.min.css" />
-<!--    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     
     <style>
-        /*body {font-family: 'Roboto', sans-serif;}*/
+        body {display:flex; flex-direction: column; height: 100vh; margin: 0; font-family: 'Roboto', sans-serif;}
         .red {animation: down 1s;}
         .green {animation: up 1s;}
 
@@ -24,8 +23,13 @@
             100% {background-color: transparent;}
         }
 
-        .section {padding-top: 12px;}
-        .footer {padding-bottom: 48px;}
+        a {text-decoration: none; color: hsl(217, 71%, 53%);}
+        .section {padding: 1rem 1.5rem 3rem 1.5rem;}
+        .title {    
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.125;
+        }
 
         /* font scaling from here: https://css-tricks.com/books/fundamental-css-tactics/scale-typography-screen-size/ */
         .scalingFont-xl {font-size: calc(46px + 340 * ((100vw - 320px) / 1680)) !important; }
@@ -33,93 +37,101 @@
         .scalingFont-m {font-size: calc(32px + 240 * ((100vw - 320px) / 1680)) !important; }
         .scalingFont-s {font-size: calc(16px + 160 * ((100vw - 320px) / 1680)) !important; }
         .lesserScalingFont {font-size: calc(20px + (80 - 20) * ((100vw - 320px) / (2000 - 320))) !important; }
+
+        .is-success {background-color: #23d160 !important; color: #fff !important;}
+        .is-info {background-color: hsl(204, 86%, 53%) !important; color: #fff !important;}
+        .is-warning {background-color: hsl(48, 100%, 67%) !important; color: #000 !important;}
+        .is-danger {background-color: hsl(348, 100%, 61%) !important; color: #fff !important;}
+
+        .buttons {display: flex;}
+        .buttons .button:not(:last-child) {margin-right: .5rem;}
+        .button {display: flex; padding: .5rem 1rem; border-radius: 4px; cursor: pointer; color: #333; background-color: #eee; border: 1px solid #666;}
+        @media (prefers-color-scheme: dark) {
+            .button {color: #eee; background-color: #222;}
+        }
+
+        footer {padding: 3rem 1.5rem;}
+        .level {display: flex; flex-direction: column; align-items: center; justify-content: space-between;}
+        @media (min-width: 680px) {
+            .level {flex-direction: row;}
+        }
+
+        .level-item {width:100%; flex-grow: 1; justify-content: center; display: flex; margin-top: 1rem; align-items: center;}
+        @media (min-width: 680px) {
+            .level-item {margin-top: 0; width: calc(100%/3);}
+            .justify-start {justify-content: flex-start;}
+            .justify-end {justify-content: flex-end;}
+        }
+
+        .tag {
+            align-items: center;
+            border-radius: 4px;
+            display: inline-flex;
+            font-size: .75rem;
+            height: 2em;
+            justify-content: center;
+            padding-left: .75em;
+            padding-right: .75em;
+            white-space: nowrap;
+        }
+
+        body {height: 100vh; color: #111; background-color: #fefefe;}
+        @media (prefers-color-scheme: dark) {
+            body {color: #eee; background-color: #111;}
+        }
     </style>
 
 </head>
 <body>
-
 <section class="section">
     <div>
-        <header class="lesserScalingFont">BTC</header>
+        <div class="lesserScalingFont">BTC</div>
         <div class="title is-1 scalingFont" id="price-btc"></div>
-        <div class="has-text-danger" id="error-btc" style="display:none;"></div>
     </div>
 </section>
 
 <section class="section" id="ethSection">
     <div>
-        <header class="lesserScalingFont">ETH</header>
+        <div class="lesserScalingFont">ETH</div>
         <div class="title is-1 scalingFont" id="price-eth"></div>
-        <div class="has-text-danger" id="error-eth" style="display:none;"></div>
     </div>
 </section>
-
-<footer class="footer">
-    <nav class="level">
-        <div class="level-item has-text-centered">
-            <span id="current-time" style="padding-right: 1em;"></span>
+<div style="flex-grow: 1;"></div>
+<footer>
+    <div class="level">
+        <div class="level-item justify-start">
+            <span id="current-time" style="margin-right: 1em;"></span>
             <span id="socket-status" class="tag"></span>
         </div>
-        <div class="level-item has-text-centered">
+        <div class="level-item">
             <div class="buttons">
-                <button class="button" id="lightBulb">&#x1F4A1;</button>
                 <button class="button" id="toggleEth">ETH</button>
-            </div>
-        </div>
-        <div class="level-item has-text-centered">
-            <div class="buttons">
                 <button class="button font-size-button" id="fontSize-s">S</button>
                 <button class="button font-size-button" id="fontSize-m">M</button>
                 <button class="button font-size-button" id="fontSize-l">L</button>
                 <button class="button font-size-button" id="fontSize-xl">XL</button>
             </div>
         </div>
-        <div class="level-item has-text-centered">
-            <span>
-                <a href="https://www.github.com/ehicks05/bitcoin-price-ticker/" target="_blank">Bitcoin Price Ticker</a> by <a href="https://ehicks.net">Eric Hicks</a>
+        <div class="level-item justify-end">
+            <span style="display:flex; align-items: center;">
+                <a href="https://www.github.com/ehicks05/bitcoin-price-ticker/" target="_blank">github</a>
+                &nbsp;&centerdot;&nbsp; <a href="https://ehicks.net">ehicks</a>
             </span>
         </div>
-    </nav>
+    </div>
 </footer>
 
 <script>
-    if (!localStorage.getItem('theme'))
-        localStorage.setItem('theme', 'Light');
     if (!localStorage.getItem('showEth'))
         localStorage.setItem('showEth', 'false');
     if (!localStorage.getItem('fontSize'))
         localStorage.setItem('fontSize', 'l');
 
-    applyTheme();
     applyShowEth();
     applyFontSize();
 
-    document.getElementById('lightBulb').addEventListener('click', toggleTheme);
     document.getElementById('toggleEth').addEventListener('click', toggleEth);
     document.querySelectorAll('.font-size-button').forEach(element => element.addEventListener('click', changeFontSize));
-
-    function toggleTheme(e)
-    {
-        const theme = localStorage.getItem('theme') === 'Light' ? 'Dark' : 'Light';
-        localStorage.setItem('theme', theme);
-
-        applyTheme(theme);
-    }
-
-    function applyTheme(theme)
-    {
-        const defaultURL = "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css";
-        const darkURL = 'https://unpkg.com/bulmaswatch/cyborg/bulmaswatch.min.css';
-
-        if (!theme)
-            theme = localStorage.getItem('theme');
-
-        const link = document.getElementById("styleLink"); // Fetch the link by its ID
-        if (theme === 'Dark')
-            link.setAttribute("href", darkURL); // Change its href attribute
-        else
-            link.setAttribute("href", defaultURL); // Change its href attribute
-    }
 
     function changeFontSize(e)
     {
