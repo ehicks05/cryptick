@@ -9,18 +9,18 @@
         body {display:flex; flex-direction: column; height: 100vh; margin: 0; 
             font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif;
         }
-        .red {animation: down 1s;}
-        .green {animation: up 1s;}
+        .red {animation: down .7s;}
+        .green {animation: up .7s;}
 
         @keyframes up {
             0% {background-color: transparent;}
-            50% {background-color: rgba(0, 200, 0, .5);}
+            10% {background-color: rgba(0, 200, 0, .5);}
             100% {background-color: transparent;}
         }
 
         @keyframes down {
             0% {background-color: transparent;}
-            50% {background-color: rgba(200, 0, 0, .5);}
+            10% {background-color: rgba(200, 0, 0, .5);}
             100% {background-color: transparent;}
         }
 
@@ -304,7 +304,7 @@
         if (newPrice < lastPrice)
             priceElement.classList.add('red');
 
-        timeout = setTimeout(() => priceElement.classList.remove('green', 'red'), 1000);
+        timeout = setTimeout(() => priceElement.classList.remove('green', 'red'), 700);
     }
 
     function changeFavicon(src) {
