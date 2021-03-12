@@ -40,10 +40,9 @@
         .section {padding: 1rem 1.5rem 3rem 1.5rem;}
         .title {font-weight: 600;}
 
-        /* font scaling from here: https://css-tricks.com/books/fundamental-css-tactics/scale-typography-screen-size/ */
-        .scalingFont-l {font-size: calc(42px + 280 * ((100vw - 320px) / 1680)) !important; }
-        .scalingFont-m {font-size: calc(32px + 240 * ((100vw - 320px) / 1680)) !important; }
-        .scalingFont-s {font-size: calc(16px + 160 * ((100vw - 320px) / 1680)) !important; }
+        .scalingFontContainer-s {width: 33%;}
+        .scalingFontContainer-m {width: 67%;}
+        .scalingFontContainer-l {width: 100%;}
         .lesserScalingFont {font-size: calc(20px + (80 - 20) * ((100vw - 320px) / (2000 - 320))) !important; }
 
         .is-success {background-color: #23d160 !important; color: #fff !important;}
@@ -82,14 +81,14 @@
 </head>
 <body>
 <section class="section">
-    <div>
+    <div class="scalingFontContainer">
         <div class="lesserScalingFont">BTC</div>
         <div class="title scalingFont" id="price-btc"></div>
     </div>
 </section>
 
 <section class="section" id="ethSection">
-    <div>
+    <div class="scalingFontContainer">
         <div class="lesserScalingFont">ETH</div>
         <div class="title scalingFont" id="price-eth"></div>
     </div>
@@ -115,6 +114,7 @@
     </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fitty/2.3.3/fitty.min.js" integrity="sha512-Qsfv/rVSIXtsKH4882nlkrR362m2+UO/14uqlSPUF7pgF1shkhXcWT5sMMixzpoysR+OEtcf+nn3YwUHr3kWqA==" crossorigin="anonymous"></script>
 <script>
     if (!localStorage.getItem('showEth'))
         localStorage.setItem('showEth', 'false');
@@ -123,6 +123,7 @@
 
     applyShowEth();
     applyFontSize();
+    fitty('.scalingFont');
 
     document.getElementById('toggleEth').addEventListener('click', toggleEth);
     document.querySelectorAll('.font-size-button').forEach(element => element.addEventListener('click', changeFontSize));
@@ -138,15 +139,17 @@
             size = localStorage.getItem('fontSize');
         localStorage.setItem('fontSize', size);
 
-        document.querySelectorAll('.scalingFont').forEach(el => {
+        document.querySelectorAll('.scalingFontContainer').forEach(el => {
             ['s', 'm', 'l'].forEach(size => {
-                el.classList.remove('scalingFont-' + size);
+                el.classList.remove('scalingFontContainer-' + size);
                 document.getElementById('fontSize-' + size).classList.remove('is-success')
             });
 
-            el.classList.add('scalingFont-' + size);
+            el.classList.add('scalingFontContainer-' + size);
             document.getElementById('fontSize-' + size).classList.add('is-success')
         });
+
+        fitty.fitAll();
     }
 
     function toggleEth(e)
