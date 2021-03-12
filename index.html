@@ -177,20 +177,17 @@
         previousSocketReadyState: 0,
         socketReadyState: 0,
         socketReadyStateId: 'socket-status',
-        showEth: localStorage.getItem('showEth'),
         btc : {
             "name": "BTC-USD",
             "lastPrice": 0,
             "lastUpdate": 0,
             "priceId": "price-btc",
-            "errorId": "error-btc",
         },
         eth: {
             "name": "ETH-USD",
             "lastPrice": 0,
             "lastUpdate": 0,
             "priceId": "price-eth",
-            "errorId": "error-eth",
         }
     };
 
@@ -215,8 +212,7 @@
                     document.title = price + ' BTC-USD';
             }
             if (response.type === "error") {
-                document.getElementById(cryptoElement.errorId).style.display = "block";
-                document.getElementById(cryptoElement.errorId).innerText = event.data;
+                console.log(response);
             }
         };
 
