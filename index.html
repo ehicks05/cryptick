@@ -276,10 +276,8 @@
         // force animation restart (https://css-tricks.com/restart-css-animation/)
         void priceElement.offsetWidth;
 
-        if (newPrice > lastPrice)
-            priceElement.classList.add('green');
-        if (newPrice < lastPrice)
-            priceElement.classList.add('red');
+        const color = newPrice > lastPrice ? 'green' : 'red';
+        priceElement.classList.add(color);
     }
 
     function changeFavicon(src) {
