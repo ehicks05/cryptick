@@ -178,15 +178,11 @@
         socketReadyState: 0,
         socketReadyStateId: 'socket-status',
         btc : {
-            "name": "BTC-USD",
             "lastPrice": 0,
-            "lastUpdate": 0,
             "priceId": "price-btc",
         },
         eth: {
-            "name": "ETH-USD",
             "lastPrice": 0,
-            "lastUpdate": 0,
             "priceId": "price-eth",
         }
     };
@@ -198,15 +194,13 @@
 
         socket.onmessage = event => {
             const response = JSON.parse(event.data);
-            const cryptoElement = response.product_id === 'BTC-USD' ? data.btc : data.eth;
+            const crypto = response.product_id === 'BTC-USD' ? data.btc : data.eth;
 
             if (response.type === 'ticker') {
-                cryptoElement.lastUpdate = new Date();
-
                 const price = Number.parseFloat(response.price);
-                flashPriceColorChange(price, cryptoElement.lastPrice, document.getElementById(cryptoElement.priceId));
-                cryptoElement.lastPrice = price;
-                document.getElementById(cryptoElement.priceId).innerText = Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
+                flashPriceColorChange(price, crypto.lastPrice, document.getElementById(crypto.priceId));
+                crypto.lastPrice = price;
+                document.getElementById(crypto.priceId).innerText = Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
 
                 if (response.product_id === 'BTC-USD')
                     document.title = price + ' BTC-USD';
@@ -231,7 +225,7 @@
 
             changeFavicon(SOCKET_STATUSES[data.socketReadyState].favicon);
         }
-    }, 100);
+    }, 1000);
 
     setInterval(checkConnection, 1000);
 
