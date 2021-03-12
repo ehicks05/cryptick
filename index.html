@@ -299,6 +299,10 @@
         if (newPrice === lastPrice) return;
         clearTimeout(timeout);
         priceElement.classList.remove('green', 'red');
+
+        // force animation restart (https://css-tricks.com/restart-css-animation/)
+        void priceElement.offsetWidth;
+
         if (newPrice > lastPrice)
             priceElement.classList.add('green');
         if (newPrice < lastPrice)
