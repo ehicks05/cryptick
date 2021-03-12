@@ -116,23 +116,23 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fitty/2.3.3/fitty.min.js" integrity="sha512-Qsfv/rVSIXtsKH4882nlkrR362m2+UO/14uqlSPUF7pgF1shkhXcWT5sMMixzpoysR+OEtcf+nn3YwUHr3kWqA==" crossorigin="anonymous"></script>
 <script>
-    const changeFontSize = e => applyFontSize(e.target.id.replace('fontSize-', ''));
+    const applyShowEth = (showEth) => {
+        if (showEth === 'true')
+            document.getElementById('toggleEth').classList.add('is-success');
+        else
+            document.getElementById('toggleEth').classList.remove('is-success');
 
-    if (!localStorage.getItem('showEth'))
-        localStorage.setItem('showEth', 'false');
-    if (!localStorage.getItem('fontSize'))
-        localStorage.setItem('fontSize', 'l');
+        document.getElementById('ethSection').style.display = showEth === 'true' ? 'block' : 'none';
+    }
 
-    applyShowEth(localStorage.getItem('showEth'));
-    applyFontSize(localStorage.getItem('fontSize'));
-    fitty('.scalingFont');
+    const toggleEth = () => {
+        let showEth = localStorage.getItem('showEth') === 'true' ? 'false' : 'true';
+        localStorage.setItem('showEth', showEth);
 
-    document.getElementById('toggleEth').addEventListener('click', toggleEth);
-    document.querySelectorAll('.font-size-button').forEach(element => element.addEventListener('click', changeFontSize));
+        applyShowEth(showEth);
+    }
 
-    function applyFontSize(size) {
-        localStorage.setItem('fontSize', size);
-
+    const applyFontSize = (size) => {
         document.querySelectorAll('.scalingFontContainer').forEach(el => {
             ['s', 'm', 'l'].forEach(size => {
                 el.classList.remove('scalingFontContainer-' + size);
@@ -146,21 +146,23 @@
         fitty.fitAll();
     }
 
-    function toggleEth() {
-        let showEth = localStorage.getItem('showEth') === 'true' ? 'false' : 'true';
-        localStorage.setItem('showEth', showEth);
-
-        applyShowEth(showEth);
+    const changeFontSize = e => {
+        const size = e.target.id.replace('fontSize-', '');
+        localStorage.setItem('fontSize', size);
+        applyFontSize(size);
     }
 
-    function applyShowEth(showEth) {
-        if (showEth === 'true')
-            document.getElementById('toggleEth').classList.add('is-success');
-        else
-            document.getElementById('toggleEth').classList.remove('is-success');
+    if (!localStorage.getItem('showEth'))
+        localStorage.setItem('showEth', 'false');
+    if (!localStorage.getItem('fontSize'))
+        localStorage.setItem('fontSize', 'l');
 
-        document.getElementById('ethSection').style.display = showEth === 'true' ? 'block' : 'none';
-    }
+    applyShowEth(localStorage.getItem('showEth'));
+    applyFontSize(localStorage.getItem('fontSize'));
+    fitty('.scalingFont');
+
+    document.getElementById('toggleEth').addEventListener('click', toggleEth);
+    document.querySelectorAll('.font-size-button').forEach(element => element.addEventListener('click', changeFontSize));
 
     const subscribeMessage = {
         "type": "subscribe",
@@ -189,7 +191,7 @@
 
     let cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
 
-    function connect(socket, subscribeMessage) {
+    const connect = (socket, subscribeMessage) => {
         socket.onopen = () => socket.send(JSON.stringify(subscribeMessage));
 
         socket.onmessage = event => {
@@ -210,7 +212,7 @@
             }
         };
 
-        socket.onclose = event => console.log('Socket onclose event has fired. Reason: ' + event.reason);
+        socket.onclose = () => console.log('Socket onclose event has fired');
     }
 
     connect(cbSocket, subscribeMessage);
@@ -240,7 +242,7 @@
         3: { name: 'Closed', class: 'is-danger', favicon: 'img/red.ico' },
     }
 
-    function flashPriceColorChange(newPrice, lastPrice, priceElement) {
+    const flashPriceColorChange = (newPrice, lastPrice, priceElement) => {
         if (newPrice === lastPrice) return;
         priceElement.classList.remove('green', 'red');
 
@@ -251,7 +253,7 @@
         priceElement.classList.add(color);
     }
 
-    function changeFavicon(src) {
+    const changeFavicon = (src) => {
         const link = document.createElement('link');
         link.id = 'dynamic-favicon';
         link.rel = 'shortcut icon';
