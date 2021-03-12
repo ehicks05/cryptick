@@ -116,27 +116,21 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fitty/2.3.3/fitty.min.js" integrity="sha512-Qsfv/rVSIXtsKH4882nlkrR362m2+UO/14uqlSPUF7pgF1shkhXcWT5sMMixzpoysR+OEtcf+nn3YwUHr3kWqA==" crossorigin="anonymous"></script>
 <script>
+    const changeFontSize = e => applyFontSize(e.target.id.replace('fontSize-', ''));
+
     if (!localStorage.getItem('showEth'))
         localStorage.setItem('showEth', 'false');
     if (!localStorage.getItem('fontSize'))
         localStorage.setItem('fontSize', 'l');
 
-    applyShowEth();
-    applyFontSize();
+    applyShowEth(localStorage.getItem('showEth'));
+    applyFontSize(localStorage.getItem('fontSize'));
     fitty('.scalingFont');
 
     document.getElementById('toggleEth').addEventListener('click', toggleEth);
     document.querySelectorAll('.font-size-button').forEach(element => element.addEventListener('click', changeFontSize));
 
-    function changeFontSize(e)
-    {
-        applyFontSize(e.target.id.replace('fontSize-', ''));
-    }
-
-    function applyFontSize(size)
-    {
-        if (!size)
-            size = localStorage.getItem('fontSize');
+    function applyFontSize(size) {
         localStorage.setItem('fontSize', size);
 
         document.querySelectorAll('.scalingFontContainer').forEach(el => {
@@ -152,19 +146,14 @@
         fitty.fitAll();
     }
 
-    function toggleEth(e)
-    {
+    function toggleEth() {
         let showEth = localStorage.getItem('showEth') === 'true' ? 'false' : 'true';
         localStorage.setItem('showEth', showEth);
 
         applyShowEth(showEth);
     }
 
-    function applyShowEth(showEth)
-    {
-        if (!showEth)
-            showEth = localStorage.getItem('showEth');
-
+    function applyShowEth(showEth) {
         if (showEth === 'true')
             document.getElementById('toggleEth').classList.add('is-success');
         else
@@ -207,16 +196,14 @@
 
     let cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
 
-    function connect(socket, subscribeMessage)
-    {
+    function connect(socket, subscribeMessage) {
         socket.onopen = () => socket.send(JSON.stringify(subscribeMessage));
 
         socket.onmessage = event => {
             const response = JSON.parse(event.data);
             const cryptoElement = response.product_id === 'BTC-USD' ? data.btc : data.eth;
 
-            if (response.type === 'ticker')
-            {
+            if (response.type === 'ticker') {
                 cryptoElement.lastUpdate = new Date();
 
                 const price = Number.parseFloat(response.price);
@@ -227,8 +214,7 @@
                 if (response.product_id === 'BTC-USD')
                     document.title = price + ' BTC-USD';
             }
-            if (response.type === "error")
-            {
+            if (response.type === "error") {
                 document.getElementById(cryptoElement.errorId).style.display = "block";
                 document.getElementById(cryptoElement.errorId).innerText = event.data;
             }
@@ -239,10 +225,8 @@
 
     connect(cbSocket, subscribeMessage);
 
-    setInterval(() =>
-    {
-        if (cbSocket.readyState !== data.socketReadyState)
-        {
+    setInterval(() => {
+        if (cbSocket.readyState !== data.socketReadyState) {
             data.previousSocketReadyState = data.socketReadyState;
             data.socketReadyState = cbSocket.readyState;
             document.getElementById(data.socketReadyStateId).classList.remove(SOCKET_STATUSES[data.previousSocketReadyState].class);
@@ -255,10 +239,8 @@
 
     setInterval(checkConnection, 1000);
 
-    function checkConnection()
-    {
-        if (SOCKET_STATUSES[data.socketReadyState].name === 'Closed')
-        {
+    function checkConnection() {
+        if (SOCKET_STATUSES[data.socketReadyState].name === 'Closed') {
             cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
             connect(cbSocket, subscribeMessage);
         }
@@ -271,8 +253,7 @@
         3: { name: 'Closed', class: 'is-danger', favicon: 'img/red.ico' },
     }
 
-    function flashPriceColorChange(newPrice, lastPrice, priceElement)
-    {
+    function flashPriceColorChange(newPrice, lastPrice, priceElement) {
         if (newPrice === lastPrice) return;
         priceElement.classList.remove('green', 'red');
 
