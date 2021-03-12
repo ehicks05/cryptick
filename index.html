@@ -252,14 +252,12 @@
     }
 
     function changeFavicon(src) {
-        const link = document.createElement('link'),
-            oldLink = document.getElementById('dynamic-favicon');
+        const link = document.createElement('link');
         link.id = 'dynamic-favicon';
         link.rel = 'shortcut icon';
         link.href = src;
-        if (oldLink) {
-            document.head.removeChild(oldLink);
-        }
+        const oldLink = document.getElementById('dynamic-favicon');
+        if (oldLink) document.head.removeChild(oldLink);
         document.head.appendChild(link);
     }
 
