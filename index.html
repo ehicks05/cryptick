@@ -102,7 +102,6 @@
 <footer>
     <div class="level">
         <div class="level-item justify-start">
-            <span id="current-time" style="margin-right: 1em;"></span>
             <span id="socket-status" class="tag"></span>
         </div>
         <div class="level-item">
@@ -190,8 +189,6 @@
     };
 
     const data = {
-        currentTime: new Date(),
-        currentTimeId: 'current-time',
         previousSocketReadyState: 0,
         socketReadyState: 0,
         socketReadyStateId: 'socket-status',
@@ -258,16 +255,6 @@
             
             changeFavicon(SOCKET_STATUSES[data.socketReadyState].favicon);
         }
-
-        data.currentTime = new Date();
-        document.getElementById(data.currentTimeId).innerText = data.currentTime.toLocaleTimeString();
-
-        const timeSinceLastUpdateBTC = getTimeSinceLastUpdate(data.currentTime, data.btc.lastUpdate);
-        document.getElementById(data.btc.priceId).title = "Seconds since last update: " + timeSinceLastUpdateBTC;
-
-        const timeSinceLastUpdateETH = getTimeSinceLastUpdate(data.currentTime, data.eth.lastUpdate);
-        document.getElementById(data.eth.priceId).title = "Seconds since last update: " + timeSinceLastUpdateETH;
-
     }, 100);
 
     setInterval(checkConnection, 1000);
@@ -279,11 +266,6 @@
             cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
             connect(cbSocket, subscribeMessage);
         }
-    }
-
-    function getTimeSinceLastUpdate(currentTime, lastUpdate)
-    {
-        return Math.round(Math.max(currentTime - lastUpdate, 0) / 1000);
     }
 
     const SOCKET_STATUSES = {
