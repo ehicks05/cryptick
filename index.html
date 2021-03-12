@@ -225,16 +225,13 @@
 
             changeFavicon(SOCKET_STATUSES[data.socketReadyState].favicon);
         }
-    }, 1000);
 
-    setInterval(checkConnection, 1000);
-
-    function checkConnection() {
+        // reconnect
         if (SOCKET_STATUSES[data.socketReadyState].name === 'Closed') {
             cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
             connect(cbSocket, subscribeMessage);
         }
-    }
+    }, 1000);
 
     const SOCKET_STATUSES = {
         0: { name: 'Connecting', class: 'is-info', favicon: 'img/yellow.ico' },
