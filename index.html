@@ -73,15 +73,10 @@
         }
 
         .tag {
-            align-items: center;
-            border-radius: 4px;
+            border-radius: 50%;
             display: inline-flex;
-            font-size: .75rem;
-            height: 2em;
-            justify-content: center;
-            padding-left: .75em;
-            padding-right: .75em;
-            white-space: nowrap;
+            height: 1rem;
+            width: 1rem;
         }
     </style>
 
@@ -104,9 +99,6 @@
 <footer>
     <div class="level">
         <div class="level-item justify-start">
-            <span id="socket-status" class="tag"></span>
-        </div>
-        <div class="level-item">
             <div class="buttons">
                 <button class="button" id="toggleEth">ETH</button>
                 <button class="button font-size-button" id="fontSize-s">S</button>
@@ -117,7 +109,8 @@
         </div>
         <div class="level-item justify-end">
             <span style="display:flex; align-items: center;">
-                <a href="https://www.github.com/ehicks05/bitcoin-price-ticker/" target="_blank">github</a>
+                <span id="socket-status" class="tag"></span>
+                &nbsp;&centerdot;&nbsp; <a href="https://www.github.com/ehicks05/bitcoin-price-ticker/" target="_blank">github</a>
                 &nbsp;&centerdot;&nbsp; <a href="https://ehicks.net">ehicks</a>
             </span>
         </div>
@@ -253,7 +246,7 @@
             data.socketReadyState = cbSocket.readyState;
             document.getElementById(data.socketReadyStateId).classList.remove(SOCKET_STATUSES[data.previousSocketReadyState].class);
             document.getElementById(data.socketReadyStateId).classList.add(SOCKET_STATUSES[data.socketReadyState].class);
-            document.getElementById(data.socketReadyStateId).innerText = SOCKET_STATUSES[data.socketReadyState].name;
+            document.getElementById(data.socketReadyStateId).title = SOCKET_STATUSES[data.socketReadyState].name;
             
             changeFavicon(SOCKET_STATUSES[data.socketReadyState].favicon);
         }
