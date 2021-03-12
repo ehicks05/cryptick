@@ -41,7 +41,6 @@
         .title {font-weight: 600;}
 
         /* font scaling from here: https://css-tricks.com/books/fundamental-css-tactics/scale-typography-screen-size/ */
-        .scalingFont-xl {font-size: calc(46px + 340 * ((100vw - 320px) / 1680)) !important; }
         .scalingFont-l {font-size: calc(42px + 280 * ((100vw - 320px) / 1680)) !important; }
         .scalingFont-m {font-size: calc(32px + 240 * ((100vw - 320px) / 1680)) !important; }
         .scalingFont-s {font-size: calc(16px + 160 * ((100vw - 320px) / 1680)) !important; }
@@ -104,7 +103,6 @@
                 <button class="button font-size-button" id="fontSize-s">S</button>
                 <button class="button font-size-button" id="fontSize-m">M</button>
                 <button class="button font-size-button" id="fontSize-l">L</button>
-                <button class="button font-size-button" id="fontSize-xl">XL</button>
             </div>
         </div>
         <div class="level-item justify-end">
@@ -141,7 +139,7 @@
         localStorage.setItem('fontSize', size);
 
         document.querySelectorAll('.scalingFont').forEach(el => {
-            ['xl', 'l', 'm', 's'].forEach(size => {
+            ['s', 'm', 'l'].forEach(size => {
                 el.classList.remove('scalingFont-' + size);
                 document.getElementById('fontSize-' + size).classList.remove('is-success')
             });
@@ -247,7 +245,7 @@
             document.getElementById(data.socketReadyStateId).classList.remove(SOCKET_STATUSES[data.previousSocketReadyState].class);
             document.getElementById(data.socketReadyStateId).classList.add(SOCKET_STATUSES[data.socketReadyState].class);
             document.getElementById(data.socketReadyStateId).title = SOCKET_STATUSES[data.socketReadyState].name;
-            
+
             changeFavicon(SOCKET_STATUSES[data.socketReadyState].favicon);
         }
     }, 100);
@@ -289,7 +287,7 @@
     }
 
     function changeFavicon(src) {
-        var link = document.createElement('link'),
+        const link = document.createElement('link'),
             oldLink = document.getElementById('dynamic-favicon');
         link.id = 'dynamic-favicon';
         link.rel = 'shortcut icon';
