@@ -4,34 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>bitcoin-price-ticker</title>
-    
+
     <style>
-        body {display:flex; flex-direction: column; height: 100vh; margin: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif;
+        html {
+            height: -webkit-fill-available;
         }
-        .red {animation: down .7s;}
-        .green {animation: up .7s;}
+        body {
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            color: #111;
+            background-color: #fefefe;
+            display:flex; flex-direction: column;
+            margin: 0;
+            font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {color: #eee; background-color: #111;}
+        }
+        .red {animation: down .5s;}
+        .green {animation: up .5s;}
 
         @keyframes up {
             0% {background-color: transparent;}
-            10% {background-color: rgba(0, 200, 0, .5);}
+            10% {background-color: rgba(0, 200, 0, .3);}
             100% {background-color: transparent;}
         }
 
         @keyframes down {
             0% {background-color: transparent;}
-            10% {background-color: rgba(200, 0, 0, .5);}
+            10% {background-color: rgba(200, 0, 0, .3);}
             100% {background-color: transparent;}
         }
 
         a {text-decoration: none; color: hsl(217, 71%, 53%);}
         .section {padding: 1rem 1.5rem 3rem 1.5rem;}
-        .title {   
-            display: inline-block;
-            font-size: 2rem;
-            font-weight: 600;
-            line-height: 1.125;
-        }
+        .title {font-weight: 600;}
 
         /* font scaling from here: https://css-tricks.com/books/fundamental-css-tactics/scale-typography-screen-size/ */
         .scalingFont-xl {font-size: calc(46px + 340 * ((100vw - 320px) / 1680)) !important; }
@@ -75,11 +82,6 @@
             padding-left: .75em;
             padding-right: .75em;
             white-space: nowrap;
-        }
-
-        body {height: 100vh; color: #111; background-color: #fefefe;}
-        @media (prefers-color-scheme: dark) {
-            body {color: #eee; background-color: #111;}
         }
     </style>
 
