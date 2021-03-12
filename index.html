@@ -268,11 +268,9 @@
         3: { name: 'Closed', class: 'is-danger', favicon: 'img/red.ico' },
     }
 
-    let timeout;
     function flashPriceColorChange(newPrice, lastPrice, priceElement)
     {
         if (newPrice === lastPrice) return;
-        clearTimeout(timeout);
         priceElement.classList.remove('green', 'red');
 
         // force animation restart (https://css-tricks.com/restart-css-animation/)
@@ -282,8 +280,6 @@
             priceElement.classList.add('green');
         if (newPrice < lastPrice)
             priceElement.classList.add('red');
-
-        timeout = setTimeout(() => priceElement.classList.remove('green', 'red'), 700);
     }
 
     function changeFavicon(src) {
