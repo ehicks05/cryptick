@@ -256,13 +256,13 @@
 
             if (response.type === 'ticker') {
                 const productId = response.product_id;
-                const quoteCurrency = productId.split('-')[1];
+                const currency = productId.split('-')[1];
                 if (!data[productId]) data[productId] = { lastPrice: 0 };
 
                 const price = Number.parseFloat(response.price);
                 const maximumSignificantDigits = price > 1 ? undefined : 3;
                 const notation = price >= .001 ? undefined : 'scientific'
-                const prettyPrice = Intl.NumberFormat('en-US', { style: 'currency', currency: quoteCurrency, maximumSignificantDigits, notation }).format(price);
+                const prettyPrice = Intl.NumberFormat('en-US', { style: 'currency', currency, maximumSignificantDigits, notation }).format(price);
                 
                 const priceEl = document.getElementById(`price${productId}`);
                 priceEl.innerText = prettyPrice;
