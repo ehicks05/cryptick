@@ -40,8 +40,8 @@
         .section {padding: 1rem 1.5rem 3rem 1.5rem;}
         .title {font-weight: 600;}
 
-        .scalingFontContainer-s {width: 33%;}
-        .scalingFontContainer-m {width: 67%;}
+        .scalingFontContainer-s {width: 25%;}
+        .scalingFontContainer-m {width: 50%;}
         .scalingFontContainer-l {width: 100%;}
         .lesserScalingFont {color: #555; font-size: calc(20px + (80 - 20) * ((100vw - 320px) / (2000 - 320))) !important; }
         @media (prefers-color-scheme: dark) {
@@ -52,9 +52,9 @@
         .is-warning {background-color: hsl(48, 100%, 67%) !important; color: #000 !important;}
         .is-danger {background-color: hsl(348, 100%, 61%) !important; color: #fff !important;}
 
-        .buttons {display: flex;}
+        .buttons {display: flex; flex-wrap: wrap; width: 100%;}
         .buttons .button:not(:last-child) {margin-right: .5rem;}
-        .button {display: flex; padding: .5rem 1rem; border-radius: 4px; cursor: pointer; color: #333; background-color: #eee; border: 1px solid #666;}
+        .button {display: flex; white-space: nowrap; padding: .5rem 1rem; border-radius: 4px; cursor: pointer; color: #333; background-color: #eee; border: 1px solid #666;}
         @media (prefers-color-scheme: dark) {
             .button {color: #eee; background-color: #222;}
         }
@@ -82,25 +82,14 @@
 
 </head>
 <body>
-<section class="section">
-    <div class="scalingFontContainer">
-        <div class="lesserScalingFont">BTC</div>
-        <div class="title scalingFont" id="price-btc"></div>
-    </div>
-</section>
+    <div id='productSections'>
 
-<section class="section" id="ethSection">
-    <div class="scalingFontContainer">
-        <div class="lesserScalingFont">ETH</div>
-        <div class="title scalingFont" id="price-eth"></div>
     </div>
-</section>
 <div style="flex-grow: 1;"></div>
 <footer>
     <div class="level">
         <div class="level-item justify-start">
             <div class="buttons">
-                <button class="button" id="toggleEth">ETH</button>
                 <button class="button font-size-button" id="fontSize-s">S</button>
                 <button class="button font-size-button" id="fontSize-m">M</button>
                 <button class="button font-size-button" id="fontSize-l">L</button>
@@ -114,24 +103,100 @@
             </span>
         </div>
     </div>
+        <div class="level">
+            <div class="level-item">
+                <div class="buttons" id='productButtons'>
+
+                </div>
+            </div>
+        </div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fitty/2.3.3/fitty.min.js" integrity="sha512-Qsfv/rVSIXtsKH4882nlkrR362m2+UO/14uqlSPUF7pgF1shkhXcWT5sMMixzpoysR+OEtcf+nn3YwUHr3kWqA==" crossorigin="anonymous"></script>
-<script>
-    const applyShowEth = (showEth) => {
-        if (showEth === 'true')
-            document.getElementById('toggleEth').classList.add('is-success');
-        else
-            document.getElementById('toggleEth').classList.remove('is-success');
+<script type='module'>
+    const createProductButton = (product) => {
+        const productButton = document.createElement('button');
+        productButton.id = `toggle${product}`;
+        productButton.className = `button`;
+        productButton.addEventListener('click', () => toggleProduct(product));
+        const content = document.createTextNode(product);
+        productButton.appendChild(content);
 
-        document.getElementById('ethSection').style.display = showEth === 'true' ? 'block' : 'none';
+        return productButton;
+    };
+
+    const createProductSection = (product) => {
+        const productSection = document.createElement('section');
+        productSection.id = `${product}Section`;
+        productSection.className = `section`;
+
+        const fontContainer = document.createElement('div');
+        fontContainer.className = `scalingFontContainer scalingFontContainer-${localStorage.getItem('fontSize')}`;
+        productSection.appendChild(fontContainer);
+
+        const label = document.createElement('div');
+        label.className = 'lesserScalingFont';
+        label.appendChild(document.createTextNode(product));
+        const price = document.createElement('div');
+        price.id = `price${product}`;
+        price.classList.add('title', 'scalingFont');
+        
+        fontContainer.appendChild(label);
+        fontContainer.appendChild(price);
+
+        document.getElementById('productSections').appendChild(productSection);
+        fitty('.scalingFont');
+    };
+
+    const API_PRODUCTS = (await (await fetch('https://api.pro.coinbase.com/products')).json())
+        .filter(product => ['BTC', 'USD', 'GBP', 'EUR'].includes(product.quote_currency))
+        .sort((a, b) => {
+            if (a.quote_currency !== b.quote_currency) return a.quote_currency.localeCompare(b.quote_currency);
+            if (a.base_currency !== b.base_currency) return a.base_currency.localeCompare(b.base_currency);
+        });
+        
+    API_PRODUCTS.forEach(apiProduct => {
+        document.getElementById('productButtons').appendChild(createProductButton(apiProduct.id));
+    });
+
+    const applyProducts = (products) => {
+        API_PRODUCTS.forEach(apiProduct => {
+            const buttonClasslist = document.getElementById(`toggle${apiProduct.id}`).classList;
+            const productSection = document.getElementById(`${apiProduct.id}Section`);
+            if (products[apiProduct.id]){
+                buttonClasslist.add('is-success');
+                if (!productSection)
+                    createProductSection(apiProduct.id);
+            } 
+            else {
+                buttonClasslist.remove('is-success');
+                if (productSection) 
+                    document.getElementById('productSections').removeChild(productSection);
+            }
+        });
     }
 
-    const toggleEth = () => {
-        let showEth = localStorage.getItem('showEth') === 'true' ? 'false' : 'true';
-        localStorage.setItem('showEth', showEth);
+    const toggleProduct = (productId) => {
+        const products = JSON.parse(localStorage.getItem('products'));
+        let showProduct = !products[productId];
+        
+        const messageType = showProduct ? "subscribe" : "unsubscribe";
+        cbSocket.send(JSON.stringify({
+            "type": messageType,
+            "product_ids": [
+                productId
+            ],
+            "channels": [
+                "ticker"
+            ]
+        }));
 
-        applyShowEth(showEth);
+        const {[productId]: toggled, ...stable} = products;
+        const newProducts = {...stable, ...(showProduct ? {[productId]: productId} : {})}
+
+        localStorage.setItem('products', JSON.stringify(newProducts));
+
+        applyProducts(newProducts);
     }
 
     const applyFontSize = (size) => {
@@ -154,24 +219,22 @@
         applyFontSize(size);
     }
 
-    if (!localStorage.getItem('showEth'))
-        localStorage.setItem('showEth', 'false');
+    if (!localStorage.getItem('products'))
+        localStorage.setItem('products', JSON.stringify({'BTC-USD': 'BTC-USD'}));
     if (!localStorage.getItem('fontSize'))
         localStorage.setItem('fontSize', 's');
 
-    applyShowEth(localStorage.getItem('showEth'));
+    applyProducts(JSON.parse(localStorage.getItem('products')));
     applyFontSize(localStorage.getItem('fontSize'));
     fitty('.scalingFont');
 
-    document.getElementById('toggleEth').addEventListener('click', toggleEth);
     document.querySelectorAll('.font-size-button').forEach(element => element.addEventListener('click', changeFontSize));
 
     const subscribeMessage = {
         "type": "subscribe",
-        "product_ids": [
-            "BTC-USD",
-            "ETH-USD"
-        ],
+        "product_ids": 
+            Object.keys(JSON.parse(localStorage.getItem('products')))
+        ,
         "channels": [
             "ticker"
         ]
@@ -181,14 +244,6 @@
         previousSocketReadyState: 0,
         socketReadyState: 0,
         socketReadyStateId: 'socket-status',
-        btc : {
-            "lastPrice": 0,
-            "priceId": "price-btc",
-        },
-        eth: {
-            "lastPrice": 0,
-            "priceId": "price-eth",
-        }
     };
 
     let cbSocket = new WebSocket("wss://ws-feed.pro.coinbase.com");
@@ -198,15 +253,21 @@
 
         socket.onmessage = event => {
             const response = JSON.parse(event.data);
-            const crypto = response.product_id === 'BTC-USD' ? data.btc : data.eth;
 
             if (response.type === 'ticker') {
-                const price = Number.parseFloat(response.price);
-                flashPriceColorChange(price, crypto.lastPrice, document.getElementById(crypto.priceId));
-                crypto.lastPrice = price;
-                document.getElementById(crypto.priceId).innerText = Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
+                const productId = response.product_id;
+                const quoteCurrency = productId.split('-')[1];
+                if (!data[productId]) data[productId] = { lastPrice: 0 };
 
-                if (response.product_id === 'BTC-USD')
+                const price = Number.parseFloat(response.price);
+                const prettyPrice = Intl.NumberFormat('en-US', { style: 'currency', currency: quoteCurrency }).format(price);
+                
+                const priceEl = document.getElementById(`price${productId}`);
+                priceEl.innerText = prettyPrice;
+                flashPriceColorChange(price, data[productId].lastPrice, priceEl);
+                data[productId].lastPrice = price;
+
+                if (productId === 'BTC-USD')
                     document.title = price + ' BTC-USD';
             }
             if (response.type === "error") {
