@@ -26,13 +26,13 @@
 
         @keyframes up {
             0% {background-color: transparent;}
-            10% {background-color: rgba(0, 200, 0, .3);}
+            10% {background-color: rgba(0, 200, 0, .1);}
             100% {background-color: transparent;}
         }
 
         @keyframes down {
             0% {background-color: transparent;}
-            10% {background-color: rgba(200, 0, 0, .3);}
+            10% {background-color: rgba(200, 0, 0, .1);}
             100% {background-color: transparent;}
         }
 
@@ -43,8 +43,10 @@
         .scalingFontContainer-s {width: 33%;}
         .scalingFontContainer-m {width: 67%;}
         .scalingFontContainer-l {width: 100%;}
-        .lesserScalingFont {font-size: calc(20px + (80 - 20) * ((100vw - 320px) / (2000 - 320))) !important; }
-
+        .lesserScalingFont {color: #555; font-size: calc(20px + (80 - 20) * ((100vw - 320px) / (2000 - 320))) !important; }
+        @media (prefers-color-scheme: dark) {
+            .lesserScalingFont {color: #aaa;}
+        }
         .is-success {background-color: #23d160 !important; color: #fff !important;}
         .is-info {background-color: hsl(204, 86%, 53%) !important; color: #fff !important;}
         .is-warning {background-color: hsl(48, 100%, 67%) !important; color: #000 !important;}
@@ -155,7 +157,7 @@
     if (!localStorage.getItem('showEth'))
         localStorage.setItem('showEth', 'false');
     if (!localStorage.getItem('fontSize'))
-        localStorage.setItem('fontSize', 'l');
+        localStorage.setItem('fontSize', 's');
 
     applyShowEth(localStorage.getItem('showEth'));
     applyFontSize(localStorage.getItem('fontSize'));
