@@ -43,7 +43,7 @@
         .scalingFontContainer-s {width: 25%;}
         .scalingFontContainer-m {width: 50%;}
         .scalingFontContainer-l {width: 100%;}
-        .lesserScalingFont {color: #555; font-size: calc(20px + (80 - 20) * ((100vw - 320px) / (2000 - 320))) !important; }
+        .lesserScalingFont {color: #555; width: 50%; white-space: nowrap; }
         @media (prefers-color-scheme: dark) {
             .lesserScalingFont {color: #aaa;}
         }
@@ -54,13 +54,14 @@
 
         .buttons {display: flex; flex-wrap: wrap; width: 100%;}
         .buttons .button:not(:last-child) {margin-right: .5rem;}
-        .button {display: flex; white-space: nowrap; padding: .5rem 1rem; border-radius: 4px; cursor: pointer; color: #333; background-color: #eee; border: 1px solid #666;}
+        .button {display: flex; white-space: nowrap; padding: .3rem .6rem; border-radius: 4px; cursor: pointer; 
+        color: #333; background-color: #eee; border: 1px solid #666;}
         @media (prefers-color-scheme: dark) {
             .button {color: #eee; background-color: #222;}
         }
 
-        footer {padding: 3rem 1.5rem;}
-        .level {display: flex; flex-direction: column; align-items: center; justify-content: space-between;}
+        footer {padding: 1rem;}
+        .level {display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 1rem;}
         @media (min-width: 680px) {
             .level {flex-direction: row;}
         }
@@ -82,38 +83,54 @@
 
 </head>
 <body>
-    <div id='productSections'>
-
-    </div>
+<div id='productSections'></div>
 <div style="flex-grow: 1;"></div>
 <footer>
     <div class="level">
         <div class="level-item justify-start">
-            <div class="buttons">
-                <button class="button font-size-button" id="fontSize-s">S</button>
-                <button class="button font-size-button" id="fontSize-m">M</button>
-                <button class="button font-size-button" id="fontSize-l">L</button>
-            </div>
-        </div>
-        <div class="level-item justify-end">
             <span style="display:flex; align-items: center;">
                 <span id="socket-status" class="tag"></span>
-                &nbsp;&centerdot;&nbsp; <a href="https://www.github.com/ehicks05/bitcoin-price-ticker/" target="_blank">github</a>
-                &nbsp;&centerdot;&nbsp; <a href="https://ehicks.net">ehicks</a>
+                <a href="https://www.github.com/ehicks05/bitcoin-price-ticker/" target="_blank" style="margin: 0 1rem;">github</a>
+                <a href="https://ehicks.net">ehicks</a>
             </span>
         </div>
+        <div class="level-item justify-end">
+            <div id="settingsButton" style="cursor: pointer;">settings [+]</div>
+        </div>
     </div>
-        <div class="level">
-            <div class="level-item">
-                <div class="buttons" id='productButtons'>
-
+    <div id='settings' style="display:none;">
+        <div style="margin: 1rem 0;">
+            <div class="">
+                Font Size:
+                <div class="buttons">
+                    <button class="button font-size-button" id="fontSize-s">S</button>
+                    <button class="button font-size-button" id="fontSize-m">M</button>
+                    <button class="button font-size-button" id="fontSize-l">L</button>
                 </div>
             </div>
         </div>
+        <div style="margin: 1rem 0;">
+            <div class="">
+                <div>Trading Pairs: </div>
+                <div class="buttons" id='productButtons'></div>
+            </div>
+        </div>
+    </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fitty/2.3.3/fitty.min.js" integrity="sha512-Qsfv/rVSIXtsKH4882nlkrR362m2+UO/14uqlSPUF7pgF1shkhXcWT5sMMixzpoysR+OEtcf+nn3YwUHr3kWqA==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fitty/2.3.3/fitty.min.js" 
+        integrity="sha512-Qsfv/rVSIXtsKH4882nlkrR362m2+UO/14uqlSPUF7pgF1shkhXcWT5sMMixzpoysR+OEtcf+nn3YwUHr3kWqA==" crossorigin="anonymous"></script>
 <script type='module'>
+    document.getElementById('settingsButton').addEventListener('click', () => {
+        const el = document.getElementById('settings');
+        if (el.style.display === 'none') {
+            el.style.display = 'block';
+            document.getElementById('settingsButton').innerText = 'settings [-]';
+        } else {
+            el.style.display = 'none';
+            document.getElementById('settingsButton').innerText = 'settings [+]';
+        }
+    })
     const createProductButton = (product) => {
         const productButton = document.createElement('button');
         productButton.id = `toggle${product}`;
@@ -129,6 +146,7 @@
         const productSection = document.createElement('section');
         productSection.id = `${product}Section`;
         productSection.className = `section`;
+        productSection.style.flexGrow = 1;
 
         const fontContainer = document.createElement('div');
         fontContainer.className = `scalingFontContainer scalingFontContainer-${localStorage.getItem('fontSize')}`;
