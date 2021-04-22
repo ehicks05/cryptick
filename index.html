@@ -38,15 +38,13 @@
 
         a {text-decoration: none; color: hsl(217, 71%, 53%);}
         .section {padding: 1rem 1.5rem 3rem 1.5rem;}
-        .title {font-weight: 600;}
 
-        .scalingFontContainer-s {width: 25%;}
-        .scalingFontContainer-m {width: 50%;}
-        .scalingFontContainer-l {width: 100%;}
-        .lesserScalingFont {color: #555; width: 50%; white-space: nowrap; }
+        .productSection {width: 14rem;}
+        .productLabel {color: #555;}
         @media (prefers-color-scheme: dark) {
-            .lesserScalingFont {color: #aaa;}
+            .productLabel {color: #aaa;}
         }
+        .productPrice {font-size: 2rem; font-weight: 600;}
         .is-success {background-color: #23d160 !important; color: #fff !important;}
         .is-info {background-color: hsl(204, 86%, 53%) !important; color: #fff !important;}
         .is-warning {background-color: hsl(48, 100%, 67%) !important; color: #000 !important;}
@@ -60,13 +58,13 @@
             .button {color: #eee; background-color: #222;}
         }
 
-        footer {padding: 1rem;}
         .level {display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 1rem;}
+        .level.is-mobile {flex-direction: row;}
         @media (min-width: 680px) {
             .level {flex-direction: row;}
         }
 
-        .level-item {width:100%; flex-grow: 1; justify-content: center; display: flex; margin-top: 1rem; align-items: center;}
+        .level-item {justify-content: center; display: flex; margin-top: 1rem; align-items: center;}
         @media (min-width: 680px) {
             .level-item {margin-top: 0; width: calc(100%/3);}
             .justify-start {justify-content: flex-start;}
@@ -83,43 +81,38 @@
 
 </head>
 <body>
-<div id='productSections'></div>
+    <header>
+        <div class="level is-mobile">
+            <div class="level-item justify-start">
+            </div>
+            <div class="level-item justify-end">
+                <div id="settingsButton" style="cursor: pointer;">settings [+]</div>
+            </div>
+        </div>
+    </header>
+<div id='settings' style="display:none;">
+    <div style="margin: 1rem 0;">
+        <div class="">
+            <div>Trading Pairs: </div>
+            <div class="buttons" id='productButtons'></div>
+        </div>
+    </div>
+</div>
+<div id='productSections' style="display: flex; flex-wrap: wrap;"></div>
 <div style="flex-grow: 1;"></div>
 <footer>
     <div class="level">
-        <div class="level-item justify-start">
+        <div style="flex-grow: 1;"></div>
+
+        <div class="level-item justify-end">
             <span style="display:flex; align-items: center;">
-                <span id="socket-status" class="tag"></span>
                 <a href="https://www.github.com/ehicks05/bitcoin-price-ticker/" target="_blank" style="margin: 0 1rem;">github</a>
                 <a href="https://ehicks.net">ehicks</a>
             </span>
         </div>
-        <div class="level-item justify-end">
-            <div id="settingsButton" style="cursor: pointer;">settings [+]</div>
-        </div>
-    </div>
-    <div id='settings' style="display:none;">
-        <div style="margin: 1rem 0;">
-            <div class="">
-                Font Size:
-                <div class="buttons">
-                    <button class="button font-size-button" id="fontSize-s">S</button>
-                    <button class="button font-size-button" id="fontSize-m">M</button>
-                    <button class="button font-size-button" id="fontSize-l">L</button>
-                </div>
-            </div>
-        </div>
-        <div style="margin: 1rem 0;">
-            <div class="">
-                <div>Trading Pairs: </div>
-                <div class="buttons" id='productButtons'></div>
-            </div>
-        </div>
     </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fitty/2.3.3/fitty.min.js" 
-        integrity="sha512-Qsfv/rVSIXtsKH4882nlkrR362m2+UO/14uqlSPUF7pgF1shkhXcWT5sMMixzpoysR+OEtcf+nn3YwUHr3kWqA==" crossorigin="anonymous"></script>
 <script type='module'>
     document.getElementById('settingsButton').addEventListener('click', () => {
         const el = document.getElementById('settings');
@@ -145,29 +138,28 @@
     const createProductSection = (product) => {
         const productSection = document.createElement('section');
         productSection.id = `${product}Section`;
-        productSection.className = `section`;
-        productSection.style.flexGrow = 1;
+        productSection.className = `section productSection`;
 
         const fontContainer = document.createElement('div');
-        fontContainer.className = `scalingFontContainer scalingFontContainer-${localStorage.getItem('fontSize')}`;
+        fontContainer.className = ``;
         productSection.appendChild(fontContainer);
 
         const label = document.createElement('div');
-        label.className = 'lesserScalingFont';
+        label.className = 'productLabel';
         label.appendChild(document.createTextNode(product));
-        const price = document.createElement('div');
+        const price = document.createElement('span');
         price.id = `price${product}`;
-        price.classList.add('title', 'scalingFont');
+        price.classList.add('productPrice');
         
         fontContainer.appendChild(label);
         fontContainer.appendChild(price);
 
         document.getElementById('productSections').appendChild(productSection);
-        fitty('.scalingFont');
     };
 
+    const SUPPORTED_QUOTE_CURRENCIES = ['BTC', 'USD'];
     const API_PRODUCTS = (await (await fetch('https://api.pro.coinbase.com/products')).json())
-        .filter(product => ['BTC', 'USD', 'GBP', 'EUR'].includes(product.quote_currency))
+        .filter(product => SUPPORTED_QUOTE_CURRENCIES.includes(product.quote_currency))
         .sort((a, b) => {
             if (a.quote_currency !== b.quote_currency) return a.quote_currency.localeCompare(b.quote_currency);
             if (a.base_currency !== b.base_currency) return a.base_currency.localeCompare(b.base_currency);
@@ -217,36 +209,10 @@
         applyProducts(newProducts);
     }
 
-    const applyFontSize = (size) => {
-        document.querySelectorAll('.scalingFontContainer').forEach(el => {
-            ['s', 'm', 'l'].forEach(size => {
-                el.classList.remove('scalingFontContainer-' + size);
-                document.getElementById('fontSize-' + size).classList.remove('is-success')
-            });
-
-            el.classList.add('scalingFontContainer-' + size);
-            document.getElementById('fontSize-' + size).classList.add('is-success')
-        });
-
-        fitty.fitAll();
-    }
-
-    const changeFontSize = e => {
-        const size = e.target.id.replace('fontSize-', '');
-        localStorage.setItem('fontSize', size);
-        applyFontSize(size);
-    }
-
     if (!localStorage.getItem('products'))
         localStorage.setItem('products', JSON.stringify({'BTC-USD': 'BTC-USD'}));
-    if (!localStorage.getItem('fontSize'))
-        localStorage.setItem('fontSize', 's');
 
     applyProducts(JSON.parse(localStorage.getItem('products')));
-    applyFontSize(localStorage.getItem('fontSize'));
-    fitty('.scalingFont');
-
-    document.querySelectorAll('.font-size-button').forEach(element => element.addEventListener('click', changeFontSize));
 
     const subscribeMessage = {
         "type": "subscribe",
@@ -278,9 +244,9 @@
                 if (!data[productId]) data[productId] = { lastPrice: 0 };
 
                 const price = Number.parseFloat(response.price);
-                const maximumSignificantDigits = price > 1 ? undefined : 3;
-                const notation = price >= .001 ? undefined : 'scientific'
-                const prettyPrice = Intl.NumberFormat('en-US', { style: 'currency', currency, maximumSignificantDigits, notation }).format(price);
+                const maximumSignificantDigits = 7;
+                const minimumSignificantDigits = 7;
+                const prettyPrice = Intl.NumberFormat('en-US', { minimumSignificantDigits, maximumSignificantDigits }).format(price);
                 
                 const priceEl = document.getElementById(`price${productId}`);
                 priceEl.innerText = prettyPrice;
