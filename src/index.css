@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  height: -webkit-fill-available;
+}
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  color: #111;
+  background-color: #fefefe;
+
+  margin: 0;
+  font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console,
+    monospace;
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #eee;
+    background-color: #111;
+  }
+}
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.red {
+  animation: down 0.5s;
+}
+.green {
+  animation: up 0.5s;
+}
+
+@keyframes up {
+  0% {
+    background-color: transparent;
+  }
+  10% {
+    background-color: rgba(0, 200, 0, 0.1);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes down {
+  0% {
+    background-color: transparent;
+  }
+  10% {
+    background-color: rgba(200, 0, 0, 0.1);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
