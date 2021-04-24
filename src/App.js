@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
-import { getProducts } from "./api";
+import useInterval from "@use-it/interval";
+import { getProducts, get24HourStats } from "./api";
 import { SOCKET_STATUSES } from "./constants";
 import { getPrettyPrice } from "./utils";
 
@@ -9,6 +10,7 @@ function App() {
   const [products, setProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [prices, setPrices] = useState({});
+  const [stats, setStats] = useState({});
 
   const { sendJsonMessage, readyState } = useWebSocket(
     "wss://ws-feed.pro.coinbase.com",
@@ -32,6 +34,14 @@ function App() {
     setSelectedProducts(selectedProductIds);
     sendJsonMessage(buildSubUnsubMessage("subscribe", selectedProductIds));
   }, []);
+
+  useInterval(() => {
+    const set = async () => {
+      const newStats = await get24HourStats(selectedProducts);
+      setStats(newStats);
+    };
+    set();
+  }, 60000);
 
   useEffect(() => {
     const set = async () => setProducts(await getProducts());
@@ -150,6 +160,7 @@ function App() {
               key={selectedProduct}
               productId={selectedProduct}
               prices={prices}
+              stats={stats}
             />
           );
         })}
@@ -198,13 +209,25 @@ const ProductButton = ({ product, selected, onClick }) => {
   );
 };
 
-const ProductSection = ({ productId, prices }) => {
+const ProductSection = ({ productId, prices, stats }) => {
   return (
-    <div className="w-48">
+    <div className="w-56">
       <div className="text-gray-700 dark:text-gray-400">{productId}</div>
       <span className="text-2xl font-semibold" id={`${productId}Price`}>
         {prices[productId]?.prettyPrice}
       </span>
+      <div className="text-xs">
+        {stats[productId] &&
+          Object.entries(stats[productId])
+            .filter(([k, v]) => k !== "productId")
+            .map(([k, v]) => {
+              return (
+                <div key={k}>
+                  {k}: {Math.round(v)}
+                </div>
+              );
+            })}
+      </div>
     </div>
   );
 };

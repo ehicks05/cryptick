@@ -17,4 +17,22 @@ const getProducts = async () => {
   return API_PRODUCTS;
 };
 
-export { getProducts };
+const _get24HourStats = async (productId) => {
+  const stats = await (
+    await fetch(`https://api.pro.coinbase.com/products/${productId}/stats`)
+  ).json();
+
+  return { ...stats, productId };
+};
+
+const get24HourStats = async (productIds) => {
+  const stats = await Promise.all(
+    productIds.map((productId) => _get24HourStats(productId))
+  );
+  const statsObject = stats.reduce((agg, curr) => {
+    return { ...agg, [curr.productId]: curr };
+  }, {});
+  return statsObject;
+};
+
+export { getProducts, get24HourStats };
