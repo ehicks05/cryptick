@@ -33,6 +33,12 @@ function App() {
     );
     setSelectedProducts(selectedProductIds);
     sendJsonMessage(buildSubUnsubMessage("subscribe", selectedProductIds));
+
+    const set = async () => {
+      const newStats = await get24HourStats(selectedProductIds);
+      setStats(newStats);
+    };
+    set();
   }, []);
 
   useInterval(() => {
