@@ -5,4 +5,6 @@ const SOCKET_STATUSES = {
   3: { name: "Closed", class: "bg-red-500", favicon: "img/red.png" },
 };
 
-export { SOCKET_STATUSES };
+const WS_URL = "wss://ws-feed.pro.coinbase.com";
+
+export { SOCKET_STATUSES, WS_URL };
