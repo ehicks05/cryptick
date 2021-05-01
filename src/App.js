@@ -49,6 +49,14 @@ function App() {
   }, 60000);
 
   useEffect(() => {
+    const set = async () => {
+      const newStats = await get24HourStats(selectedProducts);
+      setStats(newStats);
+    };
+    set();
+  }, [selectedProducts]);
+
+  useEffect(() => {
     const set = async () => setProducts(await getProducts());
     set();
   }, []);
