@@ -1,8 +1,10 @@
+import { API_URL } from "./constants";
+
+const PROD_URL = `${API_URL}/products`;
+
 const getProducts = async () => {
   const SUPPORTED_QUOTE_CURRENCIES = ["BTC", "USD"];
-  const API_PRODUCTS = (
-    await (await fetch("https://api.pro.coinbase.com/products")).json()
-  )
+  const API_PRODUCTS = (await (await fetch(PROD_URL)).json())
     .filter((product) =>
       SUPPORTED_QUOTE_CURRENCIES.includes(product.quote_currency)
     )
@@ -18,9 +20,7 @@ const getProducts = async () => {
 };
 
 const _get24HourStats = async (productId) => {
-  const stats = await (
-    await fetch(`https://api.pro.coinbase.com/products/${productId}/stats`)
-  ).json();
+  const stats = await (await fetch(`${PROD_URL}/${productId}/stats`)).json();
 
   return { ...stats, productId };
 };

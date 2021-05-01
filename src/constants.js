@@ -5,6 +5,9 @@ const SOCKET_STATUSES = {
   3: { name: "Closed", class: "bg-red-500", favicon: "img/red.png" },
 };
 
+const API_URL = "https://api.pro.coinbase.com";
 const WS_URL = "wss://ws-feed.pro.coinbase.com";
 
-export { SOCKET_STATUSES, WS_URL };
+const DEFAULT_SELECTED_PRODUCTS = ["BTC-USD"];
+
+export { SOCKET_STATUSES, API_URL, WS_URL, DEFAULT_SELECTED_PRODUCTS };

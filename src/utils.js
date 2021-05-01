@@ -11,14 +11,14 @@ const buildSubscribeMessage = (type, product_ids) => {
   return { type, product_ids, channels: ["ticker"] };
 };
 
-const flashPriceColorChange = (newPrice, lastPrice, priceElement) => {
-  if (newPrice === lastPrice) return;
+const flashPriceColorChange = (newPrice, prevPrice, priceElement) => {
+  if (newPrice === prevPrice) return;
   priceElement.classList.remove("green", "red");
 
   // force animation restart (https://css-tricks.com/restart-css-animation/)
   void priceElement.offsetWidth;
 
-  const color = newPrice > lastPrice ? "green" : "red";
+  const color = newPrice > prevPrice ? "green" : "red";
   priceElement.classList.add(color);
 };
 

@@ -1,11 +1,11 @@
 import React from "react";
 
-const ProductSection = ({ productId, price, productStats }) => {
+const ProductSection = ({ productId, productPrice, productStats }) => {
   return (
     <div className="w-56">
       <div className="text-gray-700 dark:text-gray-400">{productId}</div>
       <span className="text-2xl font-semibold" id={`${productId}Price`}>
-        {price?.prettyPrice}
+        {productPrice?.price}
       </span>
       <div className="text-xs">
         {productStats &&

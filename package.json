@@ -11,6 +11,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
+    "react-use": "^17.2.4",
     "react-use-websocket": "^2.6.1",
     "web-vitals": "^1.1.1"
   },

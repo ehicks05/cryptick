@@ -1,8 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
+import { useLocalStorage } from "react-use";
 import useInterval from "@use-it/interval";
 import { getProducts, get24HourStats } from "./api";
-import { SOCKET_STATUSES, WS_URL } from "./constants";
+import {
+  SOCKET_STATUSES,
+  WS_URL,
+  DEFAULT_SELECTED_PRODUCTS,
+} from "./constants";
 import {
   getPrettyPrice,
   buildSubscribeMessage,
@@ -13,7 +18,6 @@ import { Settings, ProductSection, Header, Footer } from "./components";
 function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [products, setProducts] = useState([]);
-  const [selectedProducts, setSelectedProducts] = useState([]);
   const [prices, setPrices] = useState({});
   const [stats, setStats] = useState({});
 
@@ -22,34 +26,20 @@ function App() {
     set();
   }, []);
 
+  const [selectedProducts, setSelectedProducts] = useLocalStorage(
+    "selectedProducts",
+    DEFAULT_SELECTED_PRODUCTS
+  );
+
   const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
     onOpen: () => {
       sendJsonMessage(buildSubscribeMessage("subscribe", selectedProducts));
     },
     onMessage: (event) => handleMessage(JSON.parse(event.data)),
+    onError: (event) => console.log(event),
     shouldReconnect: (closeEvent) => true,
     retryOnError: true,
   });
-
-  useEffect(() => {
-    if (!localStorage.getItem("products")) {
-      localStorage.setItem(
-        "products",
-        JSON.stringify({ "BTC-USD": "BTC-USD" })
-      );
-    }
-    const selectedProductIds = Object.keys(
-      JSON.parse(localStorage.getItem("products"))
-    );
-    setSelectedProducts(selectedProductIds);
-    sendJsonMessage(buildSubscribeMessage("subscribe", selectedProductIds));
-
-    const set = async () => {
-      const newStats = await get24HourStats(selectedProductIds);
-      setStats(newStats);
-    };
-    set();
-  }, []);
 
   useInterval(() => {
     const set = async () => {
@@ -72,36 +62,30 @@ function App() {
       SOCKET_STATUSES[readyState].favicon;
   }, [readyState]);
 
-  const handleMessage = (message) => {
-    if (message.type === "ticker") {
-      const productId = message.product_id;
+  const handleMessage = ({ type, product_id: productId, price: rawPrice }) => {
+    if (type === "ticker") {
       if (!prices[productId])
-        setPrices({ ...prices, [productId]: { lastPrice: 0 } });
+        setPrices({ ...prices, [productId]: { prevPrice: 0 } });
 
-      const price = Number.parseFloat(message.price);
-      const prettyPrice = getPrettyPrice(price);
+      const price = getPrettyPrice(Number.parseFloat(rawPrice));
 
       const priceEl = document.getElementById(`${productId}Price`);
       if (priceEl)
-        flashPriceColorChange(price, prices[productId]?.lastPrice, priceEl);
+        flashPriceColorChange(price, prices[productId]?.prevPrice, priceEl);
 
       const newPrices = {
         ...prices,
-        [productId]: { lastPrice: price, prettyPrice },
+        [productId]: { prevPrice: price, price },
       };
       setPrices(newPrices);
 
-      if (productId === "BTC-USD") document.title = prettyPrice + " BTC-USD";
-    }
-    if (message.type === "error") {
-      console.log(message);
+      if (productId === "BTC-USD") document.title = price + " BTC-USD";
     }
   };
 
   const toggleProduct = useCallback(
     (productId) => {
-      const products = JSON.parse(localStorage.getItem("products"));
-      let showProduct = !products[productId];
+      const showProduct = !selectedProducts.includes(productId);
 
       sendJsonMessage(
         buildSubscribeMessage(showProduct ? "subscribe" : "unsubscribe", [
@@ -109,17 +93,12 @@ function App() {
         ])
       );
 
-      const { [productId]: toggled, ...stable } = products;
-      const newProducts = {
-        ...stable,
-        ...(showProduct ? { [productId]: productId } : {}),
-      };
+      const stable = selectedProducts.filter((p) => p !== productId);
+      const newProducts = [...stable, ...(showProduct ? [productId] : [])];
 
-      localStorage.setItem("products", JSON.stringify(newProducts));
-
-      setSelectedProducts(Object.keys(newProducts));
+      setSelectedProducts(newProducts);
     },
-    [sendJsonMessage, setSelectedProducts]
+    [sendJsonMessage, selectedProducts, setSelectedProducts]
   );
 
   return (
@@ -142,7 +121,7 @@ function App() {
             <ProductSection
               key={selectedProduct}
               productId={selectedProduct}
-              price={prices[selectedProduct]}
+              productPrice={prices[selectedProduct]}
               productStats={stats[selectedProduct]}
             />
           );
