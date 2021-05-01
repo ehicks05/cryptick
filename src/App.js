@@ -12,14 +12,13 @@ function App() {
   const [prices, setPrices] = useState({});
   const [stats, setStats] = useState({});
 
-  const { sendJsonMessage, readyState } = useWebSocket(
-    "wss://ws-feed.pro.coinbase.com",
-    {
-      onOpen: () => console.log("opened"),
-      onMessage: (event) => handleMessage(JSON.parse(event.data)),
-      shouldReconnect: (closeEvent) => true,
-    }
-  );
+  const WS_URL = "wss://ws-feed.pro.coinbase.com";
+  const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
+    onOpen: () => console.log("opened"),
+    onMessage: (event) => handleMessage(JSON.parse(event.data)),
+    shouldReconnect: (closeEvent) => true,
+    retryOnError: true,
+  });
 
   useEffect(() => {
     if (!localStorage.getItem("products")) {
