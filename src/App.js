@@ -31,7 +31,7 @@ function App() {
       JSON.parse(localStorage.getItem("products"))
     );
     setSelectedProducts(selectedProductIds);
-    sendJsonMessage(buildSubUnsubMessage("subscribe", selectedProductIds));
+    sendJsonMessage(buildSubscribeMessage("subscribe", selectedProductIds));
 
     const set = async () => {
       const newStats = await get24HourStats(selectedProductIds);
@@ -66,7 +66,7 @@ function App() {
       SOCKET_STATUSES[readyState].favicon;
   }, [readyState]);
 
-  const buildSubUnsubMessage = (type, product_ids) => {
+  const buildSubscribeMessage = (type, product_ids) => {
     return { type, product_ids, channels: ["ticker"] };
   };
 
@@ -112,7 +112,7 @@ function App() {
     let showProduct = !products[productId];
 
     sendJsonMessage(
-      buildSubUnsubMessage(showProduct ? "subscribe" : "unsubscribe", [
+      buildSubscribeMessage(showProduct ? "subscribe" : "unsubscribe", [
         productId,
       ])
     );
