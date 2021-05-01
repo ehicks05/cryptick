@@ -141,23 +141,11 @@ function App() {
         </div>
       </header>
       <div className={`p-4 ${showSettings ? "block" : "hidden"}`}>
-        <div className="my-1">
-          <div>
-            <div>Trading Pairs: </div>
-            <div className="flex flex-wrap w-full">
-              {products.map((product) => {
-                return (
-                  <ProductButton
-                    key={product.id}
-                    product={product}
-                    selected={selectedProducts.includes(product.id)}
-                    onClick={() => toggleProduct(product.id)}
-                  />
-                );
-              })}
-            </div>
-          </div>
-        </div>
+        <Settings
+          products={products}
+          selectedProducts={selectedProducts}
+          toggleProduct={toggleProduct}
+        />
       </div>
       <div className="flex flex-wrap p-4">
         {selectedProducts.map((selectedProduct) => {
@@ -197,6 +185,26 @@ function App() {
     </>
   );
 }
+
+const Settings = ({ products, selectedProducts, toggleProduct }) => {
+  return (
+    <div className="my-1">
+      <div>Trading Pairs: </div>
+      <div className="flex flex-wrap w-full">
+        {products.map((product) => {
+          return (
+            <ProductButton
+              key={product.id}
+              product={product}
+              selected={selectedProducts.includes(product.id)}
+              onClick={() => toggleProduct(product.id)}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 const ProductButton = ({ product, selected, onClick }) => {
   return (
