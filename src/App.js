@@ -3,7 +3,11 @@ import useWebSocket from "react-use-websocket";
 import useInterval from "@use-it/interval";
 import { getProducts, get24HourStats } from "./api";
 import { SOCKET_STATUSES } from "./constants";
-import { getPrettyPrice } from "./utils";
+import {
+  getPrettyPrice,
+  buildSubscribeMessage,
+  flashPriceColorChange,
+} from "./utils";
 
 function App() {
   const [showSettings, setShowSettings] = useState(false);
@@ -14,7 +18,9 @@ function App() {
 
   const WS_URL = "wss://ws-feed.pro.coinbase.com";
   const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
-    onOpen: () => console.log("opened"),
+    onOpen: () => {
+      sendJsonMessage(buildSubscribeMessage("subscribe", selectedProducts));
+    },
     onMessage: (event) => handleMessage(JSON.parse(event.data)),
     shouldReconnect: (closeEvent) => true,
     retryOnError: true,
@@ -65,21 +71,6 @@ function App() {
     document.getElementById("favicon").href =
       SOCKET_STATUSES[readyState].favicon;
   }, [readyState]);
-
-  const buildSubscribeMessage = (type, product_ids) => {
-    return { type, product_ids, channels: ["ticker"] };
-  };
-
-  const flashPriceColorChange = (newPrice, lastPrice, priceElement) => {
-    if (newPrice === lastPrice) return;
-    priceElement.classList.remove("green", "red");
-
-    // force animation restart (https://css-tricks.com/restart-css-animation/)
-    void priceElement.offsetWidth;
-
-    const color = newPrice > lastPrice ? "green" : "red";
-    priceElement.classList.add(color);
-  };
 
   const handleMessage = (message) => {
     if (message.type === "ticker") {

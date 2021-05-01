@@ -7,4 +7,19 @@ const getPrettyPrice = (price) => {
   }).format(price);
 };
 
-export { getPrettyPrice };
+const buildSubscribeMessage = (type, product_ids) => {
+  return { type, product_ids, channels: ["ticker"] };
+};
+
+const flashPriceColorChange = (newPrice, lastPrice, priceElement) => {
+  if (newPrice === lastPrice) return;
+  priceElement.classList.remove("green", "red");
+
+  // force animation restart (https://css-tricks.com/restart-css-animation/)
+  void priceElement.offsetWidth;
+
+  const color = newPrice > lastPrice ? "green" : "red";
+  priceElement.classList.add(color);
+};
+
+export { getPrettyPrice, buildSubscribeMessage, flashPriceColorChange };
