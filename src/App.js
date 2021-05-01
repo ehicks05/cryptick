@@ -91,7 +91,8 @@ function App() {
       const prettyPrice = getPrettyPrice(price);
 
       const priceEl = document.getElementById(`${productId}Price`);
-      flashPriceColorChange(price, prices[productId]?.lastPrice, priceEl);
+      if (priceEl)
+        flashPriceColorChange(price, prices[productId]?.lastPrice, priceEl);
 
       const newPrices = {
         ...prices,
