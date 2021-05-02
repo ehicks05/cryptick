@@ -1,6 +1,21 @@
 import { API_URL } from "./constants";
 
+const CURR_URL = `${API_URL}/currencies`;
 const PROD_URL = `${API_URL}/products`;
+
+const getCurrencies = async () => {
+  return (await (await fetch(CURR_URL)).json())
+    .sort((a, b) => {
+      return a.details.sort_order - b.details.sort_order;
+    })
+    .reduce(
+      (agg, curr) => ({
+        ...agg,
+        [curr.id]: curr,
+      }),
+      {}
+    );
+};
 
 const getProducts = async () => {
   const SUPPORTED_QUOTE_CURRENCIES = ["BTC", "USD"];
@@ -35,4 +50,4 @@ const get24HourStats = async (productIds) => {
   return statsObject;
 };
 
-export { getProducts, get24HourStats };
+export { getCurrencies, getProducts, get24HourStats };
