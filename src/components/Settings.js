@@ -11,7 +11,7 @@ const Settings = ({
       <div className="my-1">
         <div>Trading Pairs: </div>
         <div className="flex flex-wrap w-full">
-          {products.map((product) => {
+          {Object.values(products).map((product) => {
             return (
               <ProductButton
                 key={product.id}

@@ -29,7 +29,14 @@ const getProducts = async () => {
       if (a.base_currency !== b.base_currency)
         return a.base_currency.localeCompare(b.base_currency);
       return 0;
-    });
+    })
+    .reduce(
+      (agg, curr) => ({
+        ...agg,
+        [curr.id]: curr,
+      }),
+      {}
+    );
 
   return API_PRODUCTS;
 };

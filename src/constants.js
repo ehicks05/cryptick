@@ -8,6 +8,6 @@ const SOCKET_STATUSES = {
 const API_URL = "https://api.pro.coinbase.com";
 const WS_URL = "wss://ws-feed.pro.coinbase.com";
 
-const DEFAULT_SELECTED_PRODUCTS = ["BTC-USD"];
+const DEFAULT_SELECTED_PRODUCT_IDS = ["BTC-USD"];
 
-export { SOCKET_STATUSES, API_URL, WS_URL, DEFAULT_SELECTED_PRODUCTS };
+export { SOCKET_STATUSES, API_URL, WS_URL, DEFAULT_SELECTED_PRODUCT_IDS };

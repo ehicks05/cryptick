@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { useLocalStorage } from "react-use";
 import useInterval from "@use-it/interval";
-import { getProducts, get24HourStats } from "./api";
+import { getCurrencies, getProducts, get24HourStats } from "./api";
 import {
   SOCKET_STATUSES,
   WS_URL,
-  DEFAULT_SELECTED_PRODUCTS,
+  DEFAULT_SELECTED_PRODUCT_IDS,
 } from "./constants";
 import {
   getPrettyPrice,
@@ -17,23 +17,27 @@ import { Settings, ProductSection, Header, Footer } from "./components";
 
 function App() {
   const [showSettings, setShowSettings] = useState(false);
-  const [products, setProducts] = useState([]);
+  const [currencies, setCurrencies] = useState({});
+  const [products, setProducts] = useState({});
   const [prices, setPrices] = useState({});
   const [stats, setStats] = useState({});
 
   useEffect(() => {
-    const set = async () => setProducts(await getProducts());
+    const set = async () => {
+      setProducts(await getProducts());
+      setCurrencies(await getCurrencies());
+    };
     set();
   }, []);
 
-  const [selectedProducts, setSelectedProducts] = useLocalStorage(
-    "selectedProducts",
-    DEFAULT_SELECTED_PRODUCTS
+  const [selectedProductIds, setSelectedProductIds] = useLocalStorage(
+    "selectedProductIds",
+    DEFAULT_SELECTED_PRODUCT_IDS
   );
 
   const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
     onOpen: () => {
-      sendJsonMessage(buildSubscribeMessage("subscribe", selectedProducts));
+      sendJsonMessage(buildSubscribeMessage("subscribe", selectedProductIds));
     },
     onMessage: (event) => handleMessage(JSON.parse(event.data)),
     onError: (event) => console.log(event),
@@ -43,7 +47,7 @@ function App() {
 
   useInterval(() => {
     const set = async () => {
-      const newStats = await get24HourStats(selectedProducts);
+      const newStats = await get24HourStats(selectedProductIds);
       setStats(newStats);
     };
     set();
@@ -51,11 +55,11 @@ function App() {
 
   useEffect(() => {
     const set = async () => {
-      const newStats = await get24HourStats(selectedProducts);
+      const newStats = await get24HourStats(selectedProductIds);
       setStats(newStats);
     };
     set();
-  }, [selectedProducts]);
+  }, [selectedProductIds]);
 
   useEffect(() => {
     document.getElementById("favicon").href =
@@ -85,7 +89,7 @@ function App() {
 
   const toggleProduct = useCallback(
     (productId) => {
-      const showProduct = !selectedProducts.includes(productId);
+      const showProduct = !selectedProductIds.includes(productId);
 
       sendJsonMessage(
         buildSubscribeMessage(showProduct ? "subscribe" : "unsubscribe", [
@@ -93,12 +97,12 @@ function App() {
         ])
       );
 
-      const stable = selectedProducts.filter((p) => p !== productId);
+      const stable = selectedProductIds.filter((p) => p !== productId);
       const newProducts = [...stable, ...(showProduct ? [productId] : [])];
 
-      setSelectedProducts(newProducts);
+      setSelectedProductIds(newProducts);
     },
-    [sendJsonMessage, selectedProducts, setSelectedProducts]
+    [sendJsonMessage, selectedProductIds, setSelectedProductIds]
   );
 
   return (
@@ -112,20 +116,23 @@ function App() {
       <Settings
         showSettings={showSettings}
         products={products}
-        selectedProducts={selectedProducts}
+        selectedProducts={selectedProductIds}
         toggleProduct={toggleProduct}
       />
       <div className="flex flex-wrap p-4">
-        {selectedProducts.map((selectedProduct) => {
-          return (
-            <ProductSection
-              key={selectedProduct}
-              productId={selectedProduct}
-              productPrice={prices[selectedProduct]}
-              productStats={stats[selectedProduct]}
-            />
-          );
-        })}
+        {!!Object.keys(currencies).length &&
+          !!Object.keys(products).length &&
+          selectedProductIds.map((selectedProductId) => {
+            return (
+              <ProductSection
+                key={selectedProductId}
+                product={products[selectedProductId]}
+                productPrice={prices[selectedProductId]}
+                productStats={stats[selectedProductId]}
+                currency={currencies[products[selectedProductId].base_currency]}
+              />
+            );
+          })}
       </div>
       <Footer />
     </>
