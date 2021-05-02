@@ -119,7 +119,7 @@ function App() {
         selectedProducts={selectedProductIds}
         toggleProduct={toggleProduct}
       />
-      <div className="flex flex-wrap p-4">
+      <div className="max-w-screen-lg mx-auto flex flex-wrap justify-center p-4">
         {!!Object.keys(currencies).length &&
           !!Object.keys(products).length &&
           selectedProductIds.map((selectedProductId) => {

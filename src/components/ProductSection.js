@@ -16,7 +16,7 @@ const ProductSection = ({ product, productPrice, productStats, currency }) => {
   if (!productStats) return "...";
   const change24Hour = getPercentChange(productStats.open, productStats.last);
   return (
-    <div className="w-56">
+    <div className="p-4 w-56">
       <div className="text-gray-700 dark:text-gray-400">
         {currency.name} <span className="text-xs">{product.id}</span>
       </div>
