@@ -7,10 +7,14 @@ const Settings = ({
   toggleProduct,
 }) => {
   return (
-    <div className={`p-4 ${showSettings ? "block" : "hidden"}`}>
+    <div
+      className={`max-w-screen-xl m-auto p-4 ${
+        showSettings ? "block" : "hidden"
+      }`}
+    >
       <div className="my-1">
         <div>Trading Pairs: </div>
-        <div className="flex flex-wrap w-full">
+        <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 gap-1">
           {Object.values(products).map((product) => {
             return (
               <ProductButton
@@ -31,7 +35,7 @@ const ProductButton = ({ product, selected, onClick }) => {
   return (
     <button
       key={product.id}
-      className={`whitespace-nowrap px-2 py-1 m-1 rounded cursor-pointer 
+      className={`whitespace-nowrap px-2 py-1 rounded cursor-pointer 
       ${
         selected
           ? "bg-green-500 text-gray-50"
