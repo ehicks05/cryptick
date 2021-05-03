@@ -3,13 +3,13 @@ import { getPrettyPrice } from "../utils";
 
 const getPercentChange = (from, to) => {
   const delta = to - from;
-  const color = delta >= 0 ? "green" : "red";
+  const positive = delta >= 0;
   const percent = Intl.NumberFormat("en-US", {
     style: "percent",
     signDisplay: "always",
     maximumFractionDigits: 2,
   }).format(delta / from);
-  return { percent, color };
+  return { percent, positive };
 };
 
 const ProductSection = ({ product, productPrice, productStats, currency }) => {
@@ -23,7 +23,11 @@ const ProductSection = ({ product, productPrice, productStats, currency }) => {
       <span className="text-2xl font-semibold" id={`${product.id}Price`}>
         {productPrice?.price}
       </span>
-      <span className={`ml-2 text-${change24Hour.color}-500`}>
+      <span
+        className={`ml-2 ${
+          change24Hour.positive ? "text-green-500" : "text-red-500"
+        }`}
+      >
         {change24Hour.percent}
       </span>
       <div className="text-xs">
