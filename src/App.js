@@ -26,6 +26,7 @@ function App() {
     const set = async () => {
       setProducts(await getProducts());
       setCurrencies(await getCurrencies());
+      setStats(await get24HourStats());
     };
     set();
   }, []);
@@ -47,19 +48,10 @@ function App() {
 
   useInterval(() => {
     const set = async () => {
-      const newStats = await get24HourStats(selectedProductIds);
-      setStats(newStats);
+      setStats(await get24HourStats());
     };
     set();
   }, 60000);
-
-  useEffect(() => {
-    const set = async () => {
-      const newStats = await get24HourStats(selectedProductIds);
-      setStats(newStats);
-    };
-    set();
-  }, [selectedProductIds]);
 
   const handleMessage = ({ type, product_id: productId, price: rawPrice }) => {
     if (type === "ticker") {

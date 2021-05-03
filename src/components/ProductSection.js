@@ -13,14 +13,15 @@ const getPercentChange = (from, to) => {
 };
 
 const ProductSection = ({ product, productPrice, productStats, currency }) => {
-  if (!productStats) return "...";
-  const change24Hour = getPercentChange(productStats.open, productStats.last);
+  const stats24Hour = productStats.stats_24hour;
+  const change24Hour = getPercentChange(stats24Hour.open, stats24Hour.last);
   return (
-    <div className="p-4 w-56">
+    <div className="p-4 w-64">
       <div className="text-gray-700 dark:text-gray-400">
-        {currency.name} <span className="text-xs">{product.id}</span>
+        <span className="text-xl">{currency.name}</span>{" "}
+        <span className="text-xs">{product.id}</span>
       </div>
-      <span className="text-2xl font-semibold" id={`${product.id}Price`}>
+      <span className="text-3xl font-semibold" id={`${product.id}Price`}>
         {productPrice?.price}
       </span>
       <span
@@ -32,10 +33,10 @@ const ProductSection = ({ product, productPrice, productStats, currency }) => {
       </span>
       <div className="text-xs">
         <div>
-          <span>l: {productStats.low}</span>
-          <span className="ml-4">h: {productStats.high}</span>
+          <span>l: {stats24Hour.low}</span>
+          <span className="ml-4">h: {stats24Hour.high}</span>
         </div>
-        <div>v: {getPrettyPrice(productStats.volume)}</div>
+        <div>v: {getPrettyPrice(stats24Hour.volume)}</div>
       </div>
     </div>
   );

@@ -39,20 +39,8 @@ const getProducts = async () => {
     );
 };
 
-const _get24HourStats = async (productId) => {
-  const stats = await (await fetch(`${PROD_URL}/${productId}/stats`)).json();
-
-  return { ...stats, productId };
-};
-
-const get24HourStats = async (productIds) => {
-  const stats = await Promise.all(
-    productIds.map((productId) => _get24HourStats(productId))
-  );
-  const statsObject = stats.reduce((agg, curr) => {
-    return { ...agg, [curr.productId]: curr };
-  }, {});
-  return statsObject;
+const get24HourStats = async () => {
+  return await (await fetch(`${PROD_URL}/stats`)).json();
 };
 
 export { getCurrencies, getProducts, get24HourStats };
