@@ -61,11 +61,6 @@ function App() {
     set();
   }, [selectedProductIds]);
 
-  useEffect(() => {
-    document.getElementById("favicon").href =
-      SOCKET_STATUSES[readyState].favicon;
-  }, [readyState]);
-
   const handleMessage = ({ type, product_id: productId, price: rawPrice }) => {
     if (type === "ticker") {
       if (!prices[productId])
