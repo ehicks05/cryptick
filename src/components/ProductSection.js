@@ -37,7 +37,7 @@ const ProductSection = ({ product, productPrice, productStats, currency }) => {
         {productPrice?.price}
       </span>
       <span
-        className={`ml-2 ${
+        className={`ml-2 whitespace-nowrap ${
           change24Hour.positive ? "text-green-500" : "text-red-500"
         }`}
       >
@@ -45,10 +45,10 @@ const ProductSection = ({ product, productPrice, productStats, currency }) => {
       </span>
       <div className="text-xs">
         <div>
-          <span>l: {stats24Hour.low}</span>
-          <span className="ml-4">h: {stats24Hour.high}</span>
+          <span>l: {getPrettyPrice(stats24Hour.low)}</span>
+          <span className="ml-4">h: {getPrettyPrice(stats24Hour.high)}</span>
         </div>
-        <div>v: {getPrettyPrice(stats24Hour.volume)}</div>
+        <div>v: {getPrettyPrice(Math.round(stats24Hour.volume))}</div>
       </div>
     </div>
   );

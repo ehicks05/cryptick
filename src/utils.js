@@ -1,9 +1,6 @@
-const getPrettyPrice = (price) => {
-  const maximumSignificantDigits = 7;
-  const minimumSignificantDigits = 7;
+const getPrettyPrice = (price, minimumFractionDigits) => {
   return Intl.NumberFormat("en-US", {
-    minimumSignificantDigits,
-    maximumSignificantDigits,
+    minimumFractionDigits,
   }).format(price);
 };
 

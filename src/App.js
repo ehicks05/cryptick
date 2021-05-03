@@ -58,7 +58,10 @@ function App() {
       if (!prices[productId])
         setPrices({ ...prices, [productId]: { price: 0 } });
 
-      const price = getPrettyPrice(Number.parseFloat(rawPrice));
+      const price = getPrettyPrice(
+        Number.parseFloat(rawPrice),
+        products[productId].quote_increment.length - 2
+      );
 
       const priceEl = document.getElementById(`${productId}Price`);
       if (priceEl)
