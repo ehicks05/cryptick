@@ -15,8 +15,20 @@ const getPercentChange = (from, to) => {
 const ProductSection = ({ product, productPrice, productStats, currency }) => {
   const stats24Hour = productStats.stats_24hour;
   const change24Hour = getPercentChange(stats24Hour.open, stats24Hour.last);
+  const gradientStart = change24Hour.positive
+    ? "rgba(6, 78, 59, .15)"
+    : "rgba(153, 27, 27, .15)";
   return (
-    <div className="p-4 w-64">
+    <div
+      style={{
+        backgroundImage: `linear-gradient(to top, ${gradientStart}, rgba(0,0,0,0))`,
+      }}
+      className={`p-4 w-64 m-2 border rounded  ${
+        change24Hour.positive
+          ? "border-green-300 dark:border-green-900"
+          : "border-red-300 dark:border-red-900"
+      }`}
+    >
       <div className="text-gray-700 dark:text-gray-400">
         <span className="text-xl">{currency.name}</span>{" "}
         <span className="text-xs">{product.id}</span>
