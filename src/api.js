@@ -19,7 +19,7 @@ const getCurrencies = async () => {
 
 const getProducts = async () => {
   const SUPPORTED_QUOTE_CURRENCIES = ["BTC", "USD"];
-  const API_PRODUCTS = (await (await fetch(PROD_URL)).json())
+  return (await (await fetch(PROD_URL)).json())
     .filter((product) =>
       SUPPORTED_QUOTE_CURRENCIES.includes(product.quote_currency)
     )
@@ -37,8 +37,6 @@ const getProducts = async () => {
       }),
       {}
     );
-
-  return API_PRODUCTS;
 };
 
 const _get24HourStats = async (productId) => {

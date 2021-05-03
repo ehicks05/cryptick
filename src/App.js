@@ -69,19 +69,18 @@ function App() {
   const handleMessage = ({ type, product_id: productId, price: rawPrice }) => {
     if (type === "ticker") {
       if (!prices[productId])
-        setPrices({ ...prices, [productId]: { prevPrice: 0 } });
+        setPrices({ ...prices, [productId]: { price: 0 } });
 
       const price = getPrettyPrice(Number.parseFloat(rawPrice));
 
       const priceEl = document.getElementById(`${productId}Price`);
       if (priceEl)
-        flashPriceColorChange(price, prices[productId]?.prevPrice, priceEl);
+        flashPriceColorChange(price, prices[productId]?.price, priceEl);
 
-      const newPrices = {
+      setPrices({
         ...prices,
-        [productId]: { prevPrice: price, price },
-      };
-      setPrices(newPrices);
+        [productId]: { price },
+      });
 
       if (productId === "BTC-USD") document.title = price + " BTC-USD";
     }
