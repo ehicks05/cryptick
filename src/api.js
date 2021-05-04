@@ -43,4 +43,31 @@ const get24HourStats = async () => {
   return await (await fetch(`${PROD_URL}/stats`)).json();
 };
 
-export { getCurrencies, getProducts, get24HourStats };
+const _getCandles = async (productId) => {
+  return (
+    await (
+      await fetch(`${PROD_URL}/${productId}/candles?granularity=300`)
+    ).json()
+  ).reverse();
+};
+
+const getCandles = async (productIds) => {
+  return (
+    await Promise.all(
+      productIds.map(async (productId) => {
+        const candles = await _getCandles(productId);
+        return { productId, candles };
+      })
+    )
+  )
+    .flat()
+    .reduce(
+      (agg, curr) => ({
+        ...agg,
+        [curr.productId]: curr,
+      }),
+      {}
+    );
+};
+
+export { getCurrencies, getProducts, get24HourStats, getCandles };

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { useLocalStorage } from "react-use";
 import useInterval from "@use-it/interval";
-import { getCurrencies, getProducts, get24HourStats } from "./api";
+import { getCurrencies, getProducts, get24HourStats, getCandles } from "./api";
 import {
   SOCKET_STATUSES,
   WS_URL,
@@ -21,12 +21,14 @@ function App() {
   const [products, setProducts] = useState({});
   const [prices, setPrices] = useState({});
   const [stats, setStats] = useState({});
+  const [candles, setCandles] = useState({});
 
   useEffect(() => {
     const set = async () => {
       setProducts(await getProducts());
       setCurrencies(await getCurrencies());
       setStats(await get24HourStats());
+      setCandles(await getCandles(selectedProductIds));
     };
     set();
   }, []);
@@ -49,6 +51,7 @@ function App() {
   useInterval(() => {
     const set = async () => {
       setStats(await get24HourStats());
+      setCandles(await getCandles(selectedProductIds));
     };
     set();
   }, 60000);
@@ -112,6 +115,7 @@ function App() {
         {!!Object.keys(currencies).length &&
           !!Object.keys(products).length &&
           !!Object.keys(stats).length &&
+          !!Object.keys(candles).length &&
           selectedProductIds.map((selectedProductId) => {
             return (
               <ProductSection
@@ -120,6 +124,7 @@ function App() {
                 productPrice={prices[selectedProductId]}
                 productStats={stats[selectedProductId]}
                 currency={currencies[products[selectedProductId].base_currency]}
+                candles={candles[selectedProductId].candles}
               />
             );
           })}

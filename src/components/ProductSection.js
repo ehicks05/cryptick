@@ -12,7 +12,13 @@ const getPercentChange = (from, to) => {
   return { percent, positive };
 };
 
-const ProductSection = ({ product, productPrice, productStats, currency }) => {
+const ProductSection = ({
+  product,
+  productPrice,
+  productStats,
+  currency,
+  candles,
+}) => {
   const stats24Hour = productStats.stats_24hour;
   const change24Hour = getPercentChange(stats24Hour.open, stats24Hour.last);
   const gradientStart = change24Hour.positive
@@ -50,6 +56,47 @@ const ProductSection = ({ product, productPrice, productStats, currency }) => {
         </div>
         <div>v: {getPrettyPrice(Math.round(stats24Hour.volume))}</div>
       </div>
+      <Chart
+        candles={candles}
+        color={
+          change24Hour.positive ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"
+        }
+      />
+    </div>
+  );
+};
+
+const Chart = ({ candles, color }) => {
+  const chartHeight = 96;
+  const min = Math.min(
+    ...candles.map((candle) => candle[3]),
+    ...candles.map((candle) => candle[4])
+  );
+  const max = Math.max(
+    ...candles.map((candle) => candle[3]),
+    ...candles.map((candle) => candle[4])
+  );
+
+  const getY = (y) => {
+    return chartHeight - ((y - min) / (max - min)) * chartHeight;
+  };
+
+  return (
+    <div>
+      <svg className="w-full h-24" viewBox={`0 0 300 ${chartHeight}`}>
+        {candles.map((candle, i) => {
+          return (
+            <line
+              stroke={color}
+              key={i}
+              x1={i}
+              y1={getY(candle[3])}
+              x2={i + 1}
+              y2={getY(candle[4])}
+            ></line>
+          );
+        })}
+      </svg>
     </div>
   );
 };
