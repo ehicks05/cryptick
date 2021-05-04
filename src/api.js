@@ -1,3 +1,4 @@
+import pRetry from "p-retry";
 import { API_URL } from "./constants";
 
 const CURR_URL = `${API_URL}/currencies`;
@@ -55,7 +56,9 @@ const getCandles = async (productIds) => {
   return (
     await Promise.all(
       productIds.map(async (productId) => {
-        const candles = await _getCandles(productId);
+        const candles = await pRetry(() => _getCandles(productId), {
+          retries: 3,
+        });
         return { productId, candles };
       })
     )
