@@ -17,7 +17,7 @@ const ProductSection = ({
   productPrice,
   productStats,
   currency,
-  candles,
+  productCandles,
 }) => {
   const stats24Hour = productStats.stats_24hour;
   const change24Hour = getPercentChange(stats24Hour.open, stats24Hour.last);
@@ -56,14 +56,12 @@ const ProductSection = ({
         </div>
         <div>v: {getPrettyPrice(Math.round(stats24Hour.volume))}</div>
       </div>
-      {!!Object.keys(candles).length && (
-        <Chart
-          candles={candles[product.id].candles}
-          color={
-            change24Hour.positive ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"
-          }
-        />
-      )}
+      <Chart
+        candles={productCandles}
+        color={
+          change24Hour.positive ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"
+        }
+      />
     </div>
   );
 };
@@ -85,7 +83,7 @@ const Chart = ({ candles, color }) => {
 
   return (
     <div>
-      <svg className="w-full h-24" viewBox={`0 0 300 ${chartHeight}`}>
+      <svg className="w-full h-24" viewBox={`0 0 288 ${chartHeight}`}>
         {candles.map((candle, i) => {
           return (
             <line

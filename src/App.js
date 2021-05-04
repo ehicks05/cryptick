@@ -115,6 +115,7 @@ function App() {
         {!!Object.keys(currencies).length &&
           !!Object.keys(products).length &&
           !!Object.keys(stats).length &&
+          !!Object.keys(candles).length &&
           selectedProductIds.map((selectedProductId) => {
             return (
               <ProductSection
@@ -123,7 +124,7 @@ function App() {
                 productPrice={prices[selectedProductId]}
                 productStats={stats[selectedProductId]}
                 currency={currencies[products[selectedProductId].base_currency]}
-                candles={candles}
+                productCandles={candles[selectedProductId].candles}
               />
             );
           })}
