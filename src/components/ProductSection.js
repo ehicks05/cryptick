@@ -37,7 +37,7 @@ const ProductSection = ({
     >
       <div className="text-gray-700 dark:text-gray-400">
         <span className="text-xl">{currency.name}</span>{" "}
-        <span className="text-xs">{product.id}</span>
+        <span className="text-xs">{product.display_name}</span>
       </div>
       <span className="text-3xl font-semibold" id={`${product.id}Price`}>
         {productPrice?.price}

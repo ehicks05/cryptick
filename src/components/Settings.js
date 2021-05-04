@@ -43,7 +43,7 @@ const ProductButton = ({ product, selected, onClick }) => {
       }`}
       onClick={onClick}
     >
-      {product.id}
+      {product.display_name}
     </button>
   );
 };
