@@ -49,7 +49,9 @@ const _getCandles = async (productId) => {
     await (
       await fetch(`${PROD_URL}/${productId}/candles?granularity=300`)
     ).json()
-  ).reverse();
+  )
+    .reverse()
+    .slice(12);
 };
 
 const getCandles = async (productIds) => {
