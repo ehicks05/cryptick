@@ -13,7 +13,7 @@ import {
   buildSubscribeMessage,
   flashPriceColorChange,
 } from "./utils";
-import { Settings, ProductSection, Header, Footer } from "./components";
+import { Settings, Products, Header, Footer } from "./components";
 
 function App() {
   const [showSettings, setShowSettings] = useState(false);
@@ -111,24 +111,14 @@ function App() {
         selectedProducts={selectedProductIds}
         toggleProduct={toggleProduct}
       />
-      <div className="max-w-screen-xl mx-auto flex flex-wrap justify-center p-4">
-        {!!Object.keys(currencies).length &&
-          !!Object.keys(products).length &&
-          !!Object.keys(stats).length &&
-          !!Object.keys(candles).length &&
-          selectedProductIds.map((selectedProductId) => {
-            return (
-              <ProductSection
-                key={selectedProductId}
-                product={products[selectedProductId]}
-                productPrice={prices[selectedProductId]}
-                productStats={stats[selectedProductId]}
-                currency={currencies[products[selectedProductId].base_currency]}
-                productCandles={candles[selectedProductId].candles}
-              />
-            );
-          })}
-      </div>
+      <Products
+        currencies={currencies}
+        products={products}
+        stats={stats}
+        candles={candles}
+        selectedProductIds={selectedProductIds}
+        prices={prices}
+      />
       <Footer />
     </>
   );
