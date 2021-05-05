@@ -124,6 +124,7 @@ function App() {
         stats={stats}
         candles={candles}
         selectedProductIds={selectedProductIds}
+        setSelectedProductIds={setSelectedProductIds}
         prices={prices}
       />
       <Footer />
