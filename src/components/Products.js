@@ -23,7 +23,7 @@ const Products = ({
               productPrice={prices[selectedProductId]}
               productStats={stats[selectedProductId]}
               currency={currencies[products[selectedProductId].base_currency]}
-              productCandles={candles[selectedProductId].candles}
+              productCandles={candles[selectedProductId]?.candles || []}
             />
           );
         })}

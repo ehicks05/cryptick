@@ -38,6 +38,13 @@ function App() {
     DEFAULT_SELECTED_PRODUCT_IDS
   );
 
+  useEffect(() => {
+    const set = async () => {
+      setCandles(await getCandles(selectedProductIds));
+    };
+    set();
+  }, [selectedProductIds]);
+
   const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
     onOpen: () => {
       sendJsonMessage(buildSubscribeMessage("subscribe", selectedProductIds));
