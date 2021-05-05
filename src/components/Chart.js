@@ -1,5 +1,7 @@
 import React from "react";
 
+const candleWidth = 1;
+
 const Chart = ({ candles, color }) => {
   const chartHeight = 96;
   const min = Math.min(
@@ -15,21 +17,19 @@ const Chart = ({ candles, color }) => {
     return chartHeight - ((y - min) / (max - min)) * chartHeight;
   };
 
+  const points = candles
+    .map(
+      (candle, i) =>
+        `${i * candleWidth},${getY(candle[3])} ${
+          i * candleWidth + (candleWidth - 1)
+        },${getY(candle[4])}`
+    )
+    .join(" ");
+
   return (
     <div>
       <svg className="w-full h-24" viewBox={`0 0 288 ${chartHeight}`}>
-        {candles.map((candle, i) => {
-          return (
-            <line
-              stroke={color}
-              key={i}
-              x1={i}
-              y1={getY(candle[3])}
-              x2={i + 1}
-              y2={getY(candle[4])}
-            ></line>
-          );
-        })}
+        <polyline fill={"none"} stroke={color} points={points} />
       </svg>
     </div>
   );
