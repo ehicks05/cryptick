@@ -1,4 +1,5 @@
 import pRetry from "p-retry";
+import { formatISO, subDays } from "date-fns";
 import { API_URL } from "./constants";
 
 const CURR_URL = `${API_URL}/currencies`;
@@ -45,13 +46,21 @@ const get24HourStats = async () => {
 };
 
 const _getCandles = async (productId) => {
-  return (
-    await (
-      await fetch(`${PROD_URL}/${productId}/candles?granularity=300`)
-    ).json()
-  )
-    .reverse()
-    .slice(12);
+  const granularity = 900;
+  const start = formatISO(subDays(new Date(), 1));
+  const end = formatISO(new Date());
+  try {
+    return (
+      await (
+        await fetch(
+          `${PROD_URL}/${productId}/candles?start=${start}&end=${end}&granularity=${granularity}`
+        )
+      ).json()
+    ).reverse();
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
 };
 
 const getCandles = async (productIds) => {

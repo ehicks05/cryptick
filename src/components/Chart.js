@@ -1,6 +1,6 @@
 import React from "react";
 
-const candleWidth = 1;
+const candleWidth = 3;
 
 const Chart = ({ candles, color }) => {
   const chartHeight = 96;
