@@ -38,13 +38,6 @@ function App() {
     DEFAULT_SELECTED_PRODUCT_IDS
   );
 
-  useEffect(() => {
-    const set = async () => {
-      setCandles(await getCandles(selectedProductIds));
-    };
-    set();
-  }, [selectedProductIds]);
-
   const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
     onOpen: () => {
       sendJsonMessage(buildSubscribeMessage("subscribe", selectedProductIds));
@@ -87,7 +80,7 @@ function App() {
   };
 
   const toggleProduct = useCallback(
-    (productId) => {
+    async (productId) => {
       const showProduct = !selectedProductIds.includes(productId);
 
       sendJsonMessage(
@@ -100,6 +93,11 @@ function App() {
       const newProducts = [...stable, ...(showProduct ? [productId] : [])];
 
       setSelectedProductIds(newProducts);
+
+      if (showProduct) {
+        const newCandles = await getCandles([productId]);
+        setCandles((candles) => ({ ...candles, ...newCandles }));
+      }
     },
     [sendJsonMessage, selectedProductIds, setSelectedProductIds]
   );
