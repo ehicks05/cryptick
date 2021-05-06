@@ -57,12 +57,16 @@ const ProductSection = ({
         </div>
         <div>v: {getPrettyPrice(Math.round(stats24Hour.volume))}</div>
       </div>
-      <Chart
-        candles={productCandles}
-        color={
-          change24Hour.positive ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"
-        }
-      />
+      <div className="w-full h-24">
+        {productCandles && (
+          <Chart
+            candles={productCandles}
+            color={
+              change24Hour.positive ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"
+            }
+          />
+        )}
+      </div>
     </div>
   );
 };

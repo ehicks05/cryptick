@@ -1,9 +1,11 @@
 import React from "react";
 
 const candleWidth = 3;
+const chartHeight = 96;
 
 const Chart = ({ candles, color }) => {
-  const chartHeight = 96;
+  if (!candles) return <div></div>;
+
   const min = Math.min(
     ...candles.map((candle) => candle[3]),
     ...candles.map((candle) => candle[4])
@@ -27,11 +29,9 @@ const Chart = ({ candles, color }) => {
     .join(" ");
 
   return (
-    <div>
-      <svg className="w-full h-24" viewBox={`0 0 288 ${chartHeight}`}>
-        <polyline fill={"none"} stroke={color} points={points} />
-      </svg>
-    </div>
+    <svg height="96" width="222" viewBox={`0 0 288 ${chartHeight}`}>
+      <polyline fill={"none"} stroke={color} points={points} />
+    </svg>
   );
 };
 

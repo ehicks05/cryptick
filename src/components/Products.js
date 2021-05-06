@@ -36,8 +36,7 @@ const Products = ({
   const isLoaded =
     !!Object.keys(currencies).length &&
     !!Object.keys(products).length &&
-    !!Object.keys(stats).length &&
-    !!Object.keys(candles).length;
+    !!Object.keys(stats).length;
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
