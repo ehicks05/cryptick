@@ -46,6 +46,8 @@ function App() {
     onError: (event) => console.log(event),
     shouldReconnect: (closeEvent) => true,
     retryOnError: true,
+    reconnectAttempts: 50,
+    reconnectInterval: 2000,
   });
 
   useInterval(() => {
