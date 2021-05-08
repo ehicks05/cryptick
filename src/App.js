@@ -104,6 +104,11 @@ function App() {
     [sendJsonMessage, selectedProductIds, setSelectedProductIds]
   );
 
+  const isLoaded =
+    !!Object.keys(currencies).length &&
+    !!Object.keys(products).length &&
+    !!Object.keys(stats).length;
+
   return (
     <>
       <Header
@@ -112,21 +117,25 @@ function App() {
         showSettings={showSettings}
         setShowSettings={setShowSettings}
       />
-      <Settings
-        showSettings={showSettings}
-        products={products}
-        selectedProducts={selectedProductIds}
-        toggleProduct={toggleProduct}
-      />
-      <Products
-        currencies={currencies}
-        products={products}
-        stats={stats}
-        candles={candles}
-        selectedProductIds={selectedProductIds}
-        setSelectedProductIds={setSelectedProductIds}
-        prices={prices}
-      />
+      {isLoaded && (
+        <>
+          <Settings
+            showSettings={showSettings}
+            products={products}
+            selectedProducts={selectedProductIds}
+            toggleProduct={toggleProduct}
+          />
+          <Products
+            currencies={currencies}
+            products={products}
+            stats={stats}
+            candles={candles}
+            selectedProductIds={selectedProductIds}
+            setSelectedProductIds={setSelectedProductIds}
+            prices={prices}
+          />
+        </>
+      )}
       <Footer />
     </>
   );

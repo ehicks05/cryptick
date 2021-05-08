@@ -33,11 +33,6 @@ const Products = ({
     })
   );
 
-  const isLoaded =
-    !!Object.keys(currencies).length &&
-    !!Object.keys(products).length &&
-    !!Object.keys(stats).length;
-
   const handleDragEnd = (event) => {
     const { active, over } = event;
 
@@ -60,22 +55,21 @@ const Products = ({
         strategy={rectSortingStrategy}
       >
         <div className="max-w-screen-xl mx-auto flex flex-wrap justify-center p-4">
-          {isLoaded &&
-            selectedProductIds.map((selectedProductId) => {
-              return (
-                <SortableItem key={selectedProductId} id={selectedProductId}>
-                  <ProductSection
-                    product={products[selectedProductId]}
-                    productPrice={prices[selectedProductId]}
-                    productStats={stats[selectedProductId]}
-                    currency={
-                      currencies[products[selectedProductId].base_currency]
-                    }
-                    productCandles={candles[selectedProductId]?.candles || []}
-                  />
-                </SortableItem>
-              );
-            })}
+          {selectedProductIds.map((selectedProductId) => {
+            return (
+              <SortableItem key={selectedProductId} id={selectedProductId}>
+                <ProductSection
+                  product={products[selectedProductId]}
+                  productPrice={prices[selectedProductId]}
+                  productStats={stats[selectedProductId]}
+                  currency={
+                    currencies[products[selectedProductId].base_currency]
+                  }
+                  productCandles={candles[selectedProductId]?.candles || []}
+                />
+              </SortableItem>
+            );
+          })}
         </div>
       </SortableContext>
     </DndContext>
