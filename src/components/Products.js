@@ -90,6 +90,7 @@ const DndLock = ({ isDnd, setIsDnd }) => {
   return (
     <Icon
       className="m-2"
+      role="button"
       color="gray"
       title="Toggle Drag n Drop"
       onClick={() => setIsDnd(!isDnd)}
