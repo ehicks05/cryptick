@@ -65,7 +65,7 @@ function App() {
 
       const price = getPrettyPrice(
         Number.parseFloat(rawPrice),
-        products[productId].quote_increment.length - 2
+        products[productId].minimumFractionDigits
       );
 
       const priceEl = document.getElementById(`${productId}Price`);

@@ -52,8 +52,12 @@ const ProductSection = ({
       </span>
       <div className="text-xs">
         <div>
-          <span>l: {getPrettyPrice(stats24Hour.low)}</span>
-          <span className="ml-4">h: {getPrettyPrice(stats24Hour.high)}</span>
+          <span>
+            l: {getPrettyPrice(stats24Hour.low, product.minimumFractionDigits)}
+          </span>
+          <span className="ml-4">
+            h: {getPrettyPrice(stats24Hour.high, product.minimumFractionDigits)}
+          </span>
         </div>
         <div>v: {getPrettyPrice(Math.round(stats24Hour.volume))}</div>
       </div>

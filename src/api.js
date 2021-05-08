@@ -15,6 +15,10 @@ const getProducts = async () => {
   const data = await (await fetch(PROD_URL)).json();
   return _.chain(data)
     .sortBy(["quote_currency", "base_currency"])
+    .map((product) => ({
+      ...product,
+      minimumFractionDigits: product.quote_increment.length - 2,
+    }))
     .keyBy("id")
     .value();
 };
