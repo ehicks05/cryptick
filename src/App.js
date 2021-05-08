@@ -77,7 +77,10 @@ function App() {
         [productId]: { price },
       });
 
-      if (productId === "BTC-USD") document.title = price + " BTC-USD";
+      if (productId === selectedProductIds[0])
+        document.title = `${price} ${
+          products[selectedProductIds[0]].display_name
+        }`;
     }
   };
 
