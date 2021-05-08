@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { FaLock, FaLockOpen } from "react-icons/fa";
 import ProductSection from "./ProductSection";
 import {
   DndContext,
@@ -26,6 +27,7 @@ const Products = ({
   setSelectedProductIds,
   prices,
 }) => {
+  const [isDnd, setIsDnd] = useState(false);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -54,25 +56,44 @@ const Products = ({
         items={selectedProductIds}
         strategy={rectSortingStrategy}
       >
-        <div className="max-w-screen-xl mx-auto flex flex-wrap justify-center p-4">
-          {selectedProductIds.map((selectedProductId) => {
-            return (
-              <SortableItem key={selectedProductId} id={selectedProductId}>
-                <ProductSection
-                  product={products[selectedProductId]}
-                  productPrice={prices[selectedProductId]}
-                  productStats={stats[selectedProductId]}
-                  currency={
-                    currencies[products[selectedProductId].base_currency]
-                  }
-                  productCandles={candles[selectedProductId]?.candles || []}
-                />
-              </SortableItem>
-            );
-          })}
+        <div className="max-w-screen-xl mx-auto flex flex-col p-4">
+          <DndLock isDnd={isDnd} setIsDnd={setIsDnd} />
+          <div className="flex flex-wrap justify-center">
+            {selectedProductIds.map((selectedProductId) => {
+              return (
+                <SortableItem
+                  key={selectedProductId}
+                  id={selectedProductId}
+                  disabled={!isDnd}
+                >
+                  <ProductSection
+                    product={products[selectedProductId]}
+                    productPrice={prices[selectedProductId]}
+                    productStats={stats[selectedProductId]}
+                    currency={
+                      currencies[products[selectedProductId].base_currency]
+                    }
+                    productCandles={candles[selectedProductId]?.candles || []}
+                  />
+                </SortableItem>
+              );
+            })}
+          </div>
         </div>
       </SortableContext>
     </DndContext>
+  );
+};
+
+const DndLock = ({ isDnd, setIsDnd }) => {
+  const Icon = isDnd ? FaLockOpen : FaLock;
+  return (
+    <Icon
+      className="m-2"
+      color="gray"
+      title="Toggle Drag n Drop"
+      onClick={() => setIsDnd(!isDnd)}
+    />
   );
 };
 
@@ -83,7 +104,7 @@ const SortableItem = (props) => {
     setNodeRef,
     transform,
     transition,
-  } = useSortable({ id: props.id });
+  } = useSortable({ id: props.id, disabled: props.disabled });
 
   const style = {
     transform: CSS.Transform.toString(transform),
