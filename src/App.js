@@ -121,6 +121,7 @@ function App() {
         <>
           <Settings
             showSettings={showSettings}
+            currencies={currencies}
             products={products}
             selectedProducts={selectedProductIds}
             toggleProduct={toggleProduct}
