@@ -31,7 +31,7 @@ function App() {
       setCandles(await getCandles(selectedProductIds));
     };
     set();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [selectedProductIds, setSelectedProductIds] = useLocalStorage(
     "selectedProductIds",

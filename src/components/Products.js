@@ -69,7 +69,7 @@ const Products = ({
                   <ProductSection
                     product={products[selectedProductId]}
                     productPrice={prices[selectedProductId]}
-                    productStats={stats[selectedProductId]}
+                    productStats={stats[selectedProductId].stats_24hour}
                     currency={
                       currencies[products[selectedProductId].base_currency]
                     }
