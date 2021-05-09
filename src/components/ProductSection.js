@@ -8,8 +8,20 @@ const getPercentChange = (from, to) => {
   return delta / from;
 };
 
-const StyledCard = styled.div`
-  color: ${(props) => props.inputColor || "palevioletred"};
+const StyledCard = styled.div.attrs(({ className }) => ({
+  className,
+}))`
+  background-image: ${(props) =>
+    `linear-gradient(to top, ${
+      props.isPositive ? "rgba(6, 78, 59, .15)" : "rgba(153, 27, 27, .15)"
+    }, rgba(0,0,0,0))`};
+
+  :hover {
+    background-image: ${(props) =>
+      `linear-gradient(to top, ${
+        props.isPositive ? "rgba(6, 78, 59, .30)" : "rgba(153, 27, 27, .30)"
+      }, rgba(0,0,0,0))`};
+  }
 `;
 
 const ProductSection = ({
@@ -27,20 +39,14 @@ const ProductSection = ({
     isPositive,
   };
 
-  const gradientStart = isPositive
-    ? "rgba(6, 78, 59, .15)"
-    : "rgba(153, 27, 27, .15)";
-  const style = {
-    backgroundImage: `linear-gradient(to top, ${gradientStart}, rgba(0,0,0,0))`,
-  };
   const borderColor = isPositive
-    ? "border-green-300 dark:border-green-900"
-    : "border-red-300 dark:border-red-900";
+    ? "border-green-300 dark:border-green-900 hover:border-green-500 dark:hover:border-green-700"
+    : "border-red-300 dark:border-red-900 hover:border-red-500 dark:hover:border-red-700";
 
   return (
-    <div
-      style={style}
-      className={`p-4 w-64 m-2 border rounded  ${borderColor}`}
+    <StyledCard
+      isPositive={isPositive}
+      className={`p-4 w-64 m-2 border rounded ${borderColor}`}
     >
       <ProductName currency={currency} product={product} />
       <ProductPrice
@@ -57,7 +63,7 @@ const ProductSection = ({
           />
         )}
       </div>
-    </div>
+    </StyledCard>
   );
 };
 
