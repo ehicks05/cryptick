@@ -110,7 +110,7 @@ const SortableItem = (props) => {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    touchAction: "none",
+    touchAction: props.disabled ? "auto" : "none",
   };
 
   return (
