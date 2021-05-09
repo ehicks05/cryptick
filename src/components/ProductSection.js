@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { getPrettyPrice } from "../utils";
 import Chart from "./Chart";
 
@@ -6,6 +7,10 @@ const getPercentChange = (from, to) => {
   const delta = to - from;
   return delta / from;
 };
+
+const StyledCard = styled.div`
+  color: ${(props) => props.inputColor || "palevioletred"};
+`;
 
 const ProductSection = ({
   product,
