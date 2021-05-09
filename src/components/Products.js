@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaLock, FaLockOpen } from "react-icons/fa";
-import ProductSection from "./ProductSection";
+import Product from "./Product";
 import {
   DndContext,
   closestCenter,
@@ -66,7 +66,7 @@ const Products = ({
                   id={selectedProductId}
                   disabled={!isDnd}
                 >
-                  <ProductSection
+                  <Product
                     product={products[selectedProductId]}
                     productPrice={prices[selectedProductId]}
                     productStats={stats[selectedProductId].stats_24hour}

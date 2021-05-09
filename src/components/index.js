@@ -1,7 +1,7 @@
 import Footer from "./Footer";
 import Header from "./Header";
 import Products from "./Products";
-import ProductSection from "./ProductSection";
+import Product from "./Product";
 import Settings from "./Settings";
 
-export { Footer, Header, Products, ProductSection, Settings };
+export { Footer, Header, Products, Product, Settings };

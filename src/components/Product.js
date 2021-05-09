@@ -24,7 +24,7 @@ const StyledCard = styled.div.attrs(({ className }) => ({
   }
 `;
 
-const ProductSection = ({
+const Product = ({
   product,
   productPrice,
   productStats,
@@ -115,4 +115,4 @@ const SecondaryStats = ({ product, dailyStats }) => {
   );
 };
 
-export default React.memo(ProductSection);
+export default React.memo(Product);
