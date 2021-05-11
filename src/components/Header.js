@@ -1,4 +1,5 @@
 import React from "react";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const Header = ({ title, titleClass, showSettings, setShowSettings }) => {
   return (
@@ -12,7 +13,7 @@ const Header = ({ title, titleClass, showSettings, setShowSettings }) => {
             className="cursor-pointer"
             onClick={() => setShowSettings(!showSettings)}
           >
-            {`settings[${showSettings ? "-" : "+"}]`}
+            {showSettings ? <FaTimes /> : <FaBars />}
           </div>
         </div>
       </div>
