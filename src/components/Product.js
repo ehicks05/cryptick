@@ -46,7 +46,7 @@ const Product = ({
   return (
     <StyledCard
       isPositive={isPositive}
-      className={`p-4 w-64 m-2 border rounded ${borderColor}`}
+      className={`p-4 border rounded ${borderColor}`}
     >
       <ProductName currency={currency} product={product} />
       <ProductPrice
@@ -55,13 +55,11 @@ const Product = ({
         dailyStats={dailyStats}
       />
       <SecondaryStats product={product} dailyStats={dailyStats} />
-      <div className="w-full h-24">
-        {productCandles && (
-          <Chart
-            candles={productCandles}
-            color={isPositive ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
-          />
-        )}
+      <div className="h-24">
+        <Chart
+          candles={productCandles || []}
+          color={isPositive ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
+        />
       </div>
     </StyledCard>
   );
@@ -103,7 +101,7 @@ const SecondaryStats = ({ product, dailyStats }) => {
   const { minimumFractionDigits } = product;
   const { low, high, volume } = dailyStats;
   return (
-    <div className="text-xs">
+    <div className="mb-4 text-xs">
       <div>
         <span>l: {getPrettyPrice(low, minimumFractionDigits)}</span>
         <span className="ml-4">

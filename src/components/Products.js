@@ -46,6 +46,9 @@ const Products = ({
     }
   };
 
+  const gridClasses =
+    "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2";
+
   return (
     <DndContext
       sensors={sensors}
@@ -56,9 +59,9 @@ const Products = ({
         items={selectedProductIds}
         strategy={rectSortingStrategy}
       >
-        <div className="max-w-screen-xl mx-auto flex flex-col p-4">
+        <div className="max-w-screen-2xl w-full mx-auto p-4">
           <DndLock isDnd={isDnd} setIsDnd={setIsDnd} />
-          <div className="flex flex-wrap justify-center">
+          <div className={gridClasses}>
             {selectedProductIds.map((selectedProductId) => {
               return (
                 <SortableItem
@@ -89,7 +92,7 @@ const DndLock = ({ isDnd, setIsDnd }) => {
   const Icon = isDnd ? FaLockOpen : FaLock;
   return (
     <Icon
-      className="m-2"
+      className="mb-2"
       role="button"
       color="gray"
       title="Toggle Drag n Drop"

@@ -1,10 +1,11 @@
 import React from "react";
-
-const candleWidth = 3;
-const chartHeight = 96;
+import useDimensions from "react-use-dimensions";
 
 const Chart = ({ candles, color }) => {
-  if (!candles) return <div></div>;
+  const [ref, { width, height }] = useDimensions();
+  if (!candles.length) return <div></div>;
+
+  const candleWidth = width / candles.length;
 
   const min = Math.min(
     ...candles.map((candle) => candle[3]),
@@ -16,7 +17,7 @@ const Chart = ({ candles, color }) => {
   );
 
   const getY = (y) => {
-    return chartHeight - ((y - min) / (max - min)) * chartHeight;
+    return height - ((y - min) / (max - min)) * height;
   };
 
   const points = candles
@@ -29,9 +30,13 @@ const Chart = ({ candles, color }) => {
     .join(" ");
 
   return (
-    <svg height="96" width="222" viewBox={`0 0 288 ${chartHeight}`}>
-      <polyline fill={"none"} stroke={color} points={points} />
-    </svg>
+    <div ref={ref} className="w-full h-full">
+      {width && height && (
+        <svg viewBox={`0 0 ${width} ${height}`}>
+          <polyline fill={"none"} stroke={color} points={points} />
+        </svg>
+      )}
+    </div>
   );
 };
 
