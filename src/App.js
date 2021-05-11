@@ -17,6 +17,7 @@ import { Settings, Products, Header, Footer } from "./components";
 
 function App() {
   const [showSettings, setShowSettings] = useState(false);
+  const [isReorderEnabled, setIsReorderEnabled] = useState(false);
   const [currencies, setCurrencies] = useState({});
   const [products, setProducts] = useState({});
   const [prices, setPrices] = useState({});
@@ -124,12 +125,15 @@ function App() {
         <>
           <Settings
             showSettings={showSettings}
+            isReorderEnabled={isReorderEnabled}
+            setIsReorderEnabled={setIsReorderEnabled}
             currencies={currencies}
             products={products}
             selectedProducts={selectedProductIds}
             toggleProduct={toggleProduct}
           />
           <Products
+            isReorderEnabled={isReorderEnabled}
             currencies={currencies}
             products={products}
             stats={stats}

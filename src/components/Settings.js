@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import _ from "lodash";
+import { FaLock, FaLockOpen } from "react-icons/fa";
 
 const Settings = ({
   showSettings,
+  isReorderEnabled,
+  setIsReorderEnabled,
   currencies,
   products,
   selectedProducts,
@@ -27,6 +30,8 @@ const Settings = ({
         showSettings ? "block" : "hidden"
       }`}
     >
+      <div>Reorder Cards:</div>
+      <DndLock isDnd={isReorderEnabled} setIsDnd={setIsReorderEnabled} />
       <div>Quote Currency: </div>
       <div className={gridClasses}>
         {Object.values(quoteCurrencies).map((quoteCurrency) => {
@@ -61,6 +66,19 @@ const Settings = ({
           })}
       </div>
     </div>
+  );
+};
+
+const DndLock = ({ isDnd, setIsDnd }) => {
+  const Icon = isDnd ? FaLockOpen : FaLock;
+  return (
+    <Icon
+      className="mb-2"
+      role="button"
+      color="gray"
+      title="Toggle Drag n Drop"
+      onClick={() => setIsDnd(!isDnd)}
+    />
   );
 };
 

@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { FaLock, FaLockOpen } from "react-icons/fa";
+import React from "react";
 import Product from "./Product";
 import {
   DndContext,
@@ -19,6 +18,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 const Products = ({
+  isReorderEnabled,
   currencies,
   products,
   stats,
@@ -27,7 +27,6 @@ const Products = ({
   setSelectedProductIds,
   prices,
 }) => {
-  const [isDnd, setIsDnd] = useState(false);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -60,14 +59,13 @@ const Products = ({
         strategy={rectSortingStrategy}
       >
         <div className="max-w-screen-2xl w-full mx-auto p-4">
-          <DndLock isDnd={isDnd} setIsDnd={setIsDnd} />
           <div className={gridClasses}>
             {selectedProductIds.map((selectedProductId) => {
               return (
                 <SortableItem
                   key={selectedProductId}
                   id={selectedProductId}
-                  disabled={!isDnd}
+                  disabled={!isReorderEnabled}
                 >
                   <Product
                     product={products[selectedProductId]}
@@ -88,27 +86,9 @@ const Products = ({
   );
 };
 
-const DndLock = ({ isDnd, setIsDnd }) => {
-  const Icon = isDnd ? FaLockOpen : FaLock;
-  return (
-    <Icon
-      className="mb-2"
-      role="button"
-      color="gray"
-      title="Toggle Drag n Drop"
-      onClick={() => setIsDnd(!isDnd)}
-    />
-  );
-};
-
 const SortableItem = (props) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({ id: props.id, disabled: props.disabled });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: props.id, disabled: props.disabled });
 
   const style = {
     transform: CSS.Transform.toString(transform),
