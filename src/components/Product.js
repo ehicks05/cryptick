@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { formatPrice } from "../utils";
+import { formatPrice, formatPercent } from "../utils";
 import Chart from "./Chart";
 
 const getPercentChange = (from, to) => {
@@ -72,15 +72,6 @@ const ProductName = ({ currency, product }) => {
       <span className="text-xs">{product.display_name}</span>
     </div>
   );
-};
-
-const formatPercent = (percent) => {
-  return Intl.NumberFormat("en-US", {
-    style: "percent",
-    signDisplay: "always",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(percent);
 };
 
 const ProductPrice = ({ product, price, dailyStats }) => {

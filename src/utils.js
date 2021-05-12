@@ -11,6 +11,15 @@ const formatTime = (date) => {
   }).format(date);
 };
 
+const formatPercent = (percent) => {
+  return Intl.NumberFormat("en-US", {
+    style: "percent",
+    signDisplay: "always",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(percent);
+};
+
 const buildSubscribeMessage = (type, product_ids) => {
   return { type, product_ids, channels: ["ticker"] };
 };
@@ -29,6 +38,7 @@ const flashPriceColorChange = (newPrice, prevPrice, priceElement) => {
 export {
   formatPrice,
   formatTime,
+  formatPercent,
   buildSubscribeMessage,
   flashPriceColorChange,
 };
