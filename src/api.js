@@ -17,7 +17,12 @@ const getProducts = async () => {
     .sortBy(["quote_currency", "base_currency"])
     .map((product) => ({
       ...product,
-      minimumFractionDigits: product.quote_increment.length - 2,
+      minimumQuoteDigits: product.quote_increment.substring(
+        product.quote_increment.indexOf(".") + 1
+      ).length,
+      minimumBaseDigits: product.base_increment.substring(
+        product.base_increment.indexOf(".") + 1
+      ).length,
     }))
     .keyBy("id")
     .value();

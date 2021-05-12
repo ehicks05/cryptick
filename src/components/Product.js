@@ -99,15 +99,13 @@ const ProductPrice = ({ product, price, dailyStats }) => {
 };
 
 const SecondaryStats = ({ product, dailyStats }) => {
-  const { minimumFractionDigits } = product;
+  const { minimumQuoteDigits } = product;
   const { low, high, volume } = dailyStats;
   return (
     <div className="mb-4 text-xs">
       <div>
-        <span>l: {formatPrice(low, minimumFractionDigits)}</span>
-        <span className="ml-4">
-          h: {formatPrice(high, minimumFractionDigits)}
-        </span>
+        <span>l: {formatPrice(low, minimumQuoteDigits)}</span>
+        <span className="ml-4">h: {formatPrice(high, minimumQuoteDigits)}</span>
       </div>
       <div>v: {formatPrice(Math.round(volume))}</div>
     </div>

@@ -72,7 +72,7 @@ function App() {
 
       const price = formatPrice(
         rawPrice,
-        products[productId].minimumFractionDigits
+        products[productId].minimumQuoteDigits
       );
 
       const priceEl = document.getElementById(`${productId}Price`);
@@ -98,7 +98,7 @@ function App() {
           price,
           last_size: formatPrice(
             last_size,
-            products[productId].base_increment.length - 2
+            products[productId].minimumBaseDigits
           ),
         };
 
