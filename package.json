@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@craco/craco": "^6.1.1",
+    "@craco/craco": "^6.1.2",
     "@dnd-kit/core": "^3.0.2",
     "@dnd-kit/sortable": "^3.0.1",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
     "@use-it/interval": "^1.0.0",
-    "date-fns": "^2.21.1",
+    "date-fns": "^2.21.3",
     "p-throttle": "^4.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -20,7 +20,7 @@
     "react-use-dimensions": "^1.2.1",
     "react-use-websocket": "^2.6.1",
     "styled-components": "^5.3.0",
-    "web-vitals": "^1.1.1"
+    "web-vitals": "^1.1.2"
   },
   "scripts": {
     "start": "craco start",
