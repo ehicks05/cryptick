@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import _ from "lodash";
 import useWebSocket from "react-use-websocket";
-import { useLocalStorage } from "react-use";
+import { useLocalStorage, useThrottle } from "react-use";
 import useInterval from "@use-it/interval";
 import { getCurrencies, getProducts, get24HourStats, getCandles } from "./api";
 import {
@@ -10,10 +11,11 @@ import {
 } from "./constants";
 import {
   getPrettyPrice,
+  formatTime,
   buildSubscribeMessage,
   flashPriceColorChange,
 } from "./utils";
-import { Settings, Products, Header, Footer } from "./components";
+import { Settings, Products, History, Header, Footer } from "./components";
 
 function App() {
   const [showSettings, setShowSettings] = useState(false);
@@ -23,6 +25,9 @@ function App() {
   const [prices, setPrices] = useState({});
   const [stats, setStats] = useState({});
   const [candles, setCandles] = useState({});
+  const [messages, setMessages] = useState({});
+
+  const throttledMessages = useThrottle(messages, 250);
 
   useEffect(() => {
     const set = async () => {
@@ -59,13 +64,14 @@ function App() {
     set();
   }, 60000);
 
-  const handleMessage = ({ type, product_id: productId, price: rawPrice }) => {
+  const handleMessage = (message) => {
+    const { type, product_id: productId, price: rawPrice } = message;
     if (type === "ticker") {
       if (!prices[productId])
         setPrices({ ...prices, [productId]: { price: 0 } });
 
       const price = getPrettyPrice(
-        Number.parseFloat(rawPrice),
+        rawPrice,
         products[productId].minimumFractionDigits
       );
 
@@ -82,6 +88,28 @@ function App() {
         document.title = `${price} ${
           products[selectedProductIds[0]].display_name
         }`;
+
+      setMessages((messages) => {
+        const { sequence, time, side, last_size } = message;
+        const newMessage = {
+          sequence,
+          time: formatTime(new Date(time)),
+          side,
+          price,
+          last_size: getPrettyPrice(
+            last_size,
+            products[productId].base_increment.length - 2
+          ),
+        };
+
+        return {
+          ...messages,
+          [productId]: _.take(
+            [newMessage, ...(messages[productId] || [])],
+            100
+          ),
+        };
+      });
     }
   };
 
@@ -142,6 +170,7 @@ function App() {
             setSelectedProductIds={setSelectedProductIds}
             prices={prices}
           />
+          {/* <History messages={throttledMessages["BTC-USD"] || []} /> */}
         </>
       )}
       <Footer />

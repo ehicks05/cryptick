@@ -4,6 +4,13 @@ const getPrettyPrice = (price, minimumFractionDigits) => {
   }).format(price);
 };
 
+const formatTime = (date) => {
+  return new Intl.DateTimeFormat("en-US", {
+    timeStyle: "medium",
+    hour12: false,
+  }).format(date);
+};
+
 const buildSubscribeMessage = (type, product_ids) => {
   return { type, product_ids, channels: ["ticker"] };
 };
@@ -19,4 +26,9 @@ const flashPriceColorChange = (newPrice, prevPrice, priceElement) => {
   priceElement.classList.add(color);
 };
 
-export { getPrettyPrice, buildSubscribeMessage, flashPriceColorChange };
+export {
+  getPrettyPrice,
+  formatTime,
+  buildSubscribeMessage,
+  flashPriceColorChange,
+};

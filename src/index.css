@@ -56,3 +56,40 @@ body {
     background-color: transparent;
   }
 }
+
+.red-bold {
+  animation: down-bold 0.8s;
+}
+.green-bold {
+  animation: up-bold 0.8s;
+}
+
+@keyframes up-bold {
+  0% {
+    background-color: transparent;
+  }
+  10% {
+    background-color: rgba(16, 185, 129, 0.5);
+  }
+  60% {
+    background-color: rgba(16, 185, 129, 0.1);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes down-bold {
+  0% {
+    background-color: transparent;
+  }
+  10% {
+    background-color: rgba(239, 68, 68, 0.5);
+  }
+  60% {
+    background-color: rgba(239, 68, 68, 0.1);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
