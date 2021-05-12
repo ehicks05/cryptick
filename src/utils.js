@@ -1,4 +1,4 @@
-const getPrettyPrice = (price, minimumFractionDigits) => {
+const formatPrice = (price, minimumFractionDigits) => {
   return Intl.NumberFormat("en-US", {
     minimumFractionDigits,
   }).format(price);
@@ -27,7 +27,7 @@ const flashPriceColorChange = (newPrice, prevPrice, priceElement) => {
 };
 
 export {
-  getPrettyPrice,
+  formatPrice,
   formatTime,
   buildSubscribeMessage,
   flashPriceColorChange,

@@ -10,7 +10,7 @@ import {
   DEFAULT_SELECTED_PRODUCT_IDS,
 } from "./constants";
 import {
-  getPrettyPrice,
+  formatPrice,
   formatTime,
   buildSubscribeMessage,
   flashPriceColorChange,
@@ -70,7 +70,7 @@ function App() {
       if (!prices[productId])
         setPrices({ ...prices, [productId]: { price: 0 } });
 
-      const price = getPrettyPrice(
+      const price = formatPrice(
         rawPrice,
         products[productId].minimumFractionDigits
       );
@@ -96,7 +96,7 @@ function App() {
           time: formatTime(new Date(time)),
           side,
           price,
-          last_size: getPrettyPrice(
+          last_size: formatPrice(
             last_size,
             products[productId].base_increment.length - 2
           ),

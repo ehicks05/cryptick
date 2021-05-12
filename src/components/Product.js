@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { getPrettyPrice } from "../utils";
+import { formatPrice } from "../utils";
 import Chart from "./Chart";
 
 const getPercentChange = (from, to) => {
@@ -104,12 +104,12 @@ const SecondaryStats = ({ product, dailyStats }) => {
   return (
     <div className="mb-4 text-xs">
       <div>
-        <span>l: {getPrettyPrice(low, minimumFractionDigits)}</span>
+        <span>l: {formatPrice(low, minimumFractionDigits)}</span>
         <span className="ml-4">
-          h: {getPrettyPrice(high, minimumFractionDigits)}
+          h: {formatPrice(high, minimumFractionDigits)}
         </span>
       </div>
-      <div>v: {getPrettyPrice(Math.round(volume))}</div>
+      <div>v: {formatPrice(Math.round(volume))}</div>
     </div>
   );
 };
