@@ -170,7 +170,9 @@ function App() {
             setSelectedProductIds={setSelectedProductIds}
             prices={prices}
           />
-          {/* <History messages={throttledMessages["BTC-USD"] || []} /> */}
+          <div className="max-w-screen-2xl w-full mx-auto p-4">
+            <History messages={throttledMessages["BTC-USD"] || []} />
+          </div>
         </>
       )}
       <Footer />
