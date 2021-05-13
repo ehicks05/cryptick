@@ -22,8 +22,6 @@ body {
 }
 #root {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 .red {
@@ -69,7 +67,7 @@ body {
     background-color: transparent;
   }
   10% {
-    background-color: rgba(16, 185, 129, 0.5);
+    background-color: rgba(16, 185, 129, 0.4);
   }
   60% {
     background-color: rgba(16, 185, 129, 0.1);
@@ -84,7 +82,7 @@ body {
     background-color: transparent;
   }
   10% {
-    background-color: rgba(239, 68, 68, 0.5);
+    background-color: rgba(239, 68, 68, 0.4);
   }
   60% {
     background-color: rgba(239, 68, 68, 0.1);
