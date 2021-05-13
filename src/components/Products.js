@@ -16,6 +16,7 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Link } from "react-router-dom";
 
 const Products = ({
   isReorderEnabled,
@@ -86,21 +87,25 @@ const Products = ({
   );
 };
 
-const SortableItem = (props) => {
+const SortableItem = ({ id, disabled, children }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: props.id, disabled: props.disabled });
+    useSortable({ id, disabled });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    touchAction: props.disabled ? "auto" : "none",
+    touchAction: disabled ? "auto" : "none",
   };
 
-  return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      {props.children}
-    </div>
-  );
+  if (disabled) {
+    return <Link to={`/${id}`}>{children}</Link>;
+  } else {
+    return (
+      <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+        {children}
+      </div>
+    );
+  }
 };
 
 export default React.memo(Products);

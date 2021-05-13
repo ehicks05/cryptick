@@ -15,7 +15,14 @@ import {
   buildSubscribeMessage,
   flashPriceColorChange,
 } from "./utils";
-import { Settings, Products, History, Header, Footer } from "./components";
+import {
+  Settings,
+  Products,
+  ProductDetail,
+  Header,
+  Footer,
+} from "./components";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   const [showSettings, setShowSettings] = useState(false);
@@ -28,6 +35,7 @@ function App() {
   const [messages, setMessages] = useState({});
 
   const throttledMessages = useThrottle(messages, 250);
+  const throttledPrices = useThrottle(prices, 250);
 
   useEffect(() => {
     const set = async () => {
@@ -142,41 +150,54 @@ function App() {
     !!Object.keys(stats).length;
 
   return (
-    <>
-      <Header
-        title={SOCKET_STATUSES[readyState].name}
-        titleClass={SOCKET_STATUSES[readyState].class}
-        showSettings={showSettings}
-        setShowSettings={setShowSettings}
-      />
-      {isLoaded && (
-        <>
-          <Settings
-            showSettings={showSettings}
-            isReorderEnabled={isReorderEnabled}
-            setIsReorderEnabled={setIsReorderEnabled}
-            currencies={currencies}
-            products={products}
-            selectedProducts={selectedProductIds}
-            toggleProduct={toggleProduct}
-          />
-          <Products
-            isReorderEnabled={isReorderEnabled}
-            currencies={currencies}
-            products={products}
-            stats={stats}
-            candles={candles}
-            selectedProductIds={selectedProductIds}
-            setSelectedProductIds={setSelectedProductIds}
-            prices={prices}
-          />
-          <div className="max-w-screen-2xl w-full mx-auto p-4">
-            <History messages={throttledMessages["BTC-USD"] || []} />
-          </div>
-        </>
-      )}
-      <Footer />
-    </>
+    <Router>
+      <div className="flex flex-col">
+        <Header
+          title={SOCKET_STATUSES[readyState].name}
+          titleClass={SOCKET_STATUSES[readyState].class}
+          showSettings={showSettings}
+          setShowSettings={setShowSettings}
+        />
+        {isLoaded && (
+          <>
+            <Settings
+              showSettings={showSettings}
+              isReorderEnabled={isReorderEnabled}
+              setIsReorderEnabled={setIsReorderEnabled}
+              currencies={currencies}
+              products={products}
+              selectedProducts={selectedProductIds}
+              toggleProduct={toggleProduct}
+            />
+            <Switch>
+              <Route path="/:productId">
+                <ProductDetail
+                  currencies={currencies}
+                  products={products}
+                  stats={stats}
+                  candles={candles}
+                  prices={throttledPrices}
+                  throttledMessages={throttledMessages}
+                />
+              </Route>
+              <Route path="/">
+                <Products
+                  currencies={currencies}
+                  products={products}
+                  stats={stats}
+                  candles={candles}
+                  prices={throttledPrices}
+                  isReorderEnabled={isReorderEnabled}
+                  selectedProductIds={selectedProductIds}
+                  setSelectedProductIds={setSelectedProductIds}
+                />
+              </Route>
+            </Switch>
+          </>
+        )}
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

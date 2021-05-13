@@ -6,7 +6,7 @@ const tradeSizeToBars = (tradeSize) => {
 
 const History = ({ messages }) => {
   return (
-    <div className="h-96 overflow-hidden">
+    <div className="overflow-hidden">
       <table>
         <thead>
           <tr>
