@@ -1,4 +1,5 @@
 const SOCKET_STATUSES = {
+  "-1": { name: "Uninstantiated", class: "bg-red-500" },
   0: { name: "Connecting", class: "bg-blue-500" },
   1: { name: "Connected", class: "bg-green-500" },
   2: { name: "Closing", class: "bg-yellow-300" },
