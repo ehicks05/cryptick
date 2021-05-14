@@ -160,50 +160,48 @@ function App() {
 
   return (
     <Router>
-      <div className="flex flex-col">
+      <div className="flex flex-col h-screen">
         <Header
           title={SOCKET_STATUSES[readyState].name}
           titleClass={SOCKET_STATUSES[readyState].class}
           showSettings={showSettings}
           setShowSettings={setShowSettings}
         />
-        {isLoaded && (
-          <>
-            <Settings
-              showSettings={showSettings}
-              isReorderEnabled={isReorderEnabled}
-              setIsReorderEnabled={setIsReorderEnabled}
-              currencies={currencies}
-              products={products}
-              selectedProducts={selectedProductIds}
-              toggleProduct={toggleProduct}
-            />
-            <Switch>
-              <Route path="/:productId">
-                <ProductDetail
-                  currencies={currencies}
-                  products={products}
-                  stats={stats}
-                  candles={candles}
-                  prices={throttledPrices}
-                  throttledMessages={throttledMessages}
-                />
-              </Route>
-              <Route path="/">
-                <Products
-                  currencies={currencies}
-                  products={products}
-                  stats={stats}
-                  candles={candles}
-                  prices={throttledPrices}
-                  isReorderEnabled={isReorderEnabled}
-                  selectedProductIds={selectedProductIds}
-                  setSelectedProductIds={setSelectedProductIds}
-                />
-              </Route>
-            </Switch>
-          </>
-        )}
+        <Settings
+          showSettings={showSettings}
+          isReorderEnabled={isReorderEnabled}
+          setIsReorderEnabled={setIsReorderEnabled}
+          currencies={currencies}
+          products={products}
+          selectedProducts={selectedProductIds}
+          toggleProduct={toggleProduct}
+        />
+        <div className="flex-grow flex max-h-full">
+          <Switch>
+            <Route path="/:productId">
+              <ProductDetail
+                currencies={currencies}
+                products={products}
+                stats={stats}
+                candles={candles}
+                prices={throttledPrices}
+                throttledMessages={throttledMessages}
+              />
+            </Route>
+            <Route path="/">
+              <Products
+                currencies={currencies}
+                products={products}
+                stats={stats}
+                candles={candles}
+                prices={throttledPrices}
+                isReorderEnabled={isReorderEnabled}
+                selectedProductIds={selectedProductIds}
+                setSelectedProductIds={setSelectedProductIds}
+              />
+            </Route>
+          </Switch>
+        </div>
         <Footer />
       </div>
     </Router>
