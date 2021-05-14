@@ -24,12 +24,10 @@ const Settings = ({
   const gridClasses =
     "grid grid-cols-4 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-1";
 
+  const display = showSettings ? "block" : "hidden";
+
   return (
-    <div
-      className={`max-w-screen-xl m-auto p-4 ${
-        showSettings ? "block" : "hidden"
-      }`}
-    >
+    <div className={`max-w-screen-xl m-auto p-4 ${display}`}>
       <div>Reorder Cards:</div>
       <DndLock isDnd={isReorderEnabled} setIsDnd={setIsReorderEnabled} />
       <div>Quote Currency: </div>
