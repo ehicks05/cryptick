@@ -3,6 +3,8 @@ import _ from "lodash";
 import useWebSocket from "react-use-websocket";
 import { useLocalStorage, useThrottle } from "react-use";
 import useInterval from "@use-it/interval";
+import Loader from "react-loader-spinner";
+
 import { getCurrencies, getProducts, get24HourStats, getCandles } from "./api";
 import {
   SOCKET_STATUSES,
@@ -148,6 +150,13 @@ function App() {
     !!Object.keys(currencies).length &&
     !!Object.keys(products).length &&
     !!Object.keys(stats).length;
+
+  if (!isLoaded)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader type="Rings" color="#00BFFF" height={256} width={256} />
+      </div>
+    );
 
   return (
     <Router>
