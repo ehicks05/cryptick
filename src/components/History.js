@@ -19,7 +19,7 @@ const SIDES = {
 
 const History = ({ messages }) => {
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-y-hidden">
       <table>
         <thead>
           <tr>
