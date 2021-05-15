@@ -176,7 +176,7 @@ function App() {
           selectedProducts={selectedProductIds}
           toggleProduct={toggleProduct}
         />
-        <div className="flex-grow flex max-h-full">
+        <div className="flex-grow flex flex-col h-full overflow-y-hidden">
           <Switch>
             <Route path="/:productId">
               <ProductDetail

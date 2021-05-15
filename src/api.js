@@ -36,11 +36,12 @@ const _getCandles = async (productId) => {
   const granularity = 900;
   const start = formatISO(subDays(new Date(), 1));
   const end = formatISO(new Date());
+
   try {
     return (
       await (
         await fetch(
-          `${PROD_URL}/${productId}/candles?start=${start}&end=${end}&granularity=${granularity}`
+          `${PROD_URL}/${productId}/candles?granularity=${granularity}`
         )
       ).json()
     ).reverse();

@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
+import useDimensions from "react-use-dimensions";
 import { formatPrice, formatPercent } from "../utils";
 import CandleChart from "./CandleChart";
 import History from "./History";
@@ -27,6 +28,8 @@ const ProductDetail = ({
   prices,
   throttledMessages,
 }) => {
+  const [ref, { height }] = useDimensions();
+  const [innerRef, { height: innerHeight }] = useDimensions();
   const { productId } = useParams();
   const product = products[productId];
   const productPrice = prices[productId];
@@ -48,28 +51,35 @@ const ProductDetail = ({
 
   return (
     <div
-      style={{ height: "90vh" }}
-      className="flex flex-col md:flex-row gap-4 w-full mx-auto p-4"
+      ref={ref}
+      className="h-full flex-grow flex flex-col md:flex-row gap-4 p-4"
     >
-      <div className="flex-grow">
+      <div className="flex flex-col flex-grow-0 md:flex-grow h-full">
         <div>Chart</div>
         <StyledCard
           isPositive={isPositive}
-          className={`p-4 border rounded ${borderColor}`}
+          className={`flex-grow flex flex-col p-4 border rounded ${borderColor}`}
         >
-          <ProductName currency={currency} product={product} />
-          <ProductPrice
-            product={product}
-            price={productPrice?.price}
-            dailyStats={dailyStats}
-          />
-          <SecondaryStats product={product} dailyStats={dailyStats} />
-          <div style={{ height: "70vh" }} className="">
-            <CandleChart candles={productCandles || []} />
+          <div ref={innerRef}>
+            <ProductName currency={currency} product={product} />
+            <ProductPrice
+              product={product}
+              price={productPrice?.price}
+              dailyStats={dailyStats}
+            />
+            <SecondaryStats product={product} dailyStats={dailyStats} />
+          </div>
+          <div className="flex-grow">
+            <CandleChart
+              height={height - innerHeight}
+              candles={productCandles || []}
+            />
           </div>
         </StyledCard>
       </div>
-      <History messages={throttledMessages[productId] || []} />
+      <div className="overflow-y-hidden h-full" style={{ maxHeight: height }}>
+        <History messages={throttledMessages[productId] || []} />
+      </div>
     </div>
   );
 };
