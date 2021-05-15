@@ -56,10 +56,10 @@ body {
 }
 
 .red-bold {
-  animation: down-bold 0.8s;
+  animation: down-bold 0.9s;
 }
 .green-bold {
-  animation: up-bold 0.8s;
+  animation: up-bold 0.9s;
 }
 
 @keyframes up-bold {
