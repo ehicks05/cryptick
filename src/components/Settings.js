@@ -30,7 +30,8 @@ const Settings = ({
     <div className={`max-w-screen-xl m-auto p-4 ${display}`}>
       <div>Reorder Cards:</div>
       <DndLock isDnd={isReorderEnabled} setIsDnd={setIsReorderEnabled} />
-      <div>Quote Currency: </div>
+
+      <div className="mt-4">Quote Currency: </div>
       <div className={gridClasses}>
         {Object.values(quoteCurrencies).map((quoteCurrency) => {
           return (
