@@ -1,7 +1,20 @@
 import React from "react";
 
-const tradeSizeToBars = (tradeSize) => {
+const barWidth = (tradeSize) => {
   return Math.max(Math.floor(Math.log2(tradeSize) + 8), 1);
+};
+
+const SIDES = {
+  buy: {
+    highlight: "green-bold",
+    borderColor: "border-green-500",
+    textColor: "text-green-500",
+  },
+  sell: {
+    highlight: "red-bold",
+    borderColor: "border-red-500",
+    textColor: "text-red-500",
+  },
 };
 
 const History = ({ messages }) => {
@@ -20,28 +33,20 @@ const History = ({ messages }) => {
           </tr>
         </thead>
         <tbody>
-          {messages.map(({ sequence, time, side, price, last_size }) => (
-            <TR
-              key={sequence}
-              className={side === "buy" ? "green-bold" : "red-bold"}
-            >
-              <TD
-                className={`pl-4 ${
-                  side === "buy" ? "border-green-500" : "border-red-500"
-                } `}
-                style={{
-                  borderLeftWidth: tradeSizeToBars(last_size),
-                }}
-              ></TD>
-              <TD>{last_size}</TD>
-              <TD
-                className={side === "buy" ? "text-green-500" : "text-red-500"}
-              >
-                {price}
-              </TD>
-              <TD className="opacity-50">{time}</TD>
-            </TR>
-          ))}
+          {messages.map(({ sequence, time, side, price, last_size }) => {
+            const style = { borderLeftWidth: barWidth(last_size) };
+            return (
+              <TR key={sequence} className={SIDES[side].highlight}>
+                <TD
+                  className={`pl-4 ${SIDES[side].borderColor} `}
+                  style={style}
+                ></TD>
+                <TD>{last_size}</TD>
+                <TD className={SIDES[side].textColor}>{price}</TD>
+                <TD className="opacity-50">{time}</TD>
+              </TR>
+            );
+          })}
         </tbody>
       </table>
     </div>
