@@ -99,8 +99,10 @@ function App() {
           products[selectedProductIds[0]].display_name
         }`;
 
+      const { sequence, time, side, last_size } = message;
+      if (!time) return;
+
       setMessages((messages) => {
-        const { sequence, time, side, last_size } = message;
         const newMessage = {
           sequence,
           time: formatTime(new Date(time)),
