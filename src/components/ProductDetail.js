@@ -2,14 +2,10 @@ import React from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
 import useDimensions from "react-use-dimensions";
-import { formatPrice, formatPercent } from "../utils";
 import CandleChart from "./CandleChart";
 import History from "./History";
-
-const getPercentChange = (from, to) => {
-  const delta = to - from;
-  return delta / from;
-};
+import ProductSummary from "./ProductSummary";
+import { getPercentChange } from "utils";
 
 const StyledCard = styled.div.attrs(({ className }) => ({
   className,
@@ -45,10 +41,6 @@ const ProductDetail = ({
     isPositive,
   };
 
-  const borderColor = isPositive
-    ? "border-green-300 dark:border-green-900"
-    : "border-red-300 dark:border-red-900";
-
   return (
     <div
       ref={ref}
@@ -58,16 +50,17 @@ const ProductDetail = ({
         <div>Chart</div>
         <StyledCard
           isPositive={isPositive}
-          className={`flex-grow flex flex-col p-4 border rounded ${borderColor}`}
+          className={`flex-grow flex flex-col p-4 border rounded ${borderColor(
+            isPositive
+          )}`}
         >
           <div ref={innerRef}>
-            <ProductName currency={currency} product={product} />
-            <ProductPrice
+            <ProductSummary
               product={product}
-              price={productPrice?.price}
+              productPrice={productPrice}
               dailyStats={dailyStats}
+              currency={currency}
             />
-            <SecondaryStats product={product} dailyStats={dailyStats} />
           </div>
           <div className="flex-grow">
             <CandleChart
@@ -84,42 +77,9 @@ const ProductDetail = ({
   );
 };
 
-const ProductName = ({ currency, product }) => {
-  return (
-    <div className="text-gray-700 dark:text-gray-400">
-      <span className="text-xl">{currency.name}</span>{" "}
-      <span className="text-xs">{product.display_name}</span>
-    </div>
-  );
-};
-
-const ProductPrice = ({ product, price, dailyStats }) => {
-  const { isPositive, percent } = dailyStats;
-  const color = isPositive ? "text-green-500" : "text-red-500";
-  return (
-    <>
-      <span className="text-3xl font-semibold" id={`${product.id}Price`}>
-        {price}
-      </span>
-      <span className={`ml-2 whitespace-nowrap ${color}`}>
-        {formatPercent(percent)}
-      </span>
-    </>
-  );
-};
-
-const SecondaryStats = ({ product, dailyStats }) => {
-  const { minimumQuoteDigits } = product;
-  const { low, high, volume } = dailyStats;
-  return (
-    <div className="mb-4 text-xs">
-      <div>
-        <span>l: {formatPrice(low, minimumQuoteDigits)}</span>
-        <span className="ml-4">h: {formatPrice(high, minimumQuoteDigits)}</span>
-      </div>
-      <div>v: {formatPrice(Math.round(volume))}</div>
-    </div>
-  );
-};
+const borderColor = (isPositive) =>
+  isPositive
+    ? "border-green-300 dark:border-green-900"
+    : "border-red-300 dark:border-red-900";
 
 export default React.memo(ProductDetail);

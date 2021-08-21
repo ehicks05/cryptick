@@ -39,6 +39,11 @@ const clamp = (value, min, max) => {
   return Math.min(Math.max(value, min), max);
 };
 
+const getPercentChange = (from, to) => {
+  const delta = to - from;
+  return delta / from;
+};
+
 export {
   formatPrice,
   formatTime,
@@ -46,4 +51,5 @@ export {
   buildSubscribeMessage,
   flashPriceColorChange,
   clamp,
+  getPercentChange,
 };
