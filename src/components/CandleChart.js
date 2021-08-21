@@ -2,21 +2,16 @@ import React, { useEffect, useState } from "react";
 import useDimensions from "react-use-dimensions";
 import { isEqual, fromUnixTime, startOfDay } from "date-fns";
 import { zonedTimeToUtc } from "date-fns-tz";
-
-import { clamp } from "../utils";
+import { clamp } from "utils";
 
 const CandleChart = ({ height: h, candles }) => {
   const [ref, { width }] = useDimensions();
-  const [candleWidth, setCandleWidth] = useState(width / (candles.length || 1));
   const [candleWidthMulti, setCandleWidthMulti] = useState(1);
 
   const [height, setHeight] = useState(0);
 
-  useEffect(() => {
-    const newBaseWidth = width / (candles.length || 1);
-    const newWidth = newBaseWidth * candleWidthMulti;
-    setCandleWidth(clamp(newWidth, 2, 20));
-  }, [width, candleWidthMulti, candles.length]);
+  const baseCandleWidth = 3;
+  const candleWidth = baseCandleWidth * candleWidthMulti;
 
   useEffect(() => {
     setHeight(h - 56 - 48);
@@ -24,52 +19,67 @@ const CandleChart = ({ height: h, candles }) => {
 
   if (!candles.length) return <div></div>;
 
-  const min = Math.min(...candles.map((candle) => candle[1]));
-  const max = Math.max(...candles.map((candle) => candle[2]));
+  const viewableCandleCount = width / candleWidth;
+  const viewableCandles = candles.slice(0, viewableCandleCount);
+
+  const min = Math.min(...viewableCandles.map((candle) => candle[1]));
+  const max = Math.max(...viewableCandles.map((candle) => candle[2]));
 
   const handleWheel = (e) => {
-    e.preventDefault();
-    setCandleWidthMulti((current) => (current * e.deltaY < 0 ? 1.05 : 0.95));
+    const newWidth = candleWidthMulti * (e.deltaY < 0 ? 1.05 : 0.95);
+    setCandleWidthMulti(clamp(newWidth, 2, 24));
   };
 
   const getY = (y) => {
     return height - ((y - min) / (max - min)) * height;
   };
 
-  const candleEls = candles.map(([datetime, low, high, open, close], i) => {
-    if (i === 0) return null;
-    const utc = zonedTimeToUtc(fromUnixTime(datetime));
-    const isStartOfDay = isEqual(utc, zonedTimeToUtc(startOfDay(utc)));
+  const getX = (x) => {
+    return width - x;
+  };
 
-    return (
-      <React.Fragment key={i}>
-        {isStartOfDay && (
+  // this controls the gap between candles, decreasing relative gap as you zoom in
+  // avoids candles looking too far apart when zoomed in,
+  // and too squeezed together when zoomed out
+  const rectXDivisor =
+    candleWidth < 6 ? 8 : candleWidth < 12 ? 6 : candleWidth < 24 ? 4 : 3;
+
+  const candleEls = viewableCandles.map(
+    ([datetime, low, high, open, close], i) => {
+      if (i === 0) return null;
+      const utc = zonedTimeToUtc(fromUnixTime(datetime));
+      const isStartOfDay = isEqual(utc, zonedTimeToUtc(startOfDay(utc)));
+
+      return (
+        <React.Fragment key={i}>
+          {isStartOfDay && (
+            <line
+              stroke={"rgba(100, 100, 100, .25)"}
+              x1={getX(i * candleWidth) - candleWidth / 2}
+              y1={getY(min)}
+              x2={getX(i * candleWidth) - candleWidth / 2}
+              y2={getY(max)}
+            />
+          )}
           <line
-            stroke={"rgb(100, 100, 100)"}
-            x1={i * candleWidth - candleWidth / 2}
-            y1={getY(min)}
-            x2={i * candleWidth - candleWidth / 2}
-            y2={getY(max)}
+            stroke={close >= open ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
+            x1={getX(i * candleWidth)}
+            y1={getY(low)}
+            x2={getX(i * candleWidth)}
+            y2={getY(high)}
           />
-        )}
-        <line
-          stroke={close >= open ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
-          x1={i * candleWidth}
-          y1={getY(low)}
-          x2={i * candleWidth}
-          y2={getY(high)}
-        />
-        <rect
-          stroke={close >= open ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
-          fill={close >= open ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
-          x={i * candleWidth - candleWidth / 4}
-          y={getY(Math.max(open, close))}
-          width={candleWidth / 2}
-          height={Math.abs(getY(close) - getY(open))}
-        />
-      </React.Fragment>
-    );
-  });
+          <rect
+            stroke={close >= open ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
+            fill={close >= open ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
+            x={getX(i * candleWidth) - candleWidth / rectXDivisor}
+            y={getY(Math.max(open, close))}
+            width={candleWidth / (rectXDivisor / 2)}
+            height={Math.abs(getY(close) - getY(open))}
+          />
+        </React.Fragment>
+      );
+    }
+  );
 
   return (
     <div ref={ref} className="flex flex-grow w-full h-full">
@@ -77,7 +87,7 @@ const CandleChart = ({ height: h, candles }) => {
         <svg
           style={{ touchAction: "manipulation" }}
           viewBox={`0 0 ${width} ${height}`}
-          // onWheel={handleWheel}
+          onWheel={handleWheel}
         >
           {candleEls}
         </svg>

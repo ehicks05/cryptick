@@ -20,11 +20,13 @@ const Chart = ({ candles, color, className }) => {
     return height - ((y - min) / (max - min)) * height;
   };
 
+  const getX = (x) => width - x;
+
   const points = candles
     .map(
       (candle, i) =>
-        `${i * candleWidth},${getY(candle[3])} ${
-          i * candleWidth + (candleWidth - 1)
+        `${getX(i * candleWidth)},${getY(candle[3])} ${
+          getX(i * candleWidth) + (candleWidth - 1)
         },${getY(candle[4])}`
     )
     .join(" ");

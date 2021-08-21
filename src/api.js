@@ -38,13 +38,9 @@ const _getCandles = async (productId) => {
   const end = formatISO(new Date());
 
   try {
-    return (
-      await (
-        await fetch(
-          `${PROD_URL}/${productId}/candles?granularity=${granularity}`
-        )
-      ).json()
-    ).reverse();
+    return await (
+      await fetch(`${PROD_URL}/${productId}/candles?granularity=${granularity}`)
+    ).json();
   } catch (err) {
     console.log(err);
     return [];
