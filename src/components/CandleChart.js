@@ -6,7 +6,7 @@ import { clamp } from "utils";
 
 const CandleChart = ({ height: h, candles, productPrice }) => {
   const [ref, { width }] = useDimensions();
-  const [candleWidthMulti, setCandleWidthMulti] = useState(1);
+  const [candleWidthMulti, setCandleWidthMulti] = useState(2);
 
   const [height, setHeight] = useState(0);
 
@@ -30,7 +30,7 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
   const max = Math.max(...viewableCandles.map((candle) => candle[2]));
 
   const handleWheel = (e) => {
-    const newMulti = candleWidthMulti * (e.deltaY < 0 ? 1.05 : 0.95);
+    const newMulti = candleWidthMulti * (e.deltaY < 0 ? 1.1 : 0.9);
     setCandleWidthMulti(clamp(newMulti, 1, 10));
   };
 
