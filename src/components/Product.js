@@ -46,12 +46,11 @@ const Product = ({
         dailyStats={dailyStats}
         currency={currency}
       />
-      <div className="h-24">
-        <Chart
-          candles={productCandles || []}
-          color={isPositive ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
-        />
-      </div>
+      <Chart
+        candles={productCandles || []}
+        color={isPositive ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
+        className="h-24"
+      />
     </StyledCard>
   );
 };

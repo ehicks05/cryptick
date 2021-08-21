@@ -1,7 +1,7 @@
 import React from "react";
 import useDimensions from "react-use-dimensions";
 
-const Chart = ({ candles, color }) => {
+const Chart = ({ candles, color, className }) => {
   const [ref, { width, height }] = useDimensions();
   if (!candles.length) return <div></div>;
 
@@ -30,12 +30,14 @@ const Chart = ({ candles, color }) => {
     .join(" ");
 
   return (
-    <div ref={ref} className="w-full h-full">
-      {width && height && (
-        <svg viewBox={`0 0 ${width} ${height}`}>
-          <polyline fill={"none"} stroke={color} points={points} />
-        </svg>
-      )}
+    <div className={`${className}`}>
+      <div ref={ref} className={`w-full h-full`}>
+        {width && height && (
+          <svg viewBox={`0 0 ${width} ${height}`}>
+            <polyline fill={"none"} stroke={color} points={points} />
+          </svg>
+        )}
+      </div>
     </div>
   );
 };
