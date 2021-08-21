@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useDimensions from "react-use-dimensions";
-import { isEqual, fromUnixTime, startOfDay } from "date-fns";
+import { isEqual, fromUnixTime, startOfDay, format } from "date-fns";
 import { zonedTimeToUtc } from "date-fns-tz";
 import { clamp } from "utils";
 
@@ -93,13 +93,23 @@ const CandleChart = ({ height: h, candles }) => {
       return (
         <React.Fragment key={i}>
           {isStartOfDay && (
-            <line
-              stroke={"rgba(100, 100, 100, .25)"}
-              x1={getX(i * candleWidth) - candleWidth / 2}
-              y1={getY(min)}
-              x2={getX(i * candleWidth) - candleWidth / 2}
-              y2={getY(max)}
-            />
+            <>
+              <line
+                stroke={"rgba(100, 100, 100, .25)"}
+                x1={getX(i * candleWidth) - candleWidth / 2}
+                y1={getY(min)}
+                x2={getX(i * candleWidth) - candleWidth / 2}
+                y2={getY(max)}
+              />
+              <text
+                fontSize="11"
+                fill="rgba(255, 255, 255, .95)"
+                x={getX(i * candleWidth) - 24}
+                y={getY(min)}
+              >
+                {format(utc, "MMM dd")}
+              </text>
+            </>
           )}
           <line
             stroke={close >= open ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
