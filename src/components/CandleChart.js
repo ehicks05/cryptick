@@ -35,7 +35,8 @@ const CandleChart = ({ height: h, candles }) => {
   };
 
   const getX = (x) => {
-    return width - x;
+    // 32 = allow for a right-side gutter for grid markers
+    return width - 32 - x;
   };
 
   const getHorizontalLines = (min, max) => {
@@ -104,8 +105,8 @@ const CandleChart = ({ height: h, candles }) => {
               <text
                 fontSize="11"
                 fill="rgba(255, 255, 255, .95)"
-                x={getX(i * candleWidth) - 24}
-                y={getY(min)}
+                x={getX(i * candleWidth) - 22} // 22 = push text down below chart
+                y={getY(min) + 16}
               >
                 {format(utc, "MMM dd")}
               </text>
