@@ -4,7 +4,7 @@ import { isEqual, fromUnixTime, startOfDay, format } from "date-fns";
 import { zonedTimeToUtc } from "date-fns-tz";
 import { clamp } from "utils";
 
-const CandleChart = ({ height: h, candles }) => {
+const CandleChart = ({ height: h, candles, productPrice }) => {
   const [ref, { width }] = useDimensions();
   const [candleWidthMulti, setCandleWidthMulti] = useState(1);
 
@@ -21,6 +21,10 @@ const CandleChart = ({ height: h, candles }) => {
 
   const viewableCandleCount = width / candleWidth;
   const viewableCandles = candles.slice(0, viewableCandleCount);
+
+  // set current candle's current price
+  if (viewableCandles?.[0]?.[4])
+    viewableCandles[0][4] = Number(productPrice.price.replace(/,/g, ""));
 
   const min = Math.min(...viewableCandles.map((candle) => candle[1]));
   const max = Math.max(...viewableCandles.map((candle) => candle[2]));
@@ -82,13 +86,13 @@ const CandleChart = ({ height: h, candles }) => {
     candleWidth < 6 ? 8 : candleWidth < 12 ? 6 : candleWidth < 24 ? 4 : 3;
 
   const candleEls = viewableCandles.map(
-    ([datetime, low, high, open, close], i) => {
-      if (i === 0) return null;
+    ([datetime, low, high, open, close], _i) => {
+      // if (i === 0) return null;
+      const i = _i + 1;
       const utc = zonedTimeToUtc(fromUnixTime(datetime));
       const isStartOfDay = isEqual(utc, zonedTimeToUtc(startOfDay(utc)));
-
       return (
-        <React.Fragment key={i}>
+        <React.Fragment key={_i}>
           {isStartOfDay && (
             <>
               <line

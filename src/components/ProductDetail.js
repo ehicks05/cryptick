@@ -64,6 +64,7 @@ const ProductDetail = ({
           <CandleChart
             height={height - innerHeight}
             candles={productCandles || []}
+            productPrice={productPrice}
           />
         </div>
       </StyledCard>
