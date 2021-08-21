@@ -10,7 +10,7 @@ const CandleChart = ({ height: h, candles }) => {
 
   const [height, setHeight] = useState(0);
 
-  const baseCandleWidth = 3;
+  const baseCandleWidth = 6;
   const candleWidth = baseCandleWidth * candleWidthMulti;
 
   useEffect(() => {
@@ -26,8 +26,8 @@ const CandleChart = ({ height: h, candles }) => {
   const max = Math.max(...viewableCandles.map((candle) => candle[2]));
 
   const handleWheel = (e) => {
-    const newWidth = candleWidthMulti * (e.deltaY < 0 ? 1.05 : 0.95);
-    setCandleWidthMulti(clamp(newWidth, 2, 24));
+    const newMulti = candleWidthMulti * (e.deltaY < 0 ? 1.05 : 0.95);
+    setCandleWidthMulti(clamp(newMulti, 1, 10));
   };
 
   const getY = (y) => {
