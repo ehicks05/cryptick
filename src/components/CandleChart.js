@@ -38,6 +38,46 @@ const CandleChart = ({ height: h, candles }) => {
     return width - x;
   };
 
+  const getHorizontalLines = (min, max) => {
+    const range = max - min;
+    const roughChunkSize = range / 6;
+
+    let divisor = 1;
+    let work = range;
+    while (work > 100) {
+      work /= 10;
+      divisor *= 10;
+    }
+    const chunkSize = Math.round(roughChunkSize / divisor) * divisor;
+    console.log(roughChunkSize);
+    console.log(chunkSize);
+
+    const minChunk = Math.round(min / divisor) * divisor;
+    const lines = [...new Array(7)].map((_, i) => minChunk + i * chunkSize);
+    console.log(lines);
+    return lines;
+  };
+
+  const horizontalLineEls = getHorizontalLines(min, max).map((line) => (
+    <>
+      <line
+        stroke={"rgba(100, 100, 100, .25)"}
+        x1={0}
+        y1={getY(line)}
+        x2={width}
+        y2={getY(line)}
+      />
+      <text
+        fontSize="11"
+        fill="rgba(255, 255, 255, .95)"
+        x={width - 32}
+        y={getY(line) + 3}
+      >
+        {line}
+      </text>
+    </>
+  ));
+
   // this controls the gap between candles, decreasing relative gap as you zoom in
   // avoids candles looking too far apart when zoomed in,
   // and too squeezed together when zoomed out
@@ -89,6 +129,7 @@ const CandleChart = ({ height: h, candles }) => {
           viewBox={`0 0 ${width} ${height}`}
           onWheel={handleWheel}
         >
+          {horizontalLineEls}
           {candleEls}
         </svg>
       )}
