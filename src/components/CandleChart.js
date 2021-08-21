@@ -43,18 +43,14 @@ const CandleChart = ({ height: h, candles }) => {
     const range = max - min;
     const roughChunkSize = range / 6;
 
-    let divisor = 1;
-    let work = range;
-    while (work > 100) {
-      work /= 10;
-      divisor *= 10;
-    }
-    const chunkSize = Math.round(roughChunkSize / divisor) * divisor;
+    const chunkSize = Number(roughChunkSize.toPrecision(2));
     console.log(roughChunkSize);
     console.log(chunkSize);
 
-    const minChunk = Math.round(min / divisor) * divisor;
-    const lines = [...new Array(7)].map((_, i) => minChunk + i * chunkSize);
+    const minChunk = Number(min.toPrecision(2));
+    const lines = [...new Array(14)].map(
+      (_, i) => minChunk + (i - 3) * chunkSize
+    );
     console.log(lines);
     return lines;
   };
