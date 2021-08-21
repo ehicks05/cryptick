@@ -7,7 +7,8 @@ import { clamp } from "utils";
 const CandleChart = ({ height: h, candles, productPrice }) => {
   const [ref, { width }] = useDimensions();
   const [candleWidthMulti, setCandleWidthMulti] = useState(2);
-
+  const [mousePos, setMousePos] = useState(undefined);
+  console.log(mousePos);
   const [height, setHeight] = useState(0);
 
   const baseCandleWidth = 6;
@@ -133,7 +134,18 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
   );
 
   return (
-    <div ref={ref} className="flex flex-grow w-full h-full">
+    <div
+      ref={ref}
+      className="flex flex-grow w-full h-full"
+      // onMouseMove={(e) => {
+      //   let rect = e.target.getBoundingClientRect();
+      //   let x = e.clientX - rect.left; //x position within the element.
+      //   let y = e.clientY - rect.top; //y position within the element.
+      //   // console.log({ x, y });
+      //   setMousePos({ x, y });
+      // }}
+      // onMouseOut={() => setMousePos(undefined)}
+    >
       {width && height && (
         <svg
           style={{ touchAction: "manipulation" }}
@@ -142,6 +154,26 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
         >
           {horizontalLineEls}
           {candleEls}
+          {mousePos && (
+            <>
+              {/* horizontal */}
+              <line
+                stroke={"rgba(100, 100, 100, .35)"}
+                x1={0}
+                y1={mousePos.y}
+                x2={width}
+                y2={mousePos.y}
+              />
+              {/* vertical */}
+              <line
+                stroke={"rgba(100, 100, 100, .35)"}
+                x1={mousePos.x}
+                y1={0}
+                x2={mousePos.x}
+                y2={h}
+              />
+            </>
+          )}
         </svg>
       )}
     </div>
