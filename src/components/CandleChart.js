@@ -36,7 +36,7 @@ const CandleChart = ({ height: h, candles }) => {
 
   const getX = (x) => {
     // 32 = allow for a right-side gutter for grid markers
-    return width - 32 - x;
+    return width - 36 - x;
   };
 
   const getHorizontalLines = (min, max) => {
@@ -67,7 +67,7 @@ const CandleChart = ({ height: h, candles }) => {
       <text
         fontSize="11"
         fill="rgba(255, 255, 255, .95)"
-        x={width - 32}
+        x={width - 36}
         y={getY(line) + 3}
       >
         {line}
