@@ -19,11 +19,11 @@ const SIDES = {
 
 const History = ({ messages }) => {
   return (
-    <div className="overflow-y-hidden">
+    <div className="text-xs overflow-y-hidden">
       <table>
         <thead>
           <tr>
-            <TD colSpan="4">Trade History</TD>
+            <TD colSpan="4">History</TD>
           </tr>
           <tr>
             <TD></TD>
