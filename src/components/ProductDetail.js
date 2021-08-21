@@ -46,31 +46,31 @@ const ProductDetail = ({
       ref={ref}
       className="h-full flex-grow flex flex-col md:flex-row gap-4 p-4"
     >
-      <div className="flex flex-col flex-grow-0 md:flex-grow h-full">
-        <div>Chart</div>
-        <StyledCard
-          isPositive={isPositive}
-          className={`flex-grow flex flex-col p-4 border rounded ${borderColor(
-            isPositive
-          )}`}
-        >
-          <div ref={innerRef}>
-            <ProductSummary
-              product={product}
-              productPrice={productPrice}
-              dailyStats={dailyStats}
-              currency={currency}
-            />
-          </div>
-          <div className="flex-grow">
-            <CandleChart
-              height={height - innerHeight}
-              candles={productCandles || []}
-            />
-          </div>
-        </StyledCard>
-      </div>
-      <div className="overflow-y-hidden h-full" style={{ maxHeight: height }}>
+      <StyledCard
+        isPositive={isPositive}
+        className={`flex-grow flex flex-col p-4 border rounded ${borderColor(
+          isPositive
+        )}`}
+      >
+        <div ref={innerRef}>
+          <ProductSummary
+            product={product}
+            productPrice={productPrice}
+            dailyStats={dailyStats}
+            currency={currency}
+          />
+        </div>
+        <div className="flex-grow">
+          <CandleChart
+            height={height - innerHeight}
+            candles={productCandles || []}
+          />
+        </div>
+      </StyledCard>
+      <div
+        className="hidden md:block overflow-y-hidden h-full"
+        style={{ maxHeight: height }}
+      >
         <History messages={throttledMessages[productId] || []} />
       </div>
     </div>
