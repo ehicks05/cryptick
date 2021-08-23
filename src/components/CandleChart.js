@@ -66,7 +66,7 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
   };
 
   const horizontalLineEls = getHorizontalLines(min, max).map((line) => (
-    <>
+    <g className="text-black dark:text-white">
       <line
         stroke={"rgba(100, 100, 100, .25)"}
         x1={0}
@@ -76,13 +76,13 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
       />
       <text
         fontSize="11"
-        fill="rgba(255, 255, 255, .95)"
+        className="fill-current"
         x={width - 36}
         y={getY(line) + 3}
       >
         {line}
       </text>
-    </>
+    </g>
   ));
 
   // this controls the gap between candles, decreasing relative gap as you zoom in
@@ -110,7 +110,7 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
               />
               <text
                 fontSize="11"
-                fill="rgba(255, 255, 255, .95)"
+                className="fill-current"
                 x={getX(i * candleWidth) - 22} // 22 = push text down below chart
                 y={getY(min) + 16}
               >
