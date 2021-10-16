@@ -71,7 +71,7 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
 
     const minChunk = Number(min.toPrecision(2));
     const lines = [...new Array(32)].map(
-      (_, i) => minChunk + (i - 3) * gridSize
+      (_, i) => minChunk + (i - 16) * gridSize
     );
     // console.log(`range: ${range}`);
     // console.log(`targetGridLines: ${targetGridLines}`);
