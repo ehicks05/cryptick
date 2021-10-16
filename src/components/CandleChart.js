@@ -7,8 +7,7 @@ import { clamp } from "utils";
 const CandleChart = ({ height: h, candles, productPrice }) => {
   const [ref, { width }] = useDimensions();
   const [candleWidthMulti, setCandleWidthMulti] = useState(2);
-  const [mousePos, setMousePos] = useState(undefined);
-  console.log(mousePos);
+  const [mousePos] = useState(undefined);
   const [height, setHeight] = useState(0);
 
   const baseCandleWidth = 6;
@@ -82,7 +81,7 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
   };
 
   const horizontalLineEls = getHorizontalLines(min, max).map((line) => (
-    <g className="text-black dark:text-white">
+    <g key={line} className="text-black dark:text-white">
       <line
         stroke={"rgba(100, 100, 100, .25)"}
         x1={0}
@@ -158,14 +157,14 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
     <div
       ref={ref}
       className="flex flex-grow w-full h-full"
-      // onMouseMove={(e) => {
-      //   let rect = e.target.getBoundingClientRect();
-      //   let x = e.clientX - rect.left; //x position within the element.
-      //   let y = e.clientY - rect.top; //y position within the element.
-      //   // console.log({ x, y });
-      //   setMousePos({ x, y });
-      // }}
-      // onMouseOut={() => setMousePos(undefined)}
+    // onMouseMove={(e) => {
+    //   let rect = e.target.getBoundingClientRect();
+    //   let x = e.clientX - rect.left; //x position within the element.
+    //   let y = e.clientY - rect.top; //y position within the element.
+    //   // console.log({ x, y });
+    //   setMousePos({ x, y });
+    // }}
+    // onMouseOut={() => setMousePos(undefined)}
     >
       {width && height && (
         <svg

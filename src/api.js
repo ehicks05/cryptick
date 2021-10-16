@@ -1,6 +1,6 @@
 import _ from "lodash";
 import pThrottle from "p-throttle";
-import { formatISO, subDays } from "date-fns";
+// import { formatISO, subDays } from "date-fns";
 import { API_URL } from "./constants";
 
 const CURR_URL = `${API_URL}/currencies`;
@@ -34,8 +34,8 @@ const get24HourStats = async () => {
 
 const _getCandles = async (productId) => {
   const granularity = 900;
-  const start = formatISO(subDays(new Date(), 1));
-  const end = formatISO(new Date());
+  // const start = formatISO(subDays(new Date(), 1));
+  // const end = formatISO(new Date());
 
   try {
     return await (
