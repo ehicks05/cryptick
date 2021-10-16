@@ -32,13 +32,14 @@ const ProductDetail = ({
   const productStats = stats[productId].stats_24hour;
   const currency = currencies[products[productId].base_currency];
   const [candles, setCandles] = useState([]);
+  const [granularity, setGranularity] = useState(900);
 
   const fetchCandles = useCallback(async () => {
-    setCandles(await getCandles(productId, 900));
-  }, [productId])
+    setCandles(await getCandles(productId, granularity));
+  }, [productId, granularity]);
 
   useEffect(() => {
-    fetchCandles()
+    fetchCandles();
   }, [fetchCandles]);
 
   useInterval(() => {
@@ -71,6 +72,19 @@ const ProductDetail = ({
             dailyStats={dailyStats}
             currency={currency}
           />
+          <select onChange={(e) => setGranularity(e.target.value)}>
+            {[
+              { value: 60, label: "1m" },
+              { value: 900, label: "15m" },
+              { value: 3600, label: "1h" },
+              { value: 21600, label: "6h" },
+              { value: 86400, label: "1d" },
+            ].map(({ value, label }) => (
+              <option value={value} selected={value === granularity}>
+                {label}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="flex-grow">
           <CandleChart
