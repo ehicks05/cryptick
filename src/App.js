@@ -15,7 +15,6 @@ import {
   formatPrice,
   formatTime,
   buildSubscribeMessage,
-  flashPriceColorChange,
 } from "./utils";
 import {
   Settings,
@@ -84,10 +83,6 @@ function App() {
         rawPrice,
         products[productId].minimumQuoteDigits
       );
-
-      const priceEl = document.getElementById(`${productId}Price`);
-      if (priceEl)
-        flashPriceColorChange(price, prices[productId]?.price, priceEl);
 
       setPrices({
         ...prices,

@@ -24,17 +24,6 @@ const buildSubscribeMessage = (type, product_ids) => {
   return { type, product_ids, channels: ["ticker"] };
 };
 
-const flashPriceColorChange = (newPrice, prevPrice, priceElement) => {
-  if (newPrice === prevPrice) return;
-  priceElement.classList.remove("green", "red");
-
-  // force animation restart (https://css-tricks.com/restart-css-animation/)
-  void priceElement.offsetWidth;
-
-  const color = newPrice > prevPrice ? "green" : "red";
-  priceElement.classList.add(color);
-};
-
 const clamp = (value, min, max) => {
   return Math.min(Math.max(value, min), max);
 };
@@ -49,7 +38,6 @@ export {
   formatTime,
   formatPercent,
   buildSubscribeMessage,
-  flashPriceColorChange,
   clamp,
   getPercentChange,
 };
