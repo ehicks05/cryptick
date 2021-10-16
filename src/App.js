@@ -55,9 +55,10 @@ function App() {
       // initialize prices from the 24Stats because some products
       // trade so rarely it takes a while for a price to appear
       setPrices(selectedProductIds.reduce((agg, curr) => {
+        const price = formatPrice(stats[curr].stats_24hour.last, products[curr].minimumQuoteDigits);
         return {
           ...agg,
-          [curr]: { price: stats[curr].stats_24hour.last },
+          [curr]: { price },
         }
       }, {}));
       
