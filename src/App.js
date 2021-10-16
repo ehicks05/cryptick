@@ -194,7 +194,6 @@ function App() {
                 currencies={currencies}
                 products={products}
                 stats={stats}
-                candles={candles}
                 prices={throttledPrices}
                 throttledMessages={throttledMessages}
               />

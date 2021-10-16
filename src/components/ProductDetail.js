@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
+import useInterval from "@use-it/interval";
 import useDimensions from "react-use-dimensions";
 import CandleChart from "./CandleChart";
 import History from "./History";
 import ProductSummary from "./ProductSummary";
 import { getPercentChange } from "utils";
+import { getCandles } from "../api";
 
 const StyledCard = styled.div.attrs(({ className }) => ({
   className,
@@ -20,7 +22,6 @@ const ProductDetail = ({
   currencies,
   products,
   stats,
-  candles,
   prices,
   throttledMessages,
 }) => {
@@ -31,7 +32,19 @@ const ProductDetail = ({
   const productPrice = prices[productId];
   const productStats = stats[productId].stats_24hour;
   const currency = currencies[products[productId].base_currency];
-  const productCandles = candles[productId]?.candles || [];
+  const [candles, setCandles] = useState([]);
+
+  const fetchCandles = useCallback(async () => {
+    setCandles(await getCandles(productId, 900));
+  }, [productId])
+
+  useEffect(() => {
+    fetchCandles()
+  }, [fetchCandles]);
+
+  useInterval(() => {
+    fetchCandles();
+  }, 60000);
 
   const percent = getPercentChange(productStats.open, productStats.last);
   const isPositive = percent >= 0;
@@ -63,7 +76,7 @@ const ProductDetail = ({
         <div className="flex-grow">
           <CandleChart
             height={height - innerHeight}
-            candles={productCandles || []}
+            candles={candles}
             productPrice={productPrice}
           />
         </div>
