@@ -1,23 +1,28 @@
+const priceFormats = [...Array(10)].map((_i, i) => new Intl.NumberFormat("en-US", { minimumFractionDigits: i }));
+const defaultPriceFormat = new Intl.NumberFormat("en-US");
+
 const formatPrice = (price, minimumFractionDigits) => {
-  return Intl.NumberFormat("en-US", {
-    minimumFractionDigits,
-  }).format(price);
+  return (priceFormats[minimumFractionDigits] || defaultPriceFormat).format(price);
 };
+
+const defaultTimeFormat = new Intl.DateTimeFormat("en-US", {
+  timeStyle: "medium",
+  hour12: false,
+});
 
 const formatTime = (date) => {
-  return new Intl.DateTimeFormat("en-US", {
-    timeStyle: "medium",
-    hour12: false,
-  }).format(date);
+  return defaultTimeFormat.format(date);
 };
 
+const defaultPercentFormat = new Intl.NumberFormat("en-US", {
+  style: "percent",
+  signDisplay: "always",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
 const formatPercent = (percent) => {
-  return Intl.NumberFormat("en-US", {
-    style: "percent",
-    signDisplay: "always",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(percent);
+  return defaultPercentFormat.format(percent);
 };
 
 const buildSubscribeMessage = (type, product_ids) => {
