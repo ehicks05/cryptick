@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 import useWebSocket from "react-use-websocket";
-import { useLocalStorage, useThrottle } from "react-use";
-import useInterval from "@use-it/interval";
+import { useLocalStorage, useThrottle, useInterval } from "react-use";
 import Loader from "react-loader-spinner";
 
 import { getCurrencies, getProducts, get24HourStats, getDailyCandles } from "./api";

@@ -6,7 +6,6 @@
     "@craco/craco": "^6.1.2",
     "@dnd-kit/core": "^4.0.0",
     "@dnd-kit/sortable": "^5.0.0",
-    "@use-it/interval": "^1.0.0",
     "date-fns": "^2.25.0",
     "date-fns-tz": "^1.1.6",
     "p-throttle": "^5.0.0",

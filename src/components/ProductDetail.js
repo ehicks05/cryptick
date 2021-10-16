@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
-import useInterval from "@use-it/interval";
+import { useInterval } from "react-use";
 import useDimensions from "react-use-dimensions";
 import CandleChart from "./CandleChart";
 import History from "./History";
