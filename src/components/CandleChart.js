@@ -50,9 +50,7 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
 
   const getHorizontalLines = (min, max) => {
     const range = max - min;
-    console.log(`range: ${range}`);
     const targetGridLines = height / 50; // we want a gridline every 50 pixels
-    console.log(`targetGridLines: ${targetGridLines}`);
 
     let power = -4;
     let optionIndex = 0;
@@ -70,13 +68,15 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
       }
     }
     const gridSize = options[optionIndex] * Math.pow(10, power);
-    console.log(`gridSize: ${gridSize}`);
 
     const minChunk = Number(min.toPrecision(2));
     const lines = [...new Array(32)].map(
       (_, i) => minChunk + (i - 3) * gridSize
     );
-    console.log(lines);
+    // console.log(`range: ${range}`);
+    // console.log(`targetGridLines: ${targetGridLines}`);
+    // console.log(`gridSize: ${gridSize}`);
+    // console.log(lines);
     return lines;
   };
 
