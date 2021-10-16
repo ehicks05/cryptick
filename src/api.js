@@ -47,10 +47,9 @@ const _getCandles = async (productId) => {
   }
 };
 
-// from https://docs.pro.coinbase.com/#rate-limits:
-// We throttle public endpoints by IP: 3 requests per second
+// see https://docs.cloud.coinbase.com/exchange/docs/rate-limits
 const throttle = pThrottle({
-  limit: 3,
+  limit: 10,
   interval: 1000,
 });
 
