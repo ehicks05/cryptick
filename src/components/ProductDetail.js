@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
-import { useInterval } from "react-use";
-import useDimensions from "react-use-dimensions";
+import { useInterval, useMeasure } from "react-use";
 import CandleChart from "./CandleChart";
 import History from "./History";
 import ProductSummary from "./ProductSummary";
@@ -25,8 +24,8 @@ const ProductDetail = ({
   prices,
   throttledMessages,
 }) => {
-  const [ref, { height }] = useDimensions();
-  const [innerRef, { height: innerHeight }] = useDimensions();
+  const [ref, { height }] = useMeasure();
+  const [innerRef, { height: innerHeight }] = useMeasure();
   const { productId } = useParams();
   const product = products[productId];
   const productPrice = prices[productId];

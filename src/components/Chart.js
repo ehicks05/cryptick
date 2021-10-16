@@ -1,8 +1,8 @@
 import React from "react";
-import useDimensions from "react-use-dimensions";
+import {useMeasure} from "react-use";
 
 const Chart = ({ candles, color, className }) => {
-  const [ref, { width, height }] = useDimensions();
+  const [ref, { width, height }] = useMeasure();
   if (!candles.length) return <div></div>;
 
   const candleWidth = width / candles.length;

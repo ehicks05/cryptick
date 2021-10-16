@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import useDimensions from "react-use-dimensions";
+import {useMeasure} from "react-use";
 import { isEqual, fromUnixTime, startOfDay, format } from "date-fns";
 import { zonedTimeToUtc } from "date-fns-tz";
 import { clamp } from "utils";
 
 const CandleChart = ({ height: h, candles, productPrice }) => {
-  const [ref, { width }] = useDimensions();
+  const [ref, { width }] = useMeasure();
   const [candleWidthMulti, setCandleWidthMulti] = useState(2);
   const [mousePos] = useState(undefined);
   const [height, setHeight] = useState(0);
