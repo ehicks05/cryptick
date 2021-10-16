@@ -38,20 +38,27 @@ function App() {
   const throttledMessages = useThrottle(messages, 250);
   const throttledPrices = useThrottle(prices, 250);
 
-  useEffect(() => {
-    const set = async () => {
-      setProducts(await getProducts());
-      setCurrencies(await getCurrencies());
-      setStats(await get24HourStats());
-      setCandles(await getCandles(selectedProductIds));
-    };
-    set();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   const [selectedProductIds, setSelectedProductIds] = useLocalStorage(
     "selectedProductIds",
     DEFAULT_SELECTED_PRODUCT_IDS
   );
+
+  useEffect(() => {
+    const set = async () => {
+      const [currencies, products, stats, candles] = await Promise.all([
+        getCurrencies(),
+        getProducts(),
+        get24HourStats(),
+        getCandles(selectedProductIds),
+      ]);
+      
+      setProducts(products);
+      setCurrencies(currencies);
+      setStats(stats);
+      setCandles(candles);
+    };
+    set();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
     onOpen: () => {
@@ -74,11 +81,9 @@ function App() {
   }, 60000);
 
   const handleMessage = (message) => {
+    if (Object.keys(products).length === 0) return;
     const { type, product_id: productId, price: rawPrice } = message;
     if (type === "ticker") {
-      if (!prices[productId])
-        setPrices({ ...prices, [productId]: { price: 0 } });
-
       const price = formatPrice(
         rawPrice,
         products[productId].minimumQuoteDigits
