@@ -5,7 +5,7 @@ import { useLocalStorage, useThrottle } from "react-use";
 import useInterval from "@use-it/interval";
 import Loader from "react-loader-spinner";
 
-import { getCurrencies, getProducts, get24HourStats, getCandles } from "./api";
+import { getCurrencies, getProducts, get24HourStats, getDailyCandles } from "./api";
 import {
   SOCKET_STATUSES,
   WS_URL,
@@ -49,7 +49,7 @@ function App() {
         getCurrencies(),
         getProducts(),
         get24HourStats(),
-        getCandles(selectedProductIds),
+        getDailyCandles(selectedProductIds),
       ]);
 
       // initialize prices from the 24Stats because some products
@@ -61,7 +61,7 @@ function App() {
           [curr]: { price },
         }
       }, {}));
-      
+
       setProducts(products);
       setCurrencies(currencies);
       setStats(stats);
@@ -85,7 +85,7 @@ function App() {
   useInterval(() => {
     const set = async () => {
       setStats(await get24HourStats());
-      setCandles(await getCandles(selectedProductIds));
+      setCandles(await getDailyCandles(selectedProductIds));
     };
     set();
   }, 60000);
@@ -105,9 +105,8 @@ function App() {
       });
 
       if (productId === selectedProductIds[0])
-        document.title = `${price} ${
-          products[selectedProductIds[0]].display_name
-        }`;
+        document.title = `${price} ${products[selectedProductIds[0]].display_name
+          }`;
 
       const { sequence, time, side, last_size } = message;
       if (!time) return;
@@ -151,7 +150,7 @@ function App() {
       setSelectedProductIds(newProducts);
 
       if (showProduct) {
-        const newCandles = await getCandles([productId]);
+        const newCandles = await getDailyCandles([productId]);
         setCandles((candles) => ({ ...candles, ...newCandles }));
       }
     },
