@@ -72,15 +72,20 @@ const ProductDetail = ({
             dailyStats={dailyStats}
             currency={currency}
           />
-          <select onChange={(e) => setGranularity(e.target.value)}>
+          <select
+            className="dark:bg-black"
+            onChange={(e) => setGranularity(e.target.value)}
+            value={granularity}
+          >
             {[
               { value: 60, label: "1m" },
+              { value: 300, label: "5m" },
               { value: 900, label: "15m" },
               { value: 3600, label: "1h" },
               { value: 21600, label: "6h" },
               { value: 86400, label: "1d" },
             ].map(({ value, label }) => (
-              <option value={value} selected={value === granularity}>
+              <option key={value} value={value}>
                 {label}
               </option>
             ))}
