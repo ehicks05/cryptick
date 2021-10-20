@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {useMeasure} from "react-use";
+import { useMeasure } from "react-use";
 import { isEqual, fromUnixTime, startOfDay, format } from "date-fns";
 import { zonedTimeToUtc } from "date-fns-tz";
 import { clamp } from "utils";
@@ -126,10 +126,10 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
               <text
                 fontSize="11"
                 className="fill-current"
-                x={getX(i * candleWidth) - 22} // 22 = push text down below chart
+                x={getX(i * candleWidth) - 20}
                 y={getY(min) + 16}
               >
-                {format(utc, "MMM dd")}
+                {format(utc, "MM/dd")}
               </text>
             </>
           )}
@@ -157,14 +157,14 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
     <div
       ref={ref}
       className="flex flex-grow w-full h-full"
-    // onMouseMove={(e) => {
-    //   let rect = e.target.getBoundingClientRect();
-    //   let x = e.clientX - rect.left; //x position within the element.
-    //   let y = e.clientY - rect.top; //y position within the element.
-    //   // console.log({ x, y });
-    //   setMousePos({ x, y });
-    // }}
-    // onMouseOut={() => setMousePos(undefined)}
+      // onMouseMove={(e) => {
+      //   let rect = e.target.getBoundingClientRect();
+      //   let x = e.clientX - rect.left; //x position within the element.
+      //   let y = e.clientY - rect.top; //y position within the element.
+      //   // console.log({ x, y });
+      //   setMousePos({ x, y });
+      // }}
+      // onMouseOut={() => setMousePos(undefined)}
     >
       {width && height && (
         <svg
