@@ -1,7 +1,13 @@
 import React from "react";
 import { formatPercent, formatPrice } from "utils";
 
-const ProductSummary = ({ product, productPrice, dailyStats, currency }) => {
+const ProductSummary = ({
+  product,
+  productPrice,
+  dailyStats,
+  currency,
+  granularityPicker,
+}) => {
   return (
     <>
       <ProductName currency={currency} product={product} />
@@ -10,7 +16,11 @@ const ProductSummary = ({ product, productPrice, dailyStats, currency }) => {
         price={productPrice?.price}
         dailyStats={dailyStats}
       />
-      <SecondaryStats product={product} dailyStats={dailyStats} />
+      <SecondaryStats
+        product={product}
+        dailyStats={dailyStats}
+        granularityPicker={granularityPicker}
+      />
     </>
   );
 };
@@ -39,7 +49,7 @@ const ProductPrice = ({ product, price, dailyStats }) => {
   );
 };
 
-const SecondaryStats = ({ product, dailyStats }) => {
+const SecondaryStats = ({ product, dailyStats, granularityPicker }) => {
   const { minimumQuoteDigits } = product;
   const { low, high, volume } = dailyStats;
   return (
@@ -48,7 +58,10 @@ const SecondaryStats = ({ product, dailyStats }) => {
         <span>l: {formatPrice(low, minimumQuoteDigits)}</span>
         <span className="ml-4">h: {formatPrice(high, minimumQuoteDigits)}</span>
       </div>
-      <div>v: {formatPrice(Math.round(volume))}</div>
+      <div>
+        <span>v: {formatPrice(Math.round(volume))}</span>
+        {granularityPicker && <span className="ml-4">{granularityPicker}</span>}
+      </div>
     </div>
   );
 };

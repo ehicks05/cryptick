@@ -54,6 +54,27 @@ const ProductDetail = ({
     isPositive,
   };
 
+  const granularityPicker = (
+    <select
+      className="text-xs dark:bg-black"
+      onChange={(e) => setGranularity(e.target.value)}
+      value={granularity}
+    >
+      {[
+        { value: 60, label: "1m" },
+        { value: 300, label: "5m" },
+        { value: 900, label: "15m" },
+        { value: 3600, label: "1h" },
+        { value: 21600, label: "6h" },
+        { value: 86400, label: "1d" },
+      ].map(({ value, label }) => (
+        <option key={value} value={value}>
+          {label}
+        </option>
+      ))}
+    </select>
+  );
+
   return (
     <div
       ref={ref}
@@ -71,25 +92,8 @@ const ProductDetail = ({
             productPrice={productPrice}
             dailyStats={dailyStats}
             currency={currency}
+            granularityPicker={granularityPicker}
           />
-          <select
-            className="dark:bg-black"
-            onChange={(e) => setGranularity(e.target.value)}
-            value={granularity}
-          >
-            {[
-              { value: 60, label: "1m" },
-              { value: 300, label: "5m" },
-              { value: 900, label: "15m" },
-              { value: 3600, label: "1h" },
-              { value: 21600, label: "6h" },
-              { value: 86400, label: "1d" },
-            ].map(({ value, label }) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
         </div>
         <div className="flex-grow">
           <CandleChart
