@@ -7,6 +7,7 @@ import History from "./History";
 import ProductSummary from "./ProductSummary";
 import { getPercentChange } from "utils";
 import { getCandles } from "../api";
+import { subSeconds, formatISO } from "date-fns";
 
 const StyledCard = styled.div.attrs(({ className }) => ({
   className,
@@ -34,16 +35,38 @@ const ProductDetail = ({
   const [candles, setCandles] = useState([]);
   const [granularity, setGranularity] = useState(900);
 
-  const fetchCandles = useCallback(async () => {
-    setCandles(await getCandles(productId, granularity));
-  }, [productId, granularity]);
+  const fetchCandles = useCallback(
+    async (date) => {
+      const [candles1, candles2] = await Promise.all(
+        [...Array(2)].map((_i, i) =>
+          getCandles(
+            productId,
+            granularity,
+            formatISO(subSeconds(date, granularity * 300 * (i + 1))),
+            formatISO(subSeconds(date, granularity * 300 * i))
+          )
+        )
+      );
+
+      return [...(candles1 || []), ...(candles2 || [])];
+    },
+    [productId, granularity]
+  );
 
   useEffect(() => {
-    fetchCandles();
+    const init = async () => {
+      const candles = await fetchCandles(new Date());
+      if (candles) setCandles(candles);
+    };
+    init();
   }, [fetchCandles]);
 
   useInterval(() => {
-    fetchCandles();
+    const update = async () => {
+      const candles = await fetchCandles(new Date());
+      if (candles) setCandles(candles);
+    };
+    update();
   }, 60000);
 
   const percent = getPercentChange(productStats.open, productStats.last);

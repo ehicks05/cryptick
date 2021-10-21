@@ -36,7 +36,7 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
 
   const handleWheel = (e) => {
     const newMulti = candleWidthMulti * (e.deltaY < 0 ? 1.1 : 0.9);
-    setCandleWidthMulti(clamp(newMulti, 1, 10));
+    setCandleWidthMulti(clamp(newMulti, 0.75, 10));
   };
 
   const getY = (y) => {
@@ -140,14 +140,16 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
             x2={getX(i * candleWidth)}
             y2={getY(high)}
           />
-          <rect
-            stroke={close >= open ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
-            fill={close >= open ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
-            x={getX(i * candleWidth) - candleWidth / rectXDivisor}
-            y={getY(Math.max(open, close))}
-            width={candleWidth / (rectXDivisor / 2)}
-            height={Math.abs(getY(close) - getY(open))}
-          />
+          {candleWidth >= 4 && (
+            <rect
+              stroke={close >= open ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
+              fill={close >= open ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
+              x={getX(i * candleWidth) - candleWidth / rectXDivisor}
+              y={getY(Math.max(open, close))}
+              width={candleWidth / (rectXDivisor / 2)}
+              height={Math.abs(getY(close) - getY(open))}
+            />
+          )}
         </React.Fragment>
       );
     }

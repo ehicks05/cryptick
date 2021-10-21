@@ -35,7 +35,11 @@ const get24HourStats = async () => {
 const getCandles = async (productId, granularity, start, end) => {
   try {
     return await (
-      await fetch(`${PROD_URL}/${productId}/candles?granularity=${granularity}${start ? `&start=${start}` : ''}${end ? `&end=${end}` : ''}`)
+      await fetch(
+        `${PROD_URL}/${productId}/candles?granularity=${granularity}${
+          start ? `&start=${start}` : ""
+        }${end ? `&end=${end}` : ""}`
+      )
     ).json();
   } catch (err) {
     console.log(err);
@@ -51,9 +55,12 @@ const throttle = pThrottle({
 
 const getDailyCandles = async (productIds) => {
   const throttledFetch = throttle(async (productId) => {
-    const candles = await getCandles(productId, 900,
+    const candles = await getCandles(
+      productId,
+      900,
       formatISO(subDays(new Date(), 1)),
-      formatISO(new Date()));
+      formatISO(new Date())
+    );
     return { productId, candles };
   });
 
@@ -61,4 +68,10 @@ const getDailyCandles = async (productIds) => {
   return _.keyBy(data, "productId");
 };
 
-export { getCurrencies, getProducts, get24HourStats, getDailyCandles, getCandles };
+export {
+  getCurrencies,
+  getProducts,
+  get24HourStats,
+  getDailyCandles,
+  getCandles,
+};
