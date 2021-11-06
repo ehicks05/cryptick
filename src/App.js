@@ -4,17 +4,18 @@ import useWebSocket from "react-use-websocket";
 import { useLocalStorage, useThrottle, useInterval } from "react-use";
 import Loader from "react-loader-spinner";
 
-import { getCurrencies, getProducts, get24HourStats, getDailyCandles } from "./api";
+import {
+  getCurrencies,
+  getProducts,
+  get24HourStats,
+  getDailyCandles,
+} from "./api";
 import {
   SOCKET_STATUSES,
   WS_URL,
   DEFAULT_SELECTED_PRODUCT_IDS,
 } from "./constants";
-import {
-  formatPrice,
-  formatTime,
-  buildSubscribeMessage,
-} from "./utils";
+import { formatPrice, formatTime, buildSubscribeMessage } from "./utils";
 import {
   Settings,
   Products,
@@ -53,13 +54,18 @@ function App() {
 
       // initialize prices from the 24Stats because some products
       // trade so rarely it takes a while for a price to appear
-      setPrices(selectedProductIds.reduce((agg, curr) => {
-        const price = formatPrice(stats[curr].stats_24hour.last, products[curr].minimumQuoteDigits);
-        return {
-          ...agg,
-          [curr]: { price },
-        }
-      }, {}));
+      setPrices(
+        selectedProductIds.reduce((agg, curr) => {
+          const price = formatPrice(
+            stats[curr].stats_24hour.last,
+            products[curr].minimumQuoteDigits
+          );
+          return {
+            ...agg,
+            [curr]: { price },
+          };
+        }, {})
+      );
 
       setProducts(products);
       setCurrencies(currencies);
@@ -104,8 +110,9 @@ function App() {
       });
 
       if (productId === selectedProductIds[0])
-        document.title = `${price} ${products[selectedProductIds[0]].display_name
-          }`;
+        document.title = `${price} ${
+          products[selectedProductIds[0]].display_name
+        }`;
 
       const { sequence, time, side, last_size } = message;
       if (!time) return;
