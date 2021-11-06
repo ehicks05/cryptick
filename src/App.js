@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 import useWebSocket from "react-use-websocket";
 import { useLocalStorage, useThrottle, useInterval } from "react-use";
+import { usePageVisibility } from "react-page-visibility";
 import Loader from "react-loader-spinner";
 
 import {
@@ -35,6 +36,7 @@ function App() {
   const [candles, setCandles] = useState({});
   const [messages, setMessages] = useState({});
 
+  const isVisible = usePageVisibility();
   const throttledMessages = useThrottle(messages, 250);
   const throttledPrices = useThrottle(prices, 250);
 
@@ -42,6 +44,16 @@ function App() {
     "selectedProductIds",
     DEFAULT_SELECTED_PRODUCT_IDS
   );
+
+  useEffect(() => {
+    const offline = "[offline] ";
+    if (!isVisible) {
+      document.title = `${offline}${document.title}`;
+    }
+    if (isVisible && document.title.includes(offline)) {
+      document.title = document.title.replace(offline, "");
+    }
+  }, [isVisible]);
 
   useEffect(() => {
     const set = async () => {
@@ -75,17 +87,21 @@ function App() {
     set();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
-    onOpen: () => {
-      sendJsonMessage(buildSubscribeMessage("subscribe", selectedProductIds));
+  const { sendJsonMessage, readyState } = useWebSocket(
+    WS_URL,
+    {
+      onOpen: () => {
+        sendJsonMessage(buildSubscribeMessage("subscribe", selectedProductIds));
+      },
+      onMessage: (event) => handleMessage(JSON.parse(event.data)),
+      onError: (event) => console.log(event),
+      shouldReconnect: (closeEvent) => true,
+      retryOnError: true,
+      reconnectAttempts: 50,
+      reconnectInterval: 2000,
     },
-    onMessage: (event) => handleMessage(JSON.parse(event.data)),
-    onError: (event) => console.log(event),
-    shouldReconnect: (closeEvent) => true,
-    retryOnError: true,
-    reconnectAttempts: 50,
-    reconnectInterval: 2000,
-  });
+    isVisible
+  );
 
   useInterval(() => {
     const set = async () => {
