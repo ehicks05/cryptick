@@ -112,6 +112,7 @@ function App() {
 
       setMessages((messages) => {
         const newMessage = {
+          productId,
           sequence,
           time: formatTime(new Date(time)),
           side,
