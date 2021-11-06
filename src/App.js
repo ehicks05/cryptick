@@ -24,7 +24,7 @@ import {
   Header,
   Footer,
 } from "./components";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   const [showSettings, setShowSettings] = useState(false);
@@ -211,29 +211,35 @@ function App() {
           toggleProduct={toggleProduct}
         />
         <div className="flex-grow flex flex-col h-full overflow-y-hidden">
-          <Switch>
-            <Route path="/:productId">
-              <ProductDetail
-                currencies={currencies}
-                products={products}
-                stats={stats}
-                prices={throttledPrices}
-                throttledMessages={throttledMessages}
-              />
-            </Route>
-            <Route path="/">
-              <Products
-                currencies={currencies}
-                products={products}
-                stats={stats}
-                candles={candles}
-                prices={throttledPrices}
-                isReorderEnabled={isReorderEnabled}
-                selectedProductIds={selectedProductIds}
-                setSelectedProductIds={setSelectedProductIds}
-              />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route
+              path="/:productId"
+              element={
+                <ProductDetail
+                  currencies={currencies}
+                  products={products}
+                  stats={stats}
+                  prices={throttledPrices}
+                  throttledMessages={throttledMessages}
+                />
+              }
+            />
+            <Route
+              path="/"
+              element={
+                <Products
+                  currencies={currencies}
+                  products={products}
+                  stats={stats}
+                  candles={candles}
+                  prices={throttledPrices}
+                  isReorderEnabled={isReorderEnabled}
+                  selectedProductIds={selectedProductIds}
+                  setSelectedProductIds={setSelectedProductIds}
+                />
+              }
+            />
+          </Routes>
         </div>
         <Footer />
       </div>
