@@ -33,6 +33,7 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
 
   const min = Math.min(...viewableCandles.map((candle) => candle[1]));
   const max = Math.max(...viewableCandles.map((candle) => candle[2]));
+  const maxVolume = Math.max(...viewableCandles.map((candle) => candle[5]));
 
   const handleWheel = (e) => {
     const newMulti = candleWidthMulti * (e.deltaY < 0 ? 1.1 : 0.9);
@@ -107,13 +108,25 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
     candleWidth < 6 ? 8 : candleWidth < 12 ? 6 : candleWidth < 24 ? 4 : 3;
 
   const candleEls = viewableCandles.map(
-    ([datetime, low, high, open, close], _i) => {
+    ([datetime, low, high, open, close, vol], _i) => {
       // if (i === 0) return null;
       const i = _i + 1;
       const utc = zonedTimeToUtc(fromUnixTime(datetime));
       const isStartOfDay = isEqual(utc, zonedTimeToUtc(startOfDay(utc)));
+
+      const volumeBarHeight = ((vol / maxVolume) * height) / 4;
+
       return (
         <React.Fragment key={_i}>
+          <VolumeBar
+            getX={getX}
+            i={i}
+            candleWidth={candleWidth}
+            rectXDivisor={rectXDivisor}
+            height={height}
+            volumeBarHeight={volumeBarHeight}
+            volume={vol}
+          />
           {isStartOfDay && (
             <>
               <line
@@ -199,6 +212,43 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
         </svg>
       )}
     </div>
+  );
+};
+
+const myFormat = Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
+
+const VolumeBar = ({
+  getX,
+  i,
+  candleWidth,
+  rectXDivisor,
+  height,
+  volumeBarHeight,
+  volume,
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+  return (
+    <>
+      <rect
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="text-gray-700 fill-current opacity-40 hover:opacity-60"
+        x={getX(i * candleWidth) - candleWidth / rectXDivisor}
+        y={height - volumeBarHeight}
+        width={candleWidth / (rectXDivisor / 2)}
+        height={volumeBarHeight}
+      />
+      {isHovered && (
+        <text
+          fontSize="11"
+          className="fill-current"
+          x={getX(i * candleWidth) - 20}
+          y={height + 25}
+        >
+          {myFormat.format(volume)}
+        </text>
+      )}
+    </>
   );
 };
 
