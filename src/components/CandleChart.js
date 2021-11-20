@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useMeasure } from "react-use";
-import { isEqual, fromUnixTime, startOfDay, format } from "date-fns";
-import { zonedTimeToUtc } from "date-fns-tz";
+import { fromUnixTime, format } from "date-fns";
 import { clamp } from "utils";
 
 const CandleChart = ({ height: h, candles, productPrice }) => {
@@ -111,9 +110,14 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
     ([datetime, low, high, open, close, vol], _i) => {
       // if (i === 0) return null;
       const i = _i + 1;
-      const utc = zonedTimeToUtc(fromUnixTime(datetime));
-      const isStartOfDay = isEqual(utc, zonedTimeToUtc(startOfDay(utc)));
-
+      const date = fromUnixTime(datetime);
+      const prevCandle =
+        _i < viewableCandles.length - 1 ? viewableCandles[_i + 1] : undefined;
+      const prevCandleDate = prevCandle && fromUnixTime(prevCandle[0]);
+      const isDayBoundary =
+        prevCandleDate && date.getDate() !== prevCandleDate.getDate();
+      const isMonthBoundary =
+        prevCandleDate && date.getMonth() !== prevCandleDate.getMonth();
       const volumeBarHeight = ((vol / maxVolume) * height) / 4;
 
       return (
@@ -127,7 +131,7 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
             volumeBarHeight={volumeBarHeight}
             volume={vol}
           />
-          {isStartOfDay && (
+          {isDayBoundary && (
             <>
               <line
                 stroke={"rgba(100, 100, 100, .25)"}
@@ -142,7 +146,7 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
                 x={getX(i * candleWidth) - 20}
                 y={getY(min) + 16}
               >
-                {format(utc, "MM/dd")}
+                {format(date, isMonthBoundary ? "MMM" : "MM/dd")}
               </text>
             </>
           )}
