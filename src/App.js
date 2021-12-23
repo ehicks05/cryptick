@@ -113,48 +113,49 @@ function App() {
 
   const handleMessage = (message) => {
     if (Object.keys(products).length === 0) return;
-    const { type, product_id: productId, price: rawPrice } = message;
-    if (type === "ticker") {
-      const price = formatPrice(
-        rawPrice,
-        products[productId].minimumQuoteDigits
-      );
+    if (message.type !== 'ticker') return;
+    const { product_id: productId, price: rawPrice } = message;
 
-      setPrices({
-        ...prices,
-        [productId]: { price },
-      });
+    const price = formatPrice(
+      rawPrice,
+      products[productId].minimumQuoteDigits
+    );
 
-      if (productId === selectedProductIds[0])
-        document.title = `${price} ${
-          products[selectedProductIds[0]].display_name
-        }`;
+    setPrices({
+      ...prices,
+      [productId]: { price },
+    });
 
-      const { sequence, time, side, last_size } = message;
-      if (!time) return;
+    if (productId === selectedProductIds[0])
+      document.title = `${price} ${
+        products[selectedProductIds[0]].display_name
+      }`;
 
-      setMessages((messages) => {
-        const newMessage = {
-          productId,
-          sequence,
-          time: formatTime(new Date(time)),
-          side,
-          price,
-          last_size: formatPrice(
-            last_size,
-            products[productId].minimumBaseDigits
-          ),
-        };
+    const { sequence, time, side, last_size } = message;
+    if (!time) return;
 
-        return {
-          ...messages,
-          [productId]: _.take(
-            [newMessage, ...(messages[productId] || [])],
-            100
-          ),
-        };
-      });
-    }
+    setMessages((messages) => {
+      const newMessage = {
+        productId,
+        sequence,
+        time: formatTime(new Date(time)),
+        side,
+        price,
+        last_size: formatPrice(
+          last_size,
+          products[productId].minimumBaseDigits
+        ),
+      };
+
+      return {
+        ...messages,
+        [productId]: _.take(
+          [newMessage, ...(messages[productId] || [])],
+          100
+        ),
+      };
+    });
+    
   };
 
   const toggleProduct = useCallback(
