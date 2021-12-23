@@ -3,33 +3,31 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@craco/craco": "^6.4.0",
-    "@dnd-kit/core": "^4.0.1",
-    "@dnd-kit/sortable": "^5.0.0",
-    "date-fns": "^2.25.0",
-    "date-fns-tz": "^1.1.6",
+    "@dnd-kit/core": "^4.0.3",
+    "@dnd-kit/sortable": "^5.1.0",
+    "date-fns": "^2.27.0",
+    "date-fns-tz": "^1.2.2",
     "p-throttle": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
     "react-loader-spinner": "^4.0.0",
     "react-page-visibility": "^6.4.0",
-    "react-router-dom": "^6.0.1",
-    "react-scripts": "4.0.3",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "^5.0.0",
     "react-use": "^17.3.1",
     "react-use-websocket": "^2.9.1",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
-    "@tailwindcss/postcss7-compat": "^2.2.17",
-    "autoprefixer": "^9.8.6",
-    "postcss": "^7.0.39",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2"
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.5",
+    "tailwindcss": "^3.0.7"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
