@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import _ from "lodash";
 import useWebSocket from "react-use-websocket";
-import { useInterval } from "react-use";
+import { useInterval, usePrevious } from "react-use";
 import { usePageVisibility } from "react-page-visibility";
 
 import {
@@ -18,7 +18,7 @@ import { formatPrice, formatTime, buildSubscribeMessage } from "./utils";
 
 import useStore from "./store";
 
-function DataFetcher() {
+const DataFetcher = () => {
   const setIsAppLoading = useStore(state => state.setIsAppLoading);
 
   const isVisible = usePageVisibility();
@@ -31,6 +31,8 @@ function DataFetcher() {
   const setProducts = useStore(state => state.setProducts);
 
   const setStats = useStore(state => state.setStats);
+
+  const candles = useStore(state => state.candles);
   const setCandles = useStore(state => state.setCandles);
 
   const prices = useStore(state => state.prices);
@@ -122,6 +124,23 @@ function DataFetcher() {
     };
     set();
   }, 60000);
+
+  const prevSelectedProductIds = usePrevious(selectedProductIds);
+  useEffect(() => {
+    const toggleProduct = async (productId, isNew) => {
+      sendJsonMessage(buildSubscribeMessage(isNew ? "subscribe" : "unsubscribe", [productId]));
+        
+      if (isNew) {
+        const newCandles = await getDailyCandles([productId]);
+        setCandles({ ...candles, ...newCandles });
+      }
+    };
+    if (prevSelectedProductIds && selectedProductIds) {
+      const productId = _.xor(prevSelectedProductIds, selectedProductIds);
+      const isNew = prevSelectedProductIds.indexOf(productId) === -1;
+      toggleProduct(productId, isNew);
+    }
+  }, [selectedProductIds]);
 
   const handleMessage = (message) => {
     if (Object.keys(products).length === 0) return;

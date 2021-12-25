@@ -2,10 +2,6 @@ import React, { useState, useCallback } from "react";
 import _ from "lodash";
 import { FaLock, FaLockOpen } from "react-icons/fa";
 import useStore from '../store';
-import { buildSubscribeMessage } from "utils";
-import { getDailyCandles } from "api";
-import useWebSocket from "react-use-websocket";
-import { WS_URL } from "../constants";
 import shallow from 'zustand/shallow'
 
 const Settings = () => {
@@ -13,7 +9,6 @@ const Settings = () => {
     isShowSettings,
     products,
     currencies,
-    setCandles,
     selectedProductIds,
     setSelectedProductIds }
     = useStore(state => (
@@ -21,13 +16,10 @@ const Settings = () => {
         isShowSettings: state.isShowSettings,
         products: state.products,
         currencies: state.currencies,
-        setCandles: state.setCandles,
         selectedProductIds: state.selectedProductIds,
         setSelectedProductIds: state.setSelectedProductIds,
       }
     ), shallow)
-
-  const { sendJsonMessage } = useWebSocket(WS_URL, { share: true });
 
   const quoteCurrencies = _.chain(Object.values(products))
     .map((product) => product.quote_currency)
@@ -44,26 +36,15 @@ const Settings = () => {
 
   const display = isShowSettings ? "block" : "hidden";
 
-  const toggleProduct = useCallback(
-    async (productId) => {
-      const showProduct = !selectedProductIds.includes(productId);
-      sendJsonMessage(
-        buildSubscribeMessage(showProduct ? "subscribe" : "unsubscribe", [
-          productId,
-        ])
-      );
-
+  const toggleProduct = useCallback((productId) => {
+      const isAdding = !selectedProductIds.includes(productId);
+      
       const stable = selectedProductIds.filter((p) => p !== productId);
-      const newProducts = [...stable, ...(showProduct ? [productId] : [])];
-
+      const newProducts = [...stable, ...(isAdding ? [productId] : [])];
+      
       setSelectedProductIds(newProducts);
-
-      if (showProduct) {
-        const newCandles = await getDailyCandles([productId]);
-        setCandles((candles) => ({ ...candles, ...newCandles }));
-      }
     },
-    [sendJsonMessage, selectedProductIds, setSelectedProductIds, setCandles]
+    [selectedProductIds, setSelectedProductIds]
   );
 
   return (
