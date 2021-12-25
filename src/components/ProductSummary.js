@@ -1,19 +1,21 @@
-import React from "react";
+import React, {useCallback, useRef, useEffect, useState} from "react";
+import { useThrottle, useInterval } from "react-use";
 import { formatPercent, formatPrice } from "utils";
+import useStore from '../store';
 
 const ProductSummary = ({
-  product,
-  productPrice,
+  productId,
   dailyStats,
-  currency,
   granularityPicker,
 }) => {
+  const product = useStore(useCallback(state => state.products[productId], [productId]))
+  const currency = useStore(useCallback(state => state.currencies[product.base_currency], [product]))
+
   return (
     <>
       <ProductName currency={currency} product={product} />
       <ProductPrice
-        product={product}
-        price={productPrice?.price}
+        productId={productId}
         dailyStats={dailyStats}
       />
       <SecondaryStats
@@ -34,12 +36,29 @@ const ProductName = ({ currency, product }) => {
   );
 };
 
-const ProductPrice = ({ product, price, dailyStats }) => {
+const ProductPrice = ({ productId, dailyStats }) => {
+  // Fetch initial state
+  const priceRef = useRef(useStore.getState().prices[productId]?.price);
+  // Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
+  useEffect(() => useStore.subscribe(
+    state => state.prices[productId]?.price,
+    price => (priceRef.current = price),
+  ), [productId]);
+
+  const [price, setPrice] = useState(priceRef.current);
+
+  useInterval(
+    () => {
+      setPrice(priceRef.current);
+    },
+    2000
+  );
+
   const { isPositive, percent } = dailyStats;
   const color = isPositive ? "text-green-500" : "text-red-500";
   return (
     <>
-      <span className="text-3xl font-semibold" id={`${product.id}Price`}>
+      <span className="text-3xl font-semibold" id={`${productId}Price`}>
         {price}
       </span>
       <span className={`ml-2 whitespace-nowrap ${color}`}>

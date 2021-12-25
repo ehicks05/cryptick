@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useCallback} from "react";
 import styled from "styled-components";
 import { getPercentChange } from "utils";
 import Chart from "./Chart";
 import ProductSummary from "./ProductSummary";
+import useStore from '../store';
 
 const StyledCard = styled.div.attrs(({ className }) => ({
   className,
@@ -20,13 +21,10 @@ const StyledCard = styled.div.attrs(({ className }) => ({
   }
 `;
 
-const Product = ({
-  product,
-  productPrice,
-  productStats,
-  currency,
-  productCandles,
-}) => {
+const Product = ({ productId }) => {  
+  const productStats = useStore(useCallback(state => state.stats[productId].stats_24hour, [productId]));
+  const productCandles = useStore(useCallback(state => state.candles[productId]?.candles, [productId]));
+  
   const percent = getPercentChange(productStats.open, productStats.last);
   const isPositive = percent >= 0;
   const dailyStats = {
@@ -41,10 +39,8 @@ const Product = ({
       className={`p-4 border rounded ${borderColor(isPositive)}`}
     >
       <ProductSummary
-        product={product}
-        productPrice={productPrice}
+        productId={productId}
         dailyStats={dailyStats}
-        currency={currency}
       />
       <Chart
         candles={productCandles || []}

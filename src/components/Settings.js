@@ -1,16 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import _ from "lodash";
 import { FaLock, FaLockOpen } from "react-icons/fa";
+import useStore from '../store';
+import { buildSubscribeMessage } from "utils";
+import { getDailyCandles } from "api";
+import useWebSocket from "react-use-websocket";
+import { WS_URL } from "../constants";
+import shallow from 'zustand/shallow'
 
-const Settings = ({
-  showSettings,
-  isReorderEnabled,
-  setIsReorderEnabled,
-  currencies,
-  products,
-  selectedProducts,
-  toggleProduct,
-}) => {
+const Settings = () => {
+  const {
+    isShowSettings,
+    products,
+    currencies,
+    setCandles,
+    selectedProductIds,
+    setSelectedProductIds }
+    = useStore(state => (
+      {
+        isShowSettings: state.isShowSettings,
+        products: state.products,
+        currencies: state.currencies,
+        setCandles: state.setCandles,
+        selectedProductIds: state.selectedProductIds,
+        setSelectedProductIds: state.setSelectedProductIds,
+      }
+    ), shallow)
+
+  const { sendJsonMessage } = useWebSocket(WS_URL, { share: true });
+
   const quoteCurrencies = _.chain(Object.values(products))
     .map((product) => product.quote_currency)
     .uniq()
@@ -24,18 +42,40 @@ const Settings = ({
   const gridClasses =
     "grid grid-cols-4 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-1";
 
-  const display = showSettings ? "block" : "hidden";
+  const display = isShowSettings ? "block" : "hidden";
+
+  const toggleProduct = useCallback(
+    async (productId) => {
+      const showProduct = !selectedProductIds.includes(productId);
+      sendJsonMessage(
+        buildSubscribeMessage(showProduct ? "subscribe" : "unsubscribe", [
+          productId,
+        ])
+      );
+
+      const stable = selectedProductIds.filter((p) => p !== productId);
+      const newProducts = [...stable, ...(showProduct ? [productId] : [])];
+
+      setSelectedProductIds(newProducts);
+
+      if (showProduct) {
+        const newCandles = await getDailyCandles([productId]);
+        setCandles((candles) => ({ ...candles, ...newCandles }));
+      }
+    },
+    [sendJsonMessage, selectedProductIds, setSelectedProductIds, setCandles]
+  );
 
   return (
     <div className={`max-w-screen-xl m-auto p-4 ${display}`}>
       <div>Reorder Cards:</div>
-      <DndLock isDnd={isReorderEnabled} setIsDnd={setIsReorderEnabled} />
+      <DndLock />
 
       <div className="mt-4">Quote Currency: </div>
       <div className={gridClasses}>
         {Object.values(quoteCurrencies).map((quoteCurrency) => {
           return (
-            <Button
+            <QuoteCurrencyButton
               key={quoteCurrency}
               text={quoteCurrency}
               selected={quoteCurrency === selectedQuoteCurrency}
@@ -57,9 +97,10 @@ const Settings = ({
             return (
               <Button
                 key={product.id}
+                productId={product.id}
                 text={product.base_currency}
-                selected={selectedProducts.includes(product.id)}
-                onClick={() => toggleProduct(product.id)}
+                selected={selectedProductIds.includes(product.id)}
+                toggleProduct={toggleProduct}
               />
             );
           })}
@@ -68,7 +109,10 @@ const Settings = ({
   );
 };
 
-const DndLock = ({ isDnd, setIsDnd }) => {
+const DndLock = () => {
+  const isDnd = useStore(useCallback(state => state.isReorderEnabled, []));
+  const setIsDnd = useStore(useCallback(state => state.setIsReorderEnabled, []));
+
   const Icon = isDnd ? FaLockOpen : FaLock;
   return (
     <Icon
@@ -81,7 +125,7 @@ const DndLock = ({ isDnd, setIsDnd }) => {
   );
 };
 
-const Button = ({ text, selected, onClick }) => {
+const QuoteCurrencyButton = ({ text, selected, onClick }) => {
   return (
     <button
       className={`whitespace-nowrap px-2 py-1 rounded cursor-pointer 
@@ -97,4 +141,20 @@ const Button = ({ text, selected, onClick }) => {
   );
 };
 
-export default React.memo(Settings);
+const Button = ({ productId, text, selected, toggleProduct }) => {
+  return (
+    <button
+      className={`whitespace-nowrap px-2 py-1 rounded cursor-pointer 
+      ${
+        selected
+          ? "bg-green-500 text-gray-50"
+          : "text-gray-800 bg-gray-200 dark:text-gray-200 dark:bg-gray-800"
+      }`}
+      onClick={() => toggleProduct(productId)}
+    >
+      {text}
+    </button>
+  );
+};
+
+export default Settings;

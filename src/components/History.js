@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
+import useStore from '../store';
 
 const normalize = (value) => {
   if (value < 10) return 0.0;
@@ -50,13 +51,15 @@ const getFormat = (currency) => {
   return newFormat;
 };
 
-const History = ({ messages }) => {
+const History = ({ productId }) => {
+  const ticker = useStore(useCallback(state => state.ticker[productId], [productId]));
+
   const [sizeUnit, setSizeUnit] = useState("base");
   const toggleSizeUnit = () =>
     setSizeUnit(sizeUnit === "base" ? "quote" : "base");
 
-  if (messages.length === 0) return "...";
-  const [base, quote] = messages[0].productId.split("-");
+  if (!ticker || ticker.length === 0) return "...";
+  const [base, quote] = productId.split("-");
   const selectedSizeUnit = sizeUnit === "base" ? base : quote;
   const format = getFormat(selectedSizeUnit);
 
@@ -76,7 +79,7 @@ const History = ({ messages }) => {
           </tr>
         </thead>
         <tbody>
-          {messages.map(({ sequence, time, side, price, last_size }) => {
+          {ticker.map(({ sequence, time, side, price, last_size }) => {
             const style = {
               backgroundColor: `rgba(${
                 side === "buy" ? "0,255,150" : "255,25,0"

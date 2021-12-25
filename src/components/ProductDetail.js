@@ -8,6 +8,7 @@ import ProductSummary from "./ProductSummary";
 import { getPercentChange } from "utils";
 import { getCandles } from "../api";
 import { subSeconds, formatISO } from "date-fns";
+import useStore from '../store';
 
 const StyledCard = styled.div.attrs(({ className }) => ({
   className,
@@ -18,22 +19,14 @@ const StyledCard = styled.div.attrs(({ className }) => ({
     }, rgba(0,0,0,0))`};
 `;
 
-const ProductDetail = ({
-  currencies,
-  products,
-  stats,
-  prices,
-  throttledMessages,
-}) => {
+const ProductDetail = () => {
   const [ref, { height }] = useMeasure();
   const [innerRef, { height: innerHeight }] = useMeasure();
   const { productId } = useParams();
-  const product = products[productId];
-  const productPrice = prices[productId];
-  const productStats = stats[productId].stats_24hour;
-  const currency = currencies[products[productId].base_currency];
-  const [candles, setCandles] = useState([]);
   const [granularity, setGranularity] = useState(900);
+  const [candles, setCandles] = useState([]);
+  const productPrice = useStore(useCallback(state => state.prices[productId], [productId]));
+  const productStats = useStore(useCallback(state => state.stats[productId].stats_24hour, [productId]));
 
   const fetchCandles = useCallback(
     async (date) => {
@@ -111,10 +104,8 @@ const ProductDetail = ({
       >
         <div ref={innerRef}>
           <ProductSummary
-            product={product}
-            productPrice={productPrice}
+            productId={productId}
             dailyStats={dailyStats}
-            currency={currency}
             granularityPicker={granularityPicker}
           />
         </div>
@@ -130,7 +121,7 @@ const ProductDetail = ({
         className="hidden md:block overflow-y-hidden h-full"
         style={{ maxHeight: height }}
       >
-        <History messages={throttledMessages[productId] || []} />
+        <History productId={productId} />
       </div>
     </div>
   );

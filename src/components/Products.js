@@ -17,17 +17,13 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Link } from "react-router-dom";
+import useStore from '../store';
 
-const Products = ({
-  isReorderEnabled,
-  currencies,
-  products,
-  stats,
-  candles,
-  selectedProductIds,
-  setSelectedProductIds,
-  prices,
-}) => {
+const Products = () => {
+  const isReorderEnabled = useStore(state => state.isReorderEnabled);
+  const selectedProductIds = useStore(state => state.selectedProductIds);
+  const setSelectedProductIds = useStore(state => state.setSelectedProductIds);
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -69,13 +65,7 @@ const Products = ({
                   disabled={!isReorderEnabled}
                 >
                   <Product
-                    product={products[selectedProductId]}
-                    productPrice={prices[selectedProductId]}
-                    productStats={stats[selectedProductId].stats_24hour}
-                    currency={
-                      currencies[products[selectedProductId].base_currency]
-                    }
-                    productCandles={candles[selectedProductId]?.candles || []}
+                    productId={selectedProductId}
                   />
                 </SortableItem>
               );
