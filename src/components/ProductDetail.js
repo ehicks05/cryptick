@@ -8,7 +8,7 @@ import ProductSummary from "./ProductSummary";
 import { getPercentChange } from "utils";
 import { getCandles } from "../api";
 import { subSeconds, formatISO } from "date-fns";
-import useStore from '../store';
+import useStore from "../store";
 
 const StyledCard = styled.div.attrs(({ className }) => ({
   className,
@@ -25,8 +25,9 @@ const ProductDetail = () => {
   const { productId } = useParams();
   const [granularity, setGranularity] = useState(900);
   const [candles, setCandles] = useState([]);
-  const productPrice = useStore(useCallback(state => state.prices[productId], [productId]));
-  const productStats = useStore(useCallback(state => state.stats[productId].stats_24hour, [productId]));
+  const productStats = useStore(
+    useCallback((state) => state.stats[productId].stats_24hour, [productId])
+  );
 
   const fetchCandles = useCallback(
     async (date) => {
@@ -113,7 +114,7 @@ const ProductDetail = () => {
           <CandleChart
             height={height - innerHeight}
             candles={candles}
-            productPrice={productPrice}
+            productId={productId}
           />
         </div>
       </StyledCard>

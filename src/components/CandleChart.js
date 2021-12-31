@@ -1,9 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useMeasure } from "react-use";
 import { fromUnixTime, format } from "date-fns";
 import { clamp } from "utils";
+import useStore from "../store";
+import { useInterval } from "react-use";
 
-const CandleChart = ({ height: h, candles, productPrice }) => {
+const CandleChart = ({ height: h, candles, productId }) => {
+  // Fetch initial state
+  const priceRef = useRef(useStore.getState().prices[productId]?.price);
+  // Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
+  useEffect(
+    () =>
+      useStore.subscribe(
+        (state) => state.prices[productId]?.price,
+        (price) => (priceRef.current = price)
+      ),
+    [productId]
+  );
+
+  const [price, setPrice] = useState(priceRef.current);
+
+  useInterval(() => {
+    setPrice(priceRef.current);
+  }, 2000);
+
   const [ref, { width }] = useMeasure();
   const [candleWidthMulti, setCandleWidthMulti] = useState(2);
   const [mousePos] = useState(undefined);
@@ -22,9 +42,9 @@ const CandleChart = ({ height: h, candles, productPrice }) => {
   const viewableCandles = candles.slice(0, viewableCandleCount);
 
   // set current candle's current price
-  if (viewableCandles?.[0]?.[4] && productPrice?.price) {
+  if (viewableCandles?.[0]?.[4] && price?.price) {
     const candle = viewableCandles[0];
-    const currentPrice = Number(productPrice.price.replace(/,/g, ""));
+    const currentPrice = Number(price.price.replace(/,/g, ""));
     candle[4] = currentPrice;
     if (currentPrice < candle[1]) candle[1] = currentPrice;
     if (currentPrice > candle[2]) candle[2] = currentPrice;

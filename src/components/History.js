@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from "react";
-import useStore from '../store';
+import React, { useState, useRef, useEffect } from "react";
+import useStore from "../store";
+import { useInterval } from "react-use";
 
 const normalize = (value) => {
   if (value < 10) return 0.0;
@@ -52,7 +53,23 @@ const getFormat = (currency) => {
 };
 
 const History = ({ productId }) => {
-  const ticker = useStore(useCallback(state => state.ticker[productId], [productId]));
+  // Fetch initial state
+  const tickerRef = useRef(useStore.getState().ticker[productId]);
+  // Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
+  useEffect(
+    () =>
+      useStore.subscribe(
+        (state) => state.ticker[productId],
+        (ticker) => (tickerRef.current = ticker)
+      ),
+    [productId]
+  );
+
+  const [ticker, setTicker] = useState(tickerRef.current);
+
+  useInterval(() => {
+    setTicker(tickerRef.current);
+  }, 333);
 
   const [sizeUnit, setSizeUnit] = useState("base");
   const toggleSizeUnit = () =>
