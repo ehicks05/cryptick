@@ -42,9 +42,9 @@ const CandleChart = ({ height: h, candles, productId }) => {
   const viewableCandles = candles.slice(0, viewableCandleCount);
 
   // set current candle's current price
-  if (viewableCandles?.[0]?.[4] && price?.price) {
+  if (viewableCandles?.[0]?.[4] && price) {
     const candle = viewableCandles[0];
-    const currentPrice = Number(price.price.replace(/,/g, ""));
+    const currentPrice = Number(price.replace(/,/g, ""));
     candle[4] = currentPrice;
     if (currentPrice < candle[1]) candle[1] = currentPrice;
     if (currentPrice > candle[2]) candle[2] = currentPrice;

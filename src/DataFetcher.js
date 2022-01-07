@@ -10,40 +10,41 @@ import {
   get24HourStats,
   getDailyCandles,
 } from "./api";
-import {
-  WS_URL,
-  DEFAULT_SELECTED_PRODUCT_IDS,
-} from "./constants";
+import { WS_URL, DEFAULT_SELECTED_PRODUCT_IDS } from "./constants";
 import { formatPrice, formatTime, buildSubscribeMessage } from "./utils";
 
 import useStore from "./store";
 
 const DataFetcher = () => {
-  const setIsAppLoading = useStore(state => state.setIsAppLoading);
+  const setIsAppLoading = useStore((state) => state.setIsAppLoading);
 
   const isVisible = usePageVisibility();
 
-  const selectedProductIds = useStore(state => state.selectedProductIds);
-  const setSelectedProductIds = useStore(state => state.setSelectedProductIds);
+  const selectedProductIds = useStore((state) => state.selectedProductIds);
+  const setSelectedProductIds = useStore(
+    (state) => state.setSelectedProductIds
+  );
 
-  const setCurrencies = useStore(state => state.setCurrencies);
-  const products = useStore(state => state.products);
-  const setProducts = useStore(state => state.setProducts);
+  const setCurrencies = useStore((state) => state.setCurrencies);
+  const products = useStore((state) => state.products);
+  const setProducts = useStore((state) => state.setProducts);
 
-  const setStats = useStore(state => state.setStats);
+  const setStats = useStore((state) => state.setStats);
 
-  const candles = useStore(state => state.candles);
-  const setCandles = useStore(state => state.setCandles);
+  const candles = useStore((state) => state.candles);
+  const setCandles = useStore((state) => state.setCandles);
 
-  const prices = useStore(state => state.prices);
-  const setPrices = useStore(state => state.setPrices);
+  const prices = useStore((state) => state.prices);
+  const setPrices = useStore((state) => state.setPrices);
 
-  const ticker = useStore(state => state.ticker);
-  const setTicker = useStore(state => state.setTicker);
+  const ticker = useStore((state) => state.ticker);
+  const setTicker = useStore((state) => state.setTicker);
 
-  const setIsShowSettings = useStore(state => state.setIsShowSettings);
+  const setIsShowSettings = useStore((state) => state.setIsShowSettings);
 
-  const setWebsocketReadyState = useStore(state => state.setWebsocketReadyState);
+  const setWebsocketReadyState = useStore(
+    (state) => state.setWebsocketReadyState
+  );
 
   useEffect(() => {
     const offline = "[offline] ";
@@ -56,7 +57,7 @@ const DataFetcher = () => {
   }, [isVisible]);
 
   useEffect(() => {
-    setIsShowSettings(false)
+    setIsShowSettings(false);
     if (selectedProductIds.length === 0) {
       setSelectedProductIds(DEFAULT_SELECTED_PRODUCT_IDS);
     }
@@ -108,14 +109,14 @@ const DataFetcher = () => {
       retryOnError: true,
       reconnectAttempts: 50,
       reconnectInterval: 2000,
-      share: true
+      share: true,
     },
     isVisible
   );
 
   useEffect(() => {
     setWebsocketReadyState(readyState);
-  }, [readyState])
+  }, [readyState, setWebsocketReadyState]);
 
   useInterval(() => {
     const set = async () => {
@@ -128,8 +129,10 @@ const DataFetcher = () => {
   const prevSelectedProductIds = usePrevious(selectedProductIds);
   useEffect(() => {
     const toggleProduct = async (productId, isNew) => {
-      sendJsonMessage(buildSubscribeMessage(isNew ? "subscribe" : "unsubscribe", [productId]));
-        
+      sendJsonMessage(
+        buildSubscribeMessage(isNew ? "subscribe" : "unsubscribe", [productId])
+      );
+
       if (isNew) {
         const newCandles = await getDailyCandles([productId]);
         setCandles({ ...candles, ...newCandles });
@@ -144,13 +147,10 @@ const DataFetcher = () => {
 
   const handleMessage = (message) => {
     if (Object.keys(products).length === 0) return;
-    if (message.type !== 'ticker') return;
+    if (message.type !== "ticker") return;
     const { product_id: productId, price: rawPrice } = message;
 
-    const price = formatPrice(
-      rawPrice,
-      products[productId].minimumQuoteDigits
-    );
+    const price = formatPrice(rawPrice, products[productId].minimumQuoteDigits);
 
     setPrices({
       ...prices,
@@ -171,21 +171,15 @@ const DataFetcher = () => {
       time: formatTime(new Date(time)),
       side,
       price,
-      last_size: formatPrice(
-        last_size,
-        products[productId].minimumBaseDigits
-      ),
+      last_size: formatPrice(last_size, products[productId].minimumBaseDigits),
     };
     setTicker({
       ...ticker,
-      [productId]: _.take(
-        [newMessage, ...(ticker[productId] || [])],
-        100
-      ),
+      [productId]: _.take([newMessage, ...(ticker[productId] || [])], 100),
     });
   };
 
   return null;
-}
+};
 
 export default DataFetcher;

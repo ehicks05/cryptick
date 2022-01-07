@@ -1,23 +1,20 @@
-import React, {useCallback, useRef, useEffect, useState} from "react";
-import { useThrottle, useInterval } from "react-use";
+import React, { useCallback, useRef, useEffect, useState } from "react";
+import { useInterval } from "react-use";
 import { formatPercent, formatPrice } from "utils";
-import useStore from '../store';
+import useStore from "../store";
 
-const ProductSummary = ({
-  productId,
-  dailyStats,
-  granularityPicker,
-}) => {
-  const product = useStore(useCallback(state => state.products[productId], [productId]))
-  const currency = useStore(useCallback(state => state.currencies[product.base_currency], [product]))
+const ProductSummary = ({ productId, dailyStats, granularityPicker }) => {
+  const product = useStore(
+    useCallback((state) => state.products[productId], [productId])
+  );
+  const currency = useStore(
+    useCallback((state) => state.currencies[product.base_currency], [product])
+  );
 
   return (
     <>
       <ProductName currency={currency} product={product} />
-      <ProductPrice
-        productId={productId}
-        dailyStats={dailyStats}
-      />
+      <ProductPrice productId={productId} dailyStats={dailyStats} />
       <SecondaryStats
         product={product}
         dailyStats={dailyStats}
@@ -40,19 +37,20 @@ const ProductPrice = ({ productId, dailyStats }) => {
   // Fetch initial state
   const priceRef = useRef(useStore.getState().prices[productId]?.price);
   // Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
-  useEffect(() => useStore.subscribe(
-    state => state.prices[productId]?.price,
-    price => (priceRef.current = price),
-  ), [productId]);
+  useEffect(
+    () =>
+      useStore.subscribe(
+        (state) => state.prices[productId]?.price,
+        (price) => (priceRef.current = price)
+      ),
+    [productId]
+  );
 
   const [price, setPrice] = useState(priceRef.current);
 
-  useInterval(
-    () => {
-      setPrice(priceRef.current);
-    },
-    2000
-  );
+  useInterval(() => {
+    setPrice(priceRef.current);
+  }, 2000);
 
   const { isPositive, percent } = dailyStats;
   const color = isPositive ? "text-green-500" : "text-red-500";
