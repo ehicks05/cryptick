@@ -1,9 +1,9 @@
-import React, {useCallback} from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 import { getPercentChange } from "utils";
 import Chart from "./Chart";
 import ProductSummary from "./ProductSummary";
-import useStore from '../store';
+import useStore from "../store";
 
 const StyledCard = styled.div.attrs(({ className }) => ({
   className,
@@ -21,10 +21,11 @@ const StyledCard = styled.div.attrs(({ className }) => ({
   }
 `;
 
-const Product = ({ productId }) => {  
-  const productStats = useStore(useCallback(state => state.stats[productId].stats_24hour, [productId]));
-  const productCandles = useStore(useCallback(state => state.candles[productId]?.candles, [productId]));
-  
+const Product = ({ productId }) => {
+  const productStats = useStore(
+    useCallback((state) => state.stats[productId].stats_24hour, [productId])
+  );
+
   const percent = getPercentChange(productStats.open, productStats.last);
   const isPositive = percent >= 0;
   const dailyStats = {
@@ -38,15 +39,8 @@ const Product = ({ productId }) => {
       isPositive={isPositive}
       className={`p-4 border rounded ${borderColor(isPositive)}`}
     >
-      <ProductSummary
-        productId={productId}
-        dailyStats={dailyStats}
-      />
-      <Chart
-        candles={productCandles || []}
-        color={isPositive ? "rgba(16, 185, 129)" : "rgb(239, 68, 68)"}
-        className="h-24"
-      />
+      <ProductSummary productId={productId} dailyStats={dailyStats} />
+      <Chart productId={productId} isPositive={isPositive} />
     </StyledCard>
   );
 };
