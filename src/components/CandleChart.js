@@ -33,7 +33,8 @@ const CandleChart = ({ height: h, candles, productId }) => {
   const candleWidth = baseCandleWidth * candleWidthMulti;
 
   useEffect(() => {
-    setHeight(h - 56 - 48);
+    const newHeight = Math.max(h - 56 - 48, 1);
+    setHeight(newHeight);
   }, [h]);
 
   if (!candles.length) return <div></div>;
