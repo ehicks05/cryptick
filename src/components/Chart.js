@@ -8,7 +8,7 @@ const Chart = ({ productId, isPositive }) => {
     useCallback((state) => state.candles[productId]?.candles, [productId])
   );
 
-  if (!candles.length) return <div></div>;
+  if (!candles?.length) return <div></div>;
 
   const candleWidth = width / candles.length;
 

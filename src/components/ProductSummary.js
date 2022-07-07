@@ -46,10 +46,10 @@ const ProductPrice = ({ productId, dailyStats }) => {
     [productId]
   );
 
-  const [price, setPrice] = useState(priceRef.current);
+  const [price, setPrice] = useState(priceRef.current || dailyStats.last);
 
   useInterval(() => {
-    setPrice(priceRef.current);
+    setPrice(priceRef.current || dailyStats.last);
   }, 2000);
 
   const { isPositive, percent } = dailyStats;
