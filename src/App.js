@@ -26,7 +26,7 @@ function App() {
         <div className="flex flex-col h-screen">
           <Header />
           <Settings />
-          <div className="flex-grow flex flex-col h-full overflow-y-hidden">
+          <div className="flex-grow flex flex-col h-full overflow-y-auto">
             <Routes>
               <Route path="/:productId" element={<ProductDetail />} />
               <Route path="/" element={<Products />} />
