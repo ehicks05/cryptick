@@ -27,8 +27,8 @@ const ProductSummary = ({ productId, dailyStats, granularityPicker }) => {
 const ProductName = ({ currency, product }) => {
   return (
     <div className="text-gray-700 dark:text-gray-400">
-      <span className="text-xl">{currency.name}</span>{" "}
-      <span className="text-xs">{product.display_name}</span>
+      <div className="text-xl">{currency.name}</div>
+      <div className="text-xs">{product.display_name}</div>
     </div>
   );
 };
@@ -70,7 +70,7 @@ const SecondaryStats = ({ product, dailyStats, granularityPicker }) => {
   const { minimumQuoteDigits } = product;
   const { low, high, volume } = dailyStats;
   return (
-    <div className="mb-4 text-xs">
+    <div className="mb-4 text-xs text-gray-700 dark:text-gray-400">
       <div>
         <span>l: {formatPrice(low, minimumQuoteDigits)}</span>
         <span className="ml-4">h: {formatPrice(high, minimumQuoteDigits)}</span>
