@@ -53,9 +53,7 @@ const Settings = () => {
     <div
       className={`w-full max-w-screen-xl m-auto p-4 h-full max-h-full overflow-y-auto ${display}`}
     >
-      <div>Reorder Cards:</div>
       <DndLock />
-
       <div className="mt-4">Quote Currency: </div>
       <div className={gridClasses}>
         {Object.values(quoteCurrencies).map((quoteCurrency) => {
@@ -102,13 +100,16 @@ const DndLock = () => {
 
   const Icon = isDnd ? FaLockOpen : FaLock;
   return (
-    <Icon
-      className="mb-2"
-      role="button"
-      color="gray"
-      title="Toggle Drag n Drop"
-      onClick={() => setIsDnd(!isDnd)}
-    />
+    <div className="flex gap-2 items-baseline">
+      <Icon
+        className="text-xl"
+        role="button"
+        color="gray"
+        title="Toggle Drag n Drop"
+        onClick={() => setIsDnd(!isDnd)}
+      />
+      <div>Toggle Drag n Drop</div>
+    </div>
   );
 };
 
