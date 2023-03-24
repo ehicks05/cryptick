@@ -2,7 +2,12 @@ import React, { useCallback } from "react";
 import { useMeasure } from "react-use";
 import useStore from "store";
 
-const Chart = ({ productId, isPositive }) => {
+interface ChartProps {
+  productId: string;
+  isPositive: boolean;
+}
+
+const Chart = ({ productId, isPositive }: ChartProps) => {
   const [ref, { width, height }] = useMeasure();
   const candles = useStore(
     useCallback((state) => state.candles[productId]?.candles, [productId])
@@ -15,11 +20,11 @@ const Chart = ({ productId, isPositive }) => {
   const min = Math.min(...candles.map((c) => c[4]));
   const max = Math.max(...candles.map((c) => c[4]));
 
-  const getY = (y) => {
+  const getY = (y: number) => {
     return height - ((y - min) / (max - min)) * height;
   };
 
-  const getX = (x) => width - x;
+  const getX = (x: number) => width - x;
 
   const points = candles
     .map((candle, i) => `${getX(i * candleWidth)}, ${getY(candle[4])}`)

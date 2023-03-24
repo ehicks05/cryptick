@@ -3,7 +3,7 @@ import { useInterval } from "react-use";
 import { formatPercent, formatPrice } from "utils";
 import useStore from "../store";
 
-const ProductSummary = ({ productId, dailyStats, granularityPicker }) => {
+const ProductSummary = ({ productId, dailyStats }) => {
   const product = useStore(
     useCallback((state) => state.products[productId], [productId])
   );
@@ -15,11 +15,7 @@ const ProductSummary = ({ productId, dailyStats, granularityPicker }) => {
     <>
       <ProductName currency={currency} product={product} />
       <ProductPrice productId={productId} dailyStats={dailyStats} />
-      <SecondaryStats
-        product={product}
-        dailyStats={dailyStats}
-        granularityPicker={granularityPicker}
-      />
+      <SecondaryStats product={product} dailyStats={dailyStats} />
     </>
   );
 };
@@ -68,7 +64,7 @@ const ProductPrice = ({ productId, dailyStats }) => {
   );
 };
 
-const SecondaryStats = ({ product, dailyStats, granularityPicker }) => {
+const SecondaryStats = ({ product, dailyStats }) => {
   const { minimumQuoteDigits } = product;
   const { low, high } = dailyStats;
   return (
@@ -77,9 +73,6 @@ const SecondaryStats = ({ product, dailyStats, granularityPicker }) => {
         {formatPrice(low, minimumQuoteDigits)}
         {" - "}
         {formatPrice(high, minimumQuoteDigits)}
-      </div>
-      <div>
-        {granularityPicker && <span className="ml-4">{granularityPicker}</span>}
       </div>
     </div>
   );

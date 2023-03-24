@@ -4,19 +4,19 @@ import Chart from "./Chart";
 import ProductSummary from "./ProductSummary";
 import useStore from "../store";
 
-const borderColor = (isPositive) =>
+const borderColor = (isPositive: boolean) =>
   isPositive
     ? "border-green-300 dark:border-green-900 hover:border-green-500 dark:hover:border-green-700"
     : "border-red-300 dark:border-red-900 hover:border-red-500 dark:hover:border-red-700";
 
-const background = (isPositive) =>
+const background = (isPositive: boolean) =>
   `bg-gradient-to-t ${
     isPositive
       ? "from-[rgba(6,78,59,.15)] hover:from-[rgba(6,78,59,.3)]"
       : "from-[rgba(153,27,27,.15)] hover:from-[rgba(153,27,27,.3)]"
   } to-transparent`;
 
-const Product = ({ productId }) => {
+const Product = ({ productId }: { productId: string }) => {
   const productStats = useStore(
     useCallback((state) => state.stats[productId].stats_24hour, [productId])
   );

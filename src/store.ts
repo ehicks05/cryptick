@@ -1,18 +1,20 @@
+import { Currency } from "api/currency/types";
+import { Candle, DailyCandles, Product } from "api/product/types";
 import { SOCKET_STATUSES } from "constants";
 import create from "zustand";
 import { devtools, persist, subscribeWithSelector } from "zustand/middleware";
 
 interface AppState {
-  currencies: any;
-  products: any;
+  currencies: Record<string, Currency>;
+  products: Record<string, Product>;
   stats: any;
-  candles: any;
+  candles: DailyCandles;
   prices: any;
   ticker: any;
-  setCurrencies: (data: any) => void;
-  setProducts: (data: any) => void;
+  setCurrencies: (data: Record<string, Currency>) => void;
+  setProducts: (data: Record<string, Product>) => void;
   setStats: (data: any) => void;
-  setCandles: (data: any) => void;
+  setCandles: (data: DailyCandles) => void;
   setPrices: (data: any) => void;
   setTicker: (data: any) => void;
 

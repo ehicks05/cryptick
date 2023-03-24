@@ -2,7 +2,13 @@ import _ from "lodash";
 import pThrottle from "p-throttle";
 import { formatISO, subDays } from "date-fns";
 import { REST_URL } from "./constants";
-import { CandleGranularity, Product } from "./product/types";
+import {
+  Candle,
+  CandleGranularity,
+  DailyCandles,
+  Product,
+  RawCandle,
+} from "./product/types";
 
 const PROD_URL = `${REST_URL}/products`;
 
@@ -32,7 +38,7 @@ const getCandles = async (
   granularity: CandleGranularity,
   start?: string,
   end?: string
-) => {
+): Promise<RawCandle[]> => {
   try {
     const url = `${PROD_URL}/${productId}/candles`;
     const granularityParam = `granularity=${granularity}`;
@@ -52,7 +58,7 @@ const throttle = pThrottle({
   interval: 1000,
 });
 
-const getDailyCandles = async (productIds: string[]) => {
+const getDailyCandles = async (productIds: string[]): Promise<DailyCandles> => {
   const throttledFetch = throttle(async (productId: string) => {
     const candles = await getCandles(
       productId,
