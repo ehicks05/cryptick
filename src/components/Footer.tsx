@@ -1,4 +1,5 @@
 import React from "react";
+import { ReactNode } from "react";
 
 const repoUrl = "https://www.github.com/ehicks05/bitcoin-price-ticker/";
 const siteUrl = "https://ehicks.net";
@@ -12,7 +13,12 @@ const Footer = () => {
   );
 };
 
-const Link = ({ href, children }) => {
+interface LinkProps {
+  href: string;
+  children?: ReactNode;
+}
+
+const Link = ({ href, children }: LinkProps) => {
   return (
     <a
       href={href}

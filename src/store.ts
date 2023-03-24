@@ -1,3 +1,4 @@
+import { SOCKET_STATUSES } from "constants";
 import create from "zustand";
 import { devtools, persist, subscribeWithSelector } from "zustand/middleware";
 
@@ -17,8 +18,8 @@ interface AppState {
 
   selectedProductIds: string[];
   setSelectedProductIds: (data: string[]) => void;
-  websocketReadyState: string;
-  setWebsocketReadyState: (data: string) => void;
+  websocketReadyState: keyof typeof SOCKET_STATUSES;
+  setWebsocketReadyState: (data: keyof typeof SOCKET_STATUSES) => void;
   isAppLoading: boolean;
   setIsAppLoading: (data: boolean) => void;
 
@@ -49,7 +50,7 @@ const useStore = create<AppState>(
           // ui state?
           selectedProductIds: ["BTC-USD", "ETH-USD"],
           setSelectedProductIds: (data) => set({ selectedProductIds: data }),
-          websocketReadyState: "-1",
+          websocketReadyState: "-1" as keyof typeof SOCKET_STATUSES,
           setWebsocketReadyState: (data) => set({ websocketReadyState: data }),
           isAppLoading: true,
           setIsAppLoading: (data) => set({ isAppLoading: data }),
