@@ -5,7 +5,7 @@ const siteUrl = "https://ehicks.net";
 
 const Footer = () => {
   return (
-    <footer className="flex justify-end p-4 gap-4">
+    <footer className="flex justify-end p-2 sm:p-4 gap-4">
       <Link href={repoUrl}>github</Link>
       <Link href={siteUrl}>ehicks</Link>
     </footer>
