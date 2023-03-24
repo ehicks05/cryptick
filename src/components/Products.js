@@ -17,12 +17,15 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Link } from "react-router-dom";
-import useStore from '../store';
+import { useWindowSize } from "react-use";
+import useStore from "../store";
 
 const Products = () => {
-  const isReorderEnabled = useStore(state => state.isReorderEnabled);
-  const selectedProductIds = useStore(state => state.selectedProductIds);
-  const setSelectedProductIds = useStore(state => state.setSelectedProductIds);
+  const isReorderEnabled = useStore((state) => state.isReorderEnabled);
+  const selectedProductIds = useStore((state) => state.selectedProductIds);
+  const setSelectedProductIds = useStore(
+    (state) => state.setSelectedProductIds
+  );
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -42,8 +45,8 @@ const Products = () => {
     }
   };
 
-  const gridClasses =
-    "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2";
+  const { width } = useWindowSize();
+  const minColumnWidth = width < 400 ? width - 16 - 16 - 16 - 16 : 320;
 
   return (
     <DndContext
@@ -55,8 +58,13 @@ const Products = () => {
         items={selectedProductIds}
         strategy={rectSortingStrategy}
       >
-        <div className="max-w-screen-2xl w-full mx-auto p-4">
-          <div className={gridClasses}>
+        <div className="w-full mx-auto p-4">
+          <div
+            className="grid gap-2"
+            style={{
+              gridTemplateColumns: `repeat( auto-fill, minmax(${minColumnWidth}px, 1fr))`,
+            }}
+          >
             {selectedProductIds.map((selectedProductId) => {
               return (
                 <SortableItem
@@ -64,9 +72,7 @@ const Products = () => {
                   id={selectedProductId}
                   disabled={!isReorderEnabled}
                 >
-                  <Product
-                    productId={selectedProductId}
-                  />
+                  <Product productId={selectedProductId} />
                 </SortableItem>
               );
             })}
