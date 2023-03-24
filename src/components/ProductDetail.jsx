@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router";
 import { useMeasure, useMedia } from "react-use";
 import History from "./History";
-import TradingViewWidget from "react-tradingview-widget";
+import TradingViewWidget from "./TradingViewWidget";
 
 const ProductDetail = () => {
   const [ref, { height }] = useMeasure();
