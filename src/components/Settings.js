@@ -50,7 +50,9 @@ const Settings = () => {
   );
 
   return (
-    <div className={`max-w-screen-xl m-auto p-4 ${display}`}>
+    <div
+      className={`w-full max-w-screen-xl m-auto p-4 h-full max-h-full overflow-y-auto ${display}`}
+    >
       <div>Reorder Cards:</div>
       <DndLock />
 
