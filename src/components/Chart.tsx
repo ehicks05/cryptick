@@ -8,7 +8,7 @@ interface ChartProps {
 }
 
 const Chart = ({ productId, isPositive }: ChartProps) => {
-  const [ref, { width, height }] = useMeasure();
+  const [ref, { width, height }] = useMeasure<HTMLDivElement>();
   const candles = useStore(
     useCallback((state) => state.candles[productId]?.candles, [productId])
   );

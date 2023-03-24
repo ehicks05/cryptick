@@ -5,9 +5,11 @@ import History from "./History";
 import TradingViewWidget from "./TradingViewWidget";
 
 const ProductDetail = () => {
-  const [ref, { height }] = useMeasure();
-  const { productId } = useParams();
+  const [ref, { height }] = useMeasure<HTMLDivElement>();
   const isDark = useMedia("(prefers-color-scheme: dark)");
+  const { productId } = useParams();
+
+  if (!productId) return <div>productId is missing...</div>;
 
   return (
     <div

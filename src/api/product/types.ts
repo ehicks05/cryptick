@@ -121,4 +121,20 @@ export type DailyCandles = Record<
   }
 >;
 
+export type BulkProductStats = Record<
+  string,
+  {
+    stats_30day: {
+      volume: Volume;
+    };
+    stats_24hour: {
+      open: Open;
+      high: High;
+      low: Low;
+      last: Close;
+      volume: Volume;
+    };
+  }
+>;
+
 export type RawCandle = [Timestamp, Low, High, Open, Close, Volume];

@@ -38,7 +38,7 @@ const Settings = () => {
   const display = isShowSettings ? "block" : "hidden";
 
   const toggleProduct = useCallback(
-    (productId) => {
+    (productId: string) => {
       const isAdding = !selectedProductIds.includes(productId);
 
       const stable = selectedProductIds.filter((p) => p !== productId);
@@ -113,7 +113,17 @@ const DndLock = () => {
   );
 };
 
-const QuoteCurrencyButton = ({ text, selected, onClick }) => {
+interface QuoteCurrencyButtonProps {
+  text: string;
+  selected: boolean;
+  onClick: () => void;
+}
+
+const QuoteCurrencyButton = ({
+  text,
+  selected,
+  onClick,
+}: QuoteCurrencyButtonProps) => {
   return (
     <button
       className={`whitespace-nowrap px-2 py-1 rounded cursor-pointer 
@@ -129,7 +139,14 @@ const QuoteCurrencyButton = ({ text, selected, onClick }) => {
   );
 };
 
-const Button = ({ productId, text, selected, toggleProduct }) => {
+interface ButtonProps {
+  productId: string;
+  text: string;
+  selected: boolean;
+  toggleProduct: (productId: string) => void;
+}
+
+const Button = ({ productId, text, selected, toggleProduct }: ButtonProps) => {
   return (
     <button
       className={`whitespace-nowrap px-2 py-1 rounded cursor-pointer 

@@ -3,6 +3,7 @@ import pThrottle from "p-throttle";
 import { formatISO, subDays } from "date-fns";
 import { REST_URL } from "./constants";
 import {
+  BulkProductStats,
   Candle,
   CandleGranularity,
   DailyCandles,
@@ -29,7 +30,7 @@ const getProducts = async () => {
     .value();
 };
 
-const get24HourStats = async () => {
+const get24HourStats = async (): Promise<BulkProductStats> => {
   return await (await fetch(`${PROD_URL}/stats`)).json();
 };
 
