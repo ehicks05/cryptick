@@ -1,5 +1,7 @@
 ## Crypto Price Ticker
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/a5cdb7e5-9abd-42a7-946c-b17cfa51284e/deploy-status)](https://app.netlify.com/sites/admiring-jang-089013/deploys)
+
 Display price of Bitcoin and other cryptos from the coinbase pro api. Includes live-updating charts!
 
 [crypto.ehicks.net](https://crypto.ehicks.net)
