@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from "react";
 import _ from "lodash";
 import { FaLock, FaLockOpen } from "react-icons/fa";
-import useStore from '../store';
-import shallow from 'zustand/shallow'
+import useStore from "../store";
+import shallow from "zustand/shallow";
 
 const Settings = () => {
   const {
@@ -10,16 +10,17 @@ const Settings = () => {
     products,
     currencies,
     selectedProductIds,
-    setSelectedProductIds }
-    = useStore(state => (
-      {
-        isShowSettings: state.isShowSettings,
-        products: state.products,
-        currencies: state.currencies,
-        selectedProductIds: state.selectedProductIds,
-        setSelectedProductIds: state.setSelectedProductIds,
-      }
-    ), shallow)
+    setSelectedProductIds,
+  } = useStore(
+    (state) => ({
+      isShowSettings: state.isShowSettings,
+      products: state.products,
+      currencies: state.currencies,
+      selectedProductIds: state.selectedProductIds,
+      setSelectedProductIds: state.setSelectedProductIds,
+    }),
+    shallow
+  );
 
   const quoteCurrencies = _.chain(Object.values(products))
     .map((product) => product.quote_currency)
@@ -36,12 +37,13 @@ const Settings = () => {
 
   const display = isShowSettings ? "block" : "hidden";
 
-  const toggleProduct = useCallback((productId) => {
+  const toggleProduct = useCallback(
+    (productId) => {
       const isAdding = !selectedProductIds.includes(productId);
-      
+
       const stable = selectedProductIds.filter((p) => p !== productId);
       const newProducts = [...stable, ...(isAdding ? [productId] : [])];
-      
+
       setSelectedProductIds(newProducts);
     },
     [selectedProductIds, setSelectedProductIds]
@@ -91,8 +93,10 @@ const Settings = () => {
 };
 
 const DndLock = () => {
-  const isDnd = useStore(useCallback(state => state.isReorderEnabled, []));
-  const setIsDnd = useStore(useCallback(state => state.setIsReorderEnabled, []));
+  const isDnd = useStore(useCallback((state) => state.isReorderEnabled, []));
+  const setIsDnd = useStore(
+    useCallback((state) => state.setIsReorderEnabled, [])
+  );
 
   const Icon = isDnd ? FaLockOpen : FaLock;
   return (
