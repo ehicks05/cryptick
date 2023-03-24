@@ -125,3 +125,13 @@ export interface WebSocketTickerMessage {
   volume_24h: string;
   volume_30d: string;
 }
+
+// digested
+export interface TickerMessage {
+  productId: string;
+  sequence: number;
+  time: string;
+  side: OrderSide;
+  price: string;
+  last_size: string;
+}

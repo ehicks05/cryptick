@@ -10,10 +10,15 @@ import {
   get24HourStats,
   getDailyCandles,
 } from "./api";
-import { WS_URL, DEFAULT_SELECTED_PRODUCT_IDS } from "./constants";
+import {
+  WS_URL,
+  DEFAULT_SELECTED_PRODUCT_IDS,
+  SOCKET_STATUSES,
+} from "./constants";
 import { formatPrice, formatTime, buildSubscribeMessage } from "./utils";
 
 import useStore from "./store";
+import { WebSocketTickerMessage } from "api/ws-types";
 
 const DataFetcher = () => {
   const setIsAppLoading = useStore((state) => state.setIsAppLoading);
@@ -115,7 +120,9 @@ const DataFetcher = () => {
   );
 
   useEffect(() => {
-    setWebsocketReadyState(readyState);
+    setWebsocketReadyState(
+      readyState as unknown as keyof typeof SOCKET_STATUSES
+    );
   }, [readyState, setWebsocketReadyState]);
 
   useInterval(() => {
@@ -128,7 +135,7 @@ const DataFetcher = () => {
 
   const prevSelectedProductIds = usePrevious(selectedProductIds);
   useEffect(() => {
-    const toggleProduct = async (productId, isNew) => {
+    const toggleProduct = async (productId: string, isNew: boolean) => {
       sendJsonMessage(
         buildSubscribeMessage(isNew ? "subscribe" : "unsubscribe", [productId])
       );
@@ -139,18 +146,21 @@ const DataFetcher = () => {
       }
     };
     if (prevSelectedProductIds && selectedProductIds) {
-      const productId = _.xor(prevSelectedProductIds, selectedProductIds);
+      const productId = _.xor(prevSelectedProductIds, selectedProductIds)[0];
       const isNew = prevSelectedProductIds.indexOf(productId) === -1;
       toggleProduct(productId, isNew);
     }
   }, [selectedProductIds]);
 
-  const handleMessage = (message) => {
+  const handleMessage = (message: WebSocketTickerMessage) => {
     if (Object.keys(products).length === 0) return;
     if (message.type !== "ticker") return;
     const { product_id: productId, price: rawPrice } = message;
 
-    const price = formatPrice(rawPrice, products[productId].minimumQuoteDigits);
+    const price = formatPrice(
+      Number(rawPrice),
+      products[productId].minimumQuoteDigits
+    );
 
     setPrices({
       ...prices,
@@ -171,7 +181,10 @@ const DataFetcher = () => {
       time: formatTime(new Date(time)),
       side,
       price,
-      last_size: formatPrice(last_size, products[productId].minimumBaseDigits),
+      last_size: formatPrice(
+        Number(last_size),
+        products[productId].minimumBaseDigits
+      ),
     };
     setTicker({
       ...ticker,

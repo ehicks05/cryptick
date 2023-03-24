@@ -8,33 +8,37 @@ import { getPercentChange } from "utils";
 import { getCandles } from "../api/api";
 import { subSeconds, formatISO } from "date-fns";
 import useStore from "../store";
+import { RawCandle } from "api/product/types";
 
-const borderColor = (isPositive) =>
+const borderColor = (isPositive: boolean) =>
   isPositive
     ? "border-green-300 dark:border-green-900"
     : "border-red-300 dark:border-red-900";
 
-const background = (isPositive) =>
+const background = (isPositive: boolean) =>
   `bg-gradient-to-t ${
     isPositive ? "from-[rgba(6,78,59,.15)]" : "from-[rgba(153,27,27,.15)]"
   } to-transparent`;
 
 const ProductDetail = () => {
-  const [ref, { height }] = useMeasure();
-  const [innerRef, { height: innerHeight }] = useMeasure();
+  const [ref, { height }] = useMeasure<HTMLDivElement>();
+  const [innerRef, { height: innerHeight }] = useMeasure<HTMLDivElement>();
   const { productId } = useParams();
   const [granularity, setGranularity] = useState(900);
-  const [candles, setCandles] = useState([]);
+  const [candles, setCandles] = useState<RawCandle[]>([]);
   const productStats = useStore(
-    useCallback((state) => state.stats[productId].stats_24hour, [productId])
+    useCallback(
+      (state) => state.stats[productId || ""].stats_24hour,
+      [productId]
+    )
   );
 
   const fetchCandles = useCallback(
-    async (date) => {
+    async (date: Date) => {
       const [candles1, candles2] = await Promise.all(
         [...Array(2)].map((_i, i) =>
           getCandles(
-            productId,
+            productId || "",
             granularity,
             formatISO(subSeconds(date, granularity * 300 * (i + 1))),
             formatISO(subSeconds(date, granularity * 300 * i))
@@ -74,7 +78,7 @@ const ProductDetail = () => {
   const granularityPicker = (
     <select
       className="text-xs dark:bg-black"
-      onChange={(e) => setGranularity(e.target.value)}
+      onChange={(e) => setGranularity(Number(e.target.value))}
       value={granularity}
     >
       {[
@@ -92,6 +96,8 @@ const ProductDetail = () => {
     </select>
   );
 
+  if (!productId) return <div>ProductId is missing...</div>;
+
   return (
     <div
       ref={ref}
@@ -106,7 +112,7 @@ const ProductDetail = () => {
           <ProductSummary
             productId={productId}
             dailyStats={dailyStats}
-            granularityPicker={granularityPicker}
+            // granularityPicker={granularityPicker}
           />
         </div>
         <div className="flex-grow">

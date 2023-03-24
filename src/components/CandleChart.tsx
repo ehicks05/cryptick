@@ -4,16 +4,22 @@ import { fromUnixTime, format } from "date-fns";
 import { clamp } from "utils";
 import useStore from "../store";
 import { useInterval } from "react-use";
+import { RawCandle } from "api/product/types";
 
-const CandleChart = ({ height: h, candles, productId }) => {
+interface CandleChartProps {
+  height: number;
+  candles: RawCandle[];
+  productId: string;
+}
+
+const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
   // Fetch initial state
   const priceRef = useRef(useStore.getState().prices[productId]?.price);
   // Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
   useEffect(
     () =>
       useStore.subscribe(
-        (state) => state.prices[productId]?.price,
-        (price) => (priceRef.current = price)
+        (state) => (priceRef.current = state.prices[productId]?.price)
       ),
     [productId]
   );
@@ -24,9 +30,9 @@ const CandleChart = ({ height: h, candles, productId }) => {
     setPrice(priceRef.current);
   }, 2000);
 
-  const [ref, { width }] = useMeasure();
+  const [ref, { width }] = useMeasure<HTMLDivElement>();
   const [candleWidthMulti, setCandleWidthMulti] = useState(2);
-  const [mousePos] = useState(undefined);
+  const [mousePos] = useState<{ x: number; y: number } | undefined>(undefined);
   const [height, setHeight] = useState(0);
 
   const baseCandleWidth = 6;
@@ -55,21 +61,21 @@ const CandleChart = ({ height: h, candles, productId }) => {
   const max = Math.max(...viewableCandles.map((candle) => candle[2]));
   const maxVolume = Math.max(...viewableCandles.map((candle) => candle[5]));
 
-  const handleWheel = (e) => {
+  const handleWheel = (e: WheelEvent) => {
     const newMulti = candleWidthMulti * (e.deltaY < 0 ? 1.1 : 0.9);
     setCandleWidthMulti(clamp(newMulti, 0.75, 10));
   };
 
-  const getY = (y) => {
+  const getY = (y: number) => {
     return height - ((y - min) / (max - min)) * height;
   };
 
-  const getX = (x) => {
+  const getX = (x: number) => {
     // 32 = allow for a right-side gutter for grid markers
     return width - 36 - x;
   };
 
-  const getHorizontalLines = (min, max) => {
+  const getHorizontalLines = (min: number, max: number) => {
     const range = max - min;
     const targetGridLines = height / 50; // we want a gridline every 50 pixels
 
@@ -210,7 +216,7 @@ const CandleChart = ({ height: h, candles, productId }) => {
         <svg
           style={{ touchAction: "manipulation" }}
           viewBox={`0 0 ${width} ${height}`}
-          onWheel={handleWheel}
+          onWheel={(e) => handleWheel(e as unknown as WheelEvent)}
         >
           {horizontalLineEls}
           {candleEls}
@@ -242,6 +248,16 @@ const CandleChart = ({ height: h, candles, productId }) => {
 
 const myFormat = Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
 
+interface VolumeBarProps {
+  getX: (input: number) => number;
+  i: number;
+  candleWidth: number;
+  rectXDivisor: number;
+  height: number;
+  volumeBarHeight: number;
+  volume: number;
+}
+
 const VolumeBar = ({
   getX,
   i,
@@ -250,7 +266,7 @@ const VolumeBar = ({
   height,
   volumeBarHeight,
   volume,
-}) => {
+}: VolumeBarProps) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <>

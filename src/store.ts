@@ -1,6 +1,6 @@
 import { Currency } from "api/currency/types";
 import { BulkProductStats, DailyCandles, Product } from "api/product/types";
-import { WebSocketTickerMessage } from "api/ws-types";
+import { TickerMessage } from "api/ws-types";
 import { SOCKET_STATUSES } from "constants";
 import create from "zustand";
 import { devtools, persist, subscribeWithSelector } from "zustand/middleware";
@@ -11,13 +11,13 @@ export interface AppState {
   stats: BulkProductStats;
   candles: DailyCandles;
   prices: any;
-  ticker: Record<string, WebSocketTickerMessage[]>;
+  ticker: Record<string, TickerMessage[]>;
   setCurrencies: (data: Record<string, Currency>) => void;
   setProducts: (data: Record<string, Product>) => void;
   setStats: (data: BulkProductStats) => void;
   setCandles: (data: DailyCandles) => void;
   setPrices: (data: any) => void;
-  setTicker: (data: Record<string, WebSocketTickerMessage[]>) => void;
+  setTicker: (data: Record<string, TickerMessage[]>) => void;
 
   selectedProductIds: string[];
   setSelectedProductIds: (data: string[]) => void;
