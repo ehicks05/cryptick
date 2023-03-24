@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router";
-import styled from "styled-components";
 import { useInterval, useMeasure } from "react-use";
 import CandleChart from "./CandleChart";
 import History from "./History";
@@ -10,14 +9,15 @@ import { getCandles } from "../api/api";
 import { subSeconds, formatISO } from "date-fns";
 import useStore from "../store";
 
-const StyledCard = styled.div.attrs(({ className }) => ({
-  className,
-}))`
-  background-image: ${(props) =>
-    `linear-gradient(to top, ${
-      props.isPositive ? "rgba(6, 78, 59, .15)" : "rgba(153, 27, 27, .15)"
-    }, rgba(0,0,0,0))`};
-`;
+const borderColor = (isPositive) =>
+  isPositive
+    ? "border-green-300 dark:border-green-900"
+    : "border-red-300 dark:border-red-900";
+
+const background = (isPositive) =>
+  `bg-gradient-to-t ${
+    isPositive ? "from-[rgba(6,78,59,.15)]" : "from-[rgba(153,27,27,.15)]"
+  } to-transparent`;
 
 const ProductDetail = () => {
   const [ref, { height }] = useMeasure();
@@ -97,11 +97,10 @@ const ProductDetail = () => {
       ref={ref}
       className="h-full flex-grow flex flex-col md:flex-row gap-4 p-4"
     >
-      <StyledCard
-        isPositive={isPositive}
+      <div
         className={`flex-grow flex flex-col p-4 border rounded ${borderColor(
           isPositive
-        )}`}
+        )} ${background(isPositive)}`}
       >
         <div ref={innerRef}>
           <ProductSummary
@@ -117,7 +116,7 @@ const ProductDetail = () => {
             productId={productId}
           />
         </div>
-      </StyledCard>
+      </div>
       <div
         className="hidden md:block overflow-y-hidden h-full"
         style={{ maxHeight: height }}
@@ -127,10 +126,5 @@ const ProductDetail = () => {
     </div>
   );
 };
-
-const borderColor = (isPositive) =>
-  isPositive
-    ? "border-green-300 dark:border-green-900"
-    : "border-red-300 dark:border-red-900";
 
 export default React.memo(ProductDetail);
