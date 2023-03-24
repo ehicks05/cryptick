@@ -29,7 +29,7 @@ const Settings = () => {
     .value();
 
   const [selectedQuoteCurrency, setSelectedQuoteCurrency] = useState(
-    quoteCurrencies[0]
+    quoteCurrencies.find((qc) => qc === "USD") || quoteCurrencies[0]
   );
 
   const gridClasses =
