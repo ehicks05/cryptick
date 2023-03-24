@@ -27,8 +27,10 @@ const ProductSummary = ({ productId, dailyStats, granularityPicker }) => {
 const ProductName = ({ currency, product }) => {
   return (
     <div className="text-gray-700 dark:text-gray-400">
-      <div className="text-xl">{currency.name}</div>
-      <div className="text-xs">{product.display_name}</div>
+      <div className="flex gap-2 text-xl items-baseline">
+        {product.display_name}
+        <span className="text-xs">{currency.name}</span>
+      </div>
     </div>
   );
 };
@@ -68,15 +70,15 @@ const ProductPrice = ({ productId, dailyStats }) => {
 
 const SecondaryStats = ({ product, dailyStats, granularityPicker }) => {
   const { minimumQuoteDigits } = product;
-  const { low, high, volume } = dailyStats;
+  const { low, high } = dailyStats;
   return (
     <div className="mb-4 text-xs text-gray-700 dark:text-gray-400">
       <div>
-        <span>l: {formatPrice(low, minimumQuoteDigits)}</span>
-        <span className="ml-4">h: {formatPrice(high, minimumQuoteDigits)}</span>
+        {formatPrice(low, minimumQuoteDigits)}
+        {" - "}
+        {formatPrice(high, minimumQuoteDigits)}
       </div>
       <div>
-        <span>v: {formatPrice(Math.round(volume))}</span>
         {granularityPicker && <span className="ml-4">{granularityPicker}</span>}
       </div>
     </div>

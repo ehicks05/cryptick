@@ -26,7 +26,7 @@ const Chart = ({ productId, isPositive }) => {
     .join(" ");
 
   return (
-    <div className={"h-24"}>
+    <div className={"h-32"}>
       <div ref={ref} className={`w-full h-full`}>
         {width && height && (
           <svg viewBox={`0 0 ${width} ${height}`}>
