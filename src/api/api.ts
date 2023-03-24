@@ -30,17 +30,16 @@ const get24HourStats = async () => {
 const getCandles = async (
   productId: string,
   granularity: CandleGranularity,
-  start: string,
-  end: string
+  start?: string,
+  end?: string
 ) => {
   try {
-    return await (
-      await fetch(
-        `${PROD_URL}/${productId}/candles?granularity=${granularity}${
-          start ? `&start=${start}` : ""
-        }${end ? `&end=${end}` : ""}`
-      )
-    ).json();
+    const url = `${PROD_URL}/${productId}/candles`;
+    const granularityParam = `granularity=${granularity}`;
+    const startParam = start ? `&start=${start}` : "";
+    const endParam = end ? `&end=${end}` : "";
+    const input = `${url}?${granularityParam}${startParam}${endParam}`;
+    return await (await fetch(input)).json();
   } catch (err) {
     console.log(err);
     return [];
