@@ -24,6 +24,10 @@ export interface Product {
   status: "online";
   status_message: string;
   trading_disabled: boolean;
+
+  // ADDED LOCALLY
+  minimumQuoteDigits: number;
+  minimumBaseDigits: number;
 }
 
 // Snapshot information about the last trade (tick), best bid/ask and 24h volume.
@@ -43,7 +47,7 @@ export interface ProductStats {
   low: string;
   open: string;
   volume: string;
-  volume_30day: string;
+  // volume_30day: string;
 }
 
 export interface Trade {

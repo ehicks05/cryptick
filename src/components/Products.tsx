@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import Product from "./Product";
 import {
   DndContext,
@@ -7,6 +7,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  DragEndEvent,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -34,12 +35,12 @@ const Products = () => {
     })
   );
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (active.id !== over.id) {
-      const oldIndex = selectedProductIds.indexOf(active.id);
-      const newIndex = selectedProductIds.indexOf(over.id);
+    if (over && active.id !== over.id) {
+      const oldIndex = selectedProductIds.indexOf(active.id.toString());
+      const newIndex = selectedProductIds.indexOf(over.id.toString());
       const updated = arrayMove(selectedProductIds, oldIndex, newIndex);
       setSelectedProductIds(updated);
     }
@@ -83,7 +84,13 @@ const Products = () => {
   );
 };
 
-const SortableItem = ({ id, disabled, children }) => {
+interface SortableItemProps {
+  id: string;
+  disabled: boolean;
+  children: ReactNode;
+}
+
+const SortableItem = ({ id, disabled, children }: SortableItemProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id, disabled });
 

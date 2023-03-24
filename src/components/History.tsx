@@ -1,8 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  ComponentPropsWithoutRef,
+} from "react";
 import useStore from "../store";
 import { useInterval } from "react-use";
 
-const normalize = (value) => {
+const normalize = (value: number) => {
   if (value < 10) return 0.0;
   if (value < 100) return 0.05;
   if (value < 1000) return 0.1;
@@ -16,7 +21,11 @@ const normalize = (value) => {
   return 0.8;
 };
 
-const getAlpha = (tradeSize, formattedPrice, side) => {
+const getAlpha = (
+  tradeSize: string,
+  formattedPrice: string,
+  side: "buy" | "sell"
+) => {
   const price = Number(formattedPrice.replaceAll(",", ""));
   const value = Number(tradeSize) * price;
   const intensity = normalize(value);
@@ -39,8 +48,8 @@ const SIDES = {
   },
 };
 
-const formats = {};
-const getFormat = (currency) => {
+const formats: Record<string, Intl.NumberFormat> = {};
+const getFormat = (currency: string) => {
   if (formats[currency]) return formats[currency];
   const newFormat = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -52,15 +61,14 @@ const getFormat = (currency) => {
   return newFormat;
 };
 
-const History = ({ productId }) => {
+const History = ({ productId }: { productId: string }) => {
   // Fetch initial state
   const tickerRef = useRef(useStore.getState().ticker[productId]);
   // Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
   useEffect(
     () =>
       useStore.subscribe(
-        (state) => state.ticker[productId],
-        (ticker) => (tickerRef.current = ticker)
+        (state) => (tickerRef.current = state.ticker[productId])
       ),
     [productId]
   );
@@ -75,7 +83,7 @@ const History = ({ productId }) => {
   const toggleSizeUnit = () =>
     setSizeUnit(sizeUnit === "base" ? "quote" : "base");
 
-  if (!ticker || ticker.length === 0) return "...";
+  if (!ticker || ticker.length === 0) return <div></div>;
   const [base, quote] = productId.split("-");
   const selectedSizeUnit = sizeUnit === "base" ? base : quote;
   const format = getFormat(selectedSizeUnit);
@@ -85,7 +93,7 @@ const History = ({ productId }) => {
       <table>
         <thead>
           <tr>
-            <TD colSpan="4">History</TD>
+            <TD colSpan={4}>History</TD>
           </tr>
           <tr>
             <TD className="text-right cursor-pointer" onClick={toggleSizeUnit}>
@@ -105,7 +113,9 @@ const History = ({ productId }) => {
             const tradeSize =
               sizeUnit === "base"
                 ? last_size
-                : format.format(last_size * price.replaceAll(",", ""));
+                : format.format(
+                    Number(last_size) * Number(price.replaceAll(",", ""))
+                  );
             return (
               <TR key={sequence} className={SIDES[side].highlight}>
                 <TD style={style} className="text-right">
@@ -122,20 +132,20 @@ const History = ({ productId }) => {
   );
 };
 
-const TR = React.memo(({ children, className, ...props }) => {
-  return (
-    <tr {...props} className={`${className}`}>
-      {children}
-    </tr>
-  );
-});
+const TR = React.memo(
+  ({ children, ...props }: ComponentPropsWithoutRef<"tr">) => {
+    return <tr {...props}>{children}</tr>;
+  }
+);
 
-const TD = React.memo(({ children, className, ...props }) => {
-  return (
-    <td {...props} className={`px-2 ${className}`}>
-      {children}
-    </td>
-  );
-});
+const TD = React.memo(
+  ({ children, className, ...props }: ComponentPropsWithoutRef<"td">) => {
+    return (
+      <td {...props} className={`px-2 ${className}`}>
+        {children}
+      </td>
+    );
+  }
+);
 
 export default React.memo(History);

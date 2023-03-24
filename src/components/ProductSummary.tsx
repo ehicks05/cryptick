@@ -1,9 +1,27 @@
+import { Currency } from "api/currency/types";
+import { Product } from "api/product/types";
 import React, { useCallback, useRef, useEffect, useState } from "react";
 import { useInterval } from "react-use";
 import { formatPercent, formatPrice } from "utils";
-import useStore from "../store";
+import useStore, { AppState } from "../store";
 
-const ProductSummary = ({ productId, dailyStats }) => {
+// TODO: consider handling this at API level
+interface AnnotatedProductStats {
+  percent: number;
+  isPositive: boolean;
+  open: number;
+  high: number;
+  low: number;
+  last: number;
+  volume: number;
+}
+
+interface ProductSummaryProps {
+  productId: string;
+  dailyStats: AnnotatedProductStats;
+}
+
+const ProductSummary = ({ productId, dailyStats }: ProductSummaryProps) => {
   const product = useStore(
     useCallback((state) => state.products[productId], [productId])
   );
@@ -20,7 +38,12 @@ const ProductSummary = ({ productId, dailyStats }) => {
   );
 };
 
-const ProductName = ({ currency, product }) => {
+interface ProductNameProps {
+  currency: Currency;
+  product: Product;
+}
+
+const ProductName = ({ currency, product }: ProductNameProps) => {
   return (
     <div className="text-gray-700 dark:text-gray-400">
       <div className="flex gap-2 text-xl items-baseline">
@@ -31,15 +54,19 @@ const ProductName = ({ currency, product }) => {
   );
 };
 
-const ProductPrice = ({ productId, dailyStats }) => {
+interface ProductPriceProps {
+  productId: string;
+  dailyStats: AnnotatedProductStats;
+}
+
+const ProductPrice = ({ productId, dailyStats }: ProductPriceProps) => {
   // Fetch initial state
   const priceRef = useRef(useStore.getState().prices[productId]?.price);
   // Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
   useEffect(
     () =>
       useStore.subscribe(
-        (state) => state.prices[productId]?.price,
-        (price) => (priceRef.current = price)
+        (state) => (priceRef.current = state.prices[productId]?.price)
       ),
     [productId]
   );
@@ -64,7 +91,12 @@ const ProductPrice = ({ productId, dailyStats }) => {
   );
 };
 
-const SecondaryStats = ({ product, dailyStats }) => {
+interface SecondaryStatsProps {
+  product: Product;
+  dailyStats: AnnotatedProductStats;
+}
+
+const SecondaryStats = ({ product, dailyStats }: SecondaryStatsProps) => {
   const { minimumQuoteDigits } = product;
   const { low, high } = dailyStats;
   return (
