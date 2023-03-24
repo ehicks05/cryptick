@@ -6,8 +6,8 @@ const SOCKET_STATUSES = {
   3: { name: "Closed", class: "bg-red-500" },
 };
 
-const API_URL = "https://api.pro.coinbase.com";
-const WS_URL = "wss://ws-feed.pro.coinbase.com";
+const API_URL = "https://api.exchange.coinbase.com";
+const WS_URL = "wss://ws-feed.exchange.coinbase.com";
 
 const DEFAULT_SELECTED_PRODUCT_IDS = ["BTC-USD", "ETH-USD", "LTC-USD"];
 

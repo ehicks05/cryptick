@@ -1,7 +1,7 @@
 import React from "react";
 import { FaBars, FaTimes, FaHome } from "react-icons/fa";
 import useStore from "../store";
-import { SOCKET_STATUSES } from "../constants";
+import { SOCKET_STATUSES } from "constants/index";
 import { Link } from "react-router-dom";
 
 const Header = () => {

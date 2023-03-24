@@ -6,7 +6,7 @@ import CandleChart from "./CandleChart";
 import History from "./History";
 import ProductSummary from "./ProductSummary";
 import { getPercentChange } from "utils";
-import { getCandles } from "../api";
+import { getCandles } from "../api/api";
 import { subSeconds, formatISO } from "date-fns";
 import useStore from "../store";
 

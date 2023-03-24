@@ -1,8 +1,12 @@
-const priceFormats = [...Array(10)].map((_i, i) => new Intl.NumberFormat("en-US", { minimumFractionDigits: i }));
+const priceFormats = [...Array(10)].map(
+  (_i, i) => new Intl.NumberFormat("en-US", { minimumFractionDigits: i })
+);
 const defaultPriceFormat = new Intl.NumberFormat("en-US");
 
-const formatPrice = (price, minimumFractionDigits) => {
-  return (priceFormats[minimumFractionDigits] || defaultPriceFormat).format(price);
+const formatPrice = (price: number, minimumFractionDigits: number) => {
+  return (priceFormats[minimumFractionDigits] || defaultPriceFormat).format(
+    price
+  );
 };
 
 const defaultTimeFormat = new Intl.DateTimeFormat("en-US", {
@@ -10,7 +14,7 @@ const defaultTimeFormat = new Intl.DateTimeFormat("en-US", {
   hour12: false,
 });
 
-const formatTime = (date) => {
+const formatTime = (date: Date) => {
   return defaultTimeFormat.format(date);
 };
 
@@ -21,19 +25,19 @@ const defaultPercentFormat = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });
 
-const formatPercent = (percent) => {
+const formatPercent = (percent: number) => {
   return defaultPercentFormat.format(percent);
 };
 
-const buildSubscribeMessage = (type, product_ids) => {
+const buildSubscribeMessage = (type: string, product_ids: string[]) => {
   return { type, product_ids, channels: ["ticker"] };
 };
 
-const clamp = (value, min, max) => {
+const clamp = (value: number, min: number, max: number) => {
   return Math.min(Math.max(value, min), max);
 };
 
-const getPercentChange = (from, to) => {
+const getPercentChange = (from: number, to: number) => {
   const delta = to - from;
   return delta / from;
 };

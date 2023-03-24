@@ -9,7 +9,7 @@ import {
   Footer,
 } from "./components";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import DataFetcher from "DataFetcher";
+import DataFetcher from "./DataFetcher";
 import useStore from "./store";
 
 function App() {

@@ -7,6 +7,7 @@
     "@dnd-kit/sortable": "^5.1.0",
     "date-fns": "^2.27.0",
     "date-fns-tz": "^1.2.2",
+    "lodash": "^4.17.21",
     "p-throttle": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -22,9 +23,15 @@
     "zustand": "^3.6.7"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/lodash": "^4.14.191",
+    "@types/node": "^18.15.7",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
     "autoprefixer": "^10.4.0",
     "postcss": "^8.4.5",
-    "tailwindcss": "^3.0.7"
+    "tailwindcss": "^3.0.7",
+    "typescript": "^5.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

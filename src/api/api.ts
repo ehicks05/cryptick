@@ -1,18 +1,13 @@
 import _ from "lodash";
 import pThrottle from "p-throttle";
 import { formatISO, subDays } from "date-fns";
-import { API_URL } from "./constants";
+import { REST_URL } from "./constants";
+import { CandleGranularity, Product } from "./product/types";
 
-const CURR_URL = `${API_URL}/currencies`;
-const PROD_URL = `${API_URL}/products`;
-
-const getCurrencies = async () => {
-  const data = await (await fetch(CURR_URL)).json();
-  return _.chain(data).sortBy(["sort_order"]).keyBy("id").value();
-};
+const PROD_URL = `${REST_URL}/products`;
 
 const getProducts = async () => {
-  const data = await (await fetch(PROD_URL)).json();
+  const data: Product[] = await (await fetch(PROD_URL)).json();
   return _.chain(data)
     .sortBy(["quote_currency", "base_currency"])
     .map((product) => ({
@@ -32,7 +27,12 @@ const get24HourStats = async () => {
   return await (await fetch(`${PROD_URL}/stats`)).json();
 };
 
-const getCandles = async (productId, granularity, start, end) => {
+const getCandles = async (
+  productId: string,
+  granularity: CandleGranularity,
+  start: string,
+  end: string
+) => {
   try {
     return await (
       await fetch(
@@ -53,8 +53,8 @@ const throttle = pThrottle({
   interval: 1000,
 });
 
-const getDailyCandles = async (productIds) => {
-  const throttledFetch = throttle(async (productId) => {
+const getDailyCandles = async (productIds: string[]) => {
+  const throttledFetch = throttle(async (productId: string) => {
     const candles = await getCandles(
       productId,
       900,
@@ -68,10 +68,4 @@ const getDailyCandles = async (productIds) => {
   return _.keyBy(data, "productId");
 };
 
-export {
-  getCurrencies,
-  getProducts,
-  get24HourStats,
-  getDailyCandles,
-  getCandles,
-};
+export { getProducts, get24HourStats, getDailyCandles, getCandles };
