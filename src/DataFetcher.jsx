@@ -135,7 +135,7 @@ const DataFetcher = () => {
 
       if (isNew) {
         const newCandles = await getDailyCandles([productId]);
-        setCandles((candles) => ({ ...candles, ...newCandles }));
+        setCandles({ ...candles, ...newCandles });
       }
     };
     if (prevSelectedProductIds && selectedProductIds) {
