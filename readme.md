@@ -9,7 +9,7 @@ Display price of Bitcoin and other cryptos from the coinbase pro api. Includes l
 ### Setup
 
 1. Install node
-2. run `npm i && npm run start`
+2. run `npm i && npm run dev`
 
 ### data notes
 
