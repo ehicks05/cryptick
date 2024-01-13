@@ -20,9 +20,9 @@ const Header = () => {
 					<FaHome className={'h-4 w-4 text-blue-400'} />
 				</Link>
 			</div>
-			<div role="button" onClick={() => setIsShowSettings(!isShowSettings)}>
+			<button type="button" onClick={() => setIsShowSettings(!isShowSettings)}>
 				{isShowSettings ? <FaTimes /> : <FaBars />}
-			</div>
+			</button>
 		</header>
 	);
 };

@@ -63,7 +63,7 @@ const getDailyCandles = async (productIds: string[]): Promise<DailyCandles> => {
 	const throttledFetch = throttle(async (productId: string) => {
 		const candles = await getCandles(
 			productId,
-			900,
+			CandleGranularity.FIFTEEN_MINUTES,
 			formatISO(subDays(new Date(), 1)),
 			formatISO(new Date()),
 		);

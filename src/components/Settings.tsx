@@ -124,6 +124,7 @@ const QuoteCurrencyButton = ({
 }: QuoteCurrencyButtonProps) => {
 	return (
 		<button
+			type="button"
 			className={`whitespace-nowrap px-2 py-1 rounded cursor-pointer 
       ${
 				selected
@@ -147,6 +148,7 @@ interface ButtonProps {
 const Button = ({ productId, text, selected, toggleProduct }: ButtonProps) => {
 	return (
 		<button
+			type="button"
 			className={`whitespace-nowrap px-2 py-1 rounded cursor-pointer 
       ${
 				selected

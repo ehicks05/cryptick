@@ -35,6 +35,7 @@ const Chart = ({ productId, isPositive }: ChartProps) => {
 			<div ref={ref} className={'w-full h-full'}>
 				{width && height && (
 					<svg viewBox={`0 0 ${width} ${height}`}>
+						<title>Chart</title>
 						<polyline
 							fill={'none'}
 							stroke={isPositive ? 'rgba(16, 185, 129)' : 'rgb(239, 68, 68)'}
