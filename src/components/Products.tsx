@@ -99,13 +99,12 @@ const SortableItem = ({ id, disabled, children }: SortableItemProps) => {
 
 	if (disabled) {
 		return <Link to={`/${id}`}>{children}</Link>;
-	} else {
-		return (
-			<div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-				{children}
-			</div>
-		);
 	}
+	return (
+		<div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+			{children}
+		</div>
+	);
 };
 
 export default React.memo(Products);

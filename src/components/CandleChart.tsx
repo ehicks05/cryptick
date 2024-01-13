@@ -43,7 +43,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 		setHeight(newHeight);
 	}, [h]);
 
-	if (!candles.length) return <div></div>;
+	if (!candles.length) return <div />;
 
 	const viewableCandleCount = width / candleWidth;
 	const viewableCandles = candles.slice(0, viewableCandleCount);
@@ -83,7 +83,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 		let optionIndex = 0;
 		const options = [1, 2.5, 5];
 
-		while (range / (options[optionIndex] * Math.pow(10, power)) > targetGridLines) {
+		while (range / (options[optionIndex] * 10 ** power) > targetGridLines) {
 			if (optionIndex === options.length - 1) {
 				optionIndex = 0;
 				power += 1;
@@ -91,7 +91,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 				optionIndex += 1;
 			}
 		}
-		const gridSize = options[optionIndex] * Math.pow(10, power);
+		const gridSize = options[optionIndex] * 10 ** power;
 
 		const minChunk = Number(min.toPrecision(2));
 		const lines = [...new Array(32)].map((_, i) => minChunk + (i - 16) * gridSize);

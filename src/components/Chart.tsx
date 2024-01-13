@@ -13,7 +13,7 @@ const Chart = ({ productId, isPositive }: ChartProps) => {
 		useCallback((state) => state.candles[productId]?.candles, [productId]),
 	);
 
-	if (!candles?.length) return <div></div>;
+	if (!candles?.length) return <div />;
 
 	const candleWidth = width / candles.length;
 
@@ -32,7 +32,7 @@ const Chart = ({ productId, isPositive }: ChartProps) => {
 
 	return (
 		<div className={'h-32'}>
-			<div ref={ref} className={`w-full h-full`}>
+			<div ref={ref} className={'w-full h-full'}>
 				{width && height && (
 					<svg viewBox={`0 0 ${width} ${height}`}>
 						<polyline

@@ -75,7 +75,7 @@ const History = ({ productId }: { productId: string }) => {
 	const [sizeUnit, setSizeUnit] = useState('base');
 	const toggleSizeUnit = () => setSizeUnit(sizeUnit === 'base' ? 'quote' : 'base');
 
-	if (!ticker || ticker.length === 0) return <div></div>;
+	if (!ticker || ticker.length === 0) return <div />;
 	const [base, quote] = productId.split('-');
 	const selectedSizeUnit = sizeUnit === 'base' ? base : quote;
 	const format = getFormat(selectedSizeUnit);
