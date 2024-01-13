@@ -1,9 +1,11 @@
-import { Currency } from 'api/currency/types';
-import { Product } from 'api/product/types';
+import { Currency } from 'api/types/currency';
+import { Product } from 'api/types/product';
 import React, { useCallback, useRef, useEffect, useState } from 'react';
 import { useInterval } from 'react-use';
 import { formatPercent, formatPrice } from 'utils';
 import useStore, { AppState } from '../store';
+import { useCurrencies, useProducts } from 'api';
+import { useTicker } from 'api/useTicker';
 
 // TODO: consider handling this at API level
 interface AnnotatedProductStats {
@@ -22,12 +24,15 @@ interface ProductSummaryProps {
 }
 
 const ProductSummary = ({ productId, dailyStats }: ProductSummaryProps) => {
-	const product = useStore(
-		useCallback((state) => state.products[productId], [productId]),
-	);
-	const currency = useStore(
-		useCallback((state) => state.currencies[product.base_currency], [product]),
-	);
+	const productsQuery = useProducts();
+	const product = productsQuery.data?.[productId];
+
+	const currenciesQuery = useCurrencies();
+	const currency = product
+		? currenciesQuery.data?.[product.base_currency]
+		: undefined;
+
+	if (!product || !currency) return 'loading';
 
 	return (
 		<>
@@ -60,21 +65,13 @@ interface ProductPriceProps {
 }
 
 const ProductPrice = ({ productId, dailyStats }: ProductPriceProps) => {
-	// Fetch initial state
-	const priceRef = useRef(useStore.getState().prices[productId]?.price);
-	// Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
-	useEffect(
-		() =>
-			useStore.subscribe(
-				(state) => (priceRef.current = state.prices[productId]?.price),
-			),
-		[productId],
-	);
+	const { prices } = useTicker();
+	const price = prices[productId].price;
 
-	const [price, setPrice] = useState(priceRef.current || dailyStats.last);
+	const [throttledPrice, setThrottledPrice] = useState(price || dailyStats.last);
 
 	useInterval(() => {
-		setPrice(priceRef.current || dailyStats.last);
+		setThrottledPrice(price || dailyStats.last);
 	}, 2000);
 
 	const { isPositive, percent } = dailyStats;
@@ -82,7 +79,7 @@ const ProductPrice = ({ productId, dailyStats }: ProductPriceProps) => {
 	return (
 		<>
 			<span className="text-3xl font-semibold" id={`${productId}Price`}>
-				{price}
+				{throttledPrice}
 			</span>
 			<span className={`ml-2 whitespace-nowrap ${color}`}>
 				{formatPercent(percent)}

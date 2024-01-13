@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, ComponentPropsWithoutRef } from 'react';
 import { useInterval } from 'react-use';
 import useStore from '../store';
+import { useTicker } from 'api/useTicker';
 
 const normalize = (value: number) => {
 	if (value < 10) return 0.0;
@@ -57,25 +58,19 @@ const getFormat = (currency: string) => {
 };
 
 const History = ({ productId }: { productId: string }) => {
-	// Fetch initial state
-	const tickerRef = useRef(useStore.getState().ticker[productId]);
-	// Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
-	useEffect(
-		() =>
-			useStore.subscribe((state) => (tickerRef.current = state.ticker[productId])),
-		[productId],
-	);
+	const { ticker } = useTicker();
+	const productTicker = ticker[productId];
 
-	const [ticker, setTicker] = useState(tickerRef.current);
+	const [throttledTicker, setThrottledTicker] = useState(productTicker);
 
 	useInterval(() => {
-		setTicker(tickerRef.current);
+		setThrottledTicker(productTicker);
 	}, 333);
 
 	const [sizeUnit, setSizeUnit] = useState('base');
 	const toggleSizeUnit = () => setSizeUnit(sizeUnit === 'base' ? 'quote' : 'base');
 
-	if (!ticker || ticker.length === 0) return <div />;
+	if (!throttledTicker || throttledTicker.length === 0) return <div />;
 	const [base, quote] = productId.split('-');
 	const selectedSizeUnit = sizeUnit === 'base' ? base : quote;
 	const format = getFormat(selectedSizeUnit);
@@ -96,7 +91,7 @@ const History = ({ productId }: { productId: string }) => {
 					</tr>
 				</thead>
 				<tbody>
-					{ticker.map(({ sequence, time, side, price, last_size }) => {
+					{throttledTicker.map(({ sequence, time, side, price, last_size }) => {
 						const style = {
 							backgroundColor: `rgba(${
 								side === 'buy' ? '0,255,150' : '255,25,0'

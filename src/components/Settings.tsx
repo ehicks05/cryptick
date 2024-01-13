@@ -3,24 +3,20 @@ import React, { useState, useCallback } from 'react';
 import { FaLock, FaLockOpen } from 'react-icons/fa';
 import shallow from 'zustand/shallow';
 import useStore from '../store';
+import { useCurrencies, useProducts } from 'api';
+import { useProductIds } from 'hooks';
+import { buildSubscribeMessage } from 'utils';
+import { useTicker } from 'api/useTicker';
 
 const Settings = () => {
-	const {
-		isShowSettings,
-		products,
-		currencies,
-		selectedProductIds,
-		setSelectedProductIds,
-	} = useStore(
-		(state) => ({
-			isShowSettings: state.isShowSettings,
-			products: state.products,
-			currencies: state.currencies,
-			selectedProductIds: state.selectedProductIds,
-			setSelectedProductIds: state.setSelectedProductIds,
-		}),
-		shallow,
-	);
+	const isShowSettings = useStore((state) => state.isShowSettings, shallow);
+
+	const { sendJsonMessage } = useTicker();
+	const { data: currencies } = useCurrencies();
+	const { data: products } = useProducts();
+	const [productIds, setProductIds] = useProductIds();
+
+	if (!currencies || !products) return 'loading';
 
 	const quoteCurrencies = _.chain(Object.values(products))
 		.map((product) => product.quote_currency)
@@ -39,14 +35,17 @@ const Settings = () => {
 
 	const toggleProduct = useCallback(
 		(productId: string) => {
-			const isAdding = !selectedProductIds.includes(productId);
+			const isAdding = !productIds.includes(productId);
 
-			const stable = selectedProductIds.filter((p) => p !== productId);
+			const stable = productIds.filter((p) => p !== productId);
 			const newProducts = [...stable, ...(isAdding ? [productId] : [])];
 
-			setSelectedProductIds(newProducts);
+			setProductIds(newProducts);
+			sendJsonMessage(
+				buildSubscribeMessage(isAdding ? 'subscribe' : 'unsubscribe', [productId]),
+			);
 		},
-		[selectedProductIds, setSelectedProductIds],
+		[productIds, setProductIds],
 	);
 
 	return (
@@ -82,7 +81,7 @@ const Settings = () => {
 								key={product.id}
 								productId={product.id}
 								text={product.base_currency}
-								selected={selectedProductIds.includes(product.id)}
+								selected={productIds.includes(product.id)}
 								toggleProduct={toggleProduct}
 							/>
 						);

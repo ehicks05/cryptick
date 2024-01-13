@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { getPercentChange } from 'utils';
-import useStore from '../store';
 import Chart from './Chart';
 import ProductSummary from './ProductSummary';
+import { use24HourStats } from 'api';
 
 const borderColor = (isPositive: boolean) =>
 	isPositive
@@ -17,9 +17,10 @@ const background = (isPositive: boolean) =>
 	} to-transparent`;
 
 const Product = ({ productId }: { productId: string }) => {
-	const productStats = useStore(
-		useCallback((state) => state.stats[productId].stats_24hour, [productId]),
-	);
+	const { data } = use24HourStats();
+	const productStats = data?.[productId]?.stats_24hour;
+
+	if (!productStats) return 'loading';
 
 	const percent = getPercentChange(productStats.open, productStats.last);
 	const isPositive = percent >= 0;

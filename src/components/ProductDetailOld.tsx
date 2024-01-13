@@ -1,10 +1,10 @@
-import { RawCandle } from 'api/product/types';
+import { RawCandle } from 'api/types/product';
 import { formatISO, subSeconds } from 'date-fns';
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router';
 import { useInterval, useMeasure } from 'react-use';
 import { getPercentChange } from 'utils';
-import { getCandles } from '../api/api';
+import { getCandles } from '../api';
 import useStore from '../store';
 import CandleChart from './CandleChart';
 import History from './History';

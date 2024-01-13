@@ -1,20 +1,20 @@
 import React from 'react';
-import Loader from 'react-loader-spinner';
-
+import { Rings } from 'react-loader-spinner';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DataFetcher from './DataFetcher';
 import { Footer, Header, ProductDetail, Products, Settings } from './components';
-import useStore from './store';
+import { useHandleVisibility } from 'hooks';
 
 function App() {
-	const isAppLoading = useStore((state) => state.isAppLoading);
+	useHandleVisibility();
+	const isAppLoading = false;
 
 	return (
 		<Router>
 			<DataFetcher />
 			{isAppLoading ? (
 				<div className="flex items-center justify-center h-screen">
-					<Loader type="Rings" color="#00BFFF" height={256} width={256} />
+					<Rings color="#00BFFF" height={256} width={256} />
 				</div>
 			) : (
 				<div className="flex flex-col h-screen">

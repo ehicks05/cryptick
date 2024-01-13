@@ -1,14 +1,13 @@
-import { SOCKET_STATUSES } from 'constants/index';
 import React from 'react';
 import { FaBars, FaHome, FaTimes } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import useStore from '../store';
+import { useTicker } from 'api/useTicker';
 
 const Header = () => {
 	const isShowSettings = useStore((state) => state.isShowSettings);
 	const setIsShowSettings = useStore((state) => state.setIsShowSettings);
-	const websocketReadyState = useStore((state) => state.websocketReadyState);
-	const socketStatus = SOCKET_STATUSES[websocketReadyState];
+	const { socketStatus } = useTicker();
 
 	return (
 		<header className="flex p-4 justify-between">

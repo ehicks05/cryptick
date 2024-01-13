@@ -20,11 +20,11 @@ import { Link } from 'react-router-dom';
 import { useWindowSize } from 'react-use';
 import useStore from '../store';
 import Product from './Product';
+import { useProductIds } from 'hooks/useProductIds';
 
 const Products = () => {
+	const [productIds, setProductIds] = useProductIds();
 	const isReorderEnabled = useStore((state) => state.isReorderEnabled);
-	const selectedProductIds = useStore((state) => state.selectedProductIds);
-	const setSelectedProductIds = useStore((state) => state.setSelectedProductIds);
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -37,10 +37,10 @@ const Products = () => {
 		const { active, over } = event;
 
 		if (over && active.id !== over.id) {
-			const oldIndex = selectedProductIds.indexOf(active.id.toString());
-			const newIndex = selectedProductIds.indexOf(over.id.toString());
-			const updated = arrayMove(selectedProductIds, oldIndex, newIndex);
-			setSelectedProductIds(updated);
+			const oldIndex = productIds.indexOf(active.id.toString());
+			const newIndex = productIds.indexOf(over.id.toString());
+			const updated = arrayMove(productIds, oldIndex, newIndex);
+			setProductIds(updated);
 		}
 	};
 
@@ -53,7 +53,7 @@ const Products = () => {
 			collisionDetection={closestCenter}
 			onDragEnd={handleDragEnd}
 		>
-			<SortableContext items={selectedProductIds} strategy={rectSortingStrategy}>
+			<SortableContext items={productIds} strategy={rectSortingStrategy}>
 				<div className="w-full mx-auto p-4">
 					<div
 						className="grid gap-2"
@@ -61,14 +61,14 @@ const Products = () => {
 							gridTemplateColumns: `repeat( auto-fill, minmax(${minColumnWidth}px, 1fr))`,
 						}}
 					>
-						{selectedProductIds.map((selectedProductId) => {
+						{productIds.map((productId) => {
 							return (
 								<SortableItem
-									key={selectedProductId}
-									id={selectedProductId}
+									key={productId}
+									id={productId}
 									disabled={!isReorderEnabled}
 								>
-									<Product productId={selectedProductId} />
+									<Product productId={productId} />
 								</SortableItem>
 							);
 						})}

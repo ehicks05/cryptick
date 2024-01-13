@@ -1,4 +1,4 @@
-import { RawCandle } from 'api/product/types';
+import { RawCandle } from 'api/types/product';
 import { format, fromUnixTime } from 'date-fns';
 import React, { useEffect, useState, useRef } from 'react';
 import { useMeasure } from 'react-use';

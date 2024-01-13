@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactNode } from 'react';
 
-const repoUrl = 'https://www.github.com/ehicks05/bitcoin-price-ticker/';
+const repoUrl = 'https://www.github.com/ehicks05/crypto-price-ticker/';
 const siteUrl = 'https://ehicks.net';
 
 const Footer = () => {
