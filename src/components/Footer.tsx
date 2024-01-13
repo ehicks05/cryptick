@@ -1,34 +1,34 @@
-import React from "react";
-import { ReactNode } from "react";
+import React from 'react';
+import { ReactNode } from 'react';
 
-const repoUrl = "https://www.github.com/ehicks05/bitcoin-price-ticker/";
-const siteUrl = "https://ehicks.net";
+const repoUrl = 'https://www.github.com/ehicks05/bitcoin-price-ticker/';
+const siteUrl = 'https://ehicks.net';
 
 const Footer = () => {
-  return (
-    <footer className="flex justify-end p-2 sm:p-4 gap-4">
-      <Link href={repoUrl}>github</Link>
-      <Link href={siteUrl}>ehicks</Link>
-    </footer>
-  );
+	return (
+		<footer className="flex justify-end p-2 sm:p-4 gap-4">
+			<Link href={repoUrl}>github</Link>
+			<Link href={siteUrl}>ehicks</Link>
+		</footer>
+	);
 };
 
 interface LinkProps {
-  href: string;
-  children?: ReactNode;
+	href: string;
+	children?: ReactNode;
 }
 
 const Link = ({ href, children }: LinkProps) => {
-  return (
-    <a
-      href={href}
-      className="text-blue-400 hover:underline hover:text-blue-600 visited:text-purple-600"
-      target="_blank"
-      rel="noreferrer"
-    >
-      {children}
-    </a>
-  );
+	return (
+		<a
+			href={href}
+			className="text-blue-400 hover:underline hover:text-blue-600 visited:text-purple-600"
+			target="_blank"
+			rel="noreferrer"
+		>
+			{children}
+		</a>
+	);
 };
 
 export default React.memo(Footer);

@@ -1,77 +1,77 @@
-import _ from "lodash";
-import pThrottle from "p-throttle";
-import { formatISO, subDays } from "date-fns";
-import { REST_URL } from "./constants";
+import { formatISO, subDays } from 'date-fns';
+import _ from 'lodash';
+import pThrottle from 'p-throttle';
+import { REST_URL } from './constants';
 import {
-  BulkProductStats,
-  Candle,
-  CandleGranularity,
-  DailyCandles,
-  Product,
-  RawCandle,
-} from "./product/types";
+	BulkProductStats,
+	Candle,
+	CandleGranularity,
+	DailyCandles,
+	Product,
+	RawCandle,
+} from './product/types';
 
 const PROD_URL = `${REST_URL}/products`;
 
 const getProducts = async () => {
-  const data: Product[] = await (await fetch(PROD_URL)).json();
-  return _.chain(data)
-    .sortBy(["quote_currency", "base_currency"])
-    .map((product) => ({
-      ...product,
-      minimumQuoteDigits: product.quote_increment.substring(
-        product.quote_increment.indexOf(".") + 1
-      ).length,
-      minimumBaseDigits: product.base_increment.substring(
-        product.base_increment.indexOf(".") + 1
-      ).length,
-    }))
-    .keyBy("id")
-    .value();
+	const data: Product[] = await (await fetch(PROD_URL)).json();
+	return _.chain(data)
+		.sortBy(['quote_currency', 'base_currency'])
+		.map((product) => ({
+			...product,
+			minimumQuoteDigits: product.quote_increment.substring(
+				product.quote_increment.indexOf('.') + 1,
+			).length,
+			minimumBaseDigits: product.base_increment.substring(
+				product.base_increment.indexOf('.') + 1,
+			).length,
+		}))
+		.keyBy('id')
+		.value();
 };
 
 const get24HourStats = async (): Promise<BulkProductStats> => {
-  return await (await fetch(`${PROD_URL}/stats`)).json();
+	return await (await fetch(`${PROD_URL}/stats`)).json();
 };
 
 const getCandles = async (
-  productId: string,
-  granularity: CandleGranularity,
-  start?: string,
-  end?: string
+	productId: string,
+	granularity: CandleGranularity,
+	start?: string,
+	end?: string,
 ): Promise<RawCandle[]> => {
-  try {
-    const url = `${PROD_URL}/${productId}/candles`;
-    const granularityParam = `granularity=${granularity}`;
-    const startParam = start ? `&start=${start}` : "";
-    const endParam = end ? `&end=${end}` : "";
-    const input = `${url}?${granularityParam}${startParam}${endParam}`;
-    return await (await fetch(input)).json();
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
+	try {
+		const url = `${PROD_URL}/${productId}/candles`;
+		const granularityParam = `granularity=${granularity}`;
+		const startParam = start ? `&start=${start}` : '';
+		const endParam = end ? `&end=${end}` : '';
+		const input = `${url}?${granularityParam}${startParam}${endParam}`;
+		return await (await fetch(input)).json();
+	} catch (err) {
+		console.log(err);
+		return [];
+	}
 };
 
 // see https://docs.cloud.coinbase.com/exchange/docs/rate-limits
 const throttle = pThrottle({
-  limit: 10,
-  interval: 1000,
+	limit: 10,
+	interval: 1000,
 });
 
 const getDailyCandles = async (productIds: string[]): Promise<DailyCandles> => {
-  const throttledFetch = throttle(async (productId: string) => {
-    const candles = await getCandles(
-      productId,
-      900,
-      formatISO(subDays(new Date(), 1)),
-      formatISO(new Date())
-    );
-    return { productId, candles };
-  });
+	const throttledFetch = throttle(async (productId: string) => {
+		const candles = await getCandles(
+			productId,
+			900,
+			formatISO(subDays(new Date(), 1)),
+			formatISO(new Date()),
+		);
+		return { productId, candles };
+	});
 
-  const data = (await Promise.all(productIds.map(throttledFetch))).flat();
-  return _.keyBy(data, "productId");
+	const data = (await Promise.all(productIds.map(throttledFetch))).flat();
+	return _.keyBy(data, 'productId');
 };
 
 export { getProducts, get24HourStats, getDailyCandles, getCandles };

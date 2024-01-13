@@ -5,21 +5,21 @@ export type ISO_8601_MS_UTC = string;
 export type UUID_V4 = string;
 
 export enum OrderSide {
-  BUY = "buy",
-  SELL = "sell",
+	BUY = 'buy',
+	SELL = 'sell',
 }
 
 /** @see https://docs.cloud.coinbase.com/exchange/docs/pagination */
 export interface Pagination {
-  /** Request page after (older) this pagination id. */
-  after?: string;
-  /** Request page before (newer) this pagination id. */
-  before?: string;
-  /** Number of results per request. Maximum 100. Default 100. */
-  limit?: number;
+	/** Request page after (older) this pagination id. */
+	after?: string;
+	/** Request page before (newer) this pagination id. */
+	before?: string;
+	/** Number of results per request. Maximum 100. Default 100. */
+	limit?: number;
 }
 
 export interface PaginatedData<PayloadType> {
-  data: PayloadType[];
-  pagination: { after?: string; before?: string };
+	data: PayloadType[];
+	pagination: { after?: string; before?: string };
 }
