@@ -1,5 +1,4 @@
-import create from 'zustand';
-import { devtools, persist, subscribeWithSelector } from 'zustand/middleware';
+import { create } from 'zustand';
 
 export interface AppState {
 	isAppLoading: boolean;
@@ -10,30 +9,13 @@ export interface AppState {
 	setIsReorderEnabled: (data: boolean) => void;
 }
 
-const useStore = create<AppState>(
-	subscribeWithSelector(
-		devtools(
-			persist(
-				(set) => ({
-					isAppLoading: true,
-					setIsAppLoading: (data) => set({ isAppLoading: data }),
-					isShowSettings: false,
-					setIsShowSettings: (data) => set({ isShowSettings: data }),
-					isReorderEnabled: false,
-					setIsReorderEnabled: (data) => set({ isReorderEnabled: data }),
-				}),
-				{
-					name: 'store',
-					partialize: (state) =>
-						Object.fromEntries(
-							Object.entries(state).filter(([key]) =>
-								['selectedProductIds'].includes(key),
-							),
-						),
-				},
-			),
-		),
-	),
-);
+const useStore = create<AppState>((set) => ({
+	isAppLoading: true,
+	setIsAppLoading: (data) => set({ isAppLoading: data }),
+	isShowSettings: false,
+	setIsShowSettings: (data) => set({ isShowSettings: data }),
+	isReorderEnabled: false,
+	setIsReorderEnabled: (data) => set({ isReorderEnabled: data }),
+}));
 
 export default useStore;

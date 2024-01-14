@@ -19,7 +19,7 @@
 		"react-router-dom": "^6.21.2",
 		"react-use": "^17.4.3",
 		"react-use-websocket": "^4.5.0",
-		"zustand": "^3.6.7"
+		"zustand": "^4.4.7"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.5.1",
@@ -43,11 +43,7 @@
 		"serve": "vite preview"
 	},
 	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
+		"production": [">0.2%", "not dead", "not op_mini all"],
 		"development": [
 			"last 1 chrome version",
 			"last 1 firefox version",
