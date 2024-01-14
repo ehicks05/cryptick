@@ -1,3 +1,4 @@
+import { useCandles } from 'api';
 import React, { useCallback } from 'react';
 import { useMeasure } from 'react-use';
 import useStore from 'store';
@@ -9,11 +10,10 @@ interface ChartProps {
 
 const Chart = ({ productId, isPositive }: ChartProps) => {
 	const [ref, { width, height }] = useMeasure<HTMLDivElement>();
-	const candles = useStore(
-		useCallback((state) => state.candles[productId]?.candles, [productId]),
-	);
+	const candlesQuery = useCandles([productId]);
+	const candles = candlesQuery.data?.[productId].candles;
 
-	if (!candles?.length) return <div />;
+	if (!candles || !candles.length) return <div />;
 
 	const candleWidth = width / candles.length;
 

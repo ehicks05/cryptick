@@ -16,37 +16,34 @@ const Settings = () => {
 	const { data: products } = useProducts();
 	const [productIds, setProductIds] = useProductIds();
 
-	if (!currencies || !products) return 'loading';
-
-	const quoteCurrencies = _.chain(Object.values(products))
+	const quoteCurrencies = _.chain(Object.values(products || {}))
 		.map((product) => product.quote_currency)
 		.uniq()
-		.sortBy((c) => currencies[c].details.sort_order)
+		.sortBy((c) => currencies?.[c].details.sort_order)
 		.value();
 
 	const [selectedQuoteCurrency, setSelectedQuoteCurrency] = useState(
 		quoteCurrencies.find((qc) => qc === 'USD') || quoteCurrencies[0],
 	);
 
+	if (!currencies || !products) return 'loading';
+
 	const gridClasses =
 		'grid grid-cols-4 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-1';
 
 	const display = isShowSettings ? 'block' : 'hidden';
 
-	const toggleProduct = useCallback(
-		(productId: string) => {
-			const isAdding = !productIds.includes(productId);
+	const toggleProduct = (productId: string) => {
+		const isAdding = !productIds.includes(productId);
 
-			const stable = productIds.filter((p) => p !== productId);
-			const newProducts = [...stable, ...(isAdding ? [productId] : [])];
+		const stable = productIds.filter((p) => p !== productId);
+		const newProducts = [...stable, ...(isAdding ? [productId] : [])];
 
-			setProductIds(newProducts);
-			sendJsonMessage(
-				buildSubscribeMessage(isAdding ? 'subscribe' : 'unsubscribe', [productId]),
-			);
-		},
-		[productIds, setProductIds],
-	);
+		setProductIds(newProducts);
+		sendJsonMessage(
+			buildSubscribeMessage(isAdding ? 'subscribe' : 'unsubscribe', [productId]),
+		);
+	};
 
 	return (
 		<div

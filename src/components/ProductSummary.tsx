@@ -66,7 +66,7 @@ interface ProductPriceProps {
 
 const ProductPrice = ({ productId, dailyStats }: ProductPriceProps) => {
 	const { prices } = useTicker();
-	const price = prices[productId].price;
+	const price = prices[productId]?.price || 0;
 
 	const [throttledPrice, setThrottledPrice] = useState(price || dailyStats.last);
 
