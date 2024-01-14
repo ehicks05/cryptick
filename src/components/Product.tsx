@@ -6,8 +6,8 @@ import { use24HourStats } from 'api';
 
 const borderColor = (isPositive: boolean) =>
 	isPositive
-		? 'border-green-300 dark:border-green-900 hover:border-green-500 dark:hover:border-green-700'
-		: 'border-red-300 dark:border-red-900 hover:border-red-500 dark:hover:border-red-700';
+		? 'border-green-50 dark:border-green-950 hover:border-green-200 dark:hover:border-green-900'
+		: 'border-red-50 dark:border-red-950 hover:border-red-200 dark:hover:border-red-900';
 
 const background = (isPositive: boolean) =>
 	`bg-gradient-to-t ${
@@ -32,7 +32,7 @@ const Product = ({ productId }: { productId: string }) => {
 
 	return (
 		<div
-			className={`p-4 border rounded ${borderColor(isPositive)} ${background(
+			className={`p-4 border rounded-lg ${borderColor(isPositive)} ${background(
 				isPositive,
 			)}`}
 		>

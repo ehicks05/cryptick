@@ -1,7 +1,11 @@
 import { useCandles } from 'api';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useMeasure } from 'react-use';
-import useStore from 'store';
+
+const STROKE = {
+	POSITIVE: 'stroke-green-500 dark:stroke-green-500',
+	NEGATIVE: 'stroke-red-400 dark:stroke-red-500',
+};
 
 interface ChartProps {
 	productId: string;
@@ -38,7 +42,7 @@ const Chart = ({ productId, isPositive }: ChartProps) => {
 						<title>Chart</title>
 						<polyline
 							fill={'none'}
-							stroke={isPositive ? 'rgba(16, 185, 129)' : 'rgb(239, 68, 68)'}
+							className={isPositive ? STROKE.POSITIVE : STROKE.NEGATIVE}
 							strokeLinejoin={'round'}
 							strokeWidth="1.5"
 							points={points}
