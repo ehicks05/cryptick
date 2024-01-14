@@ -7,7 +7,7 @@ import { useHandleVisibility, useProductIds } from 'hooks';
 import { useTicker } from 'api';
 
 function App() {
-	useHandleVisibility();
+	// useHandleVisibility();
 	const [productIds] = useProductIds();
 	const { prices } = useTicker();
 	const isLoading = !productIds.every((productId) => !!prices[productId]?.price);
