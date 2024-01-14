@@ -1,16 +1,16 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
 import './index.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
 
-ReactDOM.render(
-	<React.StrictMode>
-		<QueryClientProvider client={queryClient}>
-			<App />
-		</QueryClientProvider>
-	</React.StrictMode>,
-	document.getElementById('root'),
+const container = document.getElementById('root');
+// biome-ignore lint/style/noNonNullAssertion: <explanation>
+const root = createRoot(container!);
+root.render(
+	<QueryClientProvider client={queryClient}>
+		<App />
+	</QueryClientProvider>,
 );

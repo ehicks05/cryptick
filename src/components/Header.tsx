@@ -2,7 +2,7 @@ import React from 'react';
 import { FaBars, FaHome, FaTimes } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import useStore from '../store';
-import { useTicker } from 'api/useTicker';
+import { useTicker } from 'api';
 
 const Header = () => {
 	const isShowSettings = useStore((state) => state.isShowSettings);

@@ -1,11 +1,10 @@
+import React, { useState } from 'react';
 import { Currency } from 'api/types/currency';
 import { Product } from 'api/types/product';
-import React, { useCallback, useRef, useEffect, useState } from 'react';
 import { useInterval } from 'react-use';
 import { formatPercent, formatPrice } from 'utils';
-import useStore, { AppState } from '../store';
-import { useCurrencies, useProducts } from 'api';
-import { useTicker } from 'api/useTicker';
+import { use24HourStats, useCurrencies, useProducts } from 'api';
+import { useTicker } from 'api';
 
 // TODO: consider handling this at API level
 interface AnnotatedProductStats {
@@ -32,12 +31,24 @@ const ProductSummary = ({ productId, dailyStats }: ProductSummaryProps) => {
 		? currenciesQuery.data?.[product.base_currency]
 		: undefined;
 
-	if (!product || !currency) return 'loading';
+	// shouldn't have to do this...
+	const { data: stats } = use24HourStats();
+	const lastPrice = formatPrice(
+		stats?.[productId].stats_24hour.last || 0,
+		product?.minimumQuoteDigits || 0,
+	);
 
+	const { prices } = useTicker();
+	const price = prices[productId]?.price || lastPrice;
+
+	if (!product || !currency || !price) {
+		if (!price) console.log('missing price');
+		return <pre>{JSON.stringify({ price }, null, 2)}</pre>;
+	}
 	return (
 		<>
 			<ProductName currency={currency} product={product} />
-			<ProductPrice productId={productId} dailyStats={dailyStats} />
+			<ProductPrice productId={productId} price={price} dailyStats={dailyStats} />
 			<SecondaryStats product={product} dailyStats={dailyStats} />
 		</>
 	);
@@ -61,18 +72,16 @@ const ProductName = ({ currency, product }: ProductNameProps) => {
 
 interface ProductPriceProps {
 	productId: string;
+	price: string;
 	dailyStats: AnnotatedProductStats;
 }
 
-const ProductPrice = ({ productId, dailyStats }: ProductPriceProps) => {
-	const { prices } = useTicker();
-	const price = prices[productId]?.price || 0;
-
-	const [throttledPrice, setThrottledPrice] = useState(price || dailyStats.last);
+const ProductPrice = ({ productId, price, dailyStats }: ProductPriceProps) => {
+	const [throttledPrice, setThrottledPrice] = useState(price);
 
 	useInterval(() => {
-		setThrottledPrice(price || dailyStats.last);
-	}, 2000);
+		setThrottledPrice(price);
+	}, 1000);
 
 	const { isPositive, percent } = dailyStats;
 	const color = isPositive ? 'text-green-500' : 'text-red-500';
