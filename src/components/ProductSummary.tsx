@@ -48,8 +48,13 @@ const ProductSummary = ({ productId, dailyStats }: ProductSummaryProps) => {
 	return (
 		<>
 			<ProductName currency={currency} product={product} />
-			<ProductPrice productId={productId} price={price} dailyStats={dailyStats} />
-			<SecondaryStats product={product} dailyStats={dailyStats} />
+			<ProductPrice
+				productId={productId}
+				product={product}
+				price={price}
+				dailyStats={dailyStats}
+			/>
+			{/* <SecondaryStats product={product} dailyStats={dailyStats} /> */}
 		</>
 	);
 };
@@ -72,11 +77,17 @@ const ProductName = ({ currency, product }: ProductNameProps) => {
 
 interface ProductPriceProps {
 	productId: string;
+	product: Product;
 	price: string;
 	dailyStats: AnnotatedProductStats;
 }
 
-const ProductPrice = ({ productId, price, dailyStats }: ProductPriceProps) => {
+const ProductPrice = ({
+	productId,
+	product,
+	price,
+	dailyStats,
+}: ProductPriceProps) => {
 	const [throttledPrice, setThrottledPrice] = useState(price);
 
 	useInterval(() => {
@@ -85,15 +96,26 @@ const ProductPrice = ({ productId, price, dailyStats }: ProductPriceProps) => {
 
 	const { isPositive, percent } = dailyStats;
 	const color = isPositive ? 'text-green-500' : 'text-red-500';
+
+	const { minimumQuoteDigits } = product;
+	const { low, high } = dailyStats;
+
 	return (
-		<>
+		<div className="flex gap-2 mb-4">
 			<span className="text-3xl font-semibold" id={`${productId}Price`}>
 				{throttledPrice}
 			</span>
-			<span className={`ml-2 whitespace-nowrap ${color}`}>
-				{formatPercent(percent)}
-			</span>
-		</>
+			<div className="flex flex-col">
+				<span className={`whitespace-nowrap text-xs ${color}`}>
+					{formatPercent(percent)}
+				</span>
+				<span className="text-xs">
+					{formatPrice(low, minimumQuoteDigits)}
+					{' - '}
+					{formatPrice(high, minimumQuoteDigits)}
+				</span>
+			</div>
+		</div>
 	);
 };
 
