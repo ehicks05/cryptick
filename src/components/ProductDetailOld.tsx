@@ -1,14 +1,12 @@
-import { RawCandle } from 'api/types/product';
-import { formatISO, subSeconds } from 'date-fns';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router';
-import { useInterval, useMeasure } from 'react-use';
+import { useMeasure } from 'react-use';
 import { getPercentChange } from 'utils';
-import { getCandles } from '../api';
-import useStore from '../store';
+import { use24HourStats } from '../api';
 import CandleChart from './CandleChart';
 import History from './History';
 import ProductSummary from './ProductSummary';
+import { useCandles } from 'api/useCandles';
 
 const borderColor = (isPositive: boolean) =>
 	isPositive
@@ -25,44 +23,16 @@ const ProductDetail = () => {
 	const [innerRef, { height: innerHeight }] = useMeasure<HTMLDivElement>();
 	const { productId } = useParams();
 	const [granularity, setGranularity] = useState(900);
-	const [candles, setCandles] = useState<RawCandle[]>([]);
-	const productStats = useStore(
-		useCallback((state) => state.stats[productId || ''].stats_24hour, [productId]),
-	);
+	const { data: _candles } = useCandles([productId || '']);
+	const candles = _candles?.[productId || ''].candles;
 
-	const fetchCandles = useCallback(
-		async (date: Date) => {
-			const [candles1, candles2] = await Promise.all(
-				[...Array(2)].map((_i, i) =>
-					getCandles(
-						productId || '',
-						granularity,
-						formatISO(subSeconds(date, granularity * 300 * (i + 1))),
-						formatISO(subSeconds(date, granularity * 300 * i)),
-					),
-				),
-			);
+	const {data: stats} = use24HourStats();
+	const productStats = stats?.[productId || ''].stats_24hour;
 
-			return [...(candles1 || []), ...(candles2 || [])];
-		},
-		[productId, granularity],
-	);
+	if (!productId) return <div>ProductId is missing...</div>;
+	if (!productStats) return <div>productStats is missing...</div>;
+	if (!candles) return <div>candles is missing...</div>;
 
-	useEffect(() => {
-		const init = async () => {
-			const candles = await fetchCandles(new Date());
-			if (candles) setCandles(candles);
-		};
-		init();
-	}, [fetchCandles]);
-
-	useInterval(() => {
-		const update = async () => {
-			const candles = await fetchCandles(new Date());
-			if (candles) setCandles(candles);
-		};
-		update();
-	}, 60000);
 
 	const percent = getPercentChange(productStats.open, productStats.last);
 	const isPositive = percent >= 0;
@@ -92,8 +62,6 @@ const ProductDetail = () => {
 			))}
 		</select>
 	);
-
-	if (!productId) return <div>ProductId is missing...</div>;
 
 	return (
 		<div ref={ref} className="h-full flex-grow flex flex-col md:flex-row gap-4 p-4">

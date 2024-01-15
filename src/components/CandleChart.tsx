@@ -1,10 +1,10 @@
 import { RawCandle } from 'api/types/product';
 import { format, fromUnixTime } from 'date-fns';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMeasure } from 'react-use';
 import { useInterval } from 'react-use';
 import { clamp } from 'utils';
-import useStore from '../store';
+import { useTicker } from 'api';
 
 interface CandleChartProps {
 	height: number;
@@ -13,21 +13,12 @@ interface CandleChartProps {
 }
 
 const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
-	// Fetch initial state
-	const priceRef = useRef(useStore.getState().prices[productId]?.price);
-	// Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
-	useEffect(
-		() =>
-			useStore.subscribe(
-				(state) => (priceRef.current = state.prices[productId]?.price),
-			),
-		[productId],
-	);
-
-	const [price, setPrice] = useState(priceRef.current);
+	const { prices } = useTicker();
+	const unThrottledPrice = prices?.[productId].price;
+	const [price, setPrice] = useState(unThrottledPrice);
 
 	useInterval(() => {
-		setPrice(priceRef.current);
+		setPrice(unThrottledPrice);
 	}, 2000);
 
 	const [ref, { width }] = useMeasure<HTMLDivElement>();
