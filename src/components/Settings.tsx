@@ -1,14 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import _ from 'lodash';
 import { FaLock, FaLockOpen } from 'react-icons/fa';
-import shallow from 'zustand/shallow';
 import useStore from '../store';
 import { useCurrencies, useProducts, useTicker } from 'api';
 import { useProductIds } from 'hooks';
 import { buildSubscribeMessage } from 'utils';
 
 const Settings = () => {
-	const isShowSettings = useStore((state) => state.isShowSettings, shallow);
+	const isShowSettings = useStore((state) => state.isShowSettings);
 
 	const { sendJsonMessage } = useTicker();
 	const { data: currencies } = useCurrencies();

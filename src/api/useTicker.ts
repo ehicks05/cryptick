@@ -6,7 +6,8 @@ import { buildSubscribeMessage, formatPrice, formatTime } from '../utils';
 import { TickerMessage, WebSocketTickerMessage } from 'api/types/ws-types';
 import { useProductIds } from 'hooks/useProductIds';
 import { useProducts } from './useProducts';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useThrottle } from '@uidotdev/usehooks';
 
 export const useTicker = () => {
 	const [productIds] = useProductIds();
@@ -14,6 +15,8 @@ export const useTicker = () => {
 	const products = productsQuery.data;
 	const [ticker, setTicker] = useState<Record<string, TickerMessage[]>>({});
 	const [prices, setPrices] = useState<Record<string, { price: string }>>({});
+
+	const throttledPrices = useThrottle(prices, 1000);
 
 	const { sendJsonMessage, readyState } = useWebSocket(
 		WS_URL,
@@ -23,16 +26,17 @@ export const useTicker = () => {
 			},
 			onMessage: (event) => handleMessage(JSON.parse(event.data)),
 			onError: (event) => console.log(event),
-			shouldReconnect: (closeEvent) => true,
+			shouldReconnect: (_closeEvent) => true,
 			retryOnError: true,
 			reconnectAttempts: 50,
 			reconnectInterval: 2000,
 			share: true,
+			filter: (_messageEvent) => false,
 		},
 		true,
 	);
 
-	const socketStatus = SOCKET_STATUSES[readyState];
+	const socketStatus = useMemo(() => SOCKET_STATUSES[readyState], [readyState]);
 
 	const handleMessage = (message: WebSocketTickerMessage) => {
 		if (!products || Object.keys(products).length === 0) return;
@@ -72,5 +76,13 @@ export const useTicker = () => {
 		});
 	};
 
-	return { ticker, prices, setPrices, sendJsonMessage, socketStatus };
+	return {
+		ticker,
+		unthrottledPrices: prices,
+		prices: throttledPrices,
+		setPrices,
+		throttledPrices,
+		sendJsonMessage,
+		socketStatus,
+	};
 };

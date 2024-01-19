@@ -12,9 +12,9 @@ const borderColor = (isPositive: boolean) =>
 const background = (isPositive: boolean) =>
 	`bg-gradient-to-t ${
 		isPositive
-			? 'from-[rgba(6,78,59,.15)] hover:from-[rgba(6,78,59,.3)]'
-			: 'from-[rgba(153,27,27,.15)] hover:from-[rgba(153,27,27,.3)]'
-	} to-transparent`;
+			? 'to-[rgba(6,78,59,.02)] hover:to-[rgba(6,78,59,.08)] from-[rgba(6,78,59,.15)] via-[rgba(6,78,59,.10)] hover:from-[rgba(6,78,59,.25)] hover:via-[rgba(6,78,59,.25)]'
+			: 'to-[rgba(153,27,27,.02)] hover:to-[rgba(153,27,27,.08)] from-[rgba(153,27,27,.15)] via-[rgba(153,27,27,.10)] hover:from-[rgba(153,27,27,.25)] hover:via-[rgba(153,27,27,.25)]'
+	}`;
 
 const Product = ({ productId }: { productId: string }) => {
 	const { data } = use24HourStats();
@@ -32,7 +32,7 @@ const Product = ({ productId }: { productId: string }) => {
 
 	return (
 		<div
-			className={`p-4 border rounded-lg ${borderColor(isPositive)} ${background(
+			className={`p-4 rounded-lg border ${borderColor(isPositive)} ${background(
 				isPositive,
 			)}`}
 		>

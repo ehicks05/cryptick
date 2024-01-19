@@ -3,19 +3,18 @@ import { Rings } from 'react-loader-spinner';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DataFetcher from './DataFetcher';
 import { Footer, Header, ProductDetail, Products, Settings } from './components';
-import { useHandleVisibility, useProductIds } from 'hooks';
+import { useProductIds } from 'hooks';
 import { useTicker } from 'api';
 
 function App() {
-	// useHandleVisibility();
-	const [productIds] = useProductIds();
-	const { prices } = useTicker();
-	const isLoading = !productIds.every((productId) => !!prices[productId]?.price);
+	// const [productIds] = useProductIds();
+	// const { unthrottledPrices: prices } = useTicker();
+	// const isLoading = !productIds.every((productId) => !!prices[productId]?.price);
 
 	return (
 		<Router>
 			<DataFetcher />
-			{isLoading ? (
+			{false ? (
 				<div className="flex items-center justify-center h-screen">
 					<Rings color="#00BFFF" height={256} width={256} />
 				</div>
