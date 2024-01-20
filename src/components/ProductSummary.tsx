@@ -1,62 +1,43 @@
 import React from 'react';
-import { Currency } from 'api/types/currency';
 import { Product } from 'api/types/product';
 import { formatPercent, formatPrice } from 'utils';
 import { use24HourStats, useCurrencies, useProducts } from 'api';
 import { useTicker } from 'api';
 
-// TODO: consider handling this at API level
-interface AnnotatedProductStats {
-	percent: number;
-	isPositive: boolean;
-	open: number;
-	high: number;
-	low: number;
-	last: number;
-	volume: number;
-}
-
 interface ProductSummaryProps {
 	productId: string;
-	dailyStats: AnnotatedProductStats;
 }
 
-const ProductSummary = ({ productId, dailyStats }: ProductSummaryProps) => {
+const ProductSummary = ({ productId }: ProductSummaryProps) => {
 	const productsQuery = useProducts();
 	const product = productsQuery.data?.[productId];
 
-	const currenciesQuery = useCurrencies();
-	const currency = product
-		? currenciesQuery.data?.[product.base_currency]
-		: undefined;
-
-	if (!product || !currency) {
+	if (!product) {
 		return 'loading';
 	}
 	return (
 		<>
-			<ProductName currency={currency} product={product} />
-			<ProductPrice
-				productId={productId}
-				product={product}
-				dailyStats={dailyStats}
-			/>
-			{/* <SecondaryStats product={product} dailyStats={dailyStats} /> */}
+			<ProductName product={product} />
+			<ProductPrice productId={productId} product={product} />
 		</>
 	);
 };
 
 interface ProductNameProps {
-	currency: Currency;
 	product: Product;
 }
 
-const ProductName = ({ currency, product }: ProductNameProps) => {
+const ProductName = ({ product }: ProductNameProps) => {
+	const currenciesQuery = useCurrencies();
+	const currency = product
+		? currenciesQuery.data?.[product.base_currency]
+		: undefined;
+
 	return (
 		<div className="text-gray-700 dark:text-gray-400">
 			<div className="flex gap-2 text-xl items-baseline">
 				{product.display_name}
-				<span className="text-xs">{currency.name}</span>
+				<span className="text-xs">{currency?.name}</span>
 			</div>
 		</div>
 	);
@@ -65,30 +46,19 @@ const ProductName = ({ currency, product }: ProductNameProps) => {
 interface ProductPriceProps {
 	productId: string;
 	product: Product;
-	dailyStats: AnnotatedProductStats;
 }
 
-const ProductPrice = ({ productId, product, dailyStats }: ProductPriceProps) => {
-	// shouldn't have to do this...
+const ProductPrice = ({ productId, product }: ProductPriceProps) => {
 	const { data: stats } = use24HourStats();
-	const lastPrice = formatPrice(
-		stats?.[productId].stats_24hour.last || 0,
-		product?.minimumQuoteDigits || 0,
-	);
+	const productStats = stats?.[productId];
 
 	const { prices } = useTicker();
-	const price = prices[productId]?.price || lastPrice;
+	const price = prices[productId]?.price;
 
-	if (!price) {
-		if (!price) console.log('missing price');
-		return <pre>{JSON.stringify({ price }, null, 2)}</pre>;
-	}
-
-	const { isPositive, percent } = dailyStats;
+	const { high, low, isPositive, percentChange } = productStats || {};
 	const color = isPositive ? 'text-green-500' : 'text-red-500';
 
 	const { minimumQuoteDigits } = product;
-	const { low, high } = dailyStats;
 
 	return (
 		<div className="flex gap-2 mb-4">
@@ -97,32 +67,13 @@ const ProductPrice = ({ productId, product, dailyStats }: ProductPriceProps) => 
 			</span>
 			<div className="flex flex-col">
 				<span className="text-xs">
-					{formatPrice(low, minimumQuoteDigits)}
+					{low && formatPrice(low, minimumQuoteDigits)}
 					{' - '}
-					{formatPrice(high, minimumQuoteDigits)}
+					{high && formatPrice(high, minimumQuoteDigits)}
 				</span>
 				<span className={`whitespace-nowrap text-xs ${color}`}>
-					{formatPercent(percent)}
+					{percentChange && formatPercent(percentChange)}
 				</span>
-			</div>
-		</div>
-	);
-};
-
-interface SecondaryStatsProps {
-	product: Product;
-	dailyStats: AnnotatedProductStats;
-}
-
-const SecondaryStats = ({ product, dailyStats }: SecondaryStatsProps) => {
-	const { minimumQuoteDigits } = product;
-	const { low, high } = dailyStats;
-	return (
-		<div className="mb-4 text-xs text-gray-700 dark:text-gray-400">
-			<div>
-				{formatPrice(low, minimumQuoteDigits)}
-				{' - '}
-				{formatPrice(high, minimumQuoteDigits)}
 			</div>
 		</div>
 	);

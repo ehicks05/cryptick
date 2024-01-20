@@ -1,24 +1,22 @@
-import _ from 'lodash';
+import { keyBy, take } from 'lodash';
 import useWebSocket from 'react-use-websocket';
 
-import { SOCKET_STATUSES, WS_URL } from './constants';
+import { WS_URL } from './constants';
 import { buildSubscribeMessage, formatPrice, formatTime } from '../utils';
 import { TickerMessage, WebSocketTickerMessage } from 'api/types/ws-types';
 import { useProductIds } from 'hooks/useProductIds';
 import { useProducts } from './useProducts';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useThrottle } from '@uidotdev/usehooks';
+import { use24HourStats } from './use24HourStats';
 
 export const useTicker = () => {
 	const [productIds] = useProductIds();
-	const productsQuery = useProducts();
-	const products = productsQuery.data;
+	const { data: products } = useProducts();
+	const { data: stats } = use24HourStats();
 	const [ticker, setTicker] = useState<Record<string, TickerMessage[]>>({});
-	const [prices, setPrices] = useState<Record<string, { price: string }>>({});
 
-	const throttledPrices = useThrottle(prices, 1000);
-
-	const { sendJsonMessage, readyState } = useWebSocket(
+	const { sendJsonMessage } = useWebSocket(
 		WS_URL,
 		{
 			onOpen: () => {
@@ -36,8 +34,6 @@ export const useTicker = () => {
 		true,
 	);
 
-	const socketStatus = useMemo(() => SOCKET_STATUSES[readyState], [readyState]);
-
 	const handleMessage = (message: WebSocketTickerMessage) => {
 		if (!products || Object.keys(products).length === 0) return;
 		if (message.type !== 'ticker') return;
@@ -47,11 +43,6 @@ export const useTicker = () => {
 			Number(rawPrice),
 			products[productId].minimumQuoteDigits,
 		);
-
-		setPrices({
-			...prices,
-			[productId]: { price },
-		});
 
 		if (productId === productIds[0])
 			document.title = `${price} ${products[productIds[0]].display_name}`;
@@ -72,17 +63,30 @@ export const useTicker = () => {
 		};
 		setTicker({
 			...ticker,
-			[productId]: _.take([newMessage, ...(ticker[productId] || [])], 100),
+			[productId]: take([newMessage, ...(ticker[productId] || [])], 100),
 		});
 	};
 
+	const unthrottledPrices = productIds.map((productId) => {
+		const price =
+			ticker[productId]?.[0].price ||
+			formatPrice(
+				stats?.[productId]?.last || 0,
+				products?.[productId]?.minimumQuoteDigits || 0,
+			) ||
+			0;
+
+		return { productId, price };
+	});
+
+	const prices = useThrottle(
+		keyBy(unthrottledPrices, (o) => o.productId),
+		1000,
+	);
+
 	return {
 		ticker,
-		unthrottledPrices: prices,
-		prices: throttledPrices,
-		setPrices,
-		throttledPrices,
+		prices,
 		sendJsonMessage,
-		socketStatus,
 	};
 };

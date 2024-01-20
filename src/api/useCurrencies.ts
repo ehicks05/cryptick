@@ -4,7 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { CURRENCY_URL } from './constants';
 
 const getCurrencies = async () => {
-	const data: Currency[] = await (await fetch(CURRENCY_URL)).json();
+	const response = await fetch(CURRENCY_URL);
+	const data: Currency[] = await response.json();
 	return _.chain(data).sortBy(['sort_order']).keyBy('id').value();
 };
 

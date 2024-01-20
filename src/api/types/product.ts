@@ -124,19 +124,21 @@ export type DailyCandles = Record<
 	}
 >;
 
+export type Stats24Hour = {
+	open: Open;
+	high: High;
+	low: Low;
+	last: Close;
+	volume: Volume;
+};
+
 export type BulkProductStats = Record<
 	string,
 	{
 		stats_30day: {
 			volume: Volume;
 		};
-		stats_24hour: {
-			open: Open;
-			high: High;
-			low: Low;
-			last: Close;
-			volume: Volume;
-		};
+		stats_24hour: Stats24Hour;
 	}
 >;
 

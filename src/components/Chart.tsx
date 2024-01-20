@@ -1,4 +1,4 @@
-import { useCandles } from 'api';
+import { use24HourStats, useCandles } from 'api';
 import React from 'react';
 import { useMeasure } from 'react-use';
 
@@ -9,10 +9,14 @@ const STROKE = {
 
 interface ChartProps {
 	productId: string;
-	isPositive: boolean;
 }
 
-const Chart = ({ productId, isPositive }: ChartProps) => {
+const Chart = ({ productId }: ChartProps) => {
+	const { data } = use24HourStats();
+	const productStats = data?.[productId];
+
+	const isPositive = productStats ? productStats.isPositive : undefined;
+
 	const [ref, { width, height }] = useMeasure<HTMLDivElement>();
 	const candlesQuery = useCandles([productId]);
 	const candles = candlesQuery.data?.[productId].candles;

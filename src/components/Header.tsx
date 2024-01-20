@@ -2,12 +2,12 @@ import React from 'react';
 import { FaBars, FaHome, FaTimes } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import useStore from '../store';
-import { useTicker } from 'api';
+import { useSocketStatus } from 'api';
 
 const Header = () => {
 	const isShowSettings = useStore((state) => state.isShowSettings);
 	const setIsShowSettings = useStore((state) => state.setIsShowSettings);
-	const { socketStatus } = useTicker();
+	const { socketStatus } = useSocketStatus();
 
 	return (
 		<header className="flex p-4 justify-between">

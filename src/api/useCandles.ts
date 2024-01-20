@@ -12,7 +12,7 @@ interface Params {
 	end?: string;
 }
 
-export const getCandles = async ({
+export const getCandlesForProduct = async ({
 	productId,
 	granularity,
 	start,
@@ -42,7 +42,7 @@ const throttle = pThrottle({
 
 const getDailyCandles = async (productIds: string[]): Promise<DailyCandles> => {
 	const throttledFetch = throttle(async (productId: string) => {
-		const candles = await getCandles({
+		const candles = await getCandlesForProduct({
 			productId,
 			granularity: CandleGranularity.FIFTEEN_MINUTES,
 			start: formatISO(subDays(new Date(), 1)),
