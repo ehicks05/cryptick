@@ -15,16 +15,14 @@ import {
 	useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import React, { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import { useWindowSize } from 'react-use';
-import useStore from '../store';
 import Product from './Product';
 import { useProductIds } from 'hooks/useProductIds';
+import { MdDragIndicator } from 'react-icons/md';
 
 const Products = () => {
 	const [productIds, setProductIds] = useProductIds();
-	const isReorderEnabled = useStore((state) => state.isReorderEnabled);
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -62,15 +60,7 @@ const Products = () => {
 						}}
 					>
 						{productIds.map((productId) => {
-							return (
-								<SortableItem
-									key={productId}
-									id={productId}
-									disabled={!isReorderEnabled}
-								>
-									<Product productId={productId} />
-								</SortableItem>
-							);
+							return <SortableItem key={productId} id={productId} />;
 						})}
 					</div>
 				</div>
@@ -81,28 +71,31 @@ const Products = () => {
 
 interface SortableItemProps {
 	id: string;
-	disabled: boolean;
-	children: ReactNode;
 }
 
-const SortableItem = ({ id, disabled, children }: SortableItemProps) => {
-	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+const SortableItem = ({ id }: SortableItemProps) => {
+	const { setNodeRef, transform, transition, attributes, listeners } = useSortable({
 		id,
-		disabled,
 	});
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition,
-		touchAction: disabled ? 'auto' : 'none',
+		touchAction: 'none',
 	};
 
-	if (disabled) {
-		return <Link to={`/${id}`}>{children}</Link>;
-	}
+	const handle = (
+		<MdDragIndicator
+			className="text-neutral-500 dark:text-neutral-400 focus:outline-none"
+			size={20}
+			{...attributes}
+			{...listeners}
+		/>
+	);
+
 	return (
-		<div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-			{children}
+		<div ref={setNodeRef} style={style}>
+			<Product productId={id} handle={handle} />
 		</div>
 	);
 };

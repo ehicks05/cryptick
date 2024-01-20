@@ -16,10 +16,10 @@ const ProductSummary = ({ productId }: ProductSummaryProps) => {
 		return 'loading';
 	}
 	return (
-		<>
+		<div>
 			<ProductName product={product} />
 			<ProductPrice productId={productId} product={product} />
-		</>
+		</div>
 	);
 };
 

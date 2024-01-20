@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import Chart from './Chart';
 import ProductSummary from './ProductSummary';
 import { use24HourStats } from 'api';
+import { Link } from 'react-router-dom';
 
 const BORDER_COLORS = {
 	POS: 'border-green-50 dark:border-green-950 hover:border-green-200 dark:hover:border-green-900',
@@ -15,7 +16,10 @@ const BG_COLORS = {
 	UND: 'from-neutral-100 to-neutral-50 dark:from-neutral-900 dark:to-neutral-950',
 } as const;
 
-const Product = ({ productId }: { productId: string }) => {
+const Product = ({
+	productId,
+	handle,
+}: { productId: string; handle: ReactNode }) => {
 	const { data } = use24HourStats();
 	const productStats = data?.[productId];
 
@@ -25,8 +29,13 @@ const Product = ({ productId }: { productId: string }) => {
 		<div
 			className={`p-4 rounded-lg border bg-gradient-to-t ${BORDER_COLORS[colorKey]} ${BG_COLORS[colorKey]}`}
 		>
-			<ProductSummary productId={productId} />
-			<Chart productId={productId} />
+			<div className="flex justify-between">
+				<ProductSummary productId={productId} />
+				{handle}
+			</div>
+			<Link to={`/${productId}`}>
+				<Chart productId={productId} />
+			</Link>
 		</div>
 	);
 };

@@ -6,15 +6,17 @@ import { buildSubscribeMessage, formatPrice, formatTime } from '../utils';
 import { TickerMessage, WebSocketTickerMessage } from 'api/types/ws-types';
 import { useProductIds } from 'hooks/useProductIds';
 import { useProducts } from './useProducts';
-import { useState } from 'react';
-import { useThrottle } from '@uidotdev/usehooks';
+import { useLocalStorage, useThrottle } from '@uidotdev/usehooks';
 import { use24HourStats } from './use24HourStats';
 
 export const useTicker = () => {
 	const [productIds] = useProductIds();
 	const { data: products } = useProducts();
 	const { data: stats } = use24HourStats();
-	const [ticker, setTicker] = useState<Record<string, TickerMessage[]>>({});
+	const [ticker, setTicker] = useLocalStorage<Record<string, TickerMessage[]>>(
+		'crypto-ticker-ticker',
+		{},
+	);
 
 	const { sendJsonMessage } = useWebSocket(
 		WS_URL,
@@ -37,6 +39,12 @@ export const useTicker = () => {
 	const handleMessage = (message: WebSocketTickerMessage) => {
 		if (!products || Object.keys(products).length === 0) return;
 		if (message.type !== 'ticker') return;
+		if (
+			ticker[message.product_id]?.map((t) => t.sequence).includes(message.sequence)
+		) {
+			return;
+		}
+
 		const { product_id: productId, price: rawPrice } = message;
 
 		const price = formatPrice(
@@ -63,7 +71,7 @@ export const useTicker = () => {
 		};
 		setTicker({
 			...ticker,
-			[productId]: take([newMessage, ...(ticker[productId] || [])], 100),
+			[productId]: take([newMessage, ...(ticker[productId] || [])], 64),
 		});
 	};
 

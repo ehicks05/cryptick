@@ -16,7 +16,6 @@ const ProductDetail = () => {
 			<div className="flex flex-grow">
 				<TradingViewWidget
 					symbol={`COINBASE:${productId.replace('-', '')}`}
-					autosize
 					theme={isDark ? 'Dark' : 'Light'}
 				/>
 			</div>

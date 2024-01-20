@@ -4,15 +4,12 @@ import React, { useEffect, useRef } from 'react';
 const container_id = 'tradingview_84dfe';
 let tvScriptLoadingPromise: Promise<any>;
 
-export default function TradingViewWidget({
-	symbol,
-	theme,
-	autosize,
-}: {
+interface Props {
 	symbol: string;
 	theme: 'Dark' | 'Light';
-	autosize: boolean;
-}) {
+}
+
+export default function TradingViewWidget({ symbol, theme }: Props) {
 	const onLoadScriptRef = useRef<(() => void) | null>();
 
 	useEffect(() => {
@@ -42,7 +39,7 @@ export default function TradingViewWidget({
 		function createWidget() {
 			if (document.getElementById(container_id) && 'TradingView' in window) {
 				new (window.TradingView as any).widget({
-					autosize,
+					autosize: true,
 					symbol,
 					interval: 'D',
 					timezone: 'Etc/UTC',

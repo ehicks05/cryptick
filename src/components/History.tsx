@@ -58,7 +58,7 @@ const getFormat = (currency: string) => {
 
 const History = ({ productId }: { productId: string }) => {
 	const { ticker } = useTicker();
-	const productTicker = ticker[productId];
+	const productTicker = ticker[productId] || [];
 
 	const [throttledTicker, setThrottledTicker] = useState(productTicker);
 
@@ -69,7 +69,7 @@ const History = ({ productId }: { productId: string }) => {
 	const [sizeUnit, setSizeUnit] = useState('base');
 	const toggleSizeUnit = () => setSizeUnit(sizeUnit === 'base' ? 'quote' : 'base');
 
-	if (!throttledTicker || throttledTicker.length === 0) return <div />;
+	// if (!throttledTicker || throttledTicker.length === 0) return <div />;
 	const [base, quote] = productId.split('-');
 	const selectedSizeUnit = sizeUnit === 'base' ? base : quote;
 	const format = getFormat(selectedSizeUnit);
@@ -79,7 +79,9 @@ const History = ({ productId }: { productId: string }) => {
 			<table>
 				<thead>
 					<tr>
-						<TD colSpan={4}>History</TD>
+						<TD colSpan={4}>
+							History {ticker['BTC-USD']?.length} {productTicker?.length}
+						</TD>
 					</tr>
 					<tr>
 						<TD className="text-right cursor-pointer" onClick={toggleSizeUnit}>
@@ -118,18 +120,16 @@ const History = ({ productId }: { productId: string }) => {
 	);
 };
 
-const TR = React.memo(({ children, ...props }: ComponentPropsWithoutRef<'tr'>) => {
+const TR = ({ children, ...props }: ComponentPropsWithoutRef<'tr'>) => {
 	return <tr {...props}>{children}</tr>;
-});
+};
 
-const TD = React.memo(
-	({ children, className, ...props }: ComponentPropsWithoutRef<'td'>) => {
-		return (
-			<td {...props} className={`px-2 ${className}`}>
-				{children}
-			</td>
-		);
-	},
-);
+const TD = ({ children, className, ...props }: ComponentPropsWithoutRef<'td'>) => {
+	return (
+		<td {...props} className={`px-2 ${className}`}>
+			{children}
+		</td>
+	);
+};
 
-export default React.memo(History);
+export default History;
