@@ -9,8 +9,8 @@ import { useCandles } from 'api/useCandles';
 
 const borderColor = (isPositive: boolean) =>
 	isPositive
-		? 'border-green-300 dark:border-green-900'
-		: 'border-red-300 dark:border-red-900';
+		? 'border-green-300 dark:border-green-950'
+		: 'border-red-300 dark:border-red-950';
 
 const background = (isPositive: boolean) =>
 	`bg-gradient-to-t ${

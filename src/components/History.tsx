@@ -79,9 +79,7 @@ const History = ({ productId }: { productId: string }) => {
 			<table>
 				<thead>
 					<tr>
-						<TD colSpan={4}>
-							History {ticker['BTC-USD']?.length} {productTicker?.length}
-						</TD>
+						<TD colSpan={4}>History</TD>
 					</tr>
 					<tr>
 						<TD className="text-right cursor-pointer" onClick={toggleSizeUnit}>
