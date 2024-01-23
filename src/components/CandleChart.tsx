@@ -129,7 +129,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 			const volumeBarHeight = ((vol / maxVolume) * height) / 4;
 
 			return (
-				<React.Fragment key={_i}>
+				<React.Fragment key={datetime}>
 					<VolumeBar
 						getX={getX}
 						i={i}
@@ -199,6 +199,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 					viewBox={`0 0 ${width} ${height}`}
 					onWheel={(e) => handleWheel(e as unknown as WheelEvent)}
 				>
+					<title>chart</title>
 					{horizontalLineEls}
 					{candleEls}
 					{mousePos && (
