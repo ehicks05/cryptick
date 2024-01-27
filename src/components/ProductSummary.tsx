@@ -17,17 +17,20 @@ const ProductSummary = ({ productId }: ProductSummaryProps) => {
 	}
 	return (
 		<div>
-			<ProductName product={product} />
-			<ProductPrice productId={productId} product={product} />
+			<Name product={product} />
+			<div className="flex gap-2">
+				<Price productId={productId} />
+				<Stats product={product} />
+			</div>
 		</div>
 	);
 };
 
-interface ProductNameProps {
+interface NameProps {
 	product: Product;
 }
 
-const ProductName = ({ product }: ProductNameProps) => {
+const Name = ({ product }: NameProps) => {
 	const currenciesQuery = useCurrencies();
 	const currency = product
 		? currenciesQuery.data?.[product.base_currency]
@@ -43,38 +46,44 @@ const ProductName = ({ product }: ProductNameProps) => {
 	);
 };
 
-interface ProductPriceProps {
+interface PriceProps {
 	productId: string;
-	product: Product;
 }
 
-const ProductPrice = ({ productId, product }: ProductPriceProps) => {
-	const { data: stats } = use24HourStats();
-	const productStats = stats?.[productId];
-
+const Price = ({ productId }: PriceProps) => {
 	const { prices } = useTicker();
 	const price = prices[productId]?.price;
-
-	const { high, low, isPositive, percentChange } = productStats || {};
-	const color = isPositive ? 'text-green-500' : 'text-red-500';
-
-	const { minimumQuoteDigits } = product;
 
 	return (
 		<div className="flex gap-2 mb-4">
 			<span className="text-3xl font-semibold" id={`${productId}Price`}>
 				{price}
 			</span>
-			<div className="flex flex-col">
-				<span className="text-xs">
-					{low && formatPrice(low, minimumQuoteDigits)}
-					{' - '}
-					{high && formatPrice(high, minimumQuoteDigits)}
-				</span>
-				<span className={`whitespace-nowrap text-xs ${color}`}>
-					{percentChange && formatPercent(percentChange)}
-				</span>
-			</div>
+		</div>
+	);
+};
+
+interface StatsProps {
+	product: Product;
+}
+
+const Stats = ({ product: { id, minimumQuoteDigits } }: StatsProps) => {
+	const { data: stats } = use24HourStats();
+	const productStats = stats?.[id];
+
+	const { high, low, isPositive, percentChange } = productStats || {};
+	const color = isPositive ? 'text-green-500' : 'text-red-500';
+
+	return (
+		<div className="flex flex-col">
+			<span className="text-xs">
+				{low && formatPrice(low, minimumQuoteDigits)}
+				{' - '}
+				{high && formatPrice(high, minimumQuoteDigits)}
+			</span>
+			<span className={`whitespace-nowrap text-xs ${color}`}>
+				{percentChange && formatPercent(percentChange)}
+			</span>
 		</div>
 	);
 };

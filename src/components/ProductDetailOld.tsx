@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { useMeasure } from 'react-use';
-import { getPercentChange } from 'utils';
 import { use24HourStats } from '../api';
 import CandleChart from './CandleChart';
 import History from './History';
@@ -10,8 +9,8 @@ import { useCandles } from 'api/useCandles';
 
 const borderColor = (isPositive: boolean) =>
 	isPositive
-		? 'border-green-300 dark:border-green-900'
-		: 'border-red-300 dark:border-red-900';
+		? 'border-green-300 dark:border-green-950'
+		: 'border-red-300 dark:border-red-950';
 
 const background = (isPositive: boolean) =>
 	`bg-gradient-to-t ${
@@ -26,21 +25,14 @@ const ProductDetail = () => {
 	const { data: _candles } = useCandles([productId || '']);
 	const candles = _candles?.[productId || ''].candles;
 
-	const {data: stats} = use24HourStats();
-	const productStats = stats?.[productId || ''].stats_24hour;
+	const { data: stats } = use24HourStats();
+	const productStats = stats?.[productId || ''];
 
 	if (!productId) return <div>ProductId is missing...</div>;
 	if (!productStats) return <div>productStats is missing...</div>;
 	if (!candles) return <div>candles is missing...</div>;
 
-
-	const percent = getPercentChange(productStats.open, productStats.last);
-	const isPositive = percent >= 0;
-	const dailyStats = {
-		...productStats,
-		percent,
-		isPositive,
-	};
+	const isPositive = productStats.last >= productStats.open;
 
 	const granularityPicker = (
 		<select
@@ -71,11 +63,7 @@ const ProductDetail = () => {
 				)} ${background(isPositive)}`}
 			>
 				<div ref={innerRef}>
-					<ProductSummary
-						productId={productId}
-						dailyStats={dailyStats}
-						// granularityPicker={granularityPicker}
-					/>
+					<ProductSummary productId={productId} />
 				</div>
 				<div className="flex-grow">
 					<CandleChart

@@ -76,13 +76,12 @@ export const useTicker = () => {
 	};
 
 	const unthrottledPrices = productIds.map((productId) => {
-		const price =
+		const price: string =
 			ticker[productId]?.[0].price ||
 			formatPrice(
 				stats?.[productId]?.last || 0,
 				products?.[productId]?.minimumQuoteDigits || 0,
-			) ||
-			0;
+			);
 
 		return { productId, price };
 	});
