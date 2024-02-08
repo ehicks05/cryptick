@@ -6,7 +6,7 @@ let tvScriptLoadingPromise: Promise<any>;
 
 interface Props {
 	symbol: string;
-	theme: 'Dark' | 'Light';
+	theme: 'dark' | 'light';
 }
 
 export default function TradingViewWidget({ symbol, theme }: Props) {
