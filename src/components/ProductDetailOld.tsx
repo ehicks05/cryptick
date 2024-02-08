@@ -1,3 +1,4 @@
+import { useCandles } from 'api/useCandles';
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { useMeasure } from 'react-use';
@@ -5,7 +6,6 @@ import { use24HourStats } from '../api';
 import CandleChart from './CandleChart';
 import History from './History';
 import ProductSummary from './ProductSummary';
-import { useCandles } from 'api/useCandles';
 
 const borderColor = (isPositive: boolean) =>
 	isPositive

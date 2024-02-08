@@ -1,8 +1,8 @@
+import { use24HourStats } from 'api';
 import React, { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import Chart from './Chart';
 import ProductSummary from './ProductSummary';
-import { use24HourStats } from 'api';
-import { Link } from 'react-router-dom';
 
 const BORDER_COLORS = {
 	POS: 'border-green-50 dark:border-green-950 hover:border-green-200 dark:hover:border-green-900',

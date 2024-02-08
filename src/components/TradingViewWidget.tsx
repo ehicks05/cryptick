@@ -27,9 +27,7 @@ export default function TradingViewWidget({ symbol, theme }: Props) {
 			});
 		}
 
-		tvScriptLoadingPromise.then(
-			() => onLoadScriptRef.current && onLoadScriptRef.current(),
-		);
+		tvScriptLoadingPromise.then(() => onLoadScriptRef.current?.());
 
 		return () => {
 			onLoadScriptRef.current = null;

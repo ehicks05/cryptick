@@ -1,7 +1,7 @@
-import React, { ReactNode, useState } from 'react';
-import _ from 'lodash';
 import { useCurrencies, useProducts, useTicker } from 'api';
 import { useProductIds } from 'hooks';
+import _ from 'lodash';
+import React, { ReactNode, useState } from 'react';
 import { buildSubscribeMessage } from 'utils';
 
 const gridClasses =

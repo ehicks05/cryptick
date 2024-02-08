@@ -1,6 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import _ from 'lodash';
 import { PRODUCT_URL } from './constants';
-import { useQuery } from '@tanstack/react-query';
 import { Product } from './types/product';
 
 const getProducts = async () => {

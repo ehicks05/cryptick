@@ -1,10 +1,10 @@
+import { useTicker } from 'api';
 import { RawCandle } from 'api/types/product';
 import { format, fromUnixTime } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useMeasure } from 'react-use';
 import { useInterval } from 'react-use';
 import { clamp } from 'utils';
-import { useTicker } from 'api';
 
 interface CandleChartProps {
 	height: number;

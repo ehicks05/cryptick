@@ -1,7 +1,7 @@
-import { PRODUCT_URL } from './constants';
 import { useQuery } from '@tanstack/react-query';
-import { BulkProductStats, Stats24Hour } from './types/product';
 import { getPercentChange } from 'utils';
+import { PRODUCT_URL } from './constants';
+import { BulkProductStats, Stats24Hour } from './types/product';
 
 export interface AnnotatedProductStats extends Stats24Hour {
 	percentChange: number;

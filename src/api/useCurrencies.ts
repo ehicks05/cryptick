@@ -1,6 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import { Currency } from 'api/types/currency';
 import _ from 'lodash';
-import { useQuery } from '@tanstack/react-query';
 import { CURRENCY_URL } from './constants';
 
 const getCurrencies = async () => {

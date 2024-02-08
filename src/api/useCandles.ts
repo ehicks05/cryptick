@@ -1,9 +1,9 @@
-import { PRODUCT_URL } from './constants';
 import { useQuery } from '@tanstack/react-query';
-import { CandleGranularity, DailyCandles, RawCandle } from './types/product';
-import pThrottle from 'p-throttle';
 import { formatISO, subDays } from 'date-fns';
 import _ from 'lodash';
+import pThrottle from 'p-throttle';
+import { PRODUCT_URL } from './constants';
+import { CandleGranularity, DailyCandles, RawCandle } from './types/product';
 
 interface Params {
 	productId: string;

@@ -1,6 +1,6 @@
+import { useTicker } from 'api';
 import React, { useState, ComponentPropsWithoutRef } from 'react';
 import { useInterval } from 'react-use';
-import { useTicker } from 'api';
 
 const normalize = (value: number) => {
 	if (value < 10) return 0.0;
