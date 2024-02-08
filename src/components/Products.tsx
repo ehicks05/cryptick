@@ -15,11 +15,11 @@ import {
 	useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useProductIds } from 'hooks/useProductIds';
 import React from 'react';
+import { MdDragIndicator } from 'react-icons/md';
 import { useWindowSize } from 'react-use';
 import Product from './Product';
-import { useProductIds } from 'hooks/useProductIds';
-import { MdDragIndicator } from 'react-icons/md';
 
 const Products = () => {
 	const [productIds, setProductIds] = useProductIds();
@@ -81,12 +81,12 @@ const SortableItem = ({ id }: SortableItemProps) => {
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition,
-		touchAction: 'none',
 	};
 
 	const handle = (
 		<MdDragIndicator
 			className="text-neutral-500 dark:text-neutral-400 focus:outline-none"
+			style={{ touchAction: 'none' }}
 			size={20}
 			{...attributes}
 			{...listeners}
