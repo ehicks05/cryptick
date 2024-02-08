@@ -1,13 +1,17 @@
 import { keyBy, take } from 'lodash';
 import useWebSocket from 'react-use-websocket';
 
-import { WS_URL } from './constants';
-import { buildSubscribeMessage, formatPrice, formatTime } from '../utils';
+import {
+	useLocalStorage,
+	useThrottle,
+	useVisibilityChange,
+} from '@uidotdev/usehooks';
 import { TickerMessage, WebSocketTickerMessage } from 'api/types/ws-types';
 import { useProductIds } from 'hooks/useProductIds';
-import { useProducts } from './useProducts';
-import { useLocalStorage, useThrottle } from '@uidotdev/usehooks';
+import { buildSubscribeMessage, formatPrice, formatTime } from '../utils';
+import { WS_URL } from './constants';
 import { use24HourStats } from './use24HourStats';
+import { useProducts } from './useProducts';
 
 export const useTicker = () => {
 	const [productIds] = useProductIds();
@@ -17,6 +21,7 @@ export const useTicker = () => {
 		'crypto-ticker-ticker',
 		{},
 	);
+	const isVisible = useVisibilityChange();
 
 	const { sendJsonMessage } = useWebSocket(
 		WS_URL,
@@ -33,7 +38,7 @@ export const useTicker = () => {
 			share: true,
 			filter: (_messageEvent) => false,
 		},
-		true,
+		isVisible,
 	);
 
 	const handleMessage = (message: WebSocketTickerMessage) => {
