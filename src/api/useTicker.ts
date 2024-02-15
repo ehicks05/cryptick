@@ -80,20 +80,20 @@ export const useTicker = () => {
 		});
 	};
 
-	const unthrottledPrices = productIds.map((productId) => {
-		const price: string =
-			ticker[productId]?.[0].price ||
-			formatPrice(
-				stats?.[productId]?.last || 0,
-				products?.[productId]?.minimumQuoteDigits || 0,
-			);
-
-		return { productId, price };
-	});
-
 	const prices = useThrottle(
-		keyBy(unthrottledPrices, (o) => o.productId),
-		1000,
+		keyBy(
+			productIds.map((productId) => {
+				const priceFromTicker = ticker[productId]?.[0].price;
+				const priceFromStats = formatPrice(
+					stats?.[productId]?.last || 0,
+					products?.[productId]?.minimumQuoteDigits || 0,
+				);
+				const price = priceFromTicker ?? priceFromStats;
+				return { productId, price };
+			}),
+			(o) => o.productId,
+		),
+		100,
 	);
 
 	return {
