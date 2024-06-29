@@ -3,8 +3,9 @@ import React from 'react';
 import { useMeasure } from 'react-use';
 
 const STROKE = {
-	POSITIVE: 'stroke-green-500 dark:stroke-green-500',
-	NEGATIVE: 'stroke-red-400 dark:stroke-red-500',
+	POS: 'stroke-green-500 dark:stroke-green-500',
+	NEG: 'stroke-red-400 dark:stroke-red-500',
+	UND: 'stroke-neutral-500 dark:stroke-neutral-400',
 };
 
 interface ChartProps {
@@ -16,6 +17,7 @@ const Chart = ({ productId }: ChartProps) => {
 	const productStats = data?.[productId];
 
 	const isPositive = productStats ? productStats.isPositive : undefined;
+	const colorKey = isPositive === undefined ? 'UND' : isPositive ? 'POS' : 'NEG';
 
 	const [ref, { width, height }] = useMeasure<HTMLDivElement>();
 	const candlesQuery = useCandles([productId]);
@@ -42,11 +44,14 @@ const Chart = ({ productId }: ChartProps) => {
 		<div className={'h-32'}>
 			<div ref={ref} className={'w-full h-full'}>
 				{width && height && (
-					<svg viewBox={`0 0 ${width} ${height}`}>
+					<svg
+						viewBox={`0 0 ${width} ${height}`}
+						className={`${STROKE[colorKey]} hover:brightness-90 hover:dark:brightness-110`}
+					>
 						<title>Chart</title>
 						<polyline
 							fill={'none'}
-							className={isPositive ? STROKE.POSITIVE : STROKE.NEGATIVE}
+							// className={isPositive ? STROKE.POSITIVE : STROKE.NEGATIVE}
 							strokeLinejoin={'round'}
 							strokeWidth="1.5"
 							points={points}
