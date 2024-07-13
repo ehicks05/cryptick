@@ -1,4 +1,4 @@
-import { keyBy, take } from 'lodash';
+import { keyBy } from 'lodash';
 import useWebSocket from 'react-use-websocket';
 
 import {
@@ -76,7 +76,7 @@ export const useTicker = () => {
 		};
 		setTicker({
 			...ticker,
-			[productId]: take([newMessage, ...(ticker[productId] || [])], 64),
+			[productId]: [newMessage, ...(ticker[productId] || [])].slice(0, 64),
 		});
 	};
 
