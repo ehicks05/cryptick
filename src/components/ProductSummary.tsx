@@ -13,7 +13,7 @@ const ProductSummary = ({ productId }: ProductSummaryProps) => {
 	const product = productsQuery.data?.[productId];
 
 	if (!product) {
-		return 'loading';
+		return '';
 	}
 	return (
 		<div>
