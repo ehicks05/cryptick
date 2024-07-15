@@ -3,7 +3,6 @@ import { RawCandle } from 'api/types/product';
 import { format, fromUnixTime } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useMeasure } from 'react-use';
-import { useInterval } from 'react-use';
 import { clamp } from 'utils';
 
 interface CandleChartProps {
@@ -14,12 +13,7 @@ interface CandleChartProps {
 
 const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 	const { prices } = useTicker();
-	const unThrottledPrice = prices?.[productId].price;
-	const [price, setPrice] = useState(unThrottledPrice);
-
-	useInterval(() => {
-		setPrice(unThrottledPrice);
-	}, 2000);
+	const price = prices?.[productId].price;
 
 	const [ref, { width }] = useMeasure<HTMLDivElement>();
 	const [candleWidthMulti, setCandleWidthMulti] = useState(2);
