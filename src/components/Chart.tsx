@@ -39,7 +39,7 @@ const Chart = ({ productId }: ChartProps) => {
 	return (
 		<div className={'h-32'}>
 			<div className={'w-full h-full'}>
-				<svg width="full" height="full" viewBox={viewBox} preserveAspectRatio="none">
+				<svg width="100%" height="100%" viewBox={viewBox} preserveAspectRatio="none">
 					<title>Chart</title>
 					<polyline
 						fill="none"
