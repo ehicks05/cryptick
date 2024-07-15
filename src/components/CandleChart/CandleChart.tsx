@@ -4,6 +4,7 @@ import { format, fromUnixTime } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useMeasure } from 'react-use';
 import { clamp } from 'utils';
+import { Crosshair } from './Crosshair';
 import { VolumeBar } from './VolumeBar';
 
 interface CandleChartProps {
@@ -198,24 +199,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 					{horizontalLineEls}
 					{candleEls}
 					{mousePos && (
-						<>
-							{/* horizontal */}
-							<line
-								stroke={'rgba(100, 100, 100, .35)'}
-								x1={0}
-								y1={mousePos.y}
-								x2={width}
-								y2={mousePos.y}
-							/>
-							{/* vertical */}
-							<line
-								stroke={'rgba(100, 100, 100, .35)'}
-								x1={mousePos.x}
-								y1={0}
-								x2={mousePos.x}
-								y2={h}
-							/>
-						</>
+						<Crosshair x={mousePos.x} y={mousePos.y} w={width} h={height} />
 					)}
 				</svg>
 			)}
