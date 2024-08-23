@@ -3,8 +3,9 @@ import { RawCandle } from 'api/types/product';
 import { format, fromUnixTime } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useMeasure } from 'react-use';
-import { useInterval } from 'react-use';
 import { clamp } from 'utils';
+import { Crosshair } from './Crosshair';
+import { VolumeBar } from './VolumeBar';
 
 interface CandleChartProps {
 	height: number;
@@ -14,12 +15,7 @@ interface CandleChartProps {
 
 const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 	const { prices } = useTicker();
-	const unThrottledPrice = prices?.[productId].price;
-	const [price, setPrice] = useState(unThrottledPrice);
-
-	useInterval(() => {
-		setPrice(unThrottledPrice);
-	}, 2000);
+	const price = prices?.[productId].price;
 
 	const [ref, { width }] = useMeasure<HTMLDivElement>();
 	const [candleWidthMulti, setCandleWidthMulti] = useState(2);
@@ -203,75 +199,11 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 					{horizontalLineEls}
 					{candleEls}
 					{mousePos && (
-						<>
-							{/* horizontal */}
-							<line
-								stroke={'rgba(100, 100, 100, .35)'}
-								x1={0}
-								y1={mousePos.y}
-								x2={width}
-								y2={mousePos.y}
-							/>
-							{/* vertical */}
-							<line
-								stroke={'rgba(100, 100, 100, .35)'}
-								x1={mousePos.x}
-								y1={0}
-								x2={mousePos.x}
-								y2={h}
-							/>
-						</>
+						<Crosshair x={mousePos.x} y={mousePos.y} w={width} h={height} />
 					)}
 				</svg>
 			)}
 		</div>
-	);
-};
-
-const myFormat = Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
-
-interface VolumeBarProps {
-	getX: (input: number) => number;
-	i: number;
-	candleWidth: number;
-	rectXDivisor: number;
-	height: number;
-	volumeBarHeight: number;
-	volume: number;
-}
-
-const VolumeBar = ({
-	getX,
-	i,
-	candleWidth,
-	rectXDivisor,
-	height,
-	volumeBarHeight,
-	volume,
-}: VolumeBarProps) => {
-	const [isHovered, setIsHovered] = useState(false);
-	return (
-		<>
-			<rect
-				onMouseEnter={() => setIsHovered(true)}
-				onMouseLeave={() => setIsHovered(false)}
-				className="text-gray-700 fill-current opacity-40 hover:opacity-60"
-				x={getX(i * candleWidth) - candleWidth / rectXDivisor}
-				y={height - volumeBarHeight}
-				width={candleWidth / (rectXDivisor / 2)}
-				height={volumeBarHeight}
-			/>
-			{isHovered && (
-				<text
-					fontSize="11"
-					className="fill-current"
-					x={getX(i * candleWidth) - 20}
-					y={height + 25}
-				>
-					{myFormat.format(volume)}
-				</text>
-			)}
-		</>
 	);
 };
 
