@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { formatISO, subDays } from 'date-fns';
+import { subDays } from 'date-fns';
 import _ from 'lodash';
 import pThrottle from 'p-throttle';
 import { PRODUCT_URL } from './constants';
@@ -45,8 +45,8 @@ const getDailyCandles = async (productIds: string[]): Promise<DailyCandles> => {
 		const candles = await getCandlesForProduct({
 			productId,
 			granularity: CandleGranularity.FIFTEEN_MINUTES,
-			start: formatISO(subDays(new Date(), 1)),
-			end: formatISO(new Date()),
+			start: subDays(new Date(), 1).toISOString(),
+			end: new Date().toISOString(),
 		});
 		return { productId, candles };
 	});

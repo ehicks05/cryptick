@@ -1,5 +1,3 @@
-import React from 'react';
-import { Rings } from 'react-loader-spinner';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import useStore from 'store';
 import { Footer, Header, ProductDetail, Products, Settings } from './components';
