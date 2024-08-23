@@ -93,7 +93,7 @@ export const useTicker = () => {
 			}),
 			(o) => o.productId,
 		),
-		100,
+		1000,
 	);
 
 	return {
