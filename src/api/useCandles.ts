@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import _ from 'lodash';
+import { keyBy } from 'lodash-es';
 import pThrottle from 'p-throttle';
 import { PRODUCT_URL } from './constants';
 import {
@@ -58,7 +58,7 @@ const getDailyCandles = async (productIds: string[]): Promise<DailyCandles> => {
 	});
 
 	const data = (await Promise.all(productIds.map(throttledFetch))).flat();
-	return _.keyBy(data, 'productId');
+	return keyBy(data, 'productId');
 };
 
 export const useCandles = (productIds: string[]) => {

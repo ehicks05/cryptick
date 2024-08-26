@@ -1,4 +1,4 @@
-import { keyBy } from 'lodash';
+import { keyBy } from 'lodash-es';
 import useWebSocket from 'react-use-websocket';
 
 import {
@@ -6,7 +6,7 @@ import {
 	useThrottle,
 	useVisibilityChange,
 } from '@uidotdev/usehooks';
-import { TickerMessage, WebSocketTickerMessage } from 'api/types/ws-types';
+import type { TickerMessage, WebSocketTickerMessage } from 'api/types/ws-types';
 import { useProductIds } from 'hooks/useProductIds';
 import { buildSubscribeMessage, formatPrice, formatTime } from '../utils';
 import { WS_URL } from './constants';

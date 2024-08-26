@@ -1,5 +1,5 @@
 import { use24HourStats } from 'api';
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import Chart from './Chart';
 import ProductSummary from './ProductSummary';

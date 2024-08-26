@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { Currency } from 'api/types/currency';
-import _ from 'lodash';
+import type { Currency } from 'api/types/currency';
+import { chain } from 'lodash-es';
 import { CURRENCY_URL } from './constants';
 
 const getCurrencies = async () => {
 	const response = await fetch(CURRENCY_URL);
 	const data: Currency[] = await response.json();
-	return _.chain(data).sortBy(['sort_order']).keyBy('id').value();
+	return chain(data).sortBy(['sort_order']).keyBy('id').value();
 };
 
 export const useCurrencies = () => {

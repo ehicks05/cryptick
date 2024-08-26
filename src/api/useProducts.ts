@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import _ from 'lodash';
+import { chain } from 'lodash-es';
 import { PRODUCT_URL } from './constants';
-import { Product } from './types/product';
+import type { Product } from './types/product';
 
 const getProducts = async () => {
 	const data: Product[] = await (await fetch(PRODUCT_URL)).json();
-	return _.chain(data)
+	return chain(data)
 		.sortBy(['quote_currency', 'base_currency'])
 		.map((product) => ({
 			...product,

@@ -1,7 +1,7 @@
 import { useCurrencies, useProducts, useTicker } from 'api';
 import { useProductIds } from 'hooks';
-import _ from 'lodash';
-import React, { ReactNode, useState } from 'react';
+import { chain } from 'lodash-es';
+import React, { type ReactNode, useState } from 'react';
 import { buildSubscribeMessage } from 'utils';
 
 const gridClasses =
@@ -36,7 +36,7 @@ const Settings = () => {
 	const { data: products } = useProducts();
 	const [productIds, setProductIds] = useProductIds();
 
-	const quoteCurrencies = _.chain(Object.values(products || {}))
+	const quoteCurrencies = chain(Object.values(products || {}))
 		.map((product) => product.quote_currency)
 		.uniq()
 		.sortBy((c) => currencies?.[c].details.sort_order)
