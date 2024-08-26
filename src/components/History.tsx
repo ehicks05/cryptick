@@ -1,6 +1,6 @@
 import { useThrottle } from '@uidotdev/usehooks';
 import { useTicker } from 'api';
-import { useState, type ComponentPropsWithoutRef } from 'react';
+import { type ComponentPropsWithoutRef, useState } from 'react';
 
 const normalize = (value: number) => {
 	if (value < 10) return 0.0;

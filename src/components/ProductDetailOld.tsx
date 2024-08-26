@@ -1,7 +1,7 @@
+import { useMeasure } from '@uidotdev/usehooks';
 import { useCandles } from 'api/useCandles';
 import React, { useState } from 'react';
 import { useParams } from 'wouter';
-import { useMeasure } from '@uidotdev/usehooks';
 import { use24HourStats } from '../api';
 import CandleChart from './CandleChart';
 import History from './History';

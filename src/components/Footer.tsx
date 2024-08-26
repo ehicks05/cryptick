@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 const repoUrl = 'https://www.github.com/ehicks05/crypto-price-ticker/';
 const siteUrl = 'https://ehicks.net';

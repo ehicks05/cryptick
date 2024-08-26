@@ -1,6 +1,6 @@
 import { use24HourStats, useCurrencies, useProducts } from 'api';
 import { useTicker } from 'api';
-import { Product } from 'api/types/product';
+import type { Product } from 'api/types/product';
 import React from 'react';
 import { formatPercent, formatPrice } from 'utils';
 
