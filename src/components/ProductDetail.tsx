@@ -1,13 +1,13 @@
 import React from 'react';
 import { useParams } from 'react-router';
-import { useMedia } from 'react-use';
+import { useMediaQuery } from '@uidotdev/usehooks';
 import History from './History';
 import TradingViewWidget from './TradingViewWidget';
 
 const ProductDetail = () => {
 	const { productId } = useParams();
 
-	const isDark = useMedia('(prefers-color-scheme: dark)');
+	const isDark = useMediaQuery('(prefers-color-scheme: dark)');
 	const theme = isDark ? 'dark' : 'light';
 
 	if (!productId) return <div>productId is missing...</div>;

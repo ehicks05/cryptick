@@ -15,10 +15,10 @@ import {
 	useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useWindowSize } from '@uidotdev/usehooks';
 import { useProductIds } from 'hooks/useProductIds';
 import React from 'react';
 import { MdDragIndicator } from 'react-icons/md';
-import { useWindowSize } from 'react-use';
 import Product from './Product';
 
 const Products = () => {
@@ -42,7 +42,8 @@ const Products = () => {
 		}
 	};
 
-	const { width } = useWindowSize();
+	const { width: _width } = useWindowSize();
+	const width = _width || 0;
 	const minColumnWidth = width < 400 ? width - 16 - 16 - 16 - 16 : 320;
 
 	return (

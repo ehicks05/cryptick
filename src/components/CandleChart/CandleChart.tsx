@@ -2,7 +2,7 @@ import { useTicker } from 'api';
 import { RawCandle } from 'api/types/product';
 import { format, fromUnixTime } from 'date-fns';
 import React, { useEffect, useState } from 'react';
-import { useMeasure } from 'react-use';
+import { useMeasure } from '@uidotdev/usehooks';
 import { clamp } from 'utils';
 import { Crosshair } from './Crosshair';
 import { VolumeBar } from './VolumeBar';
@@ -17,7 +17,9 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 	const { prices } = useTicker();
 	const price = prices?.[productId].price;
 
-	const [ref, { width }] = useMeasure<HTMLDivElement>();
+	const [ref, { width: _width }] = useMeasure<HTMLDivElement>();
+	const width = _width || 0;
+	
 	const [candleWidthMulti, setCandleWidthMulti] = useState(2);
 	const [mousePos] = useState<{ x: number; y: number } | undefined>(undefined);
 	const [height, setHeight] = useState(0);

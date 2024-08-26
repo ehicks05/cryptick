@@ -1,4 +1,4 @@
-import { useHandleVisibility } from './useHandleVisibility';
+import { useTitle } from './useTitle';
 import { useProductIds } from './useProductIds';
 
-export { useHandleVisibility, useProductIds };
+export { useTitle, useProductIds };

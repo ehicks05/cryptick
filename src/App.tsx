@@ -2,8 +2,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import useStore from 'store';
 import { Footer, Header, ProductDetail, Products, Settings } from './components';
 import ProductDetailOld from 'components/ProductDetailOld';
+import { useTitle } from 'hooks';
 
 function App() {
+	useTitle();
 	const isShowSettings = useStore((state) => state.isShowSettings);
 
 	return (

@@ -1,7 +1,7 @@
 import { useCandles } from 'api/useCandles';
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
-import { useMeasure } from 'react-use';
+import { useMeasure } from '@uidotdev/usehooks';
 import { use24HourStats } from '../api';
 import CandleChart from './CandleChart';
 import History from './History';
@@ -18,8 +18,11 @@ const background = (isPositive: boolean) =>
 	} to-transparent`;
 
 const ProductDetail = () => {
-	const [ref, { height }] = useMeasure<HTMLDivElement>();
-	const [innerRef, { height: innerHeight }] = useMeasure<HTMLDivElement>();
+	const [ref, { height: _height }] = useMeasure<HTMLDivElement>();
+	const height = _height || 0;
+	const [innerRef, { height: _innerHeight }] = useMeasure<HTMLDivElement>();
+	const innerHeight = _innerHeight || 0;
+	
 	const { productId } = useParams();
 	const [granularity, setGranularity] = useState(900);
 	const { data: _candles } = useCandles([productId || '']);

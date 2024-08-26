@@ -57,9 +57,6 @@ export const useTicker = () => {
 			products[productId].minimumQuoteDigits,
 		);
 
-		if (productId === productIds[0])
-			document.title = `${price} ${products[productIds[0]].display_name}`;
-
 		const { sequence, time, side, last_size } = message;
 		if (!time) return;
 
