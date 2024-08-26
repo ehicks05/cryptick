@@ -1,7 +1,6 @@
 import { useSocketStatus } from 'api';
-import React from 'react';
 import { FaBars, FaHome, FaTimes } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link } from 'wouter';
 import useStore from '../store';
 
 const Header = () => {

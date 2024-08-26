@@ -1,6 +1,6 @@
 import { useCandles } from 'api/useCandles';
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'wouter';
 import { useMeasure } from '@uidotdev/usehooks';
 import { use24HourStats } from '../api';
 import CandleChart from './CandleChart';
@@ -22,7 +22,7 @@ const ProductDetail = () => {
 	const height = _height || 0;
 	const [innerRef, { height: _innerHeight }] = useMeasure<HTMLDivElement>();
 	const innerHeight = _innerHeight || 0;
-	
+
 	const { productId } = useParams();
 	const [granularity, setGranularity] = useState(900);
 	const { data: _candles } = useCandles([productId || '']);

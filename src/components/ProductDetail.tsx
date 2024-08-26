@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'wouter';
 import { useMediaQuery } from '@uidotdev/usehooks';
 import History from './History';
 import TradingViewWidget from './TradingViewWidget';
