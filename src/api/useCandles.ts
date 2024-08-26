@@ -1,9 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { subDays } from 'date-fns';
 import _ from 'lodash';
 import pThrottle from 'p-throttle';
 import { PRODUCT_URL } from './constants';
-import { CandleGranularity, DailyCandles, RawCandle } from './types/product';
+import {
+	CandleGranularity,
+	type DailyCandles,
+	type RawCandle,
+} from './types/product';
 
 interface Params {
 	productId: string;
@@ -39,6 +42,9 @@ const throttle = pThrottle({
 	limit: 10,
 	interval: 1000,
 });
+
+const subDays = (date: Date, n: number) =>
+	new Date(date.setDate(date.getDate() - n));
 
 const getDailyCandles = async (productIds: string[]): Promise<DailyCandles> => {
 	const throttledFetch = throttle(async (productId: string) => {

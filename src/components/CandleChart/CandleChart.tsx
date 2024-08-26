@@ -1,11 +1,15 @@
-import { useTicker } from 'api';
-import { RawCandle } from 'api/types/product';
-import { format, fromUnixTime } from 'date-fns';
-import React, { useEffect, useState } from 'react';
 import { useMeasure } from '@uidotdev/usehooks';
+import { useTicker } from 'api';
+import type { RawCandle } from 'api/types/product';
+import React, { useEffect, useState } from 'react';
 import { clamp } from 'utils';
 import { Crosshair } from './Crosshair';
 import { VolumeBar } from './VolumeBar';
+
+const MMM = Intl.DateTimeFormat('en-US', { month: 'short' });
+const MMdd = Intl.DateTimeFormat('en-US', { month: '2-digit', day: '2-digit' });
+
+const fromUnixTime = (unixTime: number) => new Date(unixTime * 1000);
 
 interface CandleChartProps {
 	height: number;
@@ -19,7 +23,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 
 	const [ref, { width: _width }] = useMeasure<HTMLDivElement>();
 	const width = _width || 0;
-	
+
 	const [candleWidthMulti, setCandleWidthMulti] = useState(2);
 	const [mousePos] = useState<{ x: number; y: number } | undefined>(undefined);
 	const [height, setHeight] = useState(0);
@@ -152,7 +156,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 								x={getX(i * candleWidth) - 20}
 								y={getY(min) + 16}
 							>
-								{format(date, isMonthBoundary ? 'MMM' : 'MM/dd')}
+								{isMonthBoundary ? MMM.format(date) : MMdd.format(date)}
 							</text>
 						</>
 					)}
