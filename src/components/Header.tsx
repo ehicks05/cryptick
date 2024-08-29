@@ -26,12 +26,12 @@ const Header = () => {
 			<div className="flex gap-2 items-center">
 				<SocketStatus />
 				<Link to="/" title="Home">
-					<FaHome className="h-4 w-4 text-blue-300" />
+					<FaHome className="h-4 w-4 text-blue-600 dark:text-blue-300" />
 				</Link>
 			</div>
 			<button
 				type="button"
-				name="settings"
+				aria-label="settings"
 				onClick={() => setIsShowSettings(!isShowSettings)}
 			>
 				{isShowSettings ? <FaTimes /> : <FaBars />}

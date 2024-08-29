@@ -11,9 +11,9 @@ const BG_COLORS = {
 } as const;
 
 const BORDER_COLORS = {
-	POS: 'border-green-950',
-	NEG: 'border-red-950',
-	UND: 'border-neutral-800',
+	POS: 'border-green-200 dark:border-green-950',
+	NEG: 'border-red-200 dark:border-red-950',
+	UND: 'border-neutral-200 dark:border-neutral-800',
 } as const;
 
 interface Props {
