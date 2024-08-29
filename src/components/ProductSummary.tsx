@@ -1,7 +1,7 @@
+import { useThrottle } from '@uidotdev/usehooks';
 import { use24HourStats, useCurrencies, useProducts } from 'api';
 import { useTicker } from 'api';
 import type { Product } from 'api/types/product';
-import React from 'react';
 import { formatPercent, formatPrice } from 'utils';
 
 interface ProductSummaryProps {
@@ -52,7 +52,7 @@ interface PriceProps {
 
 const Price = ({ productId }: PriceProps) => {
 	const { prices } = useTicker();
-	const price = prices[productId]?.price;
+	const price = useThrottle(prices[productId]?.price, 500);
 
 	return (
 		<div className="flex gap-2 mb-4">

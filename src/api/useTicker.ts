@@ -1,15 +1,11 @@
 import { keyBy } from 'lodash-es';
 import useWebSocket from 'react-use-websocket';
 
-import {
-	useLocalStorage,
-	useThrottle,
-	useVisibilityChange,
-} from '@uidotdev/usehooks';
+import { useLocalStorage, useVisibilityChange } from '@uidotdev/usehooks';
 import type { TickerMessage, WebSocketTickerMessage } from 'api/types/ws-types';
 import { useProductIds } from 'hooks/useProductIds';
 import { buildSubscribeMessage, formatPrice, formatTime } from '../utils';
-import { WS_URL } from './constants';
+import { SOCKET_STATUSES, WS_URL } from './constants';
 import { use24HourStats } from './use24HourStats';
 import { useProducts } from './useProducts';
 
@@ -23,7 +19,7 @@ export const useTicker = () => {
 	);
 	const isVisible = useVisibilityChange();
 
-	const { sendJsonMessage } = useWebSocket(
+	const { sendJsonMessage, readyState } = useWebSocket(
 		WS_URL,
 		{
 			onOpen: () => {
@@ -77,23 +73,21 @@ export const useTicker = () => {
 		});
 	};
 
-	const prices = useThrottle(
-		keyBy(
-			productIds.map((productId) => {
-				const priceFromTicker = ticker[productId]?.[0].price;
-				const priceFromStats = formatPrice(
-					stats?.[productId]?.last || 0,
-					products?.[productId]?.minimumQuoteDigits || 0,
-				);
-				const price = priceFromTicker ?? priceFromStats;
-				return { productId, price };
-			}),
-			(o) => o.productId,
-		),
-		1000,
+	const prices = keyBy(
+		productIds.map((productId) => {
+			const priceFromTicker = ticker[productId]?.[0].price;
+			const priceFromStats = formatPrice(
+				stats?.[productId]?.last || 0,
+				products?.[productId]?.minimumQuoteDigits || 0,
+			);
+			const price = priceFromTicker ?? priceFromStats;
+			return { productId, price };
+		}),
+		(o) => o.productId,
 	);
 
 	return {
+		socketStatus: SOCKET_STATUSES[readyState],
 		ticker,
 		prices,
 		sendJsonMessage,

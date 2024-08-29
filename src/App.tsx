@@ -1,11 +1,9 @@
 import ProductDetailOld from 'components/ProductDetailOld';
-import { useTitle } from 'hooks';
 import useStore from 'store';
 import { Route, Switch } from 'wouter';
 import { Footer, Header, ProductDetail, Products, Settings } from './components';
 
 function App() {
-	useTitle();
 	const isShowSettings = useStore((state) => state.isShowSettings);
 
 	return (
