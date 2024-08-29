@@ -15,23 +15,22 @@ interface Params {
 	end?: string;
 }
 
-export const getCandlesForProduct = async ({
+const getCandlesForProduct = async ({
 	productId,
 	granularity,
 	start,
 	end,
 }: Params): Promise<RawCandle[]> => {
+	const url = `${PRODUCT_URL}/${productId}/candles`;
+	const query = new URLSearchParams({
+		granularity: String(granularity),
+		start: start || '',
+		end: end || '',
+	});
+
 	try {
-		const url = `${PRODUCT_URL}/${productId}/candles`;
-
-		const query = new URLSearchParams({
-			granularity: String(granularity),
-			start: start || '',
-			end: end || '',
-		});
-
-		const input = `${url}?${query}`;
-		return await (await fetch(input)).json();
+		const response = await fetch(`${url}?${query}`);
+		return response.json();
 	} catch (err) {
 		console.log(err);
 		return [];
@@ -61,11 +60,10 @@ const getDailyCandles = async (productIds: string[]): Promise<DailyCandles> => {
 	return keyBy(data, 'productId');
 };
 
-export const useCandles = (productIds: string[]) => {
-	return useQuery({
+export const useCandles = (productIds: string[]) =>
+	useQuery({
 		queryKey: ['candles', productIds],
 		queryFn: () => getDailyCandles(productIds),
 		staleTime: 1000 * 60,
 		refetchInterval: 1000 * 60,
 	});
-};

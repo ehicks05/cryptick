@@ -31,8 +31,6 @@ export const useTicker = () => {
 			retryOnError: true,
 			reconnectAttempts: 50,
 			reconnectInterval: 2000,
-			share: true,
-			filter: () => false,
 		},
 		isVisible,
 	);

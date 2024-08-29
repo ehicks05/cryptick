@@ -28,11 +28,10 @@ const get24HourStats = async (): Promise<Record<string, AnnotatedProductStats>> 
 	);
 };
 
-export const use24HourStats = () => {
-	return useQuery({
+export const use24HourStats = () =>
+	useQuery({
 		queryKey: ['24HourStats'],
 		queryFn: get24HourStats,
 		staleTime: 1000 * 60,
 		refetchInterval: 1000 * 60,
 	});
-};

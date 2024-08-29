@@ -1,7 +1,8 @@
 import { useCurrencies, useProducts, useTicker } from 'api';
+import type { Currency } from 'api/types/currency';
+import type { Product } from 'api/types/product';
 import { useProductIds } from 'hooks';
-import { chain } from 'lodash-es';
-import React, { type ReactNode, useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { buildSubscribeMessage } from 'utils';
 
 const gridClasses =
@@ -30,23 +31,34 @@ const Button = ({ children, selected, onClick }: ButtonProps) => {
 	);
 };
 
+const uniq = (list: string[]) => [...new Set(list)];
+
+const getQuoteCurrencies = (
+	products: Record<string, Product>,
+	currencies: Record<string, Currency>,
+) => {
+	const quoteCurrencies = Object.values(products)
+		.map((product) => product.quote_currency)
+		.toSorted(
+			(o1: string, o2: string) =>
+				(currencies[o2].details.sort_order || 0) -
+				(currencies[o1].details.sort_order || 0),
+		);
+
+	return uniq(quoteCurrencies);
+};
+
 const Settings = () => {
 	const { sendJsonMessage } = useTicker();
-	const { data: currencies } = useCurrencies();
-	const { data: products } = useProducts();
+	const { data: currencies = {} } = useCurrencies();
+	const { data: products = {} } = useProducts();
 	const [productIds, setProductIds] = useProductIds();
 
-	const quoteCurrencies = chain(Object.values(products || {}))
-		.map((product) => product.quote_currency)
-		.uniq()
-		.sortBy((c) => currencies?.[c].details.sort_order)
-		.value();
+	const quoteCurrencies = getQuoteCurrencies(products, currencies);
 
 	const [selectedQuoteCurrency, setSelectedQuoteCurrency] = useState(
 		quoteCurrencies.find((qc) => qc === 'USD') || quoteCurrencies[0],
 	);
-
-	if (!currencies || !products) return 'loading';
 
 	const toggleProduct = (productId: string) => {
 		const isAdding = !productIds.includes(productId);
