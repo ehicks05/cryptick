@@ -1,5 +1,5 @@
 import { useDocumentTitle, useVisibilityChange } from '@uidotdev/usehooks';
-import { useTicker } from 'api';
+import { useTicker } from '../api';
 import { useProductIds } from './useProductIds';
 
 export const useTitle = () => {

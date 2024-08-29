@@ -1,7 +1,7 @@
-import { useTicker } from 'api';
-import { useTitle } from 'hooks';
 import { FaBars, FaHome, FaTimes } from 'react-icons/fa';
 import { Link } from 'wouter';
+import { useTicker } from '../api';
+import { useTitle } from '../hooks';
 import useStore from '../store';
 
 const SocketStatus = () => {

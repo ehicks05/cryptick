@@ -1,6 +1,6 @@
-import { use24HourStats } from 'api';
 import React, { type ReactNode } from 'react';
 import { Link } from 'wouter';
+import { use24HourStats } from '../api';
 import Chart from './Chart';
 import ProductSummary from './ProductSummary';
 

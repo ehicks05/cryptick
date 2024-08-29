@@ -1,8 +1,7 @@
 import { useMeasure } from '@uidotdev/usehooks';
-import { useCandles } from 'api/useCandles';
 import React, { useState } from 'react';
 import { useParams } from 'wouter';
-import { use24HourStats } from '../api';
+import { use24HourStats, useCandles } from '../api';
 import CandleChart from './CandleChart';
 import History from './History';
 import ProductSummary from './ProductSummary';
@@ -26,7 +25,7 @@ const ProductDetail = () => {
 	const { productId } = useParams();
 	const [granularity, setGranularity] = useState(900);
 	const { data: _candles } = useCandles([productId || '']);
-	const candles = _candles?.[productId || ''].candles;
+	const candles = _candles?.[productId || ''];
 
 	const { data: stats } = use24HourStats();
 	const productStats = stats?.[productId || ''];

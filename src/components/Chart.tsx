@@ -1,5 +1,5 @@
-import { use24HourStats, useCandles } from 'api';
 import React from 'react';
+import { use24HourStats, useCandles } from '../api';
 
 const STROKE = {
 	POS: 'stroke-green-500 dark:stroke-green-500',
@@ -19,7 +19,7 @@ const Chart = ({ productId }: ChartProps) => {
 	const colorKey = isPositive === undefined ? 'UND' : isPositive ? 'POS' : 'NEG';
 
 	const candlesQuery = useCandles([productId]);
-	const candles = candlesQuery.data?.[productId].candles || [];
+	const candles = candlesQuery.data?.[productId] || [];
 
 	const widthMulti = 4;
 	const width = candles.length * widthMulti;

@@ -1,8 +1,7 @@
 import { useThrottle } from '@uidotdev/usehooks';
-import { use24HourStats, useCurrencies, useProducts } from 'api';
-import { useTicker } from 'api';
-import type { Product } from 'api/types/product';
-import { formatPercent, formatPrice } from 'utils';
+import { use24HourStats, useCurrencies, useProducts, useTicker } from '../api';
+import type { Product } from '../api/types/product';
+import { formatPercent, formatPrice } from '../utils';
 
 interface ProductSummaryProps {
 	productId: string;

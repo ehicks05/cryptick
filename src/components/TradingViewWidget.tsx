@@ -1,5 +1,5 @@
 // adapted from https://www.tradingview.com/widget/advanced-chart/
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 const container_id = 'tradingview_84dfe';
 let tvScriptLoadingPromise: Promise<any>;

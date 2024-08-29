@@ -1,8 +1,8 @@
 import { useMeasure } from '@uidotdev/usehooks';
-import { useTicker } from 'api';
-import type { Candle } from 'api/types/product';
 import React, { useEffect, useState } from 'react';
-import { clamp } from 'utils';
+import { useTicker } from '../../api';
+import type { Candle } from '../../api/types/product';
+import { clamp } from '../../utils';
 import { Crosshair } from './Crosshair';
 import { VolumeBar } from './VolumeBar';
 

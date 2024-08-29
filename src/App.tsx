@@ -1,7 +1,7 @@
-import ProductDetailOld from 'components/ProductDetailOld';
-import useStore from 'store';
 import { Route, Switch } from 'wouter';
 import { Footer, Header, ProductDetail, Products, Settings } from './components';
+import ProductDetailOld from './components/ProductDetailOld';
+import useStore from './store';
 
 function App() {
 	const isShowSettings = useStore((state) => state.isShowSettings);

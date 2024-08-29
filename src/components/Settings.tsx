@@ -1,9 +1,9 @@
-import { useCurrencies, useProducts, useTicker } from 'api';
-import type { Currency } from 'api/types/currency';
-import type { Product } from 'api/types/product';
-import { useProductIds } from 'hooks';
 import { type ReactNode, useState } from 'react';
-import { buildSubscribeMessage } from 'utils';
+import { useCurrencies, useProducts, useTicker } from '../api';
+import type { Currency } from '../api/types/currency';
+import type { Product } from '../api/types/product';
+import { useProductIds } from '../hooks';
+import { buildSubscribeMessage } from '../utils';
 
 const gridClasses =
 	'grid grid-cols-4 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-1';

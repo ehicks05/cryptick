@@ -16,9 +16,9 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useWindowSize } from '@uidotdev/usehooks';
-import { useProductIds } from 'hooks/useProductIds';
 import React from 'react';
 import { MdDragIndicator } from 'react-icons/md';
+import { useProductIds } from '../hooks/useProductIds';
 import Product from './Product';
 
 const Products = () => {
