@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { keyBy } from 'lodash-es';
 import pThrottle from 'p-throttle';
 import { PRODUCT_URL } from './constants';
 import { type Candle, CandleGranularity, type RawCandle } from './types/product';
@@ -50,6 +49,15 @@ const throttle = pThrottle({
 const subDays = (date: Date, n: number) =>
 	new Date(date.setDate(date.getDate() - n));
 
+const keyByProductId = (data: { productId: string; candles: Candle[] }[]) =>
+	data.reduce(
+		(agg, curr) => {
+			agg[curr.productId] = curr.candles;
+			return agg;
+		},
+		{} as Record<string, Candle[]>,
+	);
+
 const getDailyCandles = async (productIds: string[]) => {
 	const throttledFetch = throttle(async (productId: string) => {
 		const candles = await getCandlesForProduct({
@@ -62,7 +70,8 @@ const getDailyCandles = async (productIds: string[]) => {
 	});
 
 	const data = (await Promise.all(productIds.map(throttledFetch))).flat();
-	return keyBy(data, 'productId');
+
+	return keyByProductId(data);
 };
 
 export const useCandles = (productIds: string[]) =>

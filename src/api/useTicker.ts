@@ -1,13 +1,20 @@
-import { keyBy } from 'lodash-es';
-import useWebSocket from 'react-use-websocket';
-
 import { useLocalStorage, useVisibilityChange } from '@uidotdev/usehooks';
 import type { TickerMessage, WebSocketTickerMessage } from 'api/types/ws-types';
-import { useProductIds } from 'hooks/useProductIds';
+import useWebSocket from 'react-use-websocket';
+import { useProductIds } from '../hooks/useProductIds';
 import { buildSubscribeMessage, formatPrice, formatTime } from '../utils';
 import { SOCKET_STATUSES, WS_URL } from './constants';
 import { use24HourStats } from './use24HourStats';
 import { useProducts } from './useProducts';
+
+const keyByProductId = (data: { productId: string; price: string }[]) =>
+	data.reduce(
+		(agg, curr) => {
+			agg[curr.productId] = curr;
+			return agg;
+		},
+		{} as Record<string, { productId: string; price: string }>,
+	);
 
 export const useTicker = () => {
 	const [productIds] = useProductIds();
@@ -71,7 +78,7 @@ export const useTicker = () => {
 		});
 	};
 
-	const prices = keyBy(
+	const prices = keyByProductId(
 		productIds.map((productId) => {
 			const priceFromTicker = ticker[productId]?.[0].price;
 			const priceFromStats = formatPrice(
@@ -81,7 +88,6 @@ export const useTicker = () => {
 			const price = priceFromTicker ?? priceFromStats;
 			return { productId, price };
 		}),
-		(o) => o.productId,
 	);
 
 	return {
