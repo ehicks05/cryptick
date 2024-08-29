@@ -2,11 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { keyBy } from 'lodash-es';
 import pThrottle from 'p-throttle';
 import { PRODUCT_URL } from './constants';
-import {
-	CandleGranularity,
-	type DailyCandles,
-	type RawCandle,
-} from './types/product';
+import { type Candle, CandleGranularity, type RawCandle } from './types/product';
 
 interface Params {
 	productId: string;
@@ -20,7 +16,7 @@ const getCandlesForProduct = async ({
 	granularity,
 	start,
 	end,
-}: Params): Promise<RawCandle[]> => {
+}: Params): Promise<Candle[]> => {
 	const url = `${PRODUCT_URL}/${productId}/candles`;
 	const query = new URLSearchParams({
 		granularity: String(granularity),
@@ -30,7 +26,16 @@ const getCandlesForProduct = async ({
 
 	try {
 		const response = await fetch(`${url}?${query}`);
-		return response.json();
+		const json: RawCandle[] = await response.json();
+		return json.map((candle) => ({
+			productId,
+			timestamp: candle[0] * 1000,
+			low: candle[1],
+			high: candle[2],
+			open: candle[3],
+			close: candle[4],
+			volume: candle[5],
+		}));
 	} catch (err) {
 		console.log(err);
 		return [];
@@ -45,7 +50,7 @@ const throttle = pThrottle({
 const subDays = (date: Date, n: number) =>
 	new Date(date.setDate(date.getDate() - n));
 
-const getDailyCandles = async (productIds: string[]): Promise<DailyCandles> => {
+const getDailyCandles = async (productIds: string[]) => {
 	const throttledFetch = throttle(async (productId: string) => {
 		const candles = await getCandlesForProduct({
 			productId,

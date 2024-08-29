@@ -1,6 +1,6 @@
 import { useMeasure } from '@uidotdev/usehooks';
 import { useTicker } from 'api';
-import type { RawCandle } from 'api/types/product';
+import type { Candle } from 'api/types/product';
 import React, { useEffect, useState } from 'react';
 import { clamp } from 'utils';
 import { Crosshair } from './Crosshair';
@@ -9,11 +9,9 @@ import { VolumeBar } from './VolumeBar';
 const MMM = Intl.DateTimeFormat('en-US', { month: 'short' });
 const MMdd = Intl.DateTimeFormat('en-US', { month: '2-digit', day: '2-digit' });
 
-const fromUnixTime = (unixTime: number) => new Date(unixTime * 1000);
-
 interface CandleChartProps {
 	height: number;
-	candles: RawCandle[];
+	candles: Candle[];
 	productId: string;
 }
 
@@ -42,17 +40,17 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 	const viewableCandles = candles.slice(0, viewableCandleCount);
 
 	// set current candle's current price
-	if (viewableCandles?.[0]?.[4] && price) {
+	if (viewableCandles?.[0]?.close && price) {
 		const candle = viewableCandles[0];
 		const currentPrice = Number(price.replace(/,/g, ''));
-		candle[4] = currentPrice;
-		if (currentPrice < candle[1]) candle[1] = currentPrice;
-		if (currentPrice > candle[2]) candle[2] = currentPrice;
+		candle.close = currentPrice;
+		if (currentPrice < candle.low) candle.low = currentPrice;
+		if (currentPrice > candle.high) candle.high = currentPrice;
 	}
 
-	const min = Math.min(...viewableCandles.map((candle) => candle[1]));
-	const max = Math.max(...viewableCandles.map((candle) => candle[2]));
-	const maxVolume = Math.max(...viewableCandles.map((candle) => candle[5]));
+	const min = Math.min(...viewableCandles.map((candle) => candle.low));
+	const max = Math.max(...viewableCandles.map((candle) => candle.high));
+	const maxVolume = Math.max(...viewableCandles.map((candle) => candle.volume));
 
 	const handleWheel = (e: WheelEvent) => {
 		const newMulti = candleWidthMulti * (e.deltaY < 0 ? 1.1 : 0.9);
@@ -117,21 +115,21 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 		candleWidth < 6 ? 8 : candleWidth < 12 ? 6 : candleWidth < 24 ? 4 : 3;
 
 	const candleEls = viewableCandles.map(
-		([datetime, low, high, open, close, vol], _i) => {
+		({ timestamp, low, high, open, close, volume }, _i) => {
 			// if (i === 0) return null;
 			const i = _i + 1;
-			const date = fromUnixTime(datetime);
+			const date = new Date(timestamp);
 			const prevCandle =
 				_i < viewableCandles.length - 1 ? viewableCandles[_i + 1] : undefined;
-			const prevCandleDate = prevCandle && fromUnixTime(prevCandle[0]);
+			const prevCandleDate = prevCandle && new Date(prevCandle.timestamp);
 			const isDayBoundary =
 				prevCandleDate && date.getDate() !== prevCandleDate.getDate();
 			const isMonthBoundary =
 				prevCandleDate && date.getMonth() !== prevCandleDate.getMonth();
-			const volumeBarHeight = ((vol / maxVolume) * height) / 4;
+			const volumeBarHeight = ((volume / maxVolume) * height) / 4;
 
 			return (
-				<React.Fragment key={datetime}>
+				<React.Fragment key={timestamp}>
 					<VolumeBar
 						getX={getX}
 						i={i}
@@ -139,7 +137,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 						rectXDivisor={rectXDivisor}
 						height={height}
 						volumeBarHeight={volumeBarHeight}
-						volume={vol}
+						volume={volume}
 					/>
 					{isDayBoundary && (
 						<>

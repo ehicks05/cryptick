@@ -25,15 +25,15 @@ const Chart = ({ productId }: ChartProps) => {
 	const width = candles.length * widthMulti;
 	const height = 128;
 
-	const min = Math.min(...candles.map((c) => c[4]));
-	const max = Math.max(...candles.map((c) => c[4]));
+	const min = Math.min(...candles.map((c) => c.close));
+	const max = Math.max(...candles.map((c) => c.close));
 
 	const getY = (y: number) => {
 		return height - ((y - min) / (max - min)) * height;
 	};
 
 	const points = candles
-		.map((candle, i) => `${width - i * widthMulti}, ${getY(candle[4])}`)
+		.map((candle, i) => `${width - i * widthMulti}, ${getY(candle.close)}`)
 		.join(' ');
 
 	return (
