@@ -13,7 +13,7 @@ const Link = ({ href, children }: LinkProps) => {
 	return (
 		<a
 			href={href}
-			className="text-blue-400 hover:underline hover:text-blue-600 visited:text-purple-600"
+			className="text-blue-300 hover:underline hover:text-blue-400 visited:text-purple-400"
 			target="_blank"
 			rel="noreferrer"
 		>

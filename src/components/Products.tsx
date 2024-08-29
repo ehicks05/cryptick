@@ -86,9 +86,8 @@ const SortableItem = ({ id }: SortableItemProps) => {
 
 	const handle = (
 		<MdDragIndicator
-			className="text-neutral-500 dark:text-neutral-400 focus:outline-none"
-			style={{ touchAction: 'none' }}
-			size={20}
+			className="text-neutral-500 dark:text-neutral-400 focus:outline-none touch-none p-1"
+			size={32}
 			{...attributes}
 			{...listeners}
 		/>
