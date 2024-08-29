@@ -2,7 +2,7 @@ import { useMediaQuery } from '@uidotdev/usehooks';
 import React from 'react';
 import { useParams } from 'wouter';
 import History from './History';
-import TradingViewWidget from './TradingViewWidget';
+import { TVWidget } from './TVWidget';
 
 const ProductDetail = () => {
 	const { productId } = useParams();
@@ -16,7 +16,7 @@ const ProductDetail = () => {
 	return (
 		<div className="h-full flex-grow flex flex-col md:flex-row gap-4 p-4">
 			<div className="flex flex-grow">
-				<TradingViewWidget symbol={symbol} theme={theme} />
+				<TVWidget symbol={symbol} theme={theme} />
 			</div>
 			<div className="hidden md:block overflow-y-hidden h-full">
 				<History productId={productId} />
