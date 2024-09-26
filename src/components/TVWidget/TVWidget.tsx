@@ -52,7 +52,8 @@ export default function TVWidget({ symbol, theme }: Props) {
 					disabled_features: ['header_chart_type', 'header_symbol_search'],
 					save_image: false,
 				};
-				new (window.TradingView as any).widget(options);
+				// @ts-expect-error - we don't have a type
+				new window.TradingView.widget(options);
 			}
 		}
 	}, [symbol, theme]);
