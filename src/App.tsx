@@ -7,7 +7,7 @@ function App() {
 	const isShowSettings = useStore((state) => state.isShowSettings);
 
 	return (
-		<div className="flex flex-col h-screen">
+		<div className="flex flex-col h-dvh">
 			<Header />
 			{isShowSettings && <Settings />}
 			<div className="flex-grow flex flex-col h-full overflow-y-auto">
