@@ -37,21 +37,20 @@ const Chart = ({ productId }: ChartProps) => {
 		.join(' ');
 
 	return (
-		<div className={'h-32'}>
-			<div className={'w-full h-full'}>
+		<div className="h-32">
+			<div className="w-full h-full">
 				<svg
 					width="full"
 					height="full"
-					className={`${STROKE[colorKey]} hover:brightness-90 hover:dark:brightness-110`}
+					className="group"
 					viewBox={`0 0 ${width} ${height}`}
 					preserveAspectRatio="none"
 				>
 					<title>Chart</title>
 					<polyline
 						fill="none"
-						// className={isPositive ? STROKE.POSITIVE : STROKE.NEGATIVE}
 						strokeLinejoin="round"
-						strokeWidth="1.5"
+						className={`${STROKE[colorKey]} stroke-[1.5] group-hover:stroke-2 transition-all`}
 						points={points}
 					/>
 				</svg>
