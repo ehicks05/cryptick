@@ -36,7 +36,7 @@ const Name = ({ product }: NameProps) => {
 		: undefined;
 
 	return (
-		<div className="text-gray-700 dark:text-gray-400">
+		<div className="text-neutral-700 dark:text-neutral-400">
 			<div className="flex gap-2 text-xl items-baseline">
 				{product.display_name}
 				<span className="text-xs">{currency?.name}</span>
@@ -54,7 +54,7 @@ const Price = ({ productId }: PriceProps) => {
 	const price = useThrottle(prices[productId]?.price, 500);
 
 	return (
-		<div className="flex gap-2 mb-4">
+		<div className="flex gap-2 mb-4 font-mono">
 			<span className="text-3xl font-semibold" id={`${productId}Price`}>
 				{price}
 			</span>
@@ -74,7 +74,7 @@ const Stats = ({ product: { id, minimumQuoteDigits } }: StatsProps) => {
 	const color = isPositive ? 'text-green-500' : 'text-red-500';
 
 	return (
-		<div className="flex flex-col">
+		<div className="flex flex-col font-mono">
 			<span className="text-xs">
 				{low && formatPrice(low, minimumQuoteDigits)}
 				{' - '}

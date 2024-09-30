@@ -18,11 +18,11 @@ const Button = ({ children, selected, onClick }: ButtonProps) => {
 	return (
 		<button
 			type="button"
-			className={`whitespace-nowrap px-2 py-1 rounded cursor-pointer 
+			className={`font-mono whitespace-nowrap px-2 py-1 rounded cursor-pointer 
       ${
 				selected
 					? 'bg-green-500 text-gray-50'
-					: 'text-gray-800 bg-gray-200 dark:text-gray-200 dark:bg-gray-800'
+					: 'text-neutral-800 bg-neutral-200 dark:text-neutral-200 dark:bg-neutral-800'
 			}`}
 			onClick={onClick}
 		>
