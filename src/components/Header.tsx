@@ -1,5 +1,6 @@
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { Link } from 'wouter';
+import { APP_NAME } from '../constants';
 import { useTitle } from '../hooks';
 import useStore from '../store';
 
@@ -18,7 +19,7 @@ const Header = () => {
 						<div className="px-2 py-[3.5px] rounded bg-neutral-600 text-neutral-200">
 							ct
 						</div>
-						<div className="hidden sm:block">crypto ticker</div>
+						<div className="hidden sm:block">{APP_NAME}</div>
 					</div>
 				</Link>
 			</div>

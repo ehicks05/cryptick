@@ -1,6 +1,7 @@
 import { useLocalStorage, useVisibilityChange } from '@uidotdev/usehooks';
 import type { TickerMessage, WebSocketTickerMessage } from 'api/types/ws-types';
 import useWebSocket from 'react-use-websocket';
+import { APP_NAME } from '../constants';
 import { useProductIds } from '../hooks/useProductIds';
 import { buildSubscribeMessage, formatPrice, formatTime } from '../utils';
 import { SOCKET_STATUSES, WS_URL } from './constants';
@@ -21,7 +22,7 @@ export const useTicker = () => {
 	const { data: products } = useProducts();
 	const { data: stats } = use24HourStats();
 	const [ticker, setTicker] = useLocalStorage<Record<string, TickerMessage[]>>(
-		'crypto-ticker-ticker',
+		`${APP_NAME}-ticker`,
 		{},
 	);
 	const isVisible = useVisibilityChange();

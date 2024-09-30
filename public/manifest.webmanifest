@@ -1,7 +1,7 @@
 {
-	"name": "Crypto Ticker",
-	"short_name": "Crypto Ticker",
-	"description": "A crypto dashboard",
+	"name": "cryptick",
+	"short_name": "cryptick",
+	"description": "A crypto chart dashboard",
 	"start_url": "/",
 	"lang": "en-US",
 	"display": "standalone",
