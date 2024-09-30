@@ -4,6 +4,7 @@ import type { Currency } from '../api/types/currency';
 import type { Product } from '../api/types/product';
 import { useProductIds } from '../hooks';
 import { buildSubscribeMessage } from '../utils';
+import { ChartHeightPicker } from './ChartHeightPicker';
 
 const gridClasses =
 	'grid grid-cols-4 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-1';
@@ -74,6 +75,7 @@ const Settings = () => {
 
 	return (
 		<div className="w-full max-w-screen-xl m-auto p-4 h-full max-h-full overflow-y-auto">
+			<ChartHeightPicker />
 			<div className="mt-4">Quote Currency: </div>
 			<div className={gridClasses}>
 				{quoteCurrencies.map((quoteCurrency) => (

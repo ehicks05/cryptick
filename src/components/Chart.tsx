@@ -1,3 +1,4 @@
+import { useChartHeight } from 'hooks/useChartHeight';
 import React from 'react';
 import { use24HourStats, useCandles } from '../api';
 
@@ -12,6 +13,7 @@ interface ChartProps {
 }
 
 const Chart = ({ productId }: ChartProps) => {
+	const [chartHeight] = useChartHeight();
 	const { data } = use24HourStats();
 	const productStats = data?.[productId];
 
@@ -37,7 +39,7 @@ const Chart = ({ productId }: ChartProps) => {
 		.join(' ');
 
 	return (
-		<div className="h-32">
+		<div className={chartHeight}>
 			<div className="w-full h-full">
 				<svg
 					width="full"
