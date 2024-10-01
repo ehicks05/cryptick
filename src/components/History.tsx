@@ -84,7 +84,7 @@ const History = ({ productId }: { productId: string }) => {
 						<TD className="text-right">Time</TD>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody className="font-mono">
 					{throttledTicker.map(({ sequence, time, side, price, last_size }) => {
 						const style = {
 							backgroundColor: `rgba(${
