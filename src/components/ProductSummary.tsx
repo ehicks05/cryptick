@@ -70,16 +70,19 @@ const Stats = ({ product: { id, minimumQuoteDigits } }: StatsProps) => {
 	const { data: stats } = use24HourStats();
 	const productStats = stats?.[id];
 
-	const { high, low, isPositive, percentChange } = productStats || {};
+	const { high = 0, low = 0, isPositive, percentChange } = productStats || {};
 	const color = isPositive ? 'text-green-500' : 'text-red-500';
+
+	const _low = formatPrice(low, minimumQuoteDigits);
+	const _high = formatPrice(high, minimumQuoteDigits);
+	const range =
+		low > 100 && high > 100
+			? `${_low.split('.')[0]} -  ${_high.split('.')[0]}`
+			: `${_low} - ${_high}`;
 
 	return (
 		<div className="flex flex-col font-mono">
-			<span className="text-xs">
-				{low && formatPrice(low, minimumQuoteDigits)}
-				{' - '}
-				{high && formatPrice(high, minimumQuoteDigits)}
-			</span>
+			<span className="text-xs">{range}</span>
 			<span className={`whitespace-nowrap text-xs ${color}`}>
 				{percentChange && formatPercent(percentChange)}
 			</span>
