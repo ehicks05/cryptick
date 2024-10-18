@@ -46,7 +46,9 @@ const Chart = ({ productId }: ChartProps) => {
 	};
 
 	const getY = (y: number) => {
-		const fraction = height - ((y - min) / (max - min)) * height;
+		const range = max - min;
+		const delta = y - min;
+		const fraction = height - (delta / range) * height;
 		return round(fraction, 3);
 	};
 
