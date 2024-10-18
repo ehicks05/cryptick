@@ -61,8 +61,8 @@ const Chart = ({ productId }: ChartProps) => {
 		<div className={chartHeight}>
 			<div className="w-full h-full">
 				<svg
-					width="full"
-					height="full"
+					width="100%"
+					height="100%"
 					className="group"
 					viewBox={`0 0 ${width} ${height}`}
 					preserveAspectRatio="none"
