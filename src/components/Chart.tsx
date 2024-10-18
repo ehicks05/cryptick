@@ -8,6 +8,12 @@ const STROKE = {
 	UND: 'stroke-neutral-500 dark:stroke-neutral-400',
 };
 
+const round = (n: number, places: number) => {
+	if (places < 0 || places % 1 !== 0) return n;
+	const multi = 10 ** places;
+	return Math.round(n * multi) / multi;
+};
+
 interface ChartProps {
 	productId: string;
 }
@@ -23,20 +29,31 @@ const Chart = ({ productId }: ChartProps) => {
 	const candlesQuery = useCandles([productId]);
 	const candles = candlesQuery.data?.[productId] || [];
 
-	const widthMulti = 4;
-	const width = candles.length * widthMulti;
+	const start = candles[candles.length - 1]?.timestamp || 0;
+	const end = candles[0]?.timestamp || 0;
+
 	const height = 128;
+	const width = 400;
 
 	const min = Math.min(...candles.map((c) => c.close));
 	const max = Math.max(...candles.map((c) => c.close));
 
-	const getY = (y: number) => {
-		return height - ((y - min) / (max - min)) * height;
+	const getX = (timestamp: number) => {
+		const range = end - start;
+		const delta = timestamp - start;
+		const fraction = (delta / range) * width;
+		return round(fraction, 3);
 	};
 
-	const points = candles
-		.map((candle, i) => `${width - i * widthMulti}, ${getY(candle.close)}`)
-		.join(' ');
+	const getY = (y: number) => {
+		const fraction = height - ((y - min) / (max - min)) * height;
+		return round(fraction, 3);
+	};
+
+	const _points = candles.map(
+		(candle) => `${getX(candle.timestamp)}, ${getY(candle.open)}`,
+	);
+	const points = _points.join(' ');
 
 	return (
 		<div className={chartHeight}>
