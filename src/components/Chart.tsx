@@ -29,8 +29,9 @@ const Chart = ({ productId }: ChartProps) => {
 	const candlesQuery = useCandles([productId]);
 	const candles = candlesQuery.data?.[productId] || [];
 
+	const step = (candles[0]?.timestamp || 0) - (candles[1]?.timestamp || 0);
 	const start = candles[candles.length - 1]?.timestamp || 0;
-	const end = candles[0]?.timestamp || 0;
+	const end = (candles[0]?.timestamp || 0) + step;
 
 	const height = 128;
 	const width = 400;
@@ -42,20 +43,27 @@ const Chart = ({ productId }: ChartProps) => {
 		const range = end - start;
 		const delta = timestamp - start;
 		const fraction = (delta / range) * width;
-		return round(fraction, 3);
+		return round(fraction, 4);
 	};
 
 	const getY = (y: number) => {
 		const range = max - min;
 		const delta = y - min;
 		const fraction = height - (delta / range) * height;
-		return round(fraction, 3);
+		return round(fraction, 4);
 	};
 
-	const _points = candles.map(
-		(candle) => `${getX(candle.timestamp)}, ${getY(candle.open)}`,
-	);
-	const points = _points.join(' ');
+	const points =
+		candles.length !== 0
+			? [
+					// manually insert a point for the closing price of the latest candle
+					`${getX(candles[0].timestamp + step)}, ${getY(candles[0].close)}`,
+					// use every candle's opening price
+					...candles.map(
+						(candle) => `${getX(candle.timestamp)}, ${getY(candle.open)}`,
+					),
+				]
+			: [];
 
 	return (
 		<div className={chartHeight}>
@@ -72,7 +80,7 @@ const Chart = ({ productId }: ChartProps) => {
 						fill="none"
 						strokeLinejoin="round"
 						className={`${STROKE[colorKey]} stroke-[1.5] group-hover:stroke-2 transition-all`}
-						points={points}
+						points={points.join(' ')}
 					/>
 				</svg>
 			</div>
