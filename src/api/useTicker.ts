@@ -1,4 +1,4 @@
-import { useLocalStorage, useVisibilityChange } from '@uidotdev/usehooks';
+import { useLocalStorage } from '@uidotdev/usehooks';
 import type { TickerMessage, WebSocketTickerMessage } from 'api/types/ws-types';
 import useWebSocket from 'react-use-websocket';
 import { APP_NAME } from '../constants';
@@ -25,23 +25,18 @@ export const useTicker = () => {
 		`${APP_NAME}-ticker`,
 		{},
 	);
-	const isVisible = useVisibilityChange();
 
-	const { sendJsonMessage, readyState } = useWebSocket(
-		WS_URL,
-		{
-			onOpen: () => {
-				sendJsonMessage(buildSubscribeMessage('subscribe', productIds));
-			},
-			onMessage: (event) => handleMessage(JSON.parse(event.data)),
-			onError: (event) => console.log(event),
-			shouldReconnect: () => true,
-			retryOnError: true,
-			reconnectAttempts: 50,
-			reconnectInterval: 2000,
+	const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
+		onOpen: () => {
+			sendJsonMessage(buildSubscribeMessage('subscribe', productIds));
 		},
-		isVisible,
-	);
+		onMessage: (event) => handleMessage(JSON.parse(event.data)),
+		onError: (event) => console.log(event),
+		shouldReconnect: () => true,
+		retryOnError: true,
+		reconnectAttempts: 50,
+		reconnectInterval: 2000,
+	});
 
 	const handleMessage = (message: WebSocketTickerMessage) => {
 		if (!products || Object.keys(products).length === 0) return;
