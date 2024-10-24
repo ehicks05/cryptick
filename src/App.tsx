@@ -1,10 +1,11 @@
 import { Route, Switch } from 'wouter';
+import { useShallow } from 'zustand/shallow';
 import { Footer, Header, ProductDetail, Products, Settings } from './components';
 import ProductDetailOld from './components/ProductDetailOld';
 import useStore from './store';
 
 function App() {
-	const isShowSettings = useStore((state) => state.isShowSettings);
+	const isShowSettings = useStore(useShallow((state) => state.isShowSettings));
 
 	return (
 		<div className="flex flex-col h-dvh">

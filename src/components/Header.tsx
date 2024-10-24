@@ -1,15 +1,15 @@
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { Link } from 'wouter';
+import { useShallow } from 'zustand/shallow';
 import { APP_NAME } from '../constants';
 import { useTitle } from '../hooks';
 import useStore from '../store';
 
 const Header = () => {
 	useTitle();
-	const [isShowSettings, setIsShowSettings] = useStore((state) => [
-		state.isShowSettings,
-		state.setIsShowSettings,
-	]);
+	const { isShowSettings, setIsShowSettings } = useStore(
+		useShallow((state) => state),
+	);
 
 	return (
 		<header className="flex p-4 justify-between text-neutral-600 dark:text-neutral-400">
