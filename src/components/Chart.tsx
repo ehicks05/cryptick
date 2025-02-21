@@ -72,9 +72,9 @@ const Chart = ({ productId }: ChartProps) => {
 					width="100%"
 					height="100%"
 					className="group"
-					// add 1 unit to top and bottom to prevent points on the edge from
-					// being clipped, potentially from the stroke width.
-					viewBox={`0 -1 ${width} ${height + 2}`}
+					// add 1 unit all around to prevent points on the edge from being
+					// clipped, potentially from the stroke width.
+					viewBox={`-1 -1 ${width + 2} ${height + 2}`}
 					preserveAspectRatio="none"
 				>
 					<title>Chart</title>
