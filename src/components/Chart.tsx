@@ -1,3 +1,4 @@
+import { useMeasure } from '@uidotdev/usehooks';
 import { useChartHeight } from 'hooks/useChartHeight';
 import React from 'react';
 import { use24HourStats, useCandles } from '../api';
@@ -14,11 +15,8 @@ const round = (n: number, places: number) => {
 	return Math.round(n * multi) / multi;
 };
 
-interface ChartProps {
-	productId: string;
-}
-
-const Chart = ({ productId }: ChartProps) => {
+const Chart = ({ productId }: { productId: string }) => {
+	const [ref, { height: containerHeight, width: containerWidth }] = useMeasure();
 	const [chartHeight] = useChartHeight();
 	const { data } = use24HourStats();
 	const productStats = data?.[productId];
@@ -33,8 +31,8 @@ const Chart = ({ productId }: ChartProps) => {
 	const start = candles[candles.length - 1]?.timestamp || 0;
 	const end = (candles[0]?.timestamp || 0) + step;
 
-	const height = 128;
-	const width = 400;
+	const height = containerHeight || 0;
+	const width = containerWidth || 0;
 
 	const min = Math.min(...candles.map((c) => c.close));
 	const max = Math.max(...candles.map((c) => c.close));
@@ -66,7 +64,7 @@ const Chart = ({ productId }: ChartProps) => {
 			: [];
 
 	return (
-		<div className={chartHeight}>
+		<div className={chartHeight} ref={ref}>
 			<div className="w-full h-full">
 				<svg
 					width="100%"
