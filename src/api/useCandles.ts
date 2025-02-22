@@ -63,7 +63,7 @@ const getDailyCandles = async (productIds: string[]) => {
 		const candles = await getCandlesForProduct({
 			productId,
 			granularity: CandleGranularity.FIFTEEN_MINUTES,
-			start: subDays(new Date(), 1).toISOString(),
+			start: subDays(new Date(), 2).toISOString(),
 			end: new Date().toISOString(),
 		});
 		return { productId, candles };
