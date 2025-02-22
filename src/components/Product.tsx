@@ -1,5 +1,4 @@
 import React, { type ReactNode } from 'react';
-import { Link } from 'wouter';
 import { use24HourStats } from '../api';
 import ProductSummary from './ProductSummary';
 import Chart from './SimpleChart/Chart';
@@ -35,9 +34,7 @@ const Product = ({ productId, handle }: Props) => {
 				<ProductSummary productId={productId} />
 				{handle}
 			</div>
-			<Link to={`/${productId}`}>
-				<Chart productId={productId} />
-			</Link>
+			<Chart productId={productId} />
 		</div>
 	);
 };
