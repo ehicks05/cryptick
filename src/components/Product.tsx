@@ -1,8 +1,8 @@
 import React, { type ReactNode } from 'react';
 import { Link } from 'wouter';
 import { use24HourStats } from '../api';
-import Chart from './Chart';
 import ProductSummary from './ProductSummary';
+import Chart from './SimpleChart/Chart';
 
 const BG_COLORS = {
 	POS: 'from-[rgba(60,120,60,.15)] via-[rgba(90,90,90,.10)] to-[rgba(90,90,90,.08)] dark:to-[rgba(90,90,90,.08)]',
