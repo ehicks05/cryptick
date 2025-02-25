@@ -28,9 +28,9 @@ const Product = ({ productId, handle }: Props) => {
 	const colorKey = isPositive === undefined ? 'UND' : isPositive ? 'POS' : 'NEG';
 	return (
 		<div
-			className={`p-4 rounded-lg shadow bg-gradient-to-t border ${BORDER_COLORS[colorKey]} ${BG_COLORS[colorKey]}`}
+			className={`rounded-lg shadow bg-gradient-to-t border ${BORDER_COLORS[colorKey]} ${BG_COLORS[colorKey]}`}
 		>
-			<div className="flex justify-between">
+			<div className="p-4 pb-0 flex justify-between">
 				<ProductSummary productId={productId} />
 				{handle}
 			</div>
