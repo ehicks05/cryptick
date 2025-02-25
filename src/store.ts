@@ -15,16 +15,16 @@ const useStore = create<AppState>((set) => ({
 	setIsShowSettings: (data) => set({ isShowSettings: data }),
 	ticker: {},
 	addTickerMessage: (data) =>
-		set((state) => ({
-			ticker: {
-				...state.ticker,
-				[data.productId]: [data, ...(state.ticker[data.productId] || [])].slice(
-					0,
-					64,
-				),
-			},
-		})),
+		set((state) => ({ ticker: mergeTicker(state.ticker, data) })),
 }));
+
+const mergeTicker = (
+	ticker: Record<string, TickerMessage[]>,
+	message: TickerMessage,
+) => ({
+	...ticker,
+	[message.productId]: [message, ...(ticker[message.productId] || [])].slice(0, 64),
+});
 
 export const usePrice = (productId: string) => {
 	const price = useStore((state) => state.ticker[productId]?.[0]?.price);
