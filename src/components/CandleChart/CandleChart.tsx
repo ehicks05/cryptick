@@ -1,6 +1,6 @@
 import { useMeasure } from '@uidotdev/usehooks';
 import React, { useEffect, useState } from 'react';
-import { useTicker } from '../../api';
+import { usePrice } from 'store';
 import type { Candle } from '../../api/types/product';
 import { clamp } from '../../utils';
 import { Crosshair } from './Crosshair';
@@ -16,8 +16,7 @@ interface CandleChartProps {
 }
 
 const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
-	const { prices } = useTicker();
-	const price = prices?.[productId].price;
+	const price = usePrice(productId);
 
 	const [ref, { width: _width }] = useMeasure<HTMLDivElement>();
 	const width = _width || 0;
