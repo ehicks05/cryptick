@@ -11,6 +11,7 @@ interface Props {
 }
 
 export default function TVWidget({ symbol, theme }: Props) {
+	// @ts-ignore
 	const onLoadScriptRef = useRef<(() => void) | null>();
 
 	useEffect(() => {
