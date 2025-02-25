@@ -1,6 +1,8 @@
 import { useThrottle } from '@uidotdev/usehooks';
+import { use24HourStats, useProducts } from 'api';
 import type { TickerMessage } from 'api/types/ws-types';
 import { useEffect, useState } from 'react';
+import { formatPrice } from 'utils';
 import { create } from 'zustand';
 
 export interface AppState {
@@ -28,7 +30,16 @@ const mergeTicker = (
 
 export const usePrice = (productId: string) => {
 	const price = useStore((state) => state.ticker[productId]?.[0]?.price);
-	return price;
+
+	// fall back to 24-hour stats in case ticker is empty
+	const { data: products } = useProducts();
+	const { data: stats } = use24HourStats();
+	const product = products?.[productId];
+	const last = formatPrice(
+		stats?.[productId]?.last || 0,
+		product?.minimumQuoteDigits || 0,
+	);
+	return price || last;
 };
 
 export const subscribeToPrice = (productId: string) => {
