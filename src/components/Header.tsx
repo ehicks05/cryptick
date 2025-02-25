@@ -1,7 +1,6 @@
-import { FaBars, FaTimes } from 'react-icons/fa';
 import { Link } from 'wouter';
 import { APP_NAME } from '../constants';
-import useStore from '../store';
+import { SettingsDialog } from './Settings';
 
 const Logo = () => {
 	return (
@@ -16,22 +15,11 @@ const Logo = () => {
 	);
 };
 
-const Header = () => {
-	const isShowSettings = useStore((state) => state.isShowSettings);
-	const setIsShowSettings = useStore((state) => state.setIsShowSettings);
-
-	return (
-		<header className="flex p-4 justify-between text-neutral-600 dark:text-neutral-400">
-			<Logo />
-			<button
-				type="button"
-				aria-label="settings"
-				onClick={() => setIsShowSettings(!isShowSettings)}
-			>
-				{isShowSettings ? <FaTimes /> : <FaBars />}
-			</button>
-		</header>
-	);
-};
+const Header = () => (
+	<header className="flex p-4 justify-between text-neutral-600 dark:text-neutral-400">
+		<Logo />
+		<SettingsDialog />
+	</header>
+);
 
 export default Header;

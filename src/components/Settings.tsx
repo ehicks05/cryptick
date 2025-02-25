@@ -1,4 +1,6 @@
+import { Dialog } from 'radix-ui';
 import { type ReactNode, useState } from 'react';
+import { FaBars } from 'react-icons/fa';
 import { useCurrencies, useProducts, useTicker } from '../api';
 import type { Currency } from '../api/types/currency';
 import type { Product } from '../api/types/product';
@@ -73,8 +75,10 @@ const Settings = () => {
 		);
 	};
 
+	const [baseCurrencyInput, setBaseCurrencyInput] = useState('');
+
 	return (
-		<div className="w-full max-w-screen-xl m-auto p-4 h-full max-h-full overflow-y-auto">
+		<div className="h-5/6 overflow-y-auto">
 			<ChartHeightPicker />
 			<div className="mt-4">Quote Currency: </div>
 			<div className={gridClasses}>
@@ -90,9 +94,20 @@ const Settings = () => {
 			</div>
 
 			<div className="mt-4">Base Currency: </div>
+			<input
+				type="text"
+				className="bg-neutral-800 p-1 m-1"
+				value={baseCurrencyInput}
+				onChange={(e) => setBaseCurrencyInput(e.target.value)}
+			/>
 			<div className={gridClasses}>
 				{Object.values(products)
 					.filter((product) => product.quote_currency === selectedQuoteCurrency)
+					.filter((product) =>
+						product.base_currency
+							.toLocaleLowerCase()
+							.includes(baseCurrencyInput.toLocaleLowerCase()),
+					)
 					.map((product) => (
 						<Button
 							key={product.id}
@@ -104,6 +119,28 @@ const Settings = () => {
 					))}
 			</div>
 		</div>
+	);
+};
+
+export const SettingsDialog = () => {
+	return (
+		<Dialog.Root modal>
+			<Dialog.Trigger>
+				<FaBars />
+			</Dialog.Trigger>
+			{/* <Dialog.Portal> */}
+			{/* <Dialog.Overlay /> */}
+			<Dialog.Content>
+				<div className="w-3/4 m-8 p-4 h-3/4 fixed top-0 left-0 rounded-xl bg-neutral-700">
+					<Dialog.Title>Title</Dialog.Title>
+					<Settings />
+					<Dialog.DialogClose>
+						<Button>Close</Button>
+					</Dialog.DialogClose>
+				</div>
+			</Dialog.Content>
+			{/* </Dialog.Portal> */}
+		</Dialog.Root>
 	);
 };
 
