@@ -27,9 +27,9 @@ const Chart = ({
 					width="100%"
 					height="100%"
 					className="group"
-					// add 1 unit all around to prevent points on the edge from being
+					// add space all around to prevent points on the edge from being
 					// clipped, potentially from the stroke width.
-					viewBox={`-1 -1 ${width + 2} ${height + 2}`}
+					viewBox={`-3 -3 ${width + 6} ${height + 6}`}
 					preserveAspectRatio="none"
 				>
 					<title>Chart</title>
