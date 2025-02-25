@@ -8,15 +8,8 @@ html {
 body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
-  color: #111;
-  background-color: #fefefe;
 }
-@media (prefers-color-scheme: dark) {
-  body {
-    color: #eee;
-    background-color: #060606;
-  }
-}
+
 #root {
   min-height: 100vh;
 }

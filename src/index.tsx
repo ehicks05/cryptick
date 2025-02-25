@@ -1,10 +1,12 @@
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { ThemeProvider } from 'components/ThemeProvider';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import './index.css';
+import './globals.css';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -27,7 +29,9 @@ root.render(
 			client={queryClient}
 			persistOptions={{ persister, maxAge: 1000 * 60 * 60 * 24 }}
 		>
-			<App />
+			<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+				<App />
+			</ThemeProvider>
 		</PersistQueryClientProvider>
 	</StrictMode>,
 );

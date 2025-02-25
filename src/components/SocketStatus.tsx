@@ -10,9 +10,6 @@ export const SocketStatus = () => {
 			<div className="flex items-center justify-center h-4 w-4">
 				<div className={`rounded-full h-2 w-2 ${socketStatus.class.bg}`} />
 			</div>
-			<div className={`hidden sm:block ${socketStatus.class.text}`}>
-				{socketStatus.name.toLocaleLowerCase()}
-			</div>
 		</div>
 	);
 };

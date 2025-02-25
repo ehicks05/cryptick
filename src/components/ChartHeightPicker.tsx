@@ -1,4 +1,5 @@
 import { useChartHeight } from 'hooks/useChartHeight';
+import { Button } from './ui/button';
 
 const OPTIONS = [
 	{ label: '0', value: 'h-0' },
@@ -7,6 +8,7 @@ const OPTIONS = [
 	{ label: '24', value: 'h-24' },
 	{ label: '28', value: 'h-28' },
 	{ label: '32', value: 'h-32' },
+	{ label: '40', value: 'h-40' },
 ];
 
 export const ChartHeightPicker = () => {
@@ -17,14 +19,15 @@ export const ChartHeightPicker = () => {
 			Chart Height:
 			<div className="flex gap-2">
 				{OPTIONS.map(({ label, value }) => (
-					<button
-						type="button"
+					<Button
+						variant="outline"
+						size="icon"
 						key={value}
 						className={value === chartHeight ? 'text-green-500' : ''}
 						onClick={() => setChartHeight(value)}
 					>
 						{label}
-					</button>
+					</Button>
 				))}
 			</div>
 		</div>
