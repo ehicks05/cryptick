@@ -1,6 +1,6 @@
 import { useThrottle } from '@uidotdev/usehooks';
 import { type ComponentPropsWithoutRef, useState } from 'react';
-import { useTicker } from '../api';
+import useStore from 'store';
 
 const normalize = (value: number) => {
 	if (value < 10) return 0.0;
@@ -57,14 +57,12 @@ const getFormat = (currency: string) => {
 };
 
 const History = ({ productId }: { productId: string }) => {
-	const { ticker } = useTicker();
-	const productTicker = ticker[productId] || [];
-	const throttledTicker = useThrottle(productTicker, 333);
+	const ticker = useStore((state) => state.ticker[productId]) || [];
+	const throttledTicker = useThrottle(ticker, 333);
 
 	const [sizeUnit, setSizeUnit] = useState('base');
 	const toggleSizeUnit = () => setSizeUnit(sizeUnit === 'base' ? 'quote' : 'base');
 
-	// if (!throttledTicker || throttledTicker.length === 0) return <div />;
 	const [base, quote] = productId.split('-');
 	const selectedSizeUnit = sizeUnit === 'base' ? base : quote;
 	const format = getFormat(selectedSizeUnit);

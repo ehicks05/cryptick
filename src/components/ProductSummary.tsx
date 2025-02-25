@@ -1,5 +1,5 @@
-import { useThrottle } from '@uidotdev/usehooks';
-import { use24HourStats, useCurrencies, useProducts, useTicker } from '../api';
+import { useThrottledPrice } from 'store';
+import { use24HourStats, useCurrencies, useProducts } from '../api';
 import type { Product } from '../api/types/product';
 import { formatPercent, formatPrice } from '../utils';
 
@@ -50,8 +50,7 @@ interface PriceProps {
 }
 
 const Price = ({ productId }: PriceProps) => {
-	const { prices } = useTicker();
-	const price = useThrottle(prices[productId]?.price, 500);
+	const price = useThrottledPrice(productId);
 
 	return (
 		<div className="flex gap-2 mb-4 font-mono">
