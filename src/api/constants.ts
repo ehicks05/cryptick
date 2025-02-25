@@ -4,7 +4,12 @@ const WS_URL = 'wss://ws-feed.exchange.coinbase.com';
 const CURRENCY_URL = `${REST_URL}/currencies`;
 const PRODUCT_URL = `${REST_URL}/products`;
 
-const SOCKET_STATUSES = {
+export interface SocketStatus {
+	name: string;
+	class: { text: string; bg: string; }
+}
+
+const SOCKET_STATUSES: Record<string, SocketStatus> = {
 	'-1': {
 		name: 'Uninstantiated',
 		class: { text: 'text-red-500', bg: 'bg-red-500' },
