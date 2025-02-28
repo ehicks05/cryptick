@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
+import { useCandleGranularity } from 'hooks/useCandleGranularity';
 import pThrottle from 'p-throttle';
+import { useEffect } from 'react';
 import { PRODUCT_URL } from './constants';
-import { type Candle, CandleGranularity, type RawCandle } from './types/product';
+import type { Candle, CandleGranularity, RawCandle } from './types/product';
 
 interface Params {
 	productId: string;
@@ -20,7 +22,7 @@ const getCandlesForProduct = async ({
 	const query = new URLSearchParams({
 		granularity: String(granularity),
 		start: start || '',
-		end: end || '',
+		...(end && { end }),
 	});
 
 	try {
@@ -46,8 +48,8 @@ const throttle = pThrottle({
 	interval: 1000,
 });
 
-const subDays = (date: Date, n: number) =>
-	new Date(date.setDate(date.getDate() - n));
+const subSeconds = (date: Date, n: number) =>
+	new Date(date.setSeconds(date.getSeconds() - n));
 
 const keyByProductId = (data: { productId: string; candles: Candle[] }[]) =>
 	data.reduce(
@@ -58,14 +60,15 @@ const keyByProductId = (data: { productId: string; candles: Candle[] }[]) =>
 		{} as Record<string, Candle[]>,
 	);
 
-const getDailyCandles = async (productIds: string[]) => {
+const CANDLE_COUNT = 96;
+
+const getCandlesForProducts = async (
+	productIds: string[],
+	granularity: CandleGranularity,
+) => {
 	const throttledFetch = throttle(async (productId: string) => {
-		const candles = await getCandlesForProduct({
-			productId,
-			granularity: CandleGranularity.FIFTEEN_MINUTES,
-			start: subDays(new Date(), 2).toISOString(),
-			end: new Date().toISOString(),
-		});
+		const start = subSeconds(new Date(), granularity * CANDLE_COUNT).toISOString();
+		const candles = await getCandlesForProduct({ productId, granularity, start });
 		return { productId, candles };
 	});
 
@@ -74,10 +77,19 @@ const getDailyCandles = async (productIds: string[]) => {
 	return keyByProductId(data);
 };
 
-export const useCandles = (productIds: string[]) =>
-	useQuery({
+export const useCandles = (productIds: string[]) => {
+	const [granularity] = useCandleGranularity();
+
+	const query = useQuery({
 		queryKey: ['candles', productIds],
-		queryFn: () => getDailyCandles(productIds),
+		queryFn: () => getCandlesForProducts(productIds, granularity),
 		staleTime: 1000 * 60,
 		refetchInterval: 1000 * 60,
 	});
+
+	useEffect(() => {
+		if (granularity) query.refetch();
+	}, [granularity, query.refetch]);
+
+	return query;
+};

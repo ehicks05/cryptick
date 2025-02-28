@@ -2,6 +2,7 @@ import { Settings2 } from 'lucide-react';
 import { useProducts, useTicker } from '../api';
 import { useProductIds } from '../hooks';
 import { buildSubscribeMessage } from '../utils';
+import { CandleGranularityPicker } from './CandleGranularityPicker';
 import { ChartHeightPicker } from './ChartHeightPicker';
 import { ThemeToggle } from './ThemeToggle';
 import { Button } from './ui/button';
@@ -54,6 +55,8 @@ const Settings = () => {
 			</div>
 
 			<ChartHeightPicker />
+
+			<CandleGranularityPicker />
 
 			<div className="flex flex-col">
 				<div>Theme</div>

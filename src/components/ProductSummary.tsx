@@ -1,5 +1,6 @@
+import { aggregateCandleStats } from 'lib/utils';
 import { useThrottledPrice } from 'store';
-import { use24HourStats, useCurrencies, useProducts } from '../api';
+import { useCandles, useCurrencies, useProducts } from '../api';
 import type { Product } from '../api/types/product';
 import { formatPercent, formatPrice } from '../utils';
 
@@ -66,12 +67,13 @@ interface StatsProps {
 }
 
 const Stats = ({ product: { id, minimumQuoteDigits } }: StatsProps) => {
-	const { data: stats } = use24HourStats();
-	const productStats = stats?.[id];
+	const { data: candleMap } = useCandles([id]);
+	const candles = candleMap?.[id].slice(0, 96) || [];
+	const stats = aggregateCandleStats(candles);
 
-	const { high = 0, low = 0, isPositive, percentChange } = productStats || {};
+	const { high = 0, low = 0, isPositive, percentChange } = stats;
+
 	const color = isPositive ? 'text-green-500' : 'text-red-500';
-
 	const _low = formatPrice(low, minimumQuoteDigits);
 	const _high = formatPrice(high, minimumQuoteDigits);
 	const range =

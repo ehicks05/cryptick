@@ -1,5 +1,6 @@
+import { aggregateCandleStats } from 'lib/utils';
 import React, { type ReactNode } from 'react';
-import { use24HourStats } from '../api';
+import { useCandles } from '../api';
 import ProductSummary from './ProductSummary';
 import Chart from './SimpleChart/Chart';
 
@@ -21,10 +22,11 @@ interface Props {
 }
 
 const Product = ({ productId, handle }: Props) => {
-	const { data } = use24HourStats();
-	const productStats = data?.[productId];
+	const { data } = useCandles([productId]);
+	const candles = data?.[productId].slice(0, 96) || [];
+	const stats = aggregateCandleStats(candles);
+	const { isPositive } = stats;
 
-	const isPositive = productStats ? productStats.isPositive : undefined;
 	const colorKey = isPositive === undefined ? 'UND' : isPositive ? 'POS' : 'NEG';
 	return (
 		<div
