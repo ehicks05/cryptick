@@ -66,7 +66,7 @@ const Settings = () => {
 export const SettingsDialog = () => {
 	return (
 		<Dialog modal>
-			<DialogTrigger>
+			<DialogTrigger asChild>
 				<Button variant="outline" size="icon">
 					<Settings2 />
 				</Button>
