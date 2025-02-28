@@ -16,7 +16,7 @@ export const ChartHeightPicker = () => {
 
 	return (
 		<div className="flex flex-col">
-			Chart Height:
+			Chart Height
 			<div className="flex gap-2">
 				{OPTIONS.map(({ label, value }) => (
 					<Button

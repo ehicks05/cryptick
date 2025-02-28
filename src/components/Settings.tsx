@@ -10,6 +10,7 @@ import {
 	Dialog,
 	DialogClose,
 	DialogContent,
+	DialogDescription,
 	DialogTitle,
 	DialogTrigger,
 } from './ui/dialog';
@@ -38,10 +39,13 @@ const Settings = () => {
 
 	return (
 		<div className="flex flex-col items-start gap-8 overflow-y-auto">
-			<DialogTitle>Settings</DialogTitle>
+			<div>
+				<DialogTitle>Settings</DialogTitle>
+				<DialogDescription>Adjust your settings here</DialogDescription>
+			</div>
 
 			<div className="flex flex-col">
-				<div className="">Toggle products: </div>
+				<div>Toggle Products</div>
 				<ComboboxDemo
 					items={items}
 					selectedItems={productIds}
@@ -52,11 +56,11 @@ const Settings = () => {
 			<ChartHeightPicker />
 
 			<div className="flex flex-col">
-				<div className="">Theme: </div>
+				<div>Theme</div>
 				<ThemeToggle />
 			</div>
 
-			<DialogClose>
+			<DialogClose asChild>
 				<Button variant="secondary">Close</Button>
 			</DialogClose>
 		</div>
