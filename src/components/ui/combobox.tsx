@@ -25,7 +25,7 @@ export function ComboboxDemo({ items, selectedItems, onSelect }: Props) {
 	const [open, setOpen] = React.useState(false);
 
 	return (
-		<Popover open={open} onOpenChange={setOpen}>
+		<Popover modal open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
 				<Button
 					variant="outline"
