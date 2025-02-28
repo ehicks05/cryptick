@@ -16,8 +16,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useWindowSize } from '@uidotdev/usehooks';
-import React from 'react';
-import { MdDragIndicator } from 'react-icons/md';
+import React, { type CSSProperties } from 'react';
 import { useProductIds } from '../hooks/useProductIds';
 import Product from './Product';
 
@@ -75,27 +74,22 @@ interface SortableItemProps {
 }
 
 const SortableItem = ({ id }: SortableItemProps) => {
-	const { setNodeRef, transform, transition, attributes, listeners } = useSortable({
-		id,
-	});
+	const { setNodeRef, transform, transition, attributes, listeners, isDragging } =
+		useSortable({
+			id,
+		});
 
-	const style = {
+	const style: CSSProperties = {
 		transform: CSS.Transform.toString(transform),
 		transition,
+		...(isDragging && {
+			pointerEvents: 'none', // prevent link clicks while dragging
+		}),
 	};
 
-	const handle = (
-		<MdDragIndicator
-			className="text-muted shrink-0 focus:outline-none touch-none p-1"
-			size={32}
-			{...attributes}
-			{...listeners}
-		/>
-	);
-
 	return (
-		<div ref={setNodeRef} style={style}>
-			<Product productId={id} handle={handle} />
+		<div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+			<Product productId={id} />
 		</div>
 	);
 };

@@ -1,5 +1,5 @@
 import { aggregateCandleStats } from 'lib/utils';
-import React, { type ReactNode } from 'react';
+import React from 'react';
 import { useCandles } from '../api';
 import ProductSummary from './ProductSummary';
 import Chart from './SimpleChart/Chart';
@@ -18,23 +18,21 @@ const BORDER_COLORS = {
 
 interface Props {
 	productId: string;
-	handle: ReactNode;
 }
 
-const Product = ({ productId, handle }: Props) => {
+const Product = ({ productId }: Props) => {
 	const { data } = useCandles([productId]);
 	const candles = data?.[productId].slice(0, 96) || [];
 	const stats = aggregateCandleStats(candles);
 	const { isPositive } = stats;
 
 	const colorKey = isPositive === undefined ? 'UND' : isPositive ? 'POS' : 'NEG';
+	const colorClasses = `${BORDER_COLORS[colorKey]} ${BG_COLORS[colorKey]}`;
+
 	return (
-		<div
-			className={`rounded-lg shadow bg-gradient-to-t border ${BORDER_COLORS[colorKey]} ${BG_COLORS[colorKey]}`}
-		>
-			<div className="p-4 pb-0 flex justify-between">
+		<div className={`rounded-lg shadow bg-gradient-to-t border ${colorClasses}`}>
+			<div className="p-4 pb-0">
 				<ProductSummary productId={productId} />
-				{handle}
 			</div>
 			<Chart productId={productId} />
 		</div>
