@@ -1,5 +1,6 @@
 import { CandleGranularity } from 'api/types/product';
 import { useCandleGranularity } from 'hooks/useCandleGranularity';
+import { CandlestickChart } from 'lucide-react';
 import { Button } from './ui/button';
 import {
 	DropdownMenu,
@@ -40,15 +41,17 @@ export const CandleGranularityPicker = () => {
 			<div className="flex flex-col gap-2">
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
-						<Button variant="outline" className="">
-							{GRANULARITY_LABELS[granularity]}
+						<Button variant="outline" size="icon">
+							<CandlestickChart />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent>
 						{OPTIONS.map(({ label, value }) => (
 							<DropdownMenuItem
 								key={value}
-								className={value === granularity ? 'text-green-500' : ''}
+								className={
+									value === granularity ? 'text-green-500 focus:text-green-500' : ''
+								}
 								onClick={() => handleClick(value)}
 							>
 								{label}

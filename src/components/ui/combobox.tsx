@@ -53,7 +53,9 @@ export function ComboboxDemo({ items, selectedItems, onSelect }: Props) {
 										setOpen(false);
 									}}
 									className={
-										selectedItems.includes(item.value) ? 'text-green-600' : ''
+										selectedItems.includes(item.value)
+											? 'text-green-600 data-[selected=true]:text-green-600'
+											: ''
 									}
 								>
 									<Check
