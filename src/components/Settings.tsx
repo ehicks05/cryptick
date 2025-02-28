@@ -1,4 +1,4 @@
-import { FaBars } from 'react-icons/fa';
+import { Settings2 } from 'lucide-react';
 import { useProducts, useTicker } from '../api';
 import { useProductIds } from '../hooks';
 import { buildSubscribeMessage } from '../utils';
@@ -67,7 +67,9 @@ export const SettingsDialog = () => {
 	return (
 		<Dialog modal>
 			<DialogTrigger>
-				<FaBars />
+				<Button variant="outline" size="icon">
+					<Settings2 />
+				</Button>
 			</DialogTrigger>
 			<DialogContent>
 				<div>
