@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 
 const OPTIONS = [
 	{ label: '0', value: 'h-0' },
+	{ label: '8', value: 'h-8' },
 	{ label: '16', value: 'h-16' },
 	{ label: '20', value: 'h-20' },
 	{ label: '24', value: 'h-24' },
