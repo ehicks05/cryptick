@@ -23,8 +23,14 @@ import Product from './Product';
 const Products = () => {
 	const [productIds, setProductIds] = useProductIds();
 
+	const pointerSensor = useSensor(PointerSensor, {
+		activationConstraint: {
+			distance: 10,
+		},
+	});
+
 	const sensors = useSensors(
-		useSensor(PointerSensor),
+		pointerSensor,
 		useSensor(KeyboardSensor, {
 			coordinateGetter: sortableKeyboardCoordinates,
 		}),
@@ -75,9 +81,7 @@ interface SortableItemProps {
 
 const SortableItem = ({ id }: SortableItemProps) => {
 	const { setNodeRef, transform, transition, attributes, listeners, isDragging } =
-		useSortable({
-			id,
-		});
+		useSortable({ id });
 
 	const style: CSSProperties = {
 		transform: CSS.Transform.toString(transform),
@@ -86,6 +90,8 @@ const SortableItem = ({ id }: SortableItemProps) => {
 			pointerEvents: 'none', // prevent link clicks while dragging
 		}),
 	};
+
+	console.log({ isDragging });
 
 	return (
 		<div ref={setNodeRef} style={style} {...attributes} {...listeners}>
