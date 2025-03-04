@@ -59,6 +59,7 @@ export type Currencies =
 	| 'JPY'
 	| 'GBP'
 	| 'CHF'
+	| 'BRL'
 	| 'AUD'
 	| 'CAD'
 	| 'NZD'
