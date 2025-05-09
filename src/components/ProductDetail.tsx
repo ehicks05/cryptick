@@ -14,8 +14,8 @@ const ProductDetail = () => {
 	const symbol = `COINBASE:${productId.replace('-', '')}`;
 
 	return (
-		<div className="h-full flex-grow flex flex-col md:flex-row gap-4 p-4">
-			<div className="flex flex-grow">
+		<div className="h-full grow flex flex-col md:flex-row gap-4 p-4">
+			<div className="flex grow">
 				<TVWidget symbol={symbol} theme={theme} />
 			</div>
 			<div className="hidden md:block overflow-y-hidden h-full">

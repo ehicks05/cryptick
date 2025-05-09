@@ -6,7 +6,7 @@ const Logo = () => {
 	return (
 		<Link to="/" title="Home" className={'font-logo text-xl'}>
 			<div className="flex items-center gap-3">
-				<div className="px-2 py-[3.5px] rounded bg-neutral-600 text-neutral-200">
+				<div className="px-2 py-[3.5px] rounded-sm bg-neutral-600 text-neutral-200">
 					ct
 				</div>
 				<div className="hidden sm:block">{APP_NAME}</div>

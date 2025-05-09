@@ -141,7 +141,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 	return (
 		<div
 			ref={ref}
-			className="flex flex-grow w-full h-full"
+			className="flex grow w-full h-full"
 			// onMouseMove={(e) => {
 			//   let rect = e.target.getBoundingClientRect();
 			//   let x = e.clientX - rect.left; //x position within the element.

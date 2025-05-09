@@ -12,7 +12,7 @@ const borderColor = (isPositive: boolean) =>
 		: 'border-red-300 dark:border-red-950';
 
 const background = (isPositive: boolean) =>
-	`bg-gradient-to-t ${
+	`bg-linear-to-t ${
 		isPositive ? 'from-[rgba(6,78,59,.15)]' : 'from-[rgba(153,27,27,.15)]'
 	} to-transparent`;
 
@@ -58,16 +58,16 @@ const ProductDetail = () => {
 	);
 
 	return (
-		<div ref={ref} className="h-full flex-grow flex flex-col md:flex-row gap-4 p-4">
+		<div ref={ref} className="h-full grow flex flex-col md:flex-row gap-4 p-4">
 			<div
-				className={`flex-grow flex flex-col p-4 border rounded ${borderColor(
+				className={`grow flex flex-col p-4 border rounded ${borderColor(
 					isPositive,
 				)} ${background(isPositive)}`}
 			>
 				<div ref={innerRef}>
 					<ProductSummary productId={productId} />
 				</div>
-				<div className="flex-grow">
+				<div className="grow">
 					<CandleChart
 						height={height - innerHeight}
 						candles={candles}

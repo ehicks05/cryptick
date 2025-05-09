@@ -6,7 +6,7 @@ function App() {
 	return (
 		<div className="flex flex-col h-dvh">
 			<Header />
-			<div className="flex-grow flex flex-col h-full overflow-y-auto">
+			<div className="grow flex flex-col h-full overflow-y-auto">
 				<Switch>
 					<Route path="/:productId" component={ProductDetail} />
 					<Route path="/:productId/old" component={ProductDetailOld} />

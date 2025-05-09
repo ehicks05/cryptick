@@ -30,7 +30,7 @@ const Product = ({ productId }: Props) => {
 	const colorClasses = `${BORDER_COLORS[colorKey]} ${BG_COLORS[colorKey]}`;
 
 	return (
-		<div className={`rounded-lg shadow bg-gradient-to-t border ${colorClasses}`}>
+		<div className={`rounded-lg shadow-sm bg-linear-to-t border ${colorClasses}`}>
 			<div className="p-4 pb-0">
 				<ProductSummary productId={productId} />
 			</div>
