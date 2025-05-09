@@ -2,6 +2,7 @@ import { useMeasure } from '@uidotdev/usehooks';
 import { useCandles } from 'api';
 import { aggregateCandleStats } from 'lib/utils';
 import { useState } from 'react';
+import { usePrice } from 'store';
 import { STROKE } from './constants';
 import { round } from './round';
 import { useIdealCandleWidth } from './useIdealCandleWidth';
@@ -23,6 +24,16 @@ export const useChartData = ({
 	);
 
 	const candles = isDebug ? idealCandles : _candles.slice(0, 96);
+
+	// set current candle's current price
+	const price = usePrice(productId);
+	if (candles?.[0]?.close && price) {
+		const candle = candles[0];
+		const currentPrice = Number(price.replace(/,/g, ''));
+		candle.close = currentPrice;
+		if (currentPrice < candle.low) candle.low = currentPrice;
+		if (currentPrice > candle.high) candle.high = currentPrice;
+	}
 
 	const step = (candles[0]?.timestamp || 0) - (candles[1]?.timestamp || 0);
 	const start = candles[candles.length - 1]?.timestamp || 0;
