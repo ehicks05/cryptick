@@ -36,9 +36,9 @@ export const VolumeBar = ({
 			{isHovered && (
 				<text
 					fontSize="11"
-					className="fill-current"
+					className="fill-neutral-400"
 					x={getX(i * candleWidth) - 20}
-					y={height + 25}
+					y={height - 2}
 				>
 					{myFormat.format(volume)}
 				</text>
