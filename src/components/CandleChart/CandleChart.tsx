@@ -95,7 +95,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 	const horizontalLineEls = getHorizontalLines(min, max).map((line) => (
 		<g key={line} className="text-black dark:text-white">
 			<line
-				stroke={'rgba(100, 100, 100, .25)'}
+				stroke={'rgba(100, 100, 100, .22)'}
 				x1={0}
 				y1={getY(line)}
 				x2={width}
