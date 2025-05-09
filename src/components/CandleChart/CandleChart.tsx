@@ -4,6 +4,7 @@ import { usePrice } from 'store';
 import type { Candle } from '../../api/types/product';
 import { clamp } from '../../utils';
 import { Crosshair } from './Crosshair';
+import { HorizontalLines } from './HorizontalLines';
 import { VolumeBar } from './VolumeBar';
 
 const MMM = Intl.DateTimeFormat('en-US', { month: 'short' });
@@ -64,53 +65,6 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 		// 32 = allow for a right-side gutter for grid markers
 		return width - 36 - x;
 	};
-
-	const getHorizontalLines = (min: number, max: number) => {
-		const range = max - min;
-		const targetGridLines = height / 50; // we want a gridline every 50 pixels
-
-		let power = -4;
-		let optionIndex = 0;
-		const options = [1, 2.5, 5];
-
-		while (range / (options[optionIndex] * 10 ** power) > targetGridLines) {
-			if (optionIndex === options.length - 1) {
-				optionIndex = 0;
-				power += 1;
-			} else {
-				optionIndex += 1;
-			}
-		}
-		const gridSize = options[optionIndex] * 10 ** power;
-
-		const minChunk = Number(min.toPrecision(2));
-		const lines = [...new Array(32)].map((_, i) => minChunk + (i - 16) * gridSize);
-		// console.log(`range: ${range}`);
-		// console.log(`targetGridLines: ${targetGridLines}`);
-		// console.log(`gridSize: ${gridSize}`);
-		// console.log(lines);
-		return lines;
-	};
-
-	const horizontalLineEls = getHorizontalLines(min, max).map((line) => (
-		<g key={line} className="text-black dark:text-white">
-			<line
-				stroke={'rgba(100, 100, 100, .22)'}
-				x1={0}
-				y1={getY(line)}
-				x2={width}
-				y2={getY(line)}
-			/>
-			<text
-				fontSize="11"
-				className="fill-neutral-500"
-				x={width - 36}
-				y={getY(line) + 3}
-			>
-				{line}
-			</text>
-		</g>
-	));
 
 	// this controls the gap between candles, decreasing relative gap as you zoom in
 	// avoids candles looking too far apart when zoomed in,
@@ -204,7 +158,11 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 					onWheel={(e) => handleWheel(e as unknown as WheelEvent)}
 				>
 					<title>chart</title>
-					{horizontalLineEls}
+					<HorizontalLines
+						viewableCandles={viewableCandles}
+						height={height}
+						width={width}
+					/>
 					{candleEls}
 					{mousePos && (
 						<Crosshair x={mousePos.x} y={mousePos.y} w={width} h={height} />
