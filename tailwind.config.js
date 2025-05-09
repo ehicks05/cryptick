@@ -51,6 +51,3 @@ export const theme = {
 };
 
 export const plugins = [require('tailwindcss-animate')]
-
-// font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console,
-//   monospace;
