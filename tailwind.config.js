@@ -8,7 +8,7 @@ export const content = ['./src/**/*.{js,jsx,ts,tsx}', './index.html'];
 export const theme = {
 	extend: {
 		fontFamily: {
-			sans: ['Fredoka', ...fontFamily.sans],
+			sans: ['Cal Sans', ...fontFamily.sans],
 			mono: ['Consolas', ...fontFamily.mono],
 			logo: 'Righteous',
 		}, 
