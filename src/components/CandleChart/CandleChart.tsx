@@ -149,7 +149,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 							/>
 							<text
 								fontSize="11"
-								className="fill-current"
+								className="fill-neutral-500"
 								x={getX(i * candleWidth) - 20}
 								y={getY(min) + 16}
 							>
