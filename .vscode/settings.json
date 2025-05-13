@@ -6,5 +6,19 @@
     "quickfix.biome": "always",
     "source.organizeImports.biome": "explicit"
   },
-  "cSpell.words": ["uidotdev", "usehooks"]
+  "cSpell.words": [
+    "cmdk",
+    "Consolas",
+    "cryptick",
+    "ehicks",
+    "Lucida",
+    "Menlo",
+    "Millis",
+    "rgba",
+    "tradingview",
+    "uidotdev",
+    "Uninstantiated",
+    "usehooks",
+    "wouter"
+  ]
 }

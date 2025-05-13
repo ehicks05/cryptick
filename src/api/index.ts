@@ -6,10 +6,10 @@ import { useSocketStatus } from './useSocketStatus';
 import { useTicker } from './useTicker';
 
 export {
-	use24HourStats,
-	useCandles,
-	useCurrencies,
-	useProducts,
-	useSocketStatus,
-	useTicker,
+  use24HourStats,
+  useCandles,
+  useCurrencies,
+  useProducts,
+  useSocketStatus,
+  useTicker,
 };
