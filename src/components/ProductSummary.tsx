@@ -1,8 +1,8 @@
-import { use24HourStats, useCurrencies, useProducts } from 'api';
-import { useTicker } from 'api';
-import { Product } from 'api/types/product';
-import React from 'react';
-import { formatPercent, formatPrice } from 'utils';
+import { aggregateCandleStats } from 'lib/utils';
+import { useThrottledPrice } from 'store';
+import { useCandles, useCurrencies, useProducts } from '../api';
+import type { Product } from '../api/types/product';
+import { formatPercent, formatPrice } from '../utils';
 
 interface ProductSummaryProps {
   productId: string;
@@ -37,7 +37,7 @@ const Name = ({ product }: NameProps) => {
     : undefined;
 
   return (
-    <div className='text-gray-700 dark:text-gray-400'>
+    <div className='text-neutral-700 dark:text-neutral-400'>
       <div className='flex gap-2 text-xl items-baseline'>
         {product.display_name}
         <span className='text-xs'>{currency?.name}</span>
@@ -51,11 +51,10 @@ interface PriceProps {
 }
 
 const Price = ({ productId }: PriceProps) => {
-  const { prices } = useTicker();
-  const price = prices[productId]?.price;
+  const price = useThrottledPrice(productId);
 
   return (
-    <div className='flex gap-2 mb-4'>
+    <div className='flex gap-2 mb-4 font-mono'>
       <span className='text-3xl font-semibold' id={`${productId}Price`}>
         {price}
       </span>
@@ -68,19 +67,23 @@ interface StatsProps {
 }
 
 const Stats = ({ product: { id, minimumQuoteDigits } }: StatsProps) => {
-  const { data: stats } = use24HourStats();
-  const productStats = stats?.[id];
+  const { data: candleMap } = useCandles([id]);
+  const candles = candleMap?.[id].slice(0, 96) || [];
+  const stats = aggregateCandleStats(candles);
 
-  const { high, low, isPositive, percentChange } = productStats || {};
+  const { high = 0, low = 0, isPositive, percentChange } = stats;
+
   const color = isPositive ? 'text-green-500' : 'text-red-500';
+  const _low = formatPrice(low, minimumQuoteDigits);
+  const _high = formatPrice(high, minimumQuoteDigits);
+  const range =
+    low > 100 && high > 100
+      ? `${_low.split('.')[0]} -  ${_high.split('.')[0]}`
+      : `${_low} - ${_high}`;
 
   return (
-    <div className='flex flex-col'>
-      <span className='text-xs'>
-        {low && formatPrice(low, minimumQuoteDigits)}
-        {' - '}
-        {high && formatPrice(high, minimumQuoteDigits)}
-      </span>
+    <div className='flex flex-col font-mono'>
+      <span className='text-xs'>{range}</span>
       <span className={`whitespace-nowrap text-xs ${color}`}>
         {percentChange && formatPercent(percentChange)}
       </span>

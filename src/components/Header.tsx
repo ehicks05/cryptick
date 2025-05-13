@@ -1,31 +1,25 @@
-import { useSocketStatus } from 'api';
-import React from 'react';
-import { FaBars, FaHome, FaTimes } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import useStore from '../store';
+import { Link } from 'wouter';
+import { APP_NAME } from '../constants';
+import { SettingsDialog } from './Settings';
 
-const Header = () => {
-  const isShowSettings = useStore(state => state.isShowSettings);
-  const setIsShowSettings = useStore(state => state.setIsShowSettings);
-  const { socketStatus } = useSocketStatus();
-
+const Logo = () => {
   return (
-    <header className='flex p-4 justify-between'>
-      <div className='flex gap-2 items-center'>
-        <div title={socketStatus.name} className={'flex items-center h-4 w-4'}>
-          <div
-            className={`m-auto rounded-full h-2 w-2 ${socketStatus.class}`}
-          />
+    <Link to='/' title='Home' className={'font-logo text-xl'}>
+      <div className='flex items-center gap-3'>
+        <div className='px-2 py-[3.5px] rounded-sm bg-neutral-600 text-neutral-200'>
+          ct
         </div>
-        <Link to={'/'} title='Home'>
-          <FaHome className={'h-4 w-4 text-blue-400'} />
-        </Link>
+        <div className='hidden sm:block'>{APP_NAME}</div>
       </div>
-      <button type='button' onClick={() => setIsShowSettings(!isShowSettings)}>
-        {isShowSettings ? <FaTimes /> : <FaBars />}
-      </button>
-    </header>
+    </Link>
   );
 };
+
+const Header = () => (
+  <header className='flex p-4 justify-between text-neutral-600 dark:text-neutral-400'>
+    <Logo />
+    <SettingsDialog />
+  </header>
+);
 
 export default Header;

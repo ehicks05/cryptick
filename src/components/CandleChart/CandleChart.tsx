@@ -1,23 +1,27 @@
-import { useTicker } from 'api';
-import { RawCandle } from 'api/types/product';
-import { format, fromUnixTime } from 'date-fns';
+import { useMeasure } from '@uidotdev/usehooks';
 import React, { useEffect, useState } from 'react';
-import { useMeasure } from 'react-use';
-import { clamp } from 'utils';
+import { usePrice } from 'store';
+import type { Candle } from '../../api/types/product';
+import { clamp } from '../../utils';
 import { Crosshair } from './Crosshair';
+import { HorizontalLines } from './HorizontalLines';
 import { VolumeBar } from './VolumeBar';
+
+const MMM = Intl.DateTimeFormat('en-US', { month: 'short' });
+const MMdd = Intl.DateTimeFormat('en-US', { month: '2-digit', day: '2-digit' });
 
 interface CandleChartProps {
   height: number;
-  candles: RawCandle[];
+  candles: Candle[];
   productId: string;
 }
 
 const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
-  const { prices } = useTicker();
-  const price = prices?.[productId].price;
+  const price = usePrice(productId);
 
-  const [ref, { width }] = useMeasure<HTMLDivElement>();
+  const [ref, { width: _width }] = useMeasure<HTMLDivElement>();
+  const width = _width || 0;
+
   const [candleWidthMulti, setCandleWidthMulti] = useState(2);
   const [mousePos] = useState<{ x: number; y: number } | undefined>(undefined);
   const [height, setHeight] = useState(0);
@@ -36,17 +40,17 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
   const viewableCandles = candles.slice(0, viewableCandleCount);
 
   // set current candle's current price
-  if (viewableCandles?.[0]?.[4] && price) {
+  if (viewableCandles?.[0]?.close && price) {
     const candle = viewableCandles[0];
     const currentPrice = Number(price.replace(/,/g, ''));
-    candle[4] = currentPrice;
-    if (currentPrice < candle[1]) candle[1] = currentPrice;
-    if (currentPrice > candle[2]) candle[2] = currentPrice;
+    candle.close = currentPrice;
+    if (currentPrice < candle.low) candle.low = currentPrice;
+    if (currentPrice > candle.high) candle.high = currentPrice;
   }
 
-  const min = Math.min(...viewableCandles.map(candle => candle[1]));
-  const max = Math.max(...viewableCandles.map(candle => candle[2]));
-  const maxVolume = Math.max(...viewableCandles.map(candle => candle[5]));
+  const min = Math.min(...viewableCandles.map(candle => candle.low));
+  const max = Math.max(...viewableCandles.map(candle => candle.high));
+  const maxVolume = Math.max(...viewableCandles.map(candle => candle.volume));
 
   const handleWheel = (e: WheelEvent) => {
     const newMulti = candleWidthMulti * (e.deltaY < 0 ? 1.1 : 0.9);
@@ -62,55 +66,6 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
     return width - 36 - x;
   };
 
-  const getHorizontalLines = (min: number, max: number) => {
-    const range = max - min;
-    const targetGridLines = height / 50; // we want a gridline every 50 pixels
-
-    let power = -4;
-    let optionIndex = 0;
-    const options = [1, 2.5, 5];
-
-    while (range / (options[optionIndex] * 10 ** power) > targetGridLines) {
-      if (optionIndex === options.length - 1) {
-        optionIndex = 0;
-        power += 1;
-      } else {
-        optionIndex += 1;
-      }
-    }
-    const gridSize = options[optionIndex] * 10 ** power;
-
-    const minChunk = Number(min.toPrecision(2));
-    const lines = [...new Array(32)].map(
-      (_, i) => minChunk + (i - 16) * gridSize,
-    );
-    // console.log(`range: ${range}`);
-    // console.log(`targetGridLines: ${targetGridLines}`);
-    // console.log(`gridSize: ${gridSize}`);
-    // console.log(lines);
-    return lines;
-  };
-
-  const horizontalLineEls = getHorizontalLines(min, max).map(line => (
-    <g key={line} className='text-black dark:text-white'>
-      <line
-        stroke={'rgba(100, 100, 100, .25)'}
-        x1={0}
-        y1={getY(line)}
-        x2={width}
-        y2={getY(line)}
-      />
-      <text
-        fontSize='11'
-        className='fill-current'
-        x={width - 36}
-        y={getY(line) + 3}
-      >
-        {line}
-      </text>
-    </g>
-  ));
-
   // this controls the gap between candles, decreasing relative gap as you zoom in
   // avoids candles looking too far apart when zoomed in,
   // and too squeezed together when zoomed out
@@ -118,21 +73,21 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
     candleWidth < 6 ? 8 : candleWidth < 12 ? 6 : candleWidth < 24 ? 4 : 3;
 
   const candleEls = viewableCandles.map(
-    ([datetime, low, high, open, close, vol], _i) => {
+    ({ timestamp, low, high, open, close, volume }, _i) => {
       // if (i === 0) return null;
       const i = _i + 1;
-      const date = fromUnixTime(datetime);
+      const date = new Date(timestamp);
       const prevCandle =
         _i < viewableCandles.length - 1 ? viewableCandles[_i + 1] : undefined;
-      const prevCandleDate = prevCandle && fromUnixTime(prevCandle[0]);
+      const prevCandleDate = prevCandle && new Date(prevCandle.timestamp);
       const isDayBoundary =
         prevCandleDate && date.getDate() !== prevCandleDate.getDate();
       const isMonthBoundary =
         prevCandleDate && date.getMonth() !== prevCandleDate.getMonth();
-      const volumeBarHeight = ((vol / maxVolume) * height) / 4;
+      const volumeBarHeight = ((volume / maxVolume) * height) / 4;
 
       return (
-        <React.Fragment key={datetime}>
+        <React.Fragment key={timestamp}>
           <VolumeBar
             getX={getX}
             i={i}
@@ -140,7 +95,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
             rectXDivisor={rectXDivisor}
             height={height}
             volumeBarHeight={volumeBarHeight}
-            volume={vol}
+            volume={volume}
           />
           {isDayBoundary && (
             <>
@@ -153,11 +108,11 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
               />
               <text
                 fontSize='11'
-                className='fill-current'
+                className='fill-neutral-500'
                 x={getX(i * candleWidth) - 20}
                 y={getY(min) + 16}
               >
-                {format(date, isMonthBoundary ? 'MMM' : 'MM/dd')}
+                {isMonthBoundary ? MMM.format(date) : MMdd.format(date)}
               </text>
             </>
           )}
@@ -186,7 +141,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
   return (
     <div
       ref={ref}
-      className='flex flex-grow w-full h-full'
+      className='flex grow w-full h-full'
       // onMouseMove={(e) => {
       //   let rect = e.target.getBoundingClientRect();
       //   let x = e.clientX - rect.left; //x position within the element.
@@ -203,7 +158,11 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
           onWheel={e => handleWheel(e as unknown as WheelEvent)}
         >
           <title>chart</title>
-          {horizontalLineEls}
+          <HorizontalLines
+            viewableCandles={viewableCandles}
+            height={height}
+            width={width}
+          />
           {candleEls}
           {mousePos && (
             <Crosshair x={mousePos.x} y={mousePos.y} w={width} h={height} />

@@ -1,15 +1,17 @@
 // adapted from https://www.tradingview.com/widget/advanced-chart/
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import type { AdvancedRealTimeChartProps } from './types';
 
 const container_id = 'tradingview_84dfe';
-let tvScriptLoadingPromise: Promise<any>;
+let tvScriptLoadingPromise: Promise<unknown>;
 
 interface Props {
   symbol: string;
   theme: 'dark' | 'light';
 }
 
-export default function TradingViewWidget({ symbol, theme }: Props) {
+export default function TVWidget({ symbol, theme }: Props) {
+  // @ts-ignore
   const onLoadScriptRef = useRef<(() => void) | null>();
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function TradingViewWidget({ symbol, theme }: Props) {
 
     function createWidget() {
       if (document.getElementById(container_id) && 'TradingView' in window) {
-        new (window.TradingView as any).widget({
+        const options: AdvancedRealTimeChartProps = {
           autosize: true,
           symbol,
           interval: 'D',
@@ -48,10 +50,14 @@ export default function TradingViewWidget({ symbol, theme }: Props) {
           enable_publishing: false,
           allow_symbol_change: true,
           container_id,
-        });
+          disabled_features: ['header_chart_type', 'header_symbol_search'],
+          save_image: false,
+        };
+        // @ts-expect-error - we don't have a type
+        new window.TradingView.widget(options);
       }
     }
-  }, []);
+  }, [symbol, theme]);
 
   return <div className='w-full h-full' id={container_id} />;
 }

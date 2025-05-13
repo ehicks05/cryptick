@@ -1,6 +1,6 @@
 import {
   DndContext,
-  DragEndEvent,
+  type DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   closestCenter,
@@ -15,17 +15,22 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useProductIds } from 'hooks/useProductIds';
-import React from 'react';
-import { MdDragIndicator } from 'react-icons/md';
-import { useWindowSize } from 'react-use';
+import { useWindowSize } from '@uidotdev/usehooks';
+import React, { type CSSProperties } from 'react';
+import { useProductIds } from '../hooks/useProductIds';
 import Product from './Product';
 
 const Products = () => {
   const [productIds, setProductIds] = useProductIds();
 
+  const pointerSensor = useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 10,
+    },
+  });
+
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    pointerSensor,
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
@@ -42,7 +47,8 @@ const Products = () => {
     }
   };
 
-  const { width } = useWindowSize();
+  const { width: _width } = useWindowSize();
+  const width = _width || 0;
   const minColumnWidth = width < 400 ? width - 16 - 16 - 16 - 16 : 320;
 
   return (
@@ -74,29 +80,28 @@ interface SortableItemProps {
 }
 
 const SortableItem = ({ id }: SortableItemProps) => {
-  const { setNodeRef, transform, transition, attributes, listeners } =
-    useSortable({
-      id,
-    });
+  const {
+    setNodeRef,
+    transform,
+    transition,
+    attributes,
+    listeners,
+    isDragging,
+  } = useSortable({ id });
 
-  const style = {
+  const style: CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
+    ...(isDragging && {
+      pointerEvents: 'none', // prevent link clicks while dragging
+    }),
   };
 
-  const handle = (
-    <MdDragIndicator
-      className='text-neutral-500 dark:text-neutral-400 focus:outline-none'
-      style={{ touchAction: 'none' }}
-      size={20}
-      {...attributes}
-      {...listeners}
-    />
-  );
+  console.log({ isDragging });
 
   return (
-    <div ref={setNodeRef} style={style}>
-      <Product productId={id} handle={handle} />
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <Product productId={id} />
     </div>
   );
 };

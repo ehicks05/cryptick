@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getPercentChange } from 'utils';
 import { PRODUCT_URL } from './constants';
-import { BulkProductStats, Stats24Hour } from './types/product';
+import type { BulkProductStats, Stats24Hour } from './types/product';
 
 export interface AnnotatedProductStats extends Stats24Hour {
   percentChange: number;
@@ -30,11 +30,10 @@ const get24HourStats = async (): Promise<
   );
 };
 
-export const use24HourStats = () => {
-  return useQuery({
+export const use24HourStats = () =>
+  useQuery({
     queryKey: ['24HourStats'],
     queryFn: get24HourStats,
     staleTime: 1000 * 60,
     refetchInterval: 1000 * 60,
   });
-};

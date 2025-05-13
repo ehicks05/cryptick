@@ -1,8 +1,7 @@
-import { useCandles } from 'api/useCandles';
+import { useMeasure } from '@uidotdev/usehooks';
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
-import { useMeasure } from 'react-use';
-import { use24HourStats } from '../api';
+import { useParams } from 'wouter';
+import { use24HourStats, useCandles } from '../api';
 import CandleChart from './CandleChart';
 import History from './History';
 import ProductSummary from './ProductSummary';
@@ -13,17 +12,20 @@ const borderColor = (isPositive: boolean) =>
     : 'border-red-300 dark:border-red-950';
 
 const background = (isPositive: boolean) =>
-  `bg-gradient-to-t ${
+  `bg-linear-to-t ${
     isPositive ? 'from-[rgba(6,78,59,.15)]' : 'from-[rgba(153,27,27,.15)]'
   } to-transparent`;
 
 const ProductDetail = () => {
-  const [ref, { height }] = useMeasure<HTMLDivElement>();
-  const [innerRef, { height: innerHeight }] = useMeasure<HTMLDivElement>();
+  const [ref, { height: _height }] = useMeasure<HTMLDivElement>();
+  const height = _height || 0;
+  const [innerRef, { height: _innerHeight }] = useMeasure<HTMLDivElement>();
+  const innerHeight = _innerHeight || 0;
+
   const { productId } = useParams();
   const [granularity, setGranularity] = useState(900);
   const { data: _candles } = useCandles([productId || '']);
-  const candles = _candles?.[productId || ''].candles;
+  const candles = _candles?.[productId || ''];
 
   const { data: stats } = use24HourStats();
   const productStats = stats?.[productId || ''];
@@ -56,19 +58,16 @@ const ProductDetail = () => {
   );
 
   return (
-    <div
-      ref={ref}
-      className='h-full flex-grow flex flex-col md:flex-row gap-4 p-4'
-    >
+    <div ref={ref} className='h-full grow flex flex-col md:flex-row gap-4 p-4'>
       <div
-        className={`flex-grow flex flex-col p-4 border rounded ${borderColor(
+        className={`grow flex flex-col p-4 border rounded ${borderColor(
           isPositive,
         )} ${background(isPositive)}`}
       >
         <div ref={innerRef}>
           <ProductSummary productId={productId} />
         </div>
-        <div className='flex-grow'>
+        <div className='grow'>
           <CandleChart
             height={height - innerHeight}
             candles={candles}

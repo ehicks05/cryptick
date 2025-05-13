@@ -1,4 +1,4 @@
-import { ISO_8601_MS_UTC, OrderSide } from './common';
+import type { ISO_8601_MS_UTC, OrderSide } from './common';
 
 export enum WebSocketRequestType {
   SUBSCRIBE = 'subscribe',

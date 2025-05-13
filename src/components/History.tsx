@@ -1,6 +1,6 @@
-import { useTicker } from 'api';
-import React, { useState, ComponentPropsWithoutRef } from 'react';
-import { useInterval } from 'react-use';
+import { useThrottle } from '@uidotdev/usehooks';
+import { type ComponentPropsWithoutRef, useState } from 'react';
+import useStore from 'store';
 
 const normalize = (value: number) => {
   if (value < 10) return 0.0;
@@ -57,20 +57,13 @@ const getFormat = (currency: string) => {
 };
 
 const History = ({ productId }: { productId: string }) => {
-  const { ticker } = useTicker();
-  const productTicker = ticker[productId] || [];
-
-  const [throttledTicker, setThrottledTicker] = useState(productTicker);
-
-  useInterval(() => {
-    setThrottledTicker(productTicker);
-  }, 333);
+  const ticker = useStore(state => state.ticker[productId]) || [];
+  const throttledTicker = useThrottle(ticker, 333);
 
   const [sizeUnit, setSizeUnit] = useState('base');
   const toggleSizeUnit = () =>
     setSizeUnit(sizeUnit === 'base' ? 'quote' : 'base');
 
-  // if (!throttledTicker || throttledTicker.length === 0) return <div />;
   const [base, quote] = productId.split('-');
   const selectedSizeUnit = sizeUnit === 'base' ? base : quote;
   const format = getFormat(selectedSizeUnit);
@@ -90,7 +83,7 @@ const History = ({ productId }: { productId: string }) => {
             <TD className='text-right'>Time</TD>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='font-mono'>
           {throttledTicker.map(({ sequence, time, side, price, last_size }) => {
             const style = {
               backgroundColor: `rgba(${

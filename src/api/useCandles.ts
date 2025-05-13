@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { formatISO, subDays } from 'date-fns';
-import _ from 'lodash';
+import { useCandleGranularity } from 'hooks/useCandleGranularity';
 import pThrottle from 'p-throttle';
+import { useEffect } from 'react';
 import { PRODUCT_URL } from './constants';
-import { CandleGranularity, DailyCandles, RawCandle } from './types/product';
+import type { Candle, CandleGranularity, RawCandle } from './types/product';
 
 interface Params {
   productId: string;
@@ -12,23 +12,31 @@ interface Params {
   end?: string;
 }
 
-export const getCandlesForProduct = async ({
+const getCandlesForProduct = async ({
   productId,
   granularity,
   start,
   end,
-}: Params): Promise<RawCandle[]> => {
+}: Params): Promise<Candle[]> => {
+  const url = `${PRODUCT_URL}/${productId}/candles`;
+  const query = new URLSearchParams({
+    granularity: String(granularity),
+    start: start || '',
+    ...(end && { end }),
+  });
+
   try {
-    const url = `${PRODUCT_URL}/${productId}/candles`;
-
-    const query = new URLSearchParams({
-      granularity: String(granularity),
-      start: start || '',
-      end: end || '',
-    });
-
-    const input = `${url}?${query}`;
-    return await (await fetch(input)).json();
+    const response = await fetch(`${url}?${query}`);
+    const json: RawCandle[] = await response.json();
+    return json.map(candle => ({
+      productId,
+      timestamp: candle[0] * 1000,
+      low: candle[1],
+      high: candle[2],
+      open: candle[3],
+      close: candle[4],
+      volume: candle[5],
+    }));
   } catch (err) {
     console.log(err);
     return [];
@@ -40,26 +48,52 @@ const throttle = pThrottle({
   interval: 1000,
 });
 
-const getDailyCandles = async (productIds: string[]): Promise<DailyCandles> => {
+const subSeconds = (date: Date, n: number) =>
+  new Date(date.setSeconds(date.getSeconds() - n));
+
+const keyByProductId = (data: { productId: string; candles: Candle[] }[]) =>
+  data.reduce((agg, curr) => {
+    agg[curr.productId] = curr.candles;
+    return agg;
+  }, {} as Record<string, Candle[]>);
+
+const CANDLE_COUNT = 96;
+
+const getCandlesForProducts = async (
+  productIds: string[],
+  granularity: CandleGranularity,
+) => {
   const throttledFetch = throttle(async (productId: string) => {
+    const start = subSeconds(
+      new Date(),
+      granularity * CANDLE_COUNT,
+    ).toISOString();
     const candles = await getCandlesForProduct({
       productId,
-      granularity: CandleGranularity.FIFTEEN_MINUTES,
-      start: formatISO(subDays(new Date(), 1)),
-      end: formatISO(new Date()),
+      granularity,
+      start,
     });
     return { productId, candles };
   });
 
   const data = (await Promise.all(productIds.map(throttledFetch))).flat();
-  return _.keyBy(data, 'productId');
+
+  return keyByProductId(data);
 };
 
 export const useCandles = (productIds: string[]) => {
-  return useQuery({
+  const [granularity] = useCandleGranularity();
+
+  const query = useQuery({
     queryKey: ['candles', productIds],
-    queryFn: () => getDailyCandles(productIds),
+    queryFn: () => getCandlesForProducts(productIds, granularity),
     staleTime: 1000 * 60,
     refetchInterval: 1000 * 60,
   });
+
+  useEffect(() => {
+    if (granularity) query.refetch();
+  }, [granularity, query.refetch]);
+
+  return query;
 };
