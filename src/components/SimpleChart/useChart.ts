@@ -30,9 +30,11 @@ export const useChartData = ({
 	if (candles?.[0]?.close && price) {
 		const candle = candles[0];
 		const currentPrice = Number(price.replace(/,/g, ''));
-		candle.close = currentPrice;
-		if (currentPrice < candle.low) candle.low = currentPrice;
-		if (currentPrice > candle.high) candle.high = currentPrice;
+		if (currentPrice !== 0) {
+			candle.close = currentPrice;
+			if (currentPrice < candle.low) candle.low = currentPrice;
+			if (currentPrice > candle.high) candle.high = currentPrice;
+		}
 	}
 
 	const step = (candles[0]?.timestamp || 0) - (candles[1]?.timestamp || 0);
