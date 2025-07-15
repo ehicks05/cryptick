@@ -112,7 +112,7 @@ const History = ({ productId }: { productId: string }) => {
 	const format = getFormat(selectedSizeUnit);
 
 	return (
-		<div className="text-xs overflow-y-hidden">
+		<div className="text-xs">
 			<table>
 				<thead>
 					<tr>

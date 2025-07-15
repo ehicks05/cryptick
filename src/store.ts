@@ -21,7 +21,7 @@ const mergeTicker = (
 	message: TickerMessage,
 ) => ({
 	...ticker,
-	[message.productId]: [message, ...(ticker[message.productId] || [])].slice(0, 64),
+	[message.productId]: [message, ...(ticker[message.productId] || [])].slice(0, 80),
 });
 
 export const usePrice = (productId: string) => {
