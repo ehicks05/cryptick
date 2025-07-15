@@ -1,4 +1,5 @@
 import { useThrottle } from '@uidotdev/usehooks';
+import type { TickerMessage } from 'api/types/ws-types';
 import { type ComponentPropsWithoutRef, useState } from 'react';
 import useStore from 'store';
 
@@ -56,6 +57,49 @@ const getFormat = (currency: string) => {
 	return newFormat;
 };
 
+const TR = ({ children, ...props }: ComponentPropsWithoutRef<'tr'>) => {
+	return <tr {...props}>{children}</tr>;
+};
+
+const TD = ({ children, className, ...props }: ComponentPropsWithoutRef<'td'>) => {
+	return (
+		<td {...props} className={`px-2 ${className}`}>
+			{children}
+		</td>
+	);
+};
+
+interface TickerRowProps {
+	tickerMessage: TickerMessage;
+	sizeUnit: string;
+	format: Intl.NumberFormat;
+}
+
+const TickerRow = ({
+	tickerMessage: { side, last_size, price, sequence, time },
+	sizeUnit,
+	format,
+}: TickerRowProps) => {
+	const style = {
+		backgroundColor: `rgba(${
+			side === 'buy' ? '0,255,150' : '255,25,0'
+		},${getAlpha(last_size, price, side)})`,
+	};
+	const tradeSize =
+		sizeUnit === 'base'
+			? last_size
+			: format.format(Number(last_size) * Number(price.replaceAll(',', '')));
+	return (
+		<TR key={sequence} className={SIDES[side].highlight}>
+			<TD style={style} className="text-right">
+				{tradeSize}
+			</TD>
+			<TD className={SIDES[side].textColor}>{price}</TD>
+			<TD className="opacity-50">{time}</TD>
+		</TR>
+	);
+};
+
 const History = ({ productId }: { productId: string }) => {
 	const ticker = useStore((state) => state.ticker[productId]) || [];
 	const throttledTicker = useThrottle(ticker, 333);
@@ -83,43 +127,17 @@ const History = ({ productId }: { productId: string }) => {
 					</tr>
 				</thead>
 				<tbody className="font-mono">
-					{throttledTicker.map(({ sequence, time, side, price, last_size }) => {
-						const style = {
-							backgroundColor: `rgba(${
-								side === 'buy' ? '0,255,150' : '255,25,0'
-							},${getAlpha(last_size, price, side)})`,
-						};
-						const tradeSize =
-							sizeUnit === 'base'
-								? last_size
-								: format.format(
-										Number(last_size) * Number(price.replaceAll(',', '')),
-									);
-						return (
-							<TR key={sequence} className={SIDES[side].highlight}>
-								<TD style={style} className="text-right">
-									{tradeSize}
-								</TD>
-								<TD className={SIDES[side].textColor}>{price}</TD>
-								<TD className="opacity-50">{time}</TD>
-							</TR>
-						);
-					})}
+					{throttledTicker.map((tickerMessage) => (
+						<TickerRow
+							key={tickerMessage.sequence}
+							tickerMessage={tickerMessage}
+							sizeUnit={sizeUnit}
+							format={format}
+						/>
+					))}
 				</tbody>
 			</table>
 		</div>
-	);
-};
-
-const TR = ({ children, ...props }: ComponentPropsWithoutRef<'tr'>) => {
-	return <tr {...props}>{children}</tr>;
-};
-
-const TD = ({ children, className, ...props }: ComponentPropsWithoutRef<'td'>) => {
-	return (
-		<td {...props} className={`px-2 ${className}`}>
-			{children}
-		</td>
 	);
 };
 
