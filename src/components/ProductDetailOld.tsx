@@ -36,7 +36,7 @@ const ProductDetail = () => {
 
 	const isPositive = productStats.last >= productStats.open;
 
-	const granularityPicker = (
+	const _granularityPicker = (
 		<select
 			className="text-xs dark:bg-black"
 			onChange={(e) => setGranularity(Number(e.target.value))}

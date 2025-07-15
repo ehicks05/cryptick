@@ -7,10 +7,12 @@ import { STROKE } from './constants';
 import { round } from './round';
 import { useIdealCandleWidth } from './useIdealCandleWidth';
 
-export const useChartData = ({
-	productId,
-	isDebug,
-}: { productId: string; isDebug: boolean }) => {
+interface Props {
+	productId: string;
+	isDebug: boolean;
+}
+
+export const useChartData = ({ productId, isDebug }: Props) => {
 	const [ref, { height: containerHeight, width: containerWidth }] = useMeasure();
 
 	const candlesQuery = useCandles([productId]);

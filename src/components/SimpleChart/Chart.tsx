@@ -4,10 +4,12 @@ import { Link, useSearch } from 'wouter';
 import { Debug } from './Debug';
 import { useChartData } from './useChart';
 
-const Chart = ({
-	productId,
-	isDebug = false,
-}: { productId: string; isDebug?: boolean }) => {
+interface Props {
+	productId: string;
+	isDebug?: boolean;
+}
+
+const Chart = ({ productId, isDebug = false }: Props) => {
 	const [chartHeight] = useChartHeight();
 	const {
 		points,
