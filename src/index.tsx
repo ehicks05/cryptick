@@ -1,4 +1,4 @@
-import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { ThemeProvider } from 'components/ThemeProvider';
@@ -15,7 +15,7 @@ const queryClient = new QueryClient({
 	},
 });
 
-const persister = createSyncStoragePersister({
+const persister = createAsyncStoragePersister({
 	storage: window.localStorage,
 	key: 'CRYPTO_TICKER_REACT_QUERY_OFFLINE_CACHE',
 });
