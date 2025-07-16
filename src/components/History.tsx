@@ -1,19 +1,20 @@
 import { useThrottle } from '@uidotdev/usehooks';
 import type { TickerMessage } from 'api/types/ws-types';
+import clsx from 'clsx';
 import { type ComponentPropsWithoutRef, useState } from 'react';
 import useStore from 'store';
 
 const normalize = (value: number) => {
-	if (value < 10) return 0.0;
+	if (value < 10) return 0.03;
 	if (value < 100) return 0.05;
-	if (value < 1000) return 0.1;
-	if (value < 2000) return 0.25;
-	if (value < 4000) return 0.3;
-	if (value < 8000) return 0.35;
-	if (value < 16000) return 0.4;
-	if (value < 32000) return 0.7;
-	if (value < 64000) return 0.73;
-	if (value < 128000) return 0.76;
+	if (value < 1000) return 0.15;
+	if (value < 2000) return 0.2;
+	if (value < 4000) return 0.25;
+	if (value < 8000) return 0.3;
+	if (value < 16000) return 0.35;
+	if (value < 32000) return 0.4;
+	if (value < 64000) return 0.45;
+	if (value < 128000) return 0.5;
 	return 0.8;
 };
 
@@ -33,14 +34,14 @@ const getAlpha = (
 
 const SIDES = {
 	buy: {
-		highlight: 'green-bold',
-		borderColor: 'border-green-500',
-		textColor: 'text-green-500',
+		highlight: 'emerald-bold',
+		borderColor: 'border-emerald-500',
+		textColor: 'text-emerald-700 dark:text-emerald-500',
 	},
 	sell: {
 		highlight: 'red-bold',
 		borderColor: 'border-red-500',
-		textColor: 'text-red-500',
+		textColor: 'text-red-700 dark:text-red-500',
 	},
 };
 
@@ -89,12 +90,20 @@ const TickerRow = ({
 		sizeUnit === 'base'
 			? last_size
 			: format.format(Number(last_size) * Number(price.replaceAll(',', '')));
+
+	const firstNonZeroIndex = tradeSize.search(/[1-9]/);
+	const [faded, base] = [
+		tradeSize.slice(0, firstNonZeroIndex),
+		tradeSize.slice(firstNonZeroIndex),
+	];
+
 	return (
 		<TR key={sequence} className={SIDES[side].highlight}>
 			<TD style={style} className="text-right">
-				{tradeSize}
+				<span className="text-neutral-500 dark:text-neutral-300">{faded}</span>
+				{base}
 			</TD>
-			<TD className={SIDES[side].textColor}>{price}</TD>
+			<TD className={clsx('font-bold', SIDES[side].textColor)}>{price}</TD>
 			<TD className="opacity-50">{time}</TD>
 		</TR>
 	);
@@ -112,8 +121,8 @@ const History = ({ productId }: { productId: string }) => {
 	const format = getFormat(selectedSizeUnit);
 
 	return (
-		<div className="text-xs">
-			<table>
+		<div className="w-60 text-xs">
+			<table className="w-full">
 				<thead>
 					<tr>
 						<TD colSpan={4}>History</TD>

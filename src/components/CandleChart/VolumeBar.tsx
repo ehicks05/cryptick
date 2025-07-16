@@ -24,6 +24,7 @@ export const VolumeBar = ({
 	const [isHovered, setIsHovered] = useState(false);
 	return (
 		<>
+			{/** biome-ignore lint/a11y/noStaticElementInteractions: - */}
 			<rect
 				onMouseEnter={() => setIsHovered(true)}
 				onMouseLeave={() => setIsHovered(false)}

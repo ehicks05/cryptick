@@ -13,7 +13,7 @@ const borderColor = (isPositive: boolean) =>
 
 const background = (isPositive: boolean) =>
 	`bg-linear-to-t ${
-		isPositive ? 'from-[rgba(6,78,59,.15)]' : 'from-[rgba(153,27,27,.15)]'
+		isPositive ? 'from-[rgba(6,78,59,.15)]' : 'from-[rgba(113,25,25,.15)]'
 	} to-transparent`;
 
 const ProductDetail = () => {
