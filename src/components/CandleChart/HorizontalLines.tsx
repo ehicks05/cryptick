@@ -1,5 +1,7 @@
 import type { Candle } from '../../api/types/product';
 
+const nf = Intl.NumberFormat();
+
 interface CandleChartProps {
 	height: number;
 	width: number;
@@ -53,10 +55,10 @@ export const HorizontalLines = ({
 			<text
 				fontSize="11"
 				className="fill-neutral-500"
-				x={width - 36}
+				x={width - 40}
 				y={getY(line) + 3}
 			>
-				{line}
+				{nf.format(line)}
 			</text>
 		</g>
 	));
