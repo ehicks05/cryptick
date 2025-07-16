@@ -1,5 +1,6 @@
+import { useCoinbaseWebsocket } from 'api/useCoinbaseWebsocket';
 import { Settings2 } from 'lucide-react';
-import { useProducts, useTicker } from '../api';
+import { useProducts } from '../api';
 import { useProductIds } from '../hooks';
 import { buildSubscribeMessage } from '../utils';
 import { CandleGranularityPicker } from './CandleGranularityPicker';
@@ -17,7 +18,7 @@ import {
 } from './ui/dialog';
 
 const Settings = () => {
-	const { sendJsonMessage } = useTicker();
+	const { sendJsonMessage } = useCoinbaseWebsocket();
 	const [productIds, setProductIds] = useProductIds();
 	const { data: products = {} } = useProducts();
 

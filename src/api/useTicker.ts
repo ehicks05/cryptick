@@ -6,13 +6,14 @@ import { buildSubscribeMessage, formatPrice, formatTime } from '../utils';
 import { WS_URL } from './constants';
 import { useProducts } from './useProducts';
 
+// Singleton
 export const useTicker = () => {
 	const [productIds] = useProductIds();
 	const { data: products } = useProducts();
 
 	const addTickerMessage = useStore((state) => state.addTickerMessage);
 
-	const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
+	const { sendJsonMessage } = useWebSocket(WS_URL, {
 		onOpen: () => sendJsonMessage(buildSubscribeMessage('subscribe', productIds)),
 		filter: (message) => message.type === 'ticker',
 		onMessage: (event) => handleMessage(JSON.parse(event.data)),
@@ -21,6 +22,7 @@ export const useTicker = () => {
 		retryOnError: true,
 		reconnectAttempts: 50,
 		reconnectInterval: 2000,
+		share: true,
 	});
 
 	const handleMessage = (message: WebSocketTickerMessage) => {
@@ -50,10 +52,5 @@ export const useTicker = () => {
 		if (productId === productIds[0]) {
 			document.title = `${price} ${productId}`;
 		}
-	};
-
-	return {
-		sendJsonMessage,
-		readyState,
 	};
 };

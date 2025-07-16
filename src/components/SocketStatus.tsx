@@ -1,8 +1,8 @@
-import { useTicker } from 'api';
 import { SOCKET_STATUSES } from 'api/constants';
+import { useCoinbaseWebsocket } from 'api/useCoinbaseWebsocket';
 
 export const SocketStatus = () => {
-	const { readyState } = useTicker();
+	const { readyState } = useCoinbaseWebsocket();
 	const socketStatus = SOCKET_STATUSES[readyState];
 
 	return (

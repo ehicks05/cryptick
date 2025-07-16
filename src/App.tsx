@@ -1,8 +1,11 @@
+import { useTicker } from 'api';
 import { Route, Switch } from 'wouter';
 import { Footer, Header, ProductDetail, Products } from './components';
 import ProductDetailOld from './components/ProductDetailOld';
 
 function App() {
+	useTicker();
+
 	return (
 		<div className="flex flex-col h-dvh">
 			<Header />
