@@ -37,11 +37,7 @@ export const HorizontalLines = ({
 		const gridSize = options[optionIndex] * 10 ** power;
 
 		const minChunk = Number(min.toPrecision(2));
-		const lines = [...new Array(32)].map((_, i) => minChunk + (i - 16) * gridSize);
-		// console.log(`range: ${range}`);
-		// console.log(`targetGridLines: ${targetGridLines}`);
-		// console.log(`gridSize: ${gridSize}`);
-		// console.log(lines);
+		const lines = [...new Array(48)].map((_, i) => minChunk + (i - 24) * gridSize);
 		return lines;
 	};
 
