@@ -11,8 +11,8 @@ function App() {
 			<Header />
 			<div className="grow flex flex-col h-full overflow-y-auto">
 				<Switch>
-					<Route path="/:productId" component={ProductDetail} />
-					<Route path="/:productId/old" component={ProductDetailOld} />
+					<Route path="/:productId" component={ProductDetailOld} />
+					<Route path="/:productId/tv" component={ProductDetail} />
 					<Route path="/" component={Products} />
 				</Switch>
 			</div>
