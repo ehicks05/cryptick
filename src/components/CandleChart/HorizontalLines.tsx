@@ -42,8 +42,6 @@ export const HorizontalLines = ({
 		const minLine = min + range * 0.01;
 		const maxLine = max - range * 0.01;
 
-		console.log({ min, max, range, gridSize, startingLine, minLine, maxLine });
-
 		const lines = [...new Array(50)]
 			.map((_, i) => startingLine + i * gridSize)
 			.filter((line) => line >= minLine && line <= maxLine); // not too close to edge
