@@ -81,7 +81,7 @@ export const VerticalLines = ({
 			minutes: 2 * 24 * 60, // 2,880
 			filter: (date: Date) =>
 				[3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29].includes(
-					date.getDate(),
+					date.getUTCDate(),
 				) && date.getUTCHours() === 6,
 			hideDays: true,
 		},
@@ -89,7 +89,7 @@ export const VerticalLines = ({
 			format: d,
 			minutes: 3 * 24 * 60, // 4,320
 			filter: (date: Date) =>
-				[4, 7, 10, 13, 16, 19, 22, 25, 28].includes(date.getDate()) &&
+				[4, 7, 10, 13, 16, 19, 22, 25, 28].includes(date.getUTCDate()) &&
 				date.getUTCHours() === 6,
 			hideDays: true,
 		},
@@ -97,31 +97,32 @@ export const VerticalLines = ({
 			format: d,
 			minutes: 5 * 24 * 60, // 7,200
 			filter: (date: Date) =>
-				[5, 9, 13, 17, 21, 25].includes(date.getDate()) && date.getUTCHours() === 6,
+				[5, 9, 13, 17, 21, 25].includes(date.getUTCDate()) &&
+				date.getUTCHours() === 6,
 			hideDays: true,
 		},
 		{
 			format: d,
 			minutes: 7 * 24 * 60, // 10,080
-			filter: (date: Date) => [6, 11, 16, 21, 26].includes(date.getDate()),
+			filter: (date: Date) => [6, 11, 16, 21, 26].includes(date.getUTCDate()),
 			hideDays: true,
 		},
 		{
 			format: d,
 			minutes: 30 * 24 * 60, // 43,200
-			filter: (date: Date) => date.getMonth() === 0 && date.getDate() === 1,
+			filter: (date: Date) => date.getUTCMonth() === 0 && date.getUTCDate() === 1,
 			hideDays: true,
 		},
 		{
 			format: yyyy,
 			minutes: 90 * 24 * 60,
-			filter: (date: Date) => date.getMonth() === 0 && date.getDate() === 1,
+			filter: (date: Date) => date.getUTCMonth() === 0 && date.getUTCDate() === 1,
 			hideDays: true,
 		},
 		{
 			format: yyyy,
 			minutes: 365 * 24 * 60,
-			filter: (date: Date) => date.getMonth() === 0 && date.getDate() === 1,
+			filter: (date: Date) => date.getUTCMonth() === 0 && date.getUTCDate() === 1,
 			hideDays: true,
 		},
 	];
@@ -132,46 +133,52 @@ export const VerticalLines = ({
 	}
 	const option = OPTIONS[optionIndex];
 
-	const horizontalLineEls = viewableCandles.map((candle, i) => {
-		const date = new Date(candle.timestamp);
+	const lines = viewableCandles
+		.map((candle, i) => {
+			const date = new Date(candle.timestamp);
 
-		const prevCandle =
-			i < viewableCandles.length - 1 ? viewableCandles[i + 1] : undefined;
-		const prevCandleDate = prevCandle && new Date(prevCandle.timestamp);
+			const prevCandle =
+				i < viewableCandles.length - 1 ? viewableCandles[i + 1] : undefined;
+			const prevCandleDate = prevCandle && new Date(prevCandle.timestamp);
 
-		const isDayBoundary =
-			!option.hideDays &&
-			prevCandleDate &&
-			date.getUTCDate() !== prevCandleDate.getUTCDate();
-		const isMonthBoundary =
-			prevCandleDate && date.getUTCMonth() !== prevCandleDate.getUTCMonth();
-		const isYearBoundary =
-			prevCandleDate && date.getUTCFullYear() !== prevCandleDate.getUTCFullYear();
+			const isDayBoundary =
+				!option.hideDays &&
+				prevCandleDate &&
+				date.getUTCDate() !== prevCandleDate.getUTCDate();
+			const isMonthBoundary =
+				prevCandleDate && date.getUTCMonth() !== prevCandleDate.getUTCMonth();
+			const isYearBoundary =
+				prevCandleDate && date.getUTCFullYear() !== prevCandleDate.getUTCFullYear();
 
-		const passesMinutesFilter = option.filter
-			? option.filter(date)
-			: (candle.timestamp / 1000 / 60) % option.minutes === 0;
-		if (
-			!isYearBoundary &&
-			!isMonthBoundary &&
-			!isDayBoundary &&
-			!passesMinutesFilter
-		) {
-			return;
-		}
+			const passesMinutesFilter = option.filter
+				? option.filter(date)
+				: (candle.timestamp / 1000 / 60) % option.minutes === 0;
+			if (
+				!isYearBoundary &&
+				!isMonthBoundary &&
+				!isDayBoundary &&
+				!passesMinutesFilter
+			) {
+				return;
+			}
 
-		const format = isYearBoundary
-			? yyyy
-			: isMonthBoundary
-				? MMM
-				: isDayBoundary
-					? d
-					: option.format;
+			const format = isYearBoundary
+				? yyyy
+				: isMonthBoundary
+					? MMM
+					: isDayBoundary
+						? d
+						: option.format;
 
-		const formattedDate = format.format(date);
+			const formattedDate = format.format(date);
 
+			return { timestamp: candle.timestamp, formattedDate, i };
+		})
+		.filter((line) => !!line);
+
+	return lines.map(({ timestamp, formattedDate, i }) => {
 		return (
-			<g key={candle.timestamp} className="text-black dark:text-white">
+			<g key={timestamp} className="text-black dark:text-white">
 				<line
 					stroke={'rgba(100, 100, 100, .25)'}
 					x1={getX(i * candleWidth) - candleWidth / 2}
@@ -190,6 +197,4 @@ export const VerticalLines = ({
 			</g>
 		);
 	});
-
-	return horizontalLineEls;
 };
