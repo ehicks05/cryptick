@@ -39,7 +39,9 @@ export const HorizontalLines = ({
 		const gridSize = options[optionIndex] * 10 ** power;
 
 		const minChunk = Number(min.toPrecision(2));
-		const lines = [...new Array(48)].map((_, i) => minChunk + (i - 24) * gridSize);
+		const lines = [...new Array(48)]
+			.map((_, i) => minChunk + (i - 24) * gridSize)
+			.filter((line) => line >= min * 1.003 && line <= max * 0.997); // not too close to edge
 		return lines;
 	};
 
