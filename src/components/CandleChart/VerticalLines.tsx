@@ -73,7 +73,7 @@ export const VerticalLines = ({
 		{
 			format: d,
 			minutes: 24 * 60, // 1,440
-			filter: (date: Date) => date.getUTCHours() === 6,
+			filter: (date: Date) => date.getUTCHours() === 0,
 			hideDays: true,
 		},
 		{
@@ -82,7 +82,7 @@ export const VerticalLines = ({
 			filter: (date: Date) =>
 				[3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29].includes(
 					date.getUTCDate(),
-				) && date.getUTCHours() === 6,
+				) && date.getUTCHours() === 0,
 			hideDays: true,
 		},
 		{
@@ -90,7 +90,7 @@ export const VerticalLines = ({
 			minutes: 3 * 24 * 60, // 4,320
 			filter: (date: Date) =>
 				[4, 7, 10, 13, 16, 19, 22, 25, 28].includes(date.getUTCDate()) &&
-				date.getUTCHours() === 6,
+				date.getUTCHours() === 0,
 			hideDays: true,
 		},
 		{
@@ -98,7 +98,7 @@ export const VerticalLines = ({
 			minutes: 5 * 24 * 60, // 7,200
 			filter: (date: Date) =>
 				[5, 9, 13, 17, 21, 25].includes(date.getUTCDate()) &&
-				date.getUTCHours() === 6,
+				date.getUTCHours() === 0,
 			hideDays: true,
 		},
 		{
@@ -175,6 +175,8 @@ export const VerticalLines = ({
 			return { timestamp: candle.timestamp, formattedDate, i };
 		})
 		.filter((line) => !!line);
+
+	console.log({ minutes: option.minutes });
 
 	return lines.map(({ timestamp, formattedDate, i }) => {
 		return (
