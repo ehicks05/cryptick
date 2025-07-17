@@ -38,10 +38,15 @@ export const HorizontalLines = ({
 		}
 		const gridSize = options[optionIndex] * 10 ** power;
 
-		const minChunk = Number(min.toPrecision(2));
-		const lines = [...new Array(48)]
-			.map((_, i) => minChunk + (i - 24) * gridSize)
-			.filter((line) => line >= min * 1.003 && line <= max * 0.997); // not too close to edge
+		const startingLine = gridSize * Math.ceil(min / gridSize);
+		const minLine = min + range * 0.01;
+		const maxLine = max - range * 0.01;
+
+		console.log({ min, max, range, gridSize, startingLine, minLine, maxLine });
+
+		const lines = [...new Array(50)]
+			.map((_, i) => startingLine + i * gridSize)
+			.filter((line) => line >= minLine && line <= maxLine); // not too close to edge
 		return lines;
 	};
 
