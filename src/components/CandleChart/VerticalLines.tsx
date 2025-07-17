@@ -32,7 +32,7 @@ export const VerticalLines = ({
 		viewableCandles[0].timestamp -
 		viewableCandles[viewableCandles.length - 1].timestamp;
 	const rangeMinutes = rangeMs / 1000 / 60;
-	const targetGridLines = width / 70; // we want a gridline every 50 pixels
+	const targetGridLines = width / 70; // we want a gridline every n pixels
 
 	const OPTIONS = [
 		{ format: mm, minutes: 2 },
