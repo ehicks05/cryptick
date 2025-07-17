@@ -44,26 +44,26 @@ export const VerticalLines = ({
 			format: hh,
 			minutes: 2 * 60, // 120
 			filter: (date: Date) =>
-				[3, 6, 9, 12, 15, 18, 21].includes(date.getUTCHours()) &&
+				[0, 3, 6, 9, 12, 15, 18, 21].includes(date.getUTCHours()) &&
 				date.getUTCMinutes() === 0,
 		},
 		{
 			format: hh,
 			minutes: 3 * 60, // 180
 			filter: (date: Date) =>
-				[4, 8, 12, 16, 20].includes(date.getUTCHours()) &&
+				[0, 4, 8, 12, 16, 20].includes(date.getUTCHours()) &&
 				date.getUTCMinutes() === 0,
 		},
 		{
 			format: hh,
 			minutes: 4 * 60, // 240
 			filter: (date: Date) =>
-				[6, 12, 18, 0].includes(date.getUTCHours()) && date.getUTCMinutes() === 0,
+				[0, 6, 12, 18, 0].includes(date.getUTCHours()) && date.getUTCMinutes() === 0,
 		},
 		{
 			format: hh,
 			minutes: 6 * 60, // 360
-			filter: (date: Date) => [6, 12, 18, 0].includes(date.getUTCHours()),
+			filter: (date: Date) => [0, 6, 12, 18].includes(date.getUTCHours()),
 		},
 		{
 			format: hh,
@@ -74,56 +74,48 @@ export const VerticalLines = ({
 			format: d,
 			minutes: 24 * 60, // 1,440
 			filter: (date: Date) => date.getUTCHours() === 0,
-			hideDays: true,
 		},
 		{
 			format: d,
 			minutes: 2 * 24 * 60, // 2,880
 			filter: (date: Date) =>
-				[3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29].includes(
+				[1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29].includes(
 					date.getUTCDate(),
 				) && date.getUTCHours() === 0,
-			hideDays: true,
 		},
 		{
 			format: d,
 			minutes: 3 * 24 * 60, // 4,320
 			filter: (date: Date) =>
-				[4, 7, 10, 13, 16, 19, 22, 25, 28].includes(date.getUTCDate()) &&
+				[1, 4, 7, 10, 13, 16, 19, 22, 25, 28].includes(date.getUTCDate()) &&
 				date.getUTCHours() === 0,
-			hideDays: true,
 		},
 		{
 			format: d,
 			minutes: 5 * 24 * 60, // 7,200
 			filter: (date: Date) =>
-				[5, 9, 13, 17, 21, 25].includes(date.getUTCDate()) &&
+				[1, 5, 9, 13, 17, 21, 25].includes(date.getUTCDate()) &&
 				date.getUTCHours() === 0,
-			hideDays: true,
 		},
 		{
 			format: d,
 			minutes: 7 * 24 * 60, // 10,080
-			filter: (date: Date) => [6, 11, 16, 21, 26].includes(date.getUTCDate()),
-			hideDays: true,
+			filter: (date: Date) => [1, 6, 11, 16, 21, 26].includes(date.getUTCDate()),
 		},
 		{
 			format: d,
 			minutes: 30 * 24 * 60, // 43,200
-			filter: (date: Date) => date.getUTCMonth() === 0 && date.getUTCDate() === 1,
-			hideDays: true,
+			filter: (date: Date) => date.getUTCDate() === 1,
 		},
 		{
 			format: yyyy,
 			minutes: 90 * 24 * 60,
 			filter: (date: Date) => date.getUTCMonth() === 0 && date.getUTCDate() === 1,
-			hideDays: true,
 		},
 		{
 			format: yyyy,
 			minutes: 365 * 24 * 60,
 			filter: (date: Date) => date.getUTCMonth() === 0 && date.getUTCDate() === 1,
-			hideDays: true,
 		},
 	];
 
@@ -142,9 +134,7 @@ export const VerticalLines = ({
 			const prevCandleDate = prevCandle && new Date(prevCandle.timestamp);
 
 			const isDayBoundary =
-				!option.hideDays &&
-				prevCandleDate &&
-				date.getUTCDate() !== prevCandleDate.getUTCDate();
+				prevCandleDate && date.getUTCDate() !== prevCandleDate.getUTCDate();
 			const isMonthBoundary =
 				prevCandleDate && date.getUTCMonth() !== prevCandleDate.getUTCMonth();
 			const isYearBoundary =
@@ -153,12 +143,7 @@ export const VerticalLines = ({
 			const passesMinutesFilter = option.filter
 				? option.filter(date)
 				: (candle.timestamp / 1000 / 60) % option.minutes === 0;
-			if (
-				!isYearBoundary &&
-				!isMonthBoundary &&
-				!isDayBoundary &&
-				!passesMinutesFilter
-			) {
+			if (!passesMinutesFilter) {
 				return;
 			}
 
