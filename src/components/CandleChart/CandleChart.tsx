@@ -5,15 +5,12 @@ import type { Candle as ICandle } from '../../api/types/product';
 import { clamp } from '../../utils';
 import { Crosshair } from './Crosshair';
 import { HorizontalLines } from './HorizontalLines';
+import { VerticalLines } from './VerticalLines';
 import { VolumeBar } from './VolumeBar';
-
-const MMM = Intl.DateTimeFormat('en-US', { month: 'short' });
-const d = Intl.DateTimeFormat('en-US', { day: 'numeric' });
 
 const Candle = ({
 	candle: { timestamp, low, high, open, close, volume },
 	i,
-	viewableCandles,
 	height,
 	width,
 	min,
@@ -23,7 +20,6 @@ const Candle = ({
 }: {
 	candle: ICandle;
 	i: number;
-	viewableCandles: ICandle[];
 	height: number;
 	width: number;
 	min: number;
@@ -31,14 +27,6 @@ const Candle = ({
 	maxVolume: number;
 	candleWidth: number;
 }) => {
-	const date = new Date(timestamp);
-	const prevCandle =
-		i < viewableCandles.length - 1 ? viewableCandles[i + 1] : undefined;
-	const prevCandleDate = prevCandle && new Date(prevCandle.timestamp);
-	const isDayBoundary =
-		prevCandleDate && date.getDate() !== prevCandleDate.getDate();
-	const isMonthBoundary =
-		prevCandleDate && date.getMonth() !== prevCandleDate.getMonth();
 	const volumeBarHeight = ((volume / maxVolume) * height) / 4;
 
 	const getY = (y: number) => {
@@ -67,25 +55,6 @@ const Candle = ({
 				volumeBarHeight={volumeBarHeight}
 				volume={volume}
 			/>
-			{isDayBoundary && (
-				<>
-					<line
-						stroke={'rgba(100, 100, 100, .25)'}
-						x1={getX(i * candleWidth) - candleWidth / 2}
-						y1={getY(min)}
-						x2={getX(i * candleWidth) - candleWidth / 2}
-						y2={getY(max + 1450)} // todo: figure out
-					/>
-					<text
-						fontSize="11"
-						className="fill-neutral-500"
-						x={getX(i * candleWidth + candleWidth / 2)}
-						y={getY(min) + 16}
-					>
-						{isMonthBoundary ? MMM.format(date) : d.format(date)}
-					</text>
-				</>
-			)}
 			<rect
 				// stroke={close >= open ? 'rgba(16, 185, 129)' : 'rgb(239, 68, 68)'}
 				className={
@@ -167,7 +136,6 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 			key={candle.timestamp}
 			candle={candle}
 			i={i}
-			viewableCandles={viewableCandles}
 			height={height}
 			width={width}
 			min={min}
@@ -202,6 +170,12 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 						viewableCandles={viewableCandles}
 						height={height}
 						width={width}
+					/>
+					<VerticalLines
+						viewableCandles={viewableCandles}
+						height={height}
+						width={width}
+						candleWidth={candleWidth}
 					/>
 					{candleEls}
 					{mousePos && (
