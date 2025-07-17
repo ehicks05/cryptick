@@ -161,8 +161,6 @@ export const VerticalLines = ({
 		})
 		.filter((line) => !!line);
 
-	console.log({ minutes: option.minutes });
-
 	return lines.map(({ timestamp, formattedDate, i }) => {
 		return (
 			<g key={timestamp} className="text-black dark:text-white">
