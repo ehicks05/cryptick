@@ -42,7 +42,9 @@ const Candle = ({
 	// avoids candles looking too far apart when zoomed in,
 	// and too squeezed together when zoomed out
 	const rectXDivisor =
-		candleWidth < 6 ? 8 : candleWidth < 12 ? 6 : candleWidth < 24 ? 4 : 3;
+		candleWidth < 6 ? 7 : candleWidth < 12 ? 5 : candleWidth < 24 ? 3.8 : 3;
+
+	const candlestickWidth = Math.min(0.5, candleWidth / 10);
 
 	return (
 		<React.Fragment key={timestamp}>
@@ -59,12 +61,12 @@ const Candle = ({
 				// stroke={close >= open ? 'rgba(16, 185, 129)' : 'rgb(239, 68, 68)'}
 				className={
 					close >= open
-						? 'transition-[height,y] stroke-emerald-600'
-						: 'transition-[height,y] stroke-red-500'
+						? 'transition-[height,y] stroke-emerald-600 fill-emerald-600'
+						: 'transition-[height,y] stroke-red-500 fill-red-500'
 				}
-				x={getX(i * candleWidth)}
+				x={getX(i * candleWidth + candlestickWidth / 2)}
 				y={getY(high)}
-				width={0.1}
+				width={candlestickWidth}
 				height={getY(low) - getY(high)}
 			/>
 			{candleWidth >= 4 && (
@@ -150,11 +152,11 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 			ref={ref}
 			className="flex grow w-full h-full border"
 			// onMouseMove={(e) => {
-			//   let rect = e.target.getBoundingClientRect();
-			//   let x = e.clientX - rect.left; //x position within the element.
-			//   let y = e.clientY - rect.top; //y position within the element.
-			//   // console.log({ x, y });
-			//   setMousePos({ x, y });
+			// 	let rect = e.target.getBoundingClientRect();
+			// 	let x = e.clientX - rect.left; //x position within the element.
+			// 	let y = e.clientY - rect.top; //y position within the element.
+			// 	// console.log({ x, y });
+			// 	setMousePos({ x, y });
 			// }}
 			// onMouseOut={() => setMousePos(undefined)}
 		>
