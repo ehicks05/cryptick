@@ -9,7 +9,7 @@ interface Props {
 	maxVolume: number;
 	candleWidth: number;
 	getX: (x: number) => number;
-	getY: (x: number) => number;
+	getY: (y: number) => number;
 }
 
 const Candle = ({
