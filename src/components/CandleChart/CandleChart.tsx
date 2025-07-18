@@ -3,77 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { usePrice } from 'store';
 import type { Candle as ICandle } from '../../api/types/product';
 import { clamp } from '../../utils';
+import Candle from './Candle';
 import { Crosshair } from './Crosshair';
 import { HorizontalLines } from './HorizontalLines';
 import { VerticalLines } from './VerticalLines';
-import { VolumeBar } from './VolumeBar';
-
-const Candle = ({
-	candle: { timestamp, low, high, open, close, volume },
-	i,
-	height,
-	maxVolume,
-	candleWidth,
-	getX,
-	getY,
-}: {
-	candle: ICandle;
-	i: number;
-	height: number;
-	maxVolume: number;
-	candleWidth: number;
-	getX: (x: number) => number;
-	getY: (x: number) => number;
-}) => {
-	const volumeBarHeight = ((volume / maxVolume) * height) / 4;
-
-	// this controls the gap between candles, decreasing relative gap as you zoom in
-	// avoids candles looking too far apart when zoomed in,
-	// and too squeezed together when zoomed out
-	const rectXDivisor =
-		candleWidth < 6 ? 7 : candleWidth < 12 ? 5 : candleWidth < 24 ? 3.8 : 3;
-
-	const candlestickWidth = Math.min(0.5, candleWidth / 10);
-
-	return (
-		<React.Fragment key={timestamp}>
-			<VolumeBar
-				getX={getX}
-				i={i}
-				candleWidth={candleWidth}
-				rectXDivisor={rectXDivisor}
-				height={height}
-				volumeBarHeight={volumeBarHeight}
-				volume={volume}
-			/>
-			<rect
-				// stroke={close >= open ? 'rgba(16, 185, 129)' : 'rgb(239, 68, 68)'}
-				className={
-					close >= open
-						? 'transition-[height,y] stroke-emerald-600 fill-emerald-600'
-						: 'transition-[height,y] stroke-red-500 fill-red-500'
-				}
-				x={getX(i * candleWidth + candlestickWidth / 2)}
-				y={getY(high)}
-				width={candlestickWidth}
-				height={getY(low) - getY(high)}
-			/>
-			{candleWidth >= 4 && (
-				<rect
-					className={
-						close >= open
-							? 'transition-[height,y] stroke-emerald-600 fill-emerald-600'
-							: 'transition-[height,y] stroke-red-500 fill-red-500'
-					}
-					x={getX(i * candleWidth) - candleWidth / rectXDivisor}
-					y={getY(Math.max(open, close))}
-					width={candleWidth / (rectXDivisor / 2)}
-					height={Math.abs(getY(close) - getY(open))}
-				/>
-			)}
-		</React.Fragment>
-	);
-};
 
 interface CandleChartProps {
 	height: number;
@@ -133,19 +66,6 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 		return bufferedHeight - ((y - min) / (max - min)) * bufferedHeight;
 	};
 
-	const candleEls = viewableCandles.map((candle, i) => (
-		<Candle
-			key={candle.timestamp}
-			candle={candle}
-			i={i}
-			height={height}
-			maxVolume={maxVolume}
-			candleWidth={candleWidth}
-			getX={getX}
-			getY={getY}
-		/>
-	));
-
 	return (
 		// biome-ignore lint/a11y/noStaticElementInteractions: <explanation>
 		<div
@@ -180,7 +100,18 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 						width={width}
 						candleWidth={candleWidth}
 					/>
-					{candleEls}
+					{viewableCandles.map((candle, i) => (
+						<Candle
+							key={candle.timestamp}
+							candle={candle}
+							i={i}
+							height={height}
+							maxVolume={maxVolume}
+							candleWidth={candleWidth}
+							getX={getX}
+							getY={getY}
+						/>
+					))}
 					{mousePos && (
 						<Crosshair x={mousePos.x} y={mousePos.y} w={width} h={height} />
 					)}
