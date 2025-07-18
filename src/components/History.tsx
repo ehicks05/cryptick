@@ -64,7 +64,7 @@ const TR = ({ children, ...props }: ComponentPropsWithoutRef<'tr'>) => {
 
 const TD = ({ children, className, ...props }: ComponentPropsWithoutRef<'td'>) => {
 	return (
-		<td {...props} className={`px-2 ${className}`}>
+		<td {...props} className={`px-2 w-full ${className}`}>
 			{children}
 		</td>
 	);
