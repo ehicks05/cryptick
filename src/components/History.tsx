@@ -34,7 +34,7 @@ const getAlpha = (
 
 const SIDES = {
 	buy: {
-		highlight: 'emerald-bold',
+		highlight: 'green-bold',
 		borderColor: 'border-emerald-500',
 		textColor: 'text-emerald-700 dark:text-emerald-500',
 	},
