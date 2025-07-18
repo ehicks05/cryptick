@@ -6,3 +6,6 @@ export const keyById = <T extends { id: string }>(list: T[]) =>
 		},
 		{} as Record<string, T>,
 	);
+
+// used to align refetches to be just after the start of each new minute
+export const getMsToNextMinuteStart = () => (62 - new Date().getSeconds()) * 1000;

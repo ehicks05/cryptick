@@ -4,6 +4,7 @@ import pThrottle from 'p-throttle';
 import { useEffect } from 'react';
 import { PRODUCT_URL } from './constants';
 import type { Candle, CandleGranularity, RawCandle } from './types/product';
+import { getMsToNextMinuteStart } from './utils';
 
 interface Params {
 	productId: string;
@@ -84,7 +85,7 @@ export const useCandles = (productIds: string[]) => {
 		queryKey: ['candles', productIds],
 		queryFn: () => getCandlesForProducts(productIds, granularity),
 		staleTime: 1000 * 60,
-		refetchInterval: 1000 * 60,
+		refetchInterval: getMsToNextMinuteStart,
 	});
 
 	useEffect(() => {
