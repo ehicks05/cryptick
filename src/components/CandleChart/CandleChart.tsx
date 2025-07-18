@@ -12,31 +12,20 @@ const Candle = ({
 	candle: { timestamp, low, high, open, close, volume },
 	i,
 	height,
-	width,
-	min,
-	max,
 	maxVolume,
 	candleWidth,
+	getX,
+	getY,
 }: {
 	candle: ICandle;
 	i: number;
 	height: number;
-	width: number;
-	min: number;
-	max: number;
 	maxVolume: number;
 	candleWidth: number;
+	getX: (x: number) => number;
+	getY: (x: number) => number;
 }) => {
 	const volumeBarHeight = ((volume / maxVolume) * height) / 4;
-
-	const getY = (y: number) => {
-		return height - ((y - min) / (max - min)) * height;
-	};
-
-	const getX = (x: number) => {
-		const buffer = 56; // allow for a right-side gutter for grid markers
-		return width - buffer - x;
-	};
 
 	// this controls the gap between candles, decreasing relative gap as you zoom in
 	// avoids candles looking too far apart when zoomed in,
@@ -100,6 +89,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 
 	const [candleWidthMulti, setCandleWidthMulti] = useState(2);
 	const [mousePos] = useState<{ x: number; y: number } | undefined>(undefined);
+	const [dragOffset, setDragOffset] = useState(0);
 	const [height, setHeight] = useState(0);
 
 	const baseCandleWidth = 6;
@@ -133,32 +123,43 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 		setCandleWidthMulti(clamp(newMulti, 0.75, 10));
 	};
 
+	const getX = (x: number) => {
+		const buffer = 56; // allow for a right-side gutter for grid markers
+		return width - buffer + dragOffset - x;
+	};
+
+	const getY = (y: number) => {
+		const bufferedHeight = height - 16;
+		return bufferedHeight - ((y - min) / (max - min)) * bufferedHeight;
+	};
+
 	const candleEls = viewableCandles.map((candle, i) => (
 		<Candle
 			key={candle.timestamp}
 			candle={candle}
 			i={i}
 			height={height}
-			width={width}
-			min={min}
-			max={max}
 			maxVolume={maxVolume}
 			candleWidth={candleWidth}
+			getX={getX}
+			getY={getY}
 		/>
 	));
 
 	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: <explanation>
 		<div
 			ref={ref}
 			className="flex grow w-full h-full border"
 			// onMouseMove={(e) => {
-			// 	let rect = e.target.getBoundingClientRect();
-			// 	let x = e.clientX - rect.left; //x position within the element.
-			// 	let y = e.clientY - rect.top; //y position within the element.
+			// 	const rect = e.target.getBoundingClientRect();
+			// 	const x = e.clientX - rect.left; //x position within the element.
+			// 	const y = e.clientY - rect.top; //y position within the element.
 			// 	// console.log({ x, y });
 			// 	setMousePos({ x, y });
 			// }}
 			// onMouseOut={() => setMousePos(undefined)}
+			// onBlur={() => setMousePos(undefined)}
 		>
 			{width && height && (
 				// biome-ignore lint/a11y/noSvgWithoutTitle: <>
