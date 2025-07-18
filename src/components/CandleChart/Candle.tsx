@@ -55,7 +55,7 @@ const Candle = ({
 				height={getY(low) - getY(high)}
 			/>
 			{/* body */}
-			{candleWidth >= 4 && (
+			{candleWidth >= 6 && (
 				<rect
 					className={classes}
 					x={getX(i * candleWidth) - candleWidth / rectXDivisor}
