@@ -33,8 +33,6 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 		setHeight(newHeight);
 	}, [h]);
 
-	if (!candles.length) return <div />;
-
 	const viewableCandleCount = width / candleWidth;
 	const viewableCandles = candles.slice(0, viewableCandleCount);
 
@@ -65,6 +63,8 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 		const bufferedHeight = height - 16;
 		return bufferedHeight - ((y - min) / (max - min)) * bufferedHeight;
 	};
+
+	if (!candles.length) return <div />;
 
 	return (
 		// biome-ignore lint/a11y/noStaticElementInteractions: <explanation>
