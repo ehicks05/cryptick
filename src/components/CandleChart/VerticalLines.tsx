@@ -15,6 +15,7 @@ interface CandleChartProps {
 	width: number;
 	viewableCandles: Candle[];
 	candleWidth: number;
+	getX: (x: number) => number;
 }
 
 export const VerticalLines = ({
@@ -22,12 +23,8 @@ export const VerticalLines = ({
 	width,
 	viewableCandles,
 	candleWidth,
+	getX,
 }: CandleChartProps) => {
-	const getX = (x: number) => {
-		const buffer = 56; // allow for a right-side gutter for grid markers
-		return width - buffer - x;
-	};
-
 	const rangeMs =
 		viewableCandles[0].timestamp -
 		viewableCandles[viewableCandles.length - 1].timestamp;
@@ -125,43 +122,45 @@ export const VerticalLines = ({
 	}
 	const option = OPTIONS[optionIndex];
 
-	const lines = viewableCandles
-		.map((candle, i) => {
-			const date = new Date(candle.timestamp);
+	const lines = viewableCandles.map((candle, i) => {
+		const date = new Date(candle.timestamp);
 
-			const prevCandle =
-				i < viewableCandles.length - 1 ? viewableCandles[i + 1] : undefined;
-			const prevCandleDate = prevCandle && new Date(prevCandle.timestamp);
+		const prevCandle =
+			i < viewableCandles.length - 1 ? viewableCandles[i + 1] : undefined;
+		const prevCandleDate = prevCandle && new Date(prevCandle.timestamp);
 
-			const isDayBoundary =
-				prevCandleDate && date.getUTCDate() !== prevCandleDate.getUTCDate();
-			const isMonthBoundary =
-				prevCandleDate && date.getUTCMonth() !== prevCandleDate.getUTCMonth();
-			const isYearBoundary =
-				prevCandleDate && date.getUTCFullYear() !== prevCandleDate.getUTCFullYear();
+		const isDayBoundary =
+			prevCandleDate && date.getUTCDate() !== prevCandleDate.getUTCDate();
+		const isMonthBoundary =
+			prevCandleDate && date.getUTCMonth() !== prevCandleDate.getUTCMonth();
+		const isYearBoundary =
+			prevCandleDate && date.getUTCFullYear() !== prevCandleDate.getUTCFullYear();
 
-			const passesMinutesFilter = option.filter
-				? option.filter(date)
-				: (candle.timestamp / 1000 / 60) % option.minutes === 0;
-			if (!passesMinutesFilter) {
-				return;
-			}
+		const passesMinutesFilter = option.filter
+			? option.filter(date)
+			: (candle.timestamp / 1000 / 60) % option.minutes === 0;
+		if (!passesMinutesFilter) {
+			return;
+		}
 
-			const format = isYearBoundary
-				? yyyy
-				: isMonthBoundary
-					? MMM
-					: isDayBoundary
-						? d
-						: option.format;
+		const format = isYearBoundary
+			? yyyy
+			: isMonthBoundary
+				? MMM
+				: isDayBoundary
+					? d
+					: option.format;
 
-			const formattedDate = format.format(date);
+		const formattedDate = format.format(date);
 
-			return { timestamp: candle.timestamp, formattedDate, i };
-		})
-		.filter((line) => !!line);
+		return { timestamp: candle.timestamp, formattedDate };
+	});
 
-	return lines.map(({ timestamp, formattedDate, i }) => {
+	return lines.map((line, i) => {
+		if (!line) return null;
+
+		const { timestamp, formattedDate } = line;
+
 		return (
 			<g key={timestamp} className="text-black dark:text-white">
 				<line

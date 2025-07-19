@@ -99,6 +99,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 						height={height}
 						width={width}
 						candleWidth={candleWidth}
+						getX={getX}
 					/>
 					{viewableCandles.map((candle, i) => (
 						<Candle
