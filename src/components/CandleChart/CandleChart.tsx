@@ -50,8 +50,13 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 	const maxVolume = Math.max(...viewableCandles.map((candle) => candle.volume));
 
 	const handleWheel = (e: React.WheelEvent) => {
-		const newMulti = candleWidthMulti + (e.deltaY < 0 ? 0.15 : -0.15);
-		setCandleWidthMulti(clamp(newMulti, 0.75, 10));
+		if (e.deltaY !== 0) {
+			const newMulti = candleWidthMulti + (e.deltaY < 0 ? 0.15 : -0.15);
+			setCandleWidthMulti(clamp(newMulti, 0.75, 10));
+		}
+		if (e.deltaX !== 0) {
+			// setDragOffset(dragOffset + (e.deltaX < 0 ? 1 : -1));
+		}
 	};
 
 	const getX = (x: number) => {
