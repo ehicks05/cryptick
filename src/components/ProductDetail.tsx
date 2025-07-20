@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useParams } from 'wouter';
 import { use24HourStats, useCandles } from '../api';
 import CandleChart from './CandleChart';
+import { CandleGranularityPicker } from './CandleGranularityPicker';
 import History from './History';
 import ProductSummary from './ProductSummary';
 
@@ -36,27 +37,6 @@ const ProductDetail = () => {
 
 	const isPositive = productStats.last >= productStats.open;
 
-	const _granularityPicker = (
-		<select
-			className="text-xs dark:bg-black"
-			onChange={(e) => setGranularity(Number(e.target.value))}
-			value={granularity}
-		>
-			{[
-				{ value: 60, label: '1m' },
-				{ value: 300, label: '5m' },
-				{ value: 900, label: '15m' },
-				{ value: 3600, label: '1h' },
-				{ value: 21600, label: '6h' },
-				{ value: 86400, label: '1d' },
-			].map(({ value, label }) => (
-				<option key={value} value={value}>
-					{label}
-				</option>
-			))}
-		</select>
-	);
-
 	return (
 		<div ref={ref} className="h-full grow flex flex-col md:flex-row gap-4 p-4">
 			<div
@@ -64,8 +44,9 @@ const ProductDetail = () => {
 					isPositive,
 				)} ${background(isPositive)}`}
 			>
-				<div ref={innerRef}>
+				<div ref={innerRef} className="flex flex-wrap justify-between items-center">
 					<ProductSummary productId={productId} />
+					<CandleGranularityPicker />
 				</div>
 				<div className="grow">
 					<CandleChart
@@ -76,7 +57,7 @@ const ProductDetail = () => {
 				</div>
 			</div>
 			<div
-				className="hidden md:block overflow-y-hidden h-full"
+				className="hidden md:block overflow-y-hidden h-full shrink-0"
 				style={{ maxHeight: height }}
 			>
 				<History productId={productId} />

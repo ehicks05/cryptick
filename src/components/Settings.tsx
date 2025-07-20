@@ -57,7 +57,10 @@ const Settings = () => {
 
 			<ChartHeightPicker />
 
-			<CandleGranularityPicker />
+			<div>
+				Candle Granularity
+				<CandleGranularityPicker />
+			</div>
 
 			<div className="flex flex-col">
 				<div>Theme</div>

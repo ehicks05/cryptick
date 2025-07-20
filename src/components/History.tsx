@@ -121,7 +121,7 @@ const History = ({ productId }: { productId: string }) => {
 	const format = getFormat(selectedSizeUnit);
 
 	return (
-		<div className="w-60 text-xs">
+		<div className="w-64 text-xs">
 			<table className="w-full">
 				<thead>
 					<tr>
