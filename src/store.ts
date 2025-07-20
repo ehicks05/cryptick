@@ -10,7 +10,7 @@ export interface AppState {
 	addTickerMessage: (data: TickerMessage) => void;
 }
 
-const useStore = create<AppState>((set) => ({
+export const useStore = create<AppState>((set) => ({
 	ticker: {},
 	addTickerMessage: (data) =>
 		set((state) => ({ ticker: mergeTicker(state.ticker, data) })),
@@ -56,5 +56,3 @@ export const useThrottledPrice = (productId: string) => {
 	const price = useThrottle(_price || '0', 500);
 	return price;
 };
-
-export default useStore;

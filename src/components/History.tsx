@@ -2,7 +2,7 @@ import { useThrottle } from '@uidotdev/usehooks';
 import type { TickerMessage } from 'api/types/ws-types';
 import clsx from 'clsx';
 import { type ComponentPropsWithoutRef, useState } from 'react';
-import useStore from 'store';
+import { useStore } from 'store';
 
 const normalize = (value: number) => {
 	if (value < 10) return 0.03;
