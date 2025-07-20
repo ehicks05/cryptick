@@ -1,7 +1,12 @@
 import { useTicker } from 'api';
 import { Route, Switch } from 'wouter';
-import { Footer, Header, ProductDetail, Products } from './components';
-import ProductDetailOld from './components/ProductDetailOld';
+import {
+	Footer,
+	Header,
+	ProductDetail,
+	ProductDetailTv,
+	Products,
+} from './components';
 
 function App() {
 	useTicker();
@@ -11,8 +16,8 @@ function App() {
 			<Header />
 			<div className="grow flex flex-col h-full overflow-y-auto">
 				<Switch>
-					<Route path="/:productId" component={ProductDetailOld} />
-					<Route path="/:productId/tv" component={ProductDetail} />
+					<Route path="/:productId" component={ProductDetail} />
+					<Route path="/:productId/tv" component={ProductDetailTv} />
 					<Route path="/" component={Products} />
 				</Switch>
 			</div>
