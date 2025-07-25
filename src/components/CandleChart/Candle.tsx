@@ -37,6 +37,15 @@ const Candle = ({
 
 	return (
 		<React.Fragment key={timestamp}>
+			{/* temporary hover effect */}
+			<rect
+				key={timestamp}
+				x={getX(i * candleWidth - candleWidth / 2)}
+				y={-32}
+				width={candleWidth}
+				height={height + 12}
+				className="opacity-0 hover:opacity-5 hover:fill-neutral-400 hover:stroke-neutral-400"
+			/>
 			<VolumeBar
 				getX={getX}
 				i={i}
