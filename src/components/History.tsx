@@ -1,7 +1,7 @@
-import { useThrottle } from '@uidotdev/usehooks';
+import { useLocalStorage, useThrottle } from '@uidotdev/usehooks';
 import type { TickerMessage } from 'api/types/ws-types';
 import clsx from 'clsx';
-import { type ComponentPropsWithoutRef, useState } from 'react';
+import type { ComponentPropsWithoutRef } from 'react';
 import { useStore } from 'store';
 
 const normalize = (value: number) => {
@@ -113,7 +113,7 @@ const History = ({ productId }: { productId: string }) => {
 	const ticker = useStore((state) => state.ticker[productId]) || [];
 	const throttledTicker = useThrottle(ticker, 333);
 
-	const [sizeUnit, setSizeUnit] = useState('base');
+	const [sizeUnit, setSizeUnit] = useLocalStorage('historySizeUnit', 'base');
 	const toggleSizeUnit = () => setSizeUnit(sizeUnit === 'base' ? 'quote' : 'base');
 
 	const [base, quote] = productId.split('-');
