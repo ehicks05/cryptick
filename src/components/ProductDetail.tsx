@@ -1,5 +1,5 @@
 import { useMeasure } from '@uidotdev/usehooks';
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'wouter';
 import { use24HourStats, useCandles } from '../api';
 import CandleChart from './CandleChart';
@@ -11,11 +11,6 @@ const borderColor = (isPositive: boolean) =>
 	isPositive
 		? 'border-green-300 dark:border-green-950'
 		: 'border-red-300 dark:border-red-950';
-
-const background = (isPositive: boolean) =>
-	`bg-linear-to-t ${
-		isPositive ? 'from-[rgba(6,78,59,.15)]' : 'from-[rgba(113,25,25,.15)]'
-	} to-transparent`;
 
 const ProductDetail = () => {
 	const [ref, { height: _height }] = useMeasure<HTMLDivElement>();
@@ -42,7 +37,7 @@ const ProductDetail = () => {
 			<div
 				className={`grow flex flex-col p-4 border rounded ${borderColor(
 					isPositive,
-				)} ${background(isPositive)}`}
+				)}`}
 			>
 				<div ref={innerRef} className="flex flex-wrap justify-between items-center">
 					<ProductSummary productId={productId} />
