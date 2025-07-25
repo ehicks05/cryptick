@@ -16,7 +16,7 @@ const Logo = () => {
 };
 
 const Header = () => (
-	<header className="flex p-4 justify-between text-neutral-600 dark:text-neutral-400">
+	<header className="flex p-4 pb-0 justify-between text-neutral-600 dark:text-neutral-400">
 		<Logo />
 		<SettingsDialog />
 	</header>

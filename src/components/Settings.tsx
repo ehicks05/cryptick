@@ -5,6 +5,7 @@ import { useProductIds } from '../hooks';
 import { buildSubscribeMessage } from '../utils';
 import { CandleGranularityPicker } from './CandleGranularityPicker';
 import { ChartHeightPicker } from './ChartHeightPicker';
+import ExternalLinks from './ExternalLinks';
 import { ThemeToggle } from './ThemeToggle';
 import { Button } from './ui/button';
 import { ComboboxDemo } from './ui/combobox';
@@ -65,6 +66,11 @@ const Settings = () => {
 			<div className="flex flex-col">
 				<div>Theme</div>
 				<ThemeToggle />
+			</div>
+
+			<div>
+				Links
+				<ExternalLinks />
 			</div>
 
 			<DialogClose asChild>
