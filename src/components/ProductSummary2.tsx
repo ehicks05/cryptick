@@ -16,11 +16,13 @@ const ProductSummary2 = ({ productId }: ProductSummaryProps) => {
 		return '';
 	}
 	return (
-		<div>
-			<Name product={product} />
-			<div className="flex gap-2">
-				{/* <Price productId={productId} /> */}
-				{/* <Stats product={product} /> */}
+		<div className="absolute bg-linear-to-b from-white dark:from-black via-white dark:via-black via-50% to-transparent">
+			<div className="pl-2 pt-1">
+				<Name product={product} />
+				<div className="flex gap-2">
+					{/* <Price productId={productId} /> */}
+					{/* <Stats product={product} /> */}
+				</div>
 			</div>
 		</div>
 	);
