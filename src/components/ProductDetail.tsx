@@ -19,7 +19,6 @@ const ProductDetail = () => {
 	const innerHeight = _innerHeight || 0;
 
 	const { productId } = useParams();
-	const [granularity, setGranularity] = useState(900);
 	const { data: _candles } = useCandles([productId || '']);
 	const candles = _candles?.[productId || ''];
 
