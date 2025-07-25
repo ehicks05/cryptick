@@ -64,7 +64,7 @@ const TR = ({ children, ...props }: ComponentPropsWithoutRef<'tr'>) => {
 
 const TD = ({ children, className, ...props }: ComponentPropsWithoutRef<'td'>) => {
 	return (
-		<td {...props} className={`px-2 w-full ${className}`}>
+		<td {...props} className={clsx('px-2 w-full', className)}>
 			{children}
 		</td>
 	);
@@ -123,7 +123,7 @@ const History = ({ productId }: { productId: string }) => {
 	return (
 		<div className="w-64 text-xs">
 			<table className="w-full">
-				<thead>
+				<thead className="text-neutral-600 dark:text-neutral-300">
 					<tr>
 						<TD colSpan={4}>History</TD>
 					</tr>
