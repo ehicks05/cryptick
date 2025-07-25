@@ -7,11 +7,6 @@ import { CandleGranularityPicker } from './CandleGranularityPicker';
 import History from './History';
 import ProductSummary from './ProductSummary';
 
-const borderColor = (isPositive: boolean) =>
-	isPositive
-		? 'border-green-300 dark:border-green-950'
-		: 'border-red-300 dark:border-red-950';
-
 const ProductDetail = () => {
 	const [ref, { height: _height }] = useMeasure<HTMLDivElement>();
 	const height = _height || 0;
@@ -38,7 +33,7 @@ const ProductDetail = () => {
 				</div>
 				<div className="grow">
 					<CandleChart
-						height={height - innerHeight}
+						height={height - innerHeight - 80} // why 80?
 						candles={candles}
 						productId={productId}
 					/>

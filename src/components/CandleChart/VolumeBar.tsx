@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { BOTTOM_GUTTER_HEIGHT } from './CandleChart';
 
 const myFormat = Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
 
@@ -30,7 +31,7 @@ export const VolumeBar = ({
 				onMouseLeave={() => setIsHovered(false)}
 				className="text-gray-700 fill-current opacity-40 hover:opacity-60"
 				x={getX(i * candleWidth) - candleWidth / rectXDivisor}
-				y={height - volumeBarHeight}
+				y={height - volumeBarHeight - BOTTOM_GUTTER_HEIGHT}
 				width={candleWidth / (rectXDivisor / 2)}
 				height={volumeBarHeight}
 			/>
@@ -38,7 +39,7 @@ export const VolumeBar = ({
 				<text
 					fontSize="11"
 					className="fill-neutral-400"
-					x={getX(i * candleWidth) - 20}
+					x={getX(i * candleWidth) - BOTTOM_GUTTER_HEIGHT}
 					y={height - 2}
 				>
 					{myFormat.format(volume)}

@@ -1,4 +1,5 @@
 import type { Candle } from '../../api/types/product';
+import { BOTTOM_GUTTER_HEIGHT } from './CandleChart';
 
 const mm = Intl.DateTimeFormat('en-US', {
 	timeZone: 'utc',
@@ -16,6 +17,7 @@ interface CandleChartProps {
 	viewableCandles: Candle[];
 	candleWidth: number;
 	getX: (x: number) => number;
+	dragOffset: number;
 }
 
 export const VerticalLines = ({
@@ -24,6 +26,7 @@ export const VerticalLines = ({
 	viewableCandles,
 	candleWidth,
 	getX,
+	dragOffset,
 }: CandleChartProps) => {
 	const rangeMs =
 		viewableCandles[0].timestamp -
@@ -162,19 +165,24 @@ export const VerticalLines = ({
 		const { timestamp, formattedDate } = line;
 
 		return (
-			<g key={timestamp} className="text-black dark:text-white">
+			<g key={timestamp}>
 				<line
 					stroke={'rgba(100, 100, 100, .25)'}
-					x1={getX(i * candleWidth) - candleWidth / 2}
-					y1={-32}
-					x2={getX(i * candleWidth) - candleWidth / 2}
-					y2={height} // todo: figure out
+					x1={getX(i * candleWidth - dragOffset * candleWidth) - candleWidth / 2}
+					y1={-16} // why not 0?
+					x2={getX(i * candleWidth - dragOffset * candleWidth) - candleWidth / 2}
+					y2={height - BOTTOM_GUTTER_HEIGHT} // todo: figure out
 				/>
 				<text
 					fontSize="11"
 					className="fill-neutral-500"
-					x={getX(i * candleWidth + candleWidth / 2 + 3 * formattedDate.length)}
-					y={height + 16}
+					x={getX(
+						i * candleWidth +
+							candleWidth / 2 +
+							3 * formattedDate.length -
+							dragOffset * candleWidth,
+					)}
+					y={height}
 				>
 					{formattedDate}
 				</text>

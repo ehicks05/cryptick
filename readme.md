@@ -18,3 +18,12 @@ data from cbpro includes:
 1. currencies and products - fetched once on pageload
 2. 24-stats and candles - fetched every minute
 3. ticker data - streams in constantly
+
+### todos
+
+1. when hovering over a candle
+  - display stats for that candle somewhere
+2. drag x
+  - add mouse drag
+  - when dragging to the past, fetch more candles. note: old candles don't change
+3. ui to reset scroll and zoom?

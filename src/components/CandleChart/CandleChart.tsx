@@ -6,7 +6,16 @@ import { clamp } from '../../utils';
 import Candle from './Candle';
 import { Crosshair } from './Crosshair';
 import { HorizontalLines } from './HorizontalLines';
+import { HorizontalMarkers } from './HorizontalMarkers';
 import { VerticalLines } from './VerticalLines';
+
+const DEFAULT_CANDLE_WIDTH = 12;
+const MIN_CANDLE_WIDTH_MULTI = 0.25;
+const MAX_CANDLE_WIDTH_MULTI = 5;
+const CANDLE_WIDTH_MULTI_DELTA = 0.15;
+
+export const RIGHT_GUTTER_WIDTH = 64;
+export const BOTTOM_GUTTER_HEIGHT = 20;
 
 interface CandleChartProps {
 	height: number;
@@ -20,25 +29,29 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 	const [ref, { width: _width }] = useMeasure<HTMLDivElement>();
 	const width = _width || 0;
 
-	const [candleWidthMulti, setCandleWidthMulti] = useState(2);
+	const [candleWidthMulti, setCandleWidthMulti] = useState(1);
 	const [mousePos] = useState<{ x: number; y: number } | undefined>(undefined);
 	const [dragOffset, setDragOffset] = useState(0);
 	const [height, setHeight] = useState(0);
 
-	const baseCandleWidth = 6;
-	const candleWidth = baseCandleWidth * candleWidthMulti;
+	const candleWidth = DEFAULT_CANDLE_WIDTH * candleWidthMulti;
+
+	const dragOffsetPixels = dragOffset * candleWidth;
 
 	useEffect(() => {
-		const newHeight = Math.max(h - 56 - 48, 1);
+		const newHeight = Math.max(h, 1);
 		setHeight(newHeight);
 	}, [h]);
 
 	const viewableCandleCount = width / candleWidth;
-	const viewableCandles = candles.slice(0, viewableCandleCount);
+	const viewableCandles = candles.slice(
+		-dragOffset,
+		viewableCandleCount - dragOffset + 1,
+	);
 
 	// set current candle's current price
-	if (viewableCandles?.[0]?.close && price) {
-		const candle = viewableCandles[0];
+	if (candles?.[0]?.close && price) {
+		const candle = candles[0];
 		const currentPrice = Number(price.replace(/,/g, ''));
 		candle.close = currentPrice;
 		if (currentPrice < candle.low) candle.low = currentPrice;
@@ -51,22 +64,33 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 
 	const handleWheel = (e: React.WheelEvent) => {
 		if (e.deltaY !== 0) {
-			const newMulti = candleWidthMulti + (e.deltaY < 0 ? 0.15 : -0.15);
-			setCandleWidthMulti(clamp(newMulti, 0.75, 10));
+			const newMulti =
+				candleWidthMulti +
+				(e.deltaY < 0 ? CANDLE_WIDTH_MULTI_DELTA : -CANDLE_WIDTH_MULTI_DELTA);
+			setCandleWidthMulti(
+				clamp(newMulti, MIN_CANDLE_WIDTH_MULTI, MAX_CANDLE_WIDTH_MULTI),
+			);
 		}
 		if (e.deltaX !== 0) {
-			// setDragOffset(dragOffset + (e.deltaX < 0 ? 1 : -1));
+			const newDragOffset = dragOffset + (e.deltaX < 0 ? 1 : -1);
+			if (newDragOffset <= 0) {
+				setDragOffset(dragOffset + (e.deltaX < 0 ? 1 : -1));
+			}
 		}
 	};
 
 	const getX = (x: number) => {
-		const buffer = 56; // allow for a right-side gutter for grid markers
-		return width - buffer + dragOffset - x;
+		const buffer = RIGHT_GUTTER_WIDTH; // reserve space for right-side grid markers
+		const availableWidthFactor = (width - buffer) / width;
+		return (width - x) * availableWidthFactor;
 	};
 
 	const getY = (y: number) => {
-		const bufferedHeight = height - 16;
-		return bufferedHeight - ((y - min) / (max - min)) * bufferedHeight;
+		const pushDown = 16; // prevent candles from touching the top
+		const buffer = BOTTOM_GUTTER_HEIGHT; // reserve space for bottom markers
+		const availableHeightFactor = (height - buffer) / height;
+		const availableHeight = height * availableHeightFactor;
+		return availableHeight - (availableHeight * (y - min)) / (max - min);
 	};
 
 	if (!candles.length) return <div />;
@@ -79,7 +103,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 			// onMouseMove={(e) => {
 			// 	const rect = e.target.getBoundingClientRect();
 			// 	const x = e.clientX - rect.left; //x position within the element.
-			// 	const y = e.clientY - rect.top; //y position within the element.
+			// 	const y = e.clientY - rect.top - 32; //y position within the element.
 			// 	// console.log({ x, y });
 			// 	setMousePos({ x, y });
 			// }}
@@ -87,10 +111,9 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 			// onBlur={() => setMousePos(undefined)}
 		>
 			{width && height && (
-				// biome-ignore lint/a11y/noSvgWithoutTitle: <>
 				<svg
 					style={{ touchAction: 'manipulation' }}
-					viewBox={`0 0 ${width} ${height}`}
+					viewBox={`${candleWidth / 2 + dragOffsetPixels} 0 ${width} ${height}`}
 					onWheel={handleWheel}
 				>
 					{/* <title>chart</title> */}
@@ -98,6 +121,8 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 						viewableCandles={viewableCandles}
 						height={height}
 						width={width}
+						dragOffsetPixels={dragOffsetPixels}
+						getY={getY}
 					/>
 					<VerticalLines
 						viewableCandles={viewableCandles}
@@ -105,8 +130,9 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 						width={width}
 						candleWidth={candleWidth}
 						getX={getX}
+						dragOffset={dragOffset}
 					/>
-					{viewableCandles.map((candle, i) => (
+					{candles.map((candle, i) => (
 						<Candle
 							key={candle.timestamp}
 							candle={candle}
@@ -118,6 +144,13 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 							getY={getY}
 						/>
 					))}
+					<HorizontalMarkers
+						viewableCandles={viewableCandles}
+						height={height}
+						width={width}
+						dragOffsetPixels={dragOffsetPixels}
+						getY={getY}
+					/>
 					{mousePos && (
 						<Crosshair x={mousePos.x} y={mousePos.y} w={width} h={height} />
 					)}
