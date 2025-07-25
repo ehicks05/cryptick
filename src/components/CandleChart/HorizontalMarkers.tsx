@@ -27,7 +27,7 @@ export const HorizontalMarkers = ({
 	const rectX = width - 48 + dragOffsetPixels;
 	const rectWidth = 128;
 
-	console.log({ dragOffsetPixels, rectX, rectWidth });
+	// console.log({ dragOffsetPixels, rectX, rectWidth });
 
 	return (
 		<>
