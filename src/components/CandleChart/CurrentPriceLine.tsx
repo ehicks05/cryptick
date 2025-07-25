@@ -48,7 +48,7 @@ export const CurrentPriceLine = ({
 				x={width - 58}
 				y={getY(viewableCandles[0].close) + 3}
 				animate={{ attrY: getY(viewableCandles[0].close) + 3 }}
-				transition={{ duration: 0.15, type: 'linear' }}
+				transition={{ duration: 0.15, type: 'spring' }}
 			>
 				{nf.format(viewableCandles[0].close)}
 			</motion.text>
