@@ -12,55 +12,30 @@ const ProductSummary2 = ({ productId }: ProductSummaryProps) => {
 	const productsQuery = useProducts();
 	const product = productsQuery.data?.[productId];
 
-	if (!product) {
-		return '';
-	}
-	return (
-		<div className="absolute bg-linear-to-b from-white dark:from-black via-white dark:via-black via-50% to-transparent">
-			<div className="pl-2 pt-1">
-				<Name product={product} />
-				<div className="flex gap-2">
-					{/* <Price productId={productId} /> */}
-					{/* <Stats product={product} /> */}
-				</div>
-			</div>
-		</div>
-	);
-};
-
-interface NameProps {
-	product: Product;
-}
-
-const Name = ({ product }: NameProps) => {
 	const currenciesQuery = useCurrencies();
 	const currency = product
 		? currenciesQuery.data?.[product.base_currency]
 		: undefined;
 
+	const price = useThrottledPrice(productId);
+
+	if (!product) {
+		return '';
+	}
+
 	const name = `${currency?.name ? `${currency.name} · ` : ''}${product.display_name}`;
 
 	return (
-		<div className="text-neutral-700 dark:text-neutral-400">
-			<div className="flex gap-2 items-baseline">
-				<span className="text-sm">{name}</span>
+		<div className="absolute bg-linear-to-b from-white dark:from-black via-white dark:via-black via-50% to-transparent">
+			<div className="pl-2 pt-1">
+				<div className="text-neutral-700 dark:text-neutral-400">
+					<div className="flex gap-2 items-baseline">
+						<span className="text-sm">
+							{name} · {price}
+						</span>
+					</div>
+				</div>
 			</div>
-		</div>
-	);
-};
-
-interface PriceProps {
-	productId: string;
-}
-
-const Price = ({ productId }: PriceProps) => {
-	const price = useThrottledPrice(productId);
-
-	return (
-		<div className="flex gap-2 mb-4 font-mono">
-			<span className="text-sm font-semibold" id={`${productId}Price`}>
-				{price}
-			</span>
 		</div>
 	);
 };

@@ -1,4 +1,5 @@
 import { useMeasure } from '@uidotdev/usehooks';
+import ProductSummary2 from 'components/ProductSummary2';
 import React, { useEffect, useState } from 'react';
 import { usePrice } from 'store';
 import type { Candle as ICandle } from '../../api/types/product';
@@ -99,7 +100,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 		// biome-ignore lint/a11y/noStaticElementInteractions: <explanation>
 		<div
 			ref={ref}
-			className="flex grow w-full h-full border"
+			className="relative flex grow w-full h-full border"
 			// onMouseMove={(e) => {
 			// 	const rect = e.target.getBoundingClientRect();
 			// 	const x = e.clientX - rect.left; //x position within the element.
@@ -156,6 +157,7 @@ const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
 					)}
 				</svg>
 			)}
+			<ProductSummary2 productId={productId} />
 		</div>
 	);
 };

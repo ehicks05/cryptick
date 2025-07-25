@@ -26,9 +26,8 @@ const ProductDetail = () => {
 
 	return (
 		<div ref={ref} className="h-full grow flex flex-col md:flex-row gap-4 p-4">
-			<div className="grow flex flex-col p-4 border rounded">
-				<div ref={innerRef} className="flex flex-wrap justify-between items-center">
-					<ProductSummary productId={productId} />
+			<div className="grow flex flex-col">
+				<div ref={innerRef} className="flex flex-wrap justify-end items-center pb-1">
 					<CandleGranularityPicker />
 				</div>
 				<div className="grow">
