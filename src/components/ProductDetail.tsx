@@ -29,15 +29,9 @@ const ProductDetail = () => {
 	if (!productStats) return <div>productStats is missing...</div>;
 	if (!candles) return <div>candles is missing...</div>;
 
-	const isPositive = productStats.last >= productStats.open;
-
 	return (
 		<div ref={ref} className="h-full grow flex flex-col md:flex-row gap-4 p-4">
-			<div
-				className={`grow flex flex-col p-4 border rounded ${borderColor(
-					isPositive,
-				)}`}
-			>
+			<div className="grow flex flex-col p-4 border rounded">
 				<div ref={innerRef} className="flex flex-wrap justify-between items-center">
 					<ProductSummary productId={productId} />
 					<CandleGranularityPicker />
