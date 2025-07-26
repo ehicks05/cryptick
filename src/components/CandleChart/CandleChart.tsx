@@ -18,6 +18,11 @@ const CANDLE_WIDTH_MULTI_DELTA = 0.15;
 export const RIGHT_GUTTER_WIDTH = 64;
 export const BOTTOM_GUTTER_HEIGHT = 20;
 
+interface Coord {
+	x: number;
+	y: number;
+}
+
 interface CandleChartProps {
 	height: number;
 	candles: ICandle[];
@@ -55,10 +60,10 @@ const CandleChart = ({
 		setHeight(newHeight);
 	}, [h]);
 
-	const viewableCandleCount = width / candleWidth;
+	const viewableCandleCount = Math.ceil(width / candleWidth);
 	const viewableCandles = candles.slice(
-		-dragOffset,
-		viewableCandleCount - dragOffset + 1,
+		-dragOffsetCandles,
+		viewableCandleCount - dragOffsetCandles + 1,
 	);
 
 	// set current candle's current price
@@ -84,9 +89,10 @@ const CandleChart = ({
 			);
 		}
 		if (e.deltaX !== 0) {
-			const newDragOffset = dragOffset + (e.deltaX < 0 ? 1 : -1);
-			if (newDragOffset <= 0) {
-				setDragOffset(dragOffset + (e.deltaX < 0 ? 1 : -1));
+			const direction = e.deltaX < 0 ? 1 : -1;
+			const newOffset = dragOffsetPixels + direction * candleWidth;
+			if (newOffset <= 0) {
+				setDragOffsetPixels(newOffset);
 			}
 		}
 	};
@@ -105,28 +111,51 @@ const CandleChart = ({
 		return availableHeight - (availableHeight * (y - min)) / (max - min);
 	};
 
+	const [prevX, setPrevX] = useState(0);
+
 	if (!candles.length) return <div />;
 
 	return (
-		// biome-ignore lint/a11y/noStaticElementInteractions: <explanation>
-		<div
-			ref={ref}
-			className="relative flex grow w-full h-full border"
-			// onMouseMove={(e) => {
-			// 	const rect = e.target.getBoundingClientRect();
-			// 	const x = e.clientX - rect.left; //x position within the element.
-			// 	const y = e.clientY - rect.top - 32; //y position within the element.
-			// 	// console.log({ x, y });
-			// 	setMousePos({ x, y });
-			// }}
-			// onMouseOut={() => setMousePos(undefined)}
-			// onBlur={() => setMousePos(undefined)}
-		>
+		<div ref={ref} className="relative flex grow w-full h-full border">
 			{width && height && (
 				<svg
 					style={{ touchAction: 'manipulation' }}
 					viewBox={`${candleWidth / 2 + dragOffsetPixels} 0 ${width} ${height}`}
 					onWheel={handleWheel}
+					onMouseMove={(e) => {
+						const rect = e.currentTarget.getBoundingClientRect();
+						const x = e.clientX - rect.left; //x position within the element.
+						// setMousePos({ x, y });
+
+						if (mouseDown) {
+							const deltaX = prevX - x;
+							console.log({ deltaX });
+							setDragOffsetPixels(Math.min(0, dragOffsetPixels + deltaX));
+							setPrevX(x);
+						}
+					}}
+					onMouseDown={(e) => {
+						setMouseDown(true);
+
+						const rect = e.currentTarget.getBoundingClientRect();
+						const x = e.clientX - rect.left; //x position within the element.
+						setPrevX(x);
+					}}
+					onMouseUp={() => {
+						setMouseDown(false);
+
+						setPrevX(0);
+					}}
+					onMouseLeave={() => {
+						setMousePos(undefined);
+						setMouseDown(false);
+						setPrevX(0);
+					}}
+					onBlur={() => {
+						setMousePos(undefined);
+						setMouseDown(false);
+						setPrevX(0);
+					}}
 				>
 					{/* <title>chart</title> */}
 					<HorizontalLines
@@ -142,7 +171,7 @@ const CandleChart = ({
 						width={width}
 						candleWidth={candleWidth}
 						getX={getX}
-						dragOffset={dragOffset}
+						dragOffset={dragOffsetCandles}
 					/>
 					{candles.map((candle, i) => (
 						<Candle
