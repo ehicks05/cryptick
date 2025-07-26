@@ -8,6 +8,9 @@ import { CandleGranularityPicker } from './CandleGranularityPicker';
 import History from './History';
 import { Button } from './ui/button';
 
+const DEFAULT_CANDLE_WIDTH_MULTI = 1;
+const DEFAULT_DRAG_OFFSET = 0;
+
 const ProductDetail = () => {
 	const [ref, { height: _height }] = useMeasure<HTMLDivElement>();
 	const height = _height || 0;
@@ -21,8 +24,10 @@ const ProductDetail = () => {
 	const { data: stats } = use24HourStats();
 	const productStats = stats?.[productId || ''];
 
-	const [candleWidthMulti, setCandleWidthMulti] = useState(1);
-	const [dragOffsetPixels, setDragOffsetPixels] = useState(0);
+	const [candleWidthMulti, setCandleWidthMulti] = useState(
+		DEFAULT_CANDLE_WIDTH_MULTI,
+	);
+	const [dragOffsetPixels, setDragOffsetPixels] = useState(DEFAULT_DRAG_OFFSET);
 
 	const resetView = () => {
 		setCandleWidthMulti(1);
@@ -41,7 +46,15 @@ const ProductDetail = () => {
 					className="flex flex-wrap justify-between items-center gap-2 pb-1"
 				>
 					<CandleGranularityPicker />
-					<Button onClick={resetView} variant="ghost" title="Reset View">
+					<Button
+						onClick={resetView}
+						variant="ghost"
+						title="Reset View"
+						disabled={
+							candleWidthMulti === DEFAULT_CANDLE_WIDTH_MULTI &&
+							dragOffsetPixels === DEFAULT_DRAG_OFFSET
+						}
+					>
 						<RotateCcw />
 					</Button>
 				</div>
