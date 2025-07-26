@@ -22,23 +22,34 @@ interface CandleChartProps {
 	height: number;
 	candles: ICandle[];
 	productId: string;
+	candleWidthMulti: number;
+	setCandleWidthMulti: React.Dispatch<React.SetStateAction<number>>;
+	dragOffsetPixels: number;
+	setDragOffsetPixels: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const CandleChart = ({ height: h, candles, productId }: CandleChartProps) => {
+const CandleChart = ({
+	height: h,
+	candles,
+	productId,
+	candleWidthMulti,
+	setCandleWidthMulti,
+	dragOffsetPixels,
+	setDragOffsetPixels,
+}: CandleChartProps) => {
 	const price = usePrice(productId);
 
 	const [ref, { width: _width }] = useMeasure<HTMLDivElement>();
 	const width = _width || 0;
 
-	const [candleWidthMulti, setCandleWidthMulti] = useState(1);
-	const [mousePos] = useState<{ x: number; y: number } | undefined>(undefined);
-	const [dragOffset, setDragOffset] = useState(0);
-	const [height, setHeight] = useState(0);
+	const [mouseDown, setMouseDown] = useState(false);
+	const [mousePos, setMousePos] = useState<Coord | undefined>(undefined);
 
 	const candleWidth = DEFAULT_CANDLE_WIDTH * candleWidthMulti;
 
-	const dragOffsetPixels = dragOffset * candleWidth;
+	const dragOffsetCandles = Math.round(dragOffsetPixels / candleWidth);
 
+	const [height, setHeight] = useState(0);
 	useEffect(() => {
 		const newHeight = Math.max(h, 1);
 		setHeight(newHeight);

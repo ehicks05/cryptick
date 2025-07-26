@@ -1,11 +1,12 @@
 import { useMeasure } from '@uidotdev/usehooks';
-import React from 'react';
+import { RotateCcw } from 'lucide-react';
+import React, { useState } from 'react';
 import { useParams } from 'wouter';
 import { use24HourStats, useCandles } from '../api';
 import CandleChart from './CandleChart';
 import { CandleGranularityPicker } from './CandleGranularityPicker';
 import History from './History';
-import ProductSummary from './ProductSummary';
+import { Button } from './ui/button';
 
 const ProductDetail = () => {
 	const [ref, { height: _height }] = useMeasure<HTMLDivElement>();
@@ -20,6 +21,14 @@ const ProductDetail = () => {
 	const { data: stats } = use24HourStats();
 	const productStats = stats?.[productId || ''];
 
+	const [candleWidthMulti, setCandleWidthMulti] = useState(1);
+	const [dragOffsetPixels, setDragOffsetPixels] = useState(0);
+
+	const resetView = () => {
+		setCandleWidthMulti(1);
+		setDragOffsetPixels(0);
+	};
+
 	if (!productId) return <div>ProductId is missing...</div>;
 	if (!productStats) return <div>productStats is missing...</div>;
 	if (!candles) return <div>candles is missing...</div>;
@@ -27,14 +36,24 @@ const ProductDetail = () => {
 	return (
 		<div ref={ref} className="h-full grow flex flex-col md:flex-row gap-4 p-4">
 			<div className="grow flex flex-col">
-				<div ref={innerRef} className="flex flex-wrap justify-end items-center pb-1">
+				<div
+					ref={innerRef}
+					className="flex flex-wrap justify-between items-center gap-2 pb-1"
+				>
 					<CandleGranularityPicker />
+					<Button onClick={resetView} variant="ghost" title="Reset View">
+						<RotateCcw />
+					</Button>
 				</div>
 				<div className="grow">
 					<CandleChart
 						height={height - innerHeight - 80} // why 80?
 						candles={candles}
 						productId={productId}
+						candleWidthMulti={candleWidthMulti}
+						setCandleWidthMulti={setCandleWidthMulti}
+						dragOffsetPixels={dragOffsetPixels}
+						setDragOffsetPixels={setDragOffsetPixels}
 					/>
 				</div>
 			</div>
