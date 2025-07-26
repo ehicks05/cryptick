@@ -24,6 +24,5 @@ data from cbpro includes:
 1. when hovering over a candle
   - display stats for that candle somewhere
 2. drag x
-  - add mouse drag
   - when dragging to the past, fetch more candles. note: old candles don't change
-3. ui to reset scroll and zoom?
+3. 1w, 1m candles
