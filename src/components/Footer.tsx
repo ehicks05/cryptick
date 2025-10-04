@@ -4,7 +4,7 @@ import { SocketStatus } from './SocketStatus';
 
 const Footer = () => {
 	return (
-		<footer className="flex items-center justify-between p-4 pt-0 gap-4">
+		<footer className="flex items-center justify-between p-4 pt-2 gap-4">
 			<SocketStatus />
 
 			<ExternalLinks />
