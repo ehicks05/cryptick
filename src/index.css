@@ -40,17 +40,13 @@
 }
 
 @layer utilities {
-	html {
-		height: -webkit-fill-available;
-	}
-	body {
-		min-height: 100vh;
-		min-height: -webkit-fill-available;
-	}
+	/* body {
+		height: 100dvh;
+	} */
 
-	#root {
-		min-height: 100vh;
-	}
+	/* #root {
+		min-height: 100dvh;
+	} */
 
 	.red {
 		animation: down 0.5s;
@@ -118,21 +114,6 @@
 		100% {
 			background-color: transparent;
 		}
-	}
-
-	/* SCROLLBAR */
-	::-webkit-scrollbar {
-		width: 6px;
-	}
-	::-webkit-scrollbar-track {
-		background: transparent;
-	}
-	::-webkit-scrollbar-thumb {
-		background: #575757;
-		border-radius: 4px;
-	}
-	::-webkit-scrollbar-thumb:hover {
-		background: #636363;
 	}
 }
 
