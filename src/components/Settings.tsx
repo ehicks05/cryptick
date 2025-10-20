@@ -50,7 +50,12 @@ const Settings = () => {
 			<div className="flex flex-col">
 				<div>Toggle Products</div>
 				<ComboboxDemo
-					items={items}
+					items={items.toSorted((o1, o2) => {
+						const o1v = productIds.includes(o1.value) ? -1 : 1;
+						const o2v = productIds.includes(o2.value) ? -1 : 1;
+
+						return o1v - o2v;
+					})}
 					selectedItems={productIds}
 					onSelect={(value) => toggleProduct(value)}
 				/>
