@@ -87,7 +87,6 @@ const getCandlesForProducts = async (
 	const start =
 		_start || subSeconds(new Date(), granularity * CANDLE_COUNT).toISOString();
 	const end = _end || undefined;
-	console.log(_start, _end);
 	const data = (
 		await Promise.all(productIds.map((id) => throttledFetch(id, start, end)))
 	).flat();
@@ -116,11 +115,14 @@ const getHistoricPerformanceForProducts = async (productIds: string[]) => {
 	const granularity = CandleGranularity.ONE_MINUTE;
 	const SEVEN_DAYS = 60 * 60 * 24 * 7;
 	const THIRTY_DAYS = 60 * 60 * 24 * 30;
+
+	// if there are no candles exactly 30 days ago, look for anything in the next hour
+	const WINDOW = 60 * 60;
+
 	const days7Start = subSeconds(new Date(), SEVEN_DAYS).toISOString();
-	const days7End = subSeconds(new Date(), SEVEN_DAYS - 90).toISOString();
+	const days7End = subSeconds(new Date(), SEVEN_DAYS - WINDOW).toISOString();
 	const days30Start = subSeconds(new Date(), THIRTY_DAYS).toISOString();
-	const days30End = subSeconds(new Date(), THIRTY_DAYS - 90).toISOString();
-	console.log({ days7Start, days7End, days30Start, days30End });
+	const days30End = subSeconds(new Date(), THIRTY_DAYS - WINDOW).toISOString();
 	const day7Candles = await getCandlesForProducts(
 		productIds,
 		granularity,
