@@ -9,26 +9,35 @@ import Chart from './SimpleChart/Chart';
 
 const BG_COLORS = {
 	POS: clsx(
-		'from-[rgba(60,120,60,.1)]',
-		'via-[rgba(60,120,60,.1)]',
+		'from-[rgba(60,120,60,.08)]',
+		'via-[rgba(60,120,60,.08)]',
 		'to-[rgba(60,120,60,.01)]',
 		'via-[40%]',
 		'to-[70%]',
-		'dark:from-[rgba(60,120,60,.2)]',
-		'dark:via-[rgba(60,120,60,.2)]',
+		'dark:from-[rgba(60,120,60,.15)]',
+		'dark:via-[rgba(60,120,60,.1)]',
 		'dark:to-[rgba(60,120,60,.1)]',
 	),
 	NEG: clsx(
-		'from-[rgba(150,60,60,.1)]',
-		'via-[rgba(150,60,60,.1)]',
+		'from-[rgba(150,60,60,.08)]',
+		'via-[rgba(150,60,60,.08)]',
 		'to-[rgba(150,60,60,.01)]',
 		'via-[40%]',
 		'to-[70%]',
-		'dark:from-[rgba(150,60,60,.2)]',
-		'dark:via-[rgba(150,60,60,.2)]',
+		'dark:from-[rgba(150,60,60,.15)]',
+		'dark:via-[rgba(150,60,60,.1)]',
 		'dark:to-[rgba(150,60,60,.1)]',
 	),
-	UND: 'from-[rgba(090,90,90,.15)] via-[rgba(90,90,90,.10)] to-[rgba(90,90,90,.08)] dark:to-[rgba(90,90,90,.08)]',
+	UND: clsx(
+		'from-[rgba(90,90,90,.15)]',
+		'via-[rgba(90,90,90,.1)]',
+		'to-[rgba(90,90,90,.08)]',
+		'via-[40%]',
+		'to-[70%]',
+		'dark:from-[rgba(90,90,90,.15)]',
+		'dark:via-[rgba(90,90,90,.1)]',
+		'dark:to-[rgba(90,90,90,.08)]',
+	),
 } as const;
 
 const BORDER_COLORS = {
