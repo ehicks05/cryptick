@@ -73,7 +73,7 @@ const getCandlesForProducts = async (
 	_end?: string,
 ) => {
 	const throttledFetch = throttle(
-		async (productId: string, start: string, end?: number) => {
+		async (productId: string, start: string, end?: string) => {
 			const candles = await getCandlesForProduct({
 				productId,
 				granularity,
