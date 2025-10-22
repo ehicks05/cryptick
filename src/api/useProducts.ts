@@ -22,7 +22,12 @@ const annotate = (product: Product) => ({
 const getProducts = async () => {
 	const response = await fetch(PRODUCT_URL);
 	const data: Product[] = await response.json();
-	return keyById(data.toSorted(sort).map(annotate));
+	return keyById(
+		data
+			.toSorted(sort)
+			.filter((o) => o.status === 'online')
+			.map(annotate),
+	);
 };
 
 export const useProducts = () =>

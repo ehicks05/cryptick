@@ -85,7 +85,7 @@ const Performance = ({ productId }: { productId: string }) => {
 	const day30Change = getChange(day30, Number(price));
 
 	const { data: _stats } = use24HourStats();
-	const day1 = _stats?.[productId].open || 0;
+	const day1 = _stats?.[productId]?.open || 0;
 	const day1Change = getChange(day1, Number(price));
 
 	const changes = [

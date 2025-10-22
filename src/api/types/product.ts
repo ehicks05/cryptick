@@ -21,7 +21,7 @@ export interface Product {
 	 * increment is 0.01, order prices of 0.001 or 0.021 would be rejected).
 	 */
 	quote_increment: string;
-	status: 'online';
+	status: 'delisted' | 'online';
 	status_message: string;
 	trading_disabled: boolean;
 
