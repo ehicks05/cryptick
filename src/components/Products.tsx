@@ -49,7 +49,7 @@ const Products = () => {
 
 	const { width: _width } = useWindowSize();
 	const width = _width || 0;
-	const minColumnWidth = width < 400 ? width - 16 - 16 - 16 - 16 : 320;
+	const minColumnWidth = width < 400 ? width - 16 - 16 - 16 - 16 : 380;
 
 	return (
 		<DndContext
@@ -90,8 +90,6 @@ const SortableItem = ({ id }: SortableItemProps) => {
 			pointerEvents: 'none', // prevent link clicks while dragging
 		}),
 	};
-
-	console.log({ isDragging });
 
 	return (
 		<div ref={setNodeRef} style={style} {...attributes} {...listeners}>
