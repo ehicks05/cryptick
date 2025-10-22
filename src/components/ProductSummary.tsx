@@ -16,11 +16,11 @@ const ProductSummary = ({ productId }: ProductSummaryProps) => {
 		return '';
 	}
 	return (
-		<div>
+		<div className="flex justify-between">
 			<Name product={product} />
 			<div className="flex gap-2">
 				<Price productId={productId} />
-				<Stats product={product} />
+				{/* <Stats product={product} /> */}
 			</div>
 		</div>
 	);
@@ -37,10 +37,10 @@ const Name = ({ product }: NameProps) => {
 		: undefined;
 
 	return (
-		<div className="text-neutral-700 dark:text-neutral-400">
-			<div className="flex gap-2 text-xl items-baseline">
+		<div className="">
+			<div className="flex flex-col text-xl items-baseline">
 				{product.display_name}
-				<span className="text-xs">{currency?.name}</span>
+				<span className="text-xs text-muted-foreground">{currency?.name}</span>
 			</div>
 		</div>
 	);

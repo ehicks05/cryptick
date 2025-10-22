@@ -1,12 +1,33 @@
-import { aggregateCandleStats } from 'lib/utils';
+import { useHistoricPerformance } from 'api/useCandles';
+import clsx from 'clsx';
+import { aggregateCandleStats, getChange } from 'lib/utils';
 import React from 'react';
-import { useCandles } from '../api';
+import { useThrottledPrice } from 'store';
+import { use24HourStats, useCandles } from '../api';
 import ProductSummary from './ProductSummary';
 import Chart from './SimpleChart/Chart';
 
 const BG_COLORS = {
-	POS: 'from-[rgba(60,120,60,.15)] via-[rgba(90,90,90,.10)] to-[rgba(90,90,90,.08)] dark:to-[rgba(90,90,90,.08)]',
-	NEG: 'from-[rgba(150,60,60,.15)] via-[rgba(90,90,90,.10)] to-[rgba(90,90,90,.08)] dark:to-[rgba(90,90,90,.08)]',
+	POS: clsx(
+		'from-[rgba(60,120,60,.1)]',
+		'via-[rgba(60,120,60,.1)]',
+		'to-[rgba(60,120,60,.01)]',
+		'via-[40%]',
+		'to-[70%]',
+		'dark:from-[rgba(60,120,60,.2)]',
+		'dark:via-[rgba(60,120,60,.2)]',
+		'dark:to-[rgba(60,120,60,.1)]',
+	),
+	NEG: clsx(
+		'from-[rgba(150,60,60,.1)]',
+		'via-[rgba(150,60,60,.1)]',
+		'to-[rgba(150,60,60,.01)]',
+		'via-[40%]',
+		'to-[70%]',
+		'dark:from-[rgba(150,60,60,.2)]',
+		'dark:via-[rgba(150,60,60,.2)]',
+		'dark:to-[rgba(150,60,60,.1)]',
+	),
 	UND: 'from-[rgba(090,90,90,.15)] via-[rgba(90,90,90,.10)] to-[rgba(90,90,90,.08)] dark:to-[rgba(90,90,90,.08)]',
 } as const;
 
@@ -27,14 +48,71 @@ const Product = ({ productId }: Props) => {
 	const { isPositive } = stats;
 
 	const colorKey = isPositive === undefined ? 'UND' : isPositive ? 'POS' : 'NEG';
-	const colorClasses = `${BORDER_COLORS[colorKey]} ${BG_COLORS[colorKey]}`;
 
 	return (
-		<div className={`rounded-lg shadow-sm bg-linear-to-t border ${colorClasses}`}>
-			<div className="p-4 pb-0">
+		<div
+			className={clsx(
+				'rounded-lg shadow-sm border bg-radial',
+				BG_COLORS[colorKey],
+				BORDER_COLORS[colorKey],
+			)}
+		>
+			<div className="p-4 pt-2 pb-0">
 				<ProductSummary productId={productId} />
 			</div>
 			<Chart productId={productId} />
+			<Performance productId={productId} />
+		</div>
+	);
+};
+
+const nf = new Intl.NumberFormat('en-US', {
+	style: 'percent',
+	minimumFractionDigits: 2,
+});
+
+const Performance = ({ productId }: { productId: string }) => {
+	const _price = useThrottledPrice(productId);
+	const cleanPriceString = _price.replace(/[$,]/g, ''); // Removes '$' and ','
+	const price = Number.parseFloat(cleanPriceString);
+
+	const { data } = useHistoricPerformance([productId]);
+
+	const day7 = data?.day7Candles[productId][0]?.open || 0;
+	const day30 = data?.day30Candles[productId][0]?.open || 0;
+
+	const day7Change = getChange(day7, Number(price));
+	const day30Change = getChange(day30, Number(price));
+
+	const { data: _stats } = use24HourStats();
+	const day1 = _stats?.[productId].open || 0;
+	const day1Change = getChange(day1, Number(price));
+
+	const changes = [
+		{ ...day1Change, label: '24H', class: '' },
+		{ ...day7Change, label: '7D', class: 'justify-center' },
+		{ ...day30Change, label: '30D', class: 'justify-end' },
+	];
+
+	return (
+		<div className="p-4 py-2 grid grid-cols-3 justify-between items-center">
+			{changes.map((change) => {
+				const color = change.isPositive
+					? 'text-green-700 dark:text-green-500'
+					: 'text-red-600 dark:text-red-500';
+				return (
+					<div
+						key={change.label}
+						className={clsx('flex items-baseline gap-2', change.class)}
+					>
+						<span className="text-xs text-muted-foreground">{change.label}</span>
+						<span className={clsx(change.class, color, 'text-sm font-mono')}>
+							{change.isPositive ? '+' : ''}
+							{nf.format(change.percentChange)}
+						</span>
+					</div>
+				);
+			})}
 		</div>
 	);
 };

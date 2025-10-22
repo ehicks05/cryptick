@@ -3,7 +3,7 @@ import { useCandleGranularity } from 'hooks/useCandleGranularity';
 import pThrottle from 'p-throttle';
 import { useEffect } from 'react';
 import { PRODUCT_URL } from './constants';
-import type { Candle, CandleGranularity, RawCandle } from './types/product';
+import { type Candle, CandleGranularity, type RawCandle } from './types/product';
 import { getMsToNextMinuteStart } from './utils';
 
 interface Params {
@@ -11,6 +11,7 @@ interface Params {
 	granularity: CandleGranularity;
 	start?: string;
 	end?: string;
+	limit?: number;
 }
 
 const getCandlesForProduct = async ({
@@ -18,12 +19,14 @@ const getCandlesForProduct = async ({
 	granularity,
 	start,
 	end,
+	limit,
 }: Params): Promise<Candle[]> => {
 	const url = `${PRODUCT_URL}/${productId}/candles`;
 	const query = new URLSearchParams({
 		granularity: String(granularity),
 		start: start || '',
 		...(end && { end }),
+		...(limit && { limit: String(limit) }),
 	});
 
 	try {
@@ -66,14 +69,28 @@ const CANDLE_COUNT = 96;
 const getCandlesForProducts = async (
 	productIds: string[],
 	granularity: CandleGranularity,
+	_start?: string,
+	_end?: string,
 ) => {
-	const throttledFetch = throttle(async (productId: string) => {
-		const start = subSeconds(new Date(), granularity * CANDLE_COUNT).toISOString();
-		const candles = await getCandlesForProduct({ productId, granularity, start });
-		return { productId, candles };
-	});
+	const throttledFetch = throttle(
+		async (productId: string, start: string, end?: number) => {
+			const candles = await getCandlesForProduct({
+				productId,
+				granularity,
+				start,
+				end,
+			});
+			return { productId, candles };
+		},
+	);
 
-	const data = (await Promise.all(productIds.map(throttledFetch))).flat();
+	const start =
+		_start || subSeconds(new Date(), granularity * CANDLE_COUNT).toISOString();
+	const end = _end || undefined;
+	console.log(_start, _end);
+	const data = (
+		await Promise.all(productIds.map((id) => throttledFetch(id, start, end)))
+	).flat();
 
 	return keyByProductId(data);
 };
@@ -91,6 +108,42 @@ export const useCandles = (productIds: string[]) => {
 	useEffect(() => {
 		if (granularity) query.refetch();
 	}, [granularity, query.refetch]);
+
+	return query;
+};
+
+const getHistoricPerformanceForProducts = async (productIds: string[]) => {
+	const granularity = CandleGranularity.ONE_MINUTE;
+	const SEVEN_DAYS = 60 * 60 * 24 * 7;
+	const THIRTY_DAYS = 60 * 60 * 24 * 30;
+	const days7Start = subSeconds(new Date(), SEVEN_DAYS).toISOString();
+	const days7End = subSeconds(new Date(), SEVEN_DAYS - 90).toISOString();
+	const days30Start = subSeconds(new Date(), THIRTY_DAYS).toISOString();
+	const days30End = subSeconds(new Date(), THIRTY_DAYS - 90).toISOString();
+	console.log({ days7Start, days7End, days30Start, days30End });
+	const day7Candles = await getCandlesForProducts(
+		productIds,
+		granularity,
+		days7Start,
+		days7End,
+	);
+	const day30Candles = await getCandlesForProducts(
+		productIds,
+		granularity,
+		days30Start,
+		days30End,
+	);
+
+	return { day7Candles, day30Candles };
+};
+
+export const useHistoricPerformance = (productIds: string[]) => {
+	const query = useQuery({
+		queryKey: ['historicCandles', productIds],
+		queryFn: () => getHistoricPerformanceForProducts(productIds),
+		staleTime: 1000 * 60,
+		refetchInterval: getMsToNextMinuteStart,
+	});
 
 	return query;
 };
