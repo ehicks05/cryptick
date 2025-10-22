@@ -1,8 +1,5 @@
 'use client';
 
-import { Check, ChevronsUpDown } from 'lucide-react';
-import * as React from 'react';
-
 import { Button } from 'components/ui/button';
 import {
 	Command,
@@ -14,6 +11,8 @@ import {
 } from 'components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from 'components/ui/popover';
 import { cn } from 'lib/utils';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import * as React from 'react';
 
 interface Props {
 	items: { label: string; value: string }[];
@@ -27,9 +26,9 @@ export function ComboboxDemo({ items, selectedItems, onSelect }: Props) {
 	return (
 		<Popover modal open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
+				{/** biome-ignore lint/a11y/useSemanticElements: <yo> */}
 				<Button
 					variant="outline"
-					// biome-ignore lint/a11y/useSemanticElements: <explanation>
 					role="combobox"
 					aria-expanded={open}
 					className="w-[200px] justify-between"
@@ -50,7 +49,6 @@ export function ComboboxDemo({ items, selectedItems, onSelect }: Props) {
 									value={item.value}
 									onSelect={(currentValue) => {
 										onSelect(currentValue);
-										setOpen(false);
 									}}
 									className={
 										selectedItems.includes(item.value)
