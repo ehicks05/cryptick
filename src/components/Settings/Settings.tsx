@@ -13,7 +13,7 @@ import {
 import { ChartHeightPicker } from './ChartHeightPicker';
 import { ProductPicker } from './ProductPicker';
 
-export const Settings = () => {
+const Settings = () => {
 	return (
 		<div className="flex flex-col items-start gap-8 overflow-y-auto">
 			<div>
