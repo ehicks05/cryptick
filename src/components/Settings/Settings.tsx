@@ -4,7 +4,7 @@ import { useProducts } from '../../api';
 import { useProductIds } from '../../hooks';
 import { buildSubscribeMessage } from '../../utils';
 import { CandleGranularityPicker } from '../CandleGranularityPicker';
-import ExternalLinks from '../ExternalLinks';
+import { ExternalLinks } from '../ExternalLinks';
 import { ThemeToggle } from '../ThemeToggle';
 import { Button } from '../ui/button';
 import { ComboboxDemo } from '../ui/combobox';

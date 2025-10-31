@@ -1,7 +1,7 @@
 import { SOCKET_STATUSES } from 'api/constants';
 import { useCoinbaseWebsocket } from 'api/useCoinbaseWebsocket';
 import React from 'react';
-import ExternalLinks from './ExternalLinks';
+import { ExternalLinks } from './ExternalLinks';
 
 const SocketStatus = () => {
 	const { readyState } = useCoinbaseWebsocket();
