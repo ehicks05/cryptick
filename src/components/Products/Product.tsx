@@ -51,9 +51,9 @@ const Performance = ({ productId }: { productId: string }) => {
 	const day1Change = getChange(day1, Number(price));
 
 	const changes = [
-		{ ...day1Change, label: '24H', class: '' },
-		{ ...day7Change, label: '7D', class: 'justify-center' },
-		{ ...day30Change, label: '30D', class: 'justify-end' },
+		{ ...day1Change, label: '24H', align: '' },
+		{ ...day7Change, label: '7D', align: 'justify-center' },
+		{ ...day30Change, label: '30D', align: 'justify-end' },
 	];
 
 	return (
@@ -64,20 +64,10 @@ const Performance = ({ productId }: { productId: string }) => {
 				return (
 					<div
 						key={change.label}
-						className={cn(
-							'flex items-baseline gap-2',
-							change.class,
-							BG_COLORS[direction],
-						)}
+						className={cn('flex items-baseline gap-2', change.align)}
 					>
 						<span className="text-xs text-muted-foreground">{change.label}</span>
-						<span
-							className={cn(
-								change.class,
-								TEXT_COLORS[direction],
-								'text-sm font-mono',
-							)}
-						>
+						<span className={cn(TEXT_COLORS[direction], 'text-sm font-mono')}>
 							{formatPercent(change.percentChange)}
 						</span>
 					</div>
