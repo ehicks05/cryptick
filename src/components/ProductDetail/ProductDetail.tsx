@@ -39,7 +39,7 @@ const ProductDetail = () => {
 	if (!candles) return <div>candles is missing...</div>;
 
 	return (
-		<div ref={ref} className="h-full grow flex flex-col md:flex-row gap-4 p-4">
+		<div ref={ref} className="h-full grow flex flex-col md:flex-row gap-4">
 			<div className="grow flex flex-col">
 				<div
 					ref={innerRef}

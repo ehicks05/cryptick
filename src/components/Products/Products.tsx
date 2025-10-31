@@ -57,7 +57,7 @@ const Products = () => {
 			onDragEnd={handleDragEnd}
 		>
 			<SortableContext items={productIds} strategy={rectSortingStrategy}>
-				<div className="w-full mx-auto p-4">
+				<div className="w-full mx-auto">
 					<div
 						className="grid gap-2"
 						style={{

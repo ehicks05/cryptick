@@ -8,7 +8,7 @@ export function App() {
 	return (
 		<div className="flex flex-col h-dvh">
 			<Header />
-			<div className="grow flex flex-col h-full overflow-y-auto">
+			<div className="grow flex flex-col h-full overflow-y-auto p-4">
 				<Routes />
 			</div>
 			<Footer />

@@ -13,34 +13,31 @@ import {
 import { ChartHeightPicker } from './ChartHeightPicker';
 import { ProductPicker } from './ProductPicker';
 
-const Settings = () => {
-	return (
-		<div className="flex flex-col items-start gap-8 overflow-y-auto">
-			<div>
-				<DialogTitle>Settings</DialogTitle>
-				<DialogDescription>Adjust your settings here</DialogDescription>
-			</div>
-
-			<ProductPicker />
-
-			<ChartHeightPicker />
-
-			<div>
-				Candle Granularity
-				<CandleGranularityPicker />
-			</div>
-
-			<div className="flex flex-col">
-				<div>Theme</div>
-				<ThemeToggle />
-			</div>
-
-			<DialogClose asChild>
-				<Button variant="secondary">Close</Button>
-			</DialogClose>
+const Settings = () => (
+	<div className="flex flex-col items-start gap-8 overflow-y-auto">
+		<div>
+			<DialogTitle>Settings</DialogTitle>
+			<DialogDescription>Adjust your settings here</DialogDescription>
 		</div>
-	);
-};
+
+		<ProductPicker />
+		<ChartHeightPicker />
+
+		<div>
+			Candle Granularity
+			<CandleGranularityPicker />
+		</div>
+
+		<div className="flex flex-col">
+			<div>Theme</div>
+			<ThemeToggle />
+		</div>
+
+		<DialogClose asChild>
+			<Button variant="secondary">Close</Button>
+		</DialogClose>
+	</div>
+);
 
 export const SettingsDialog = () => {
 	return (
