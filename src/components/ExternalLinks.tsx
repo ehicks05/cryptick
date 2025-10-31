@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import React from 'react';
 import { Link, useSearch } from 'wouter';
-import { APP_AUTHOR_URL, APP_REPO_URL } from '../constants';
+import { APP } from '../constants';
 
 interface LinkProps {
 	href: string;
@@ -39,8 +39,8 @@ const ExternalLinks = () => {
 	return (
 		<div className="flex gap-4">
 			{import.meta.env.DEV && <DebugLink />}
-			<ExternalLink href={APP_REPO_URL}>github</ExternalLink>
-			<ExternalLink href={APP_AUTHOR_URL}>ehicks</ExternalLink>
+			<ExternalLink href={APP.REPO_URL}>github</ExternalLink>
+			<ExternalLink href={APP.AUTHOR_URL}>ehicks</ExternalLink>
 		</div>
 	);
 };

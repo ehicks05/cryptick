@@ -1,6 +1,7 @@
-import { useLocalStorage, useThrottle } from '@uidotdev/usehooks';
+import { useThrottle } from '@uidotdev/usehooks';
 import type { TickerMessage } from 'api/types/ws-types';
 import clsx from 'clsx';
+import { useHistoryUnit } from 'hooks/useHistoryUnit';
 import type { ComponentPropsWithoutRef } from 'react';
 import { useStore } from 'store';
 
@@ -113,8 +114,7 @@ const History = ({ productId }: { productId: string }) => {
 	const ticker = useStore((state) => state.ticker[productId]) || [];
 	const throttledTicker = useThrottle(ticker, 333);
 
-	const [sizeUnit, setSizeUnit] = useLocalStorage('historySizeUnit', 'base');
-	const toggleSizeUnit = () => setSizeUnit(sizeUnit === 'base' ? 'quote' : 'base');
+	const { sizeUnit, toggleSizeUnit } = useHistoryUnit();
 
 	const [base, quote] = productId.split('-');
 	const selectedSizeUnit = sizeUnit === 'base' ? base : quote;
