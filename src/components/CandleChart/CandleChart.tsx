@@ -1,5 +1,5 @@
 import { useMeasure } from '@uidotdev/usehooks';
-import ProductSummary2 from 'components/ProductSummary2';
+import { ProductSummary } from 'components/CandleChart/ProductSummary';
 import React, { useEffect, useState } from 'react';
 import { usePrice } from 'store';
 import type { Candle as ICandle } from '../../api/types/product';
@@ -197,7 +197,7 @@ const CandleChart = ({
 					)}
 				</svg>
 			)}
-			<ProductSummary2 productId={productId} />
+			<ProductSummary productId={productId} />
 		</div>
 	);
 };
