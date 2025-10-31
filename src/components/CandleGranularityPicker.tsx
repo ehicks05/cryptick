@@ -1,6 +1,6 @@
 import { CandleGranularity } from 'api/types/product';
 import { clsx } from 'clsx';
-import { useCandleGranularity } from 'hooks/useCandleGranularity';
+import { useCandleGranularity } from 'hooks/useStorage';
 import { ChevronDown } from 'lucide-react';
 import { Button } from './ui/button';
 import {

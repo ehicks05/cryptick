@@ -1,4 +1,4 @@
-import { useChartHeight } from 'hooks/useChartHeight';
+import { useChartHeight } from 'hooks/useStorage';
 import React from 'react';
 import { Link, useSearch } from 'wouter';
 import { Debug } from './Debug';

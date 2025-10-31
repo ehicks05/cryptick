@@ -1,7 +1,7 @@
 import type { WebSocketTickerMessage } from 'api/types/ws-types';
 import useWebSocket from 'react-use-websocket';
 import { useStore } from 'store';
-import { useProductIds } from '../hooks/useProductIds';
+import { useProductIds } from '../hooks/useStorage';
 import { buildSubscribeMessage, formatPrice, formatTime } from '../utils';
 import { WS_URL } from './constants';
 import { useProducts } from './useProducts';

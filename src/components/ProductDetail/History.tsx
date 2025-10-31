@@ -1,7 +1,7 @@
 import { useThrottle } from '@uidotdev/usehooks';
 import type { TickerMessage } from 'api/types/ws-types';
 import clsx from 'clsx';
-import { useHistoryUnit } from 'hooks/useHistoryUnit';
+import { useHistoryUnit } from 'hooks/useStorage';
 import type { ComponentPropsWithoutRef } from 'react';
 import { useStore } from 'store';
 

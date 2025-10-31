@@ -17,7 +17,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import React, { type CSSProperties } from 'react';
 import { useScreen } from 'usehooks-ts';
-import { useProductIds } from '../../hooks/useProductIds';
+import { useProductIds } from '../../hooks/useStorage';
 import Product from './Product';
 
 const Products = () => {

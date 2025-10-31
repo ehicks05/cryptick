@@ -1,4 +1,4 @@
-import { useChartHeight } from 'hooks/useChartHeight';
+import { useChartHeight } from 'hooks/useStorage';
 import { Button } from '../ui/button';
 
 const OPTIONS = [

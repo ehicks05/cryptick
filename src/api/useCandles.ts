@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useCandleGranularity } from 'hooks/useCandleGranularity';
+import { useCandleGranularity } from 'hooks/useStorage';
 import pThrottle from 'p-throttle';
 import { useEffect } from 'react';
 import { PRODUCT_URL } from './constants';
