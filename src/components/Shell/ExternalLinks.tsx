@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link, useSearch } from 'wouter';
-import { APP } from '../constants';
+import { APP } from '../../constants';
 
 interface LinkProps {
 	href: string;

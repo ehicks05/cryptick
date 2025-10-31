@@ -1,6 +1,6 @@
 import { Link } from 'wouter';
-import { APP } from '../constants';
-import { SettingsDialog } from './Settings/Settings';
+import { APP } from '../../constants';
+import { SettingsDialog } from '../Settings/Settings';
 
 const Logo = () => {
 	return (

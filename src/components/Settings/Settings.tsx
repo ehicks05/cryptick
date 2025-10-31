@@ -1,11 +1,10 @@
 import { useCoinbaseWebsocket } from 'api/useCoinbaseWebsocket';
-import { Settings2 } from 'lucide-react';
+import { SettingsIcon } from 'lucide-react';
 import { useProducts } from '../../api';
 import { useProductIds } from '../../hooks';
 import { buildSubscribeMessage } from '../../utils';
 import { CandleGranularityPicker } from '../CandleGranularityPicker';
-import { ExternalLinks } from '../ExternalLinks';
-import { ThemeToggle } from '../ThemeToggle';
+import { ThemeToggle } from '../Theme/ThemeToggle';
 import { Button } from '../ui/button';
 import { ComboboxDemo } from '../ui/combobox';
 import {
@@ -73,11 +72,6 @@ const Settings = () => {
 				<ThemeToggle />
 			</div>
 
-			<div>
-				Links
-				<ExternalLinks />
-			</div>
-
 			<DialogClose asChild>
 				<Button variant="secondary">Close</Button>
 			</DialogClose>
@@ -90,7 +84,7 @@ export const SettingsDialog = () => {
 		<Dialog modal>
 			<DialogTrigger asChild>
 				<Button variant="outline" size="icon">
-					<Settings2 />
+					<SettingsIcon />
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
