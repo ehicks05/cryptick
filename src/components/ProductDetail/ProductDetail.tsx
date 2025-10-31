@@ -2,11 +2,11 @@ import { useMeasure } from '@uidotdev/usehooks';
 import { RotateCcw } from 'lucide-react';
 import React, { useState } from 'react';
 import { useParams } from 'wouter';
-import { use24HourStats, useCandles } from '../api';
-import CandleChart from './CandleChart';
-import { CandleGranularityPicker } from './CandleGranularityPicker';
-import History from './History';
-import { Button } from './ui/button';
+import { use24HourStats, useCandles } from '../../api';
+import CandleChart from '../CandleChart';
+import { CandleGranularityPicker } from '../CandleGranularityPicker';
+import { Button } from '../ui/button';
+import { History } from './History';
 
 const DEFAULT_CANDLE_WIDTH_MULTI = 1;
 const DEFAULT_DRAG_OFFSET = 0;

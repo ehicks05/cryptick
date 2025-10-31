@@ -110,7 +110,7 @@ const TickerRow = ({
 	);
 };
 
-const History = ({ productId }: { productId: string }) => {
+export const History = ({ productId }: { productId: string }) => {
 	const ticker = useStore((state) => state.ticker[productId]) || [];
 	const throttledTicker = useThrottle(ticker, 333);
 
@@ -149,5 +149,3 @@ const History = ({ productId }: { productId: string }) => {
 		</div>
 	);
 };
-
-export default History;

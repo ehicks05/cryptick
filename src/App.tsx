@@ -1,11 +1,6 @@
 import { useTicker } from 'api';
 import { Route, Switch } from 'wouter';
-import {
-	Footer,
-	Header,
-	ProductDetail,
-	Products,
-} from './components';
+import { Footer, Header, ProductDetail, Products } from './components';
 
 function App() {
 	useTicker();
