@@ -4,7 +4,6 @@ import {
 	Footer,
 	Header,
 	ProductDetail,
-	ProductDetailTv,
 	Products,
 } from './components';
 
@@ -17,7 +16,6 @@ function App() {
 			<div className="grow flex flex-col h-full overflow-y-auto">
 				<Switch>
 					<Route path="/:productId" component={ProductDetail} />
-					<Route path="/:productId/tv" component={ProductDetailTv} />
 					<Route path="/" component={Products} />
 				</Switch>
 			</div>
