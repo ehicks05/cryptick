@@ -26,7 +26,6 @@ export function ComboboxDemo({ items, selectedItems, onSelect }: Props) {
 	return (
 		<Popover modal open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
-				{/** biome-ignore lint/a11y/useSemanticElements: <yo> */}
 				<Button
 					variant="outline"
 					role="combobox"
@@ -39,7 +38,7 @@ export function ComboboxDemo({ items, selectedItems, onSelect }: Props) {
 			</PopoverTrigger>
 			<PopoverContent className="w-[200px] p-0">
 				<Command>
-					<CommandInput placeholder="Search product..." />
+					<CommandInput placeholder="Search products..." />
 					<CommandList>
 						<CommandEmpty>No product found.</CommandEmpty>
 						<CommandGroup>
