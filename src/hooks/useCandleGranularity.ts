@@ -1,9 +1,5 @@
-import { useLocalStorage } from '@uidotdev/usehooks';
-import { APP_NAME, DEFAULT_CANDLE_GRANULARITY } from '../constants';
+import { DEFAULT_CANDLE_GRANULARITY } from '../constants';
+import { useLocalStorage } from './useLocalStorage';
 
-export const useCandleGranularity = () => {
-	return useLocalStorage(
-		`${APP_NAME}-candle-granularity`,
-		DEFAULT_CANDLE_GRANULARITY,
-	);
-};
+export const useCandleGranularity = () =>
+	useLocalStorage('candle-granularity', DEFAULT_CANDLE_GRANULARITY);
