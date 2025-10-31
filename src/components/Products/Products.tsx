@@ -15,8 +15,8 @@ import {
 	useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useWindowSize } from '@uidotdev/usehooks';
 import React, { type CSSProperties } from 'react';
+import { useScreen } from 'usehooks-ts';
 import { useProductIds } from '../../hooks/useProductIds';
 import Product from './Product';
 
@@ -47,8 +47,7 @@ const Products = () => {
 		}
 	};
 
-	const { width: _width } = useWindowSize();
-	const width = _width || 0;
+	const { width = 0 } = useScreen();
 	const minColumnWidth = width < 400 ? width - 16 - 16 - 16 - 16 : 380;
 
 	return (
