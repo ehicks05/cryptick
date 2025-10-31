@@ -1,14 +1,13 @@
 import { useCoinbaseWebsocket } from 'api/useCoinbaseWebsocket';
 import { Settings2 } from 'lucide-react';
-import { useProducts } from '../api';
-import { useProductIds } from '../hooks';
-import { buildSubscribeMessage } from '../utils';
-import { CandleGranularityPicker } from './CandleGranularityPicker';
-import { ChartHeightPicker } from './ChartHeightPicker';
-import ExternalLinks from './ExternalLinks';
-import { ThemeToggle } from './ThemeToggle';
-import { Button } from './ui/button';
-import { ComboboxDemo } from './ui/combobox';
+import { useProducts } from '../../api';
+import { useProductIds } from '../../hooks';
+import { buildSubscribeMessage } from '../../utils';
+import { CandleGranularityPicker } from '../CandleGranularityPicker';
+import ExternalLinks from '../ExternalLinks';
+import { ThemeToggle } from '../ThemeToggle';
+import { Button } from '../ui/button';
+import { ComboboxDemo } from '../ui/combobox';
 import {
 	Dialog,
 	DialogClose,
@@ -16,7 +15,8 @@ import {
 	DialogDescription,
 	DialogTitle,
 	DialogTrigger,
-} from './ui/dialog';
+} from '../ui/dialog';
+import { ChartHeightPicker } from './ChartHeightPicker';
 
 const Settings = () => {
 	const { sendJsonMessage } = useCoinbaseWebsocket();

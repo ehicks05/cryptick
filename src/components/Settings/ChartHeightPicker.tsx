@@ -1,5 +1,5 @@
 import { useChartHeight } from 'hooks/useChartHeight';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 
 const OPTIONS = [
 	{ label: '0', value: 'h-0' },
