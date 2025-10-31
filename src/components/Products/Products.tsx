@@ -17,7 +17,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { useWindowSize } from '@uidotdev/usehooks';
 import React, { type CSSProperties } from 'react';
-import { useProductIds } from '../hooks/useProductIds';
+import { useProductIds } from '../../hooks/useProductIds';
 import Product from './Product';
 
 const Products = () => {

@@ -1,8 +1,8 @@
 import { aggregateCandleStats } from 'lib/utils';
 import { useThrottledPrice } from 'store';
-import { useCandles, useCurrencies, useProducts } from '../api';
-import type { Product } from '../api/types/product';
-import { formatPercent, formatPrice } from '../utils';
+import { useCandles, useCurrencies, useProducts } from '../../api';
+import type { Product } from '../../api/types/product';
+import { formatPercent, formatPrice } from '../../utils';
 
 interface ProductSummaryProps {
 	productId: string;

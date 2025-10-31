@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import { aggregateCandleStats, getChange } from 'lib/utils';
 import React from 'react';
 import { useThrottledPrice } from 'store';
-import { use24HourStats, useCandles } from '../api';
+import { use24HourStats, useCandles } from '../../api';
+import Chart from '../SimpleChart/Chart';
 import ProductSummary from './ProductSummary';
-import Chart from './SimpleChart/Chart';
 
 const BG_COLORS = {
 	POS: clsx(
