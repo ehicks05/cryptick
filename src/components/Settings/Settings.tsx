@@ -1,12 +1,7 @@
-import { useCoinbaseWebsocket } from 'api/useCoinbaseWebsocket';
 import { SettingsIcon } from 'lucide-react';
-import { useProducts } from '../../api';
-import { useProductIds } from '../../hooks';
-import { buildSubscribeMessage } from '../../utils';
 import { CandleGranularityPicker } from '../CandleGranularityPicker';
 import { ThemeToggle } from '../Theme/ThemeToggle';
 import { Button } from '../ui/button';
-import { ComboboxDemo } from '../ui/combobox';
 import {
 	Dialog,
 	DialogClose,
@@ -16,29 +11,9 @@ import {
 	DialogTrigger,
 } from '../ui/dialog';
 import { ChartHeightPicker } from './ChartHeightPicker';
+import { ProductPicker } from './ProductPicker';
 
-const Settings = () => {
-	const { sendJsonMessage } = useCoinbaseWebsocket();
-	const [productIds, setProductIds] = useProductIds();
-	const { data: products = {} } = useProducts();
-
-	const toggleProduct = (productId: string) => {
-		const isAdding = !productIds.includes(productId);
-
-		const stable = productIds.filter((p) => p !== productId);
-		const newProducts = [...stable, ...(isAdding ? [productId] : [])];
-
-		setProductIds(newProducts);
-		sendJsonMessage(
-			buildSubscribeMessage(isAdding ? 'subscribe' : 'unsubscribe', [productId]),
-		);
-	};
-
-	const items = Object.values(products).map(({ id, display_name }) => ({
-		label: display_name,
-		value: id,
-	}));
-
+export const Settings = () => {
 	return (
 		<div className="flex flex-col items-start gap-8 overflow-y-auto">
 			<div>
@@ -46,19 +21,7 @@ const Settings = () => {
 				<DialogDescription>Adjust your settings here</DialogDescription>
 			</div>
 
-			<div className="flex flex-col">
-				<div>Toggle Products</div>
-				<ComboboxDemo
-					items={items.toSorted((o1, o2) => {
-						const o1v = productIds.includes(o1.value) ? -1 : 1;
-						const o2v = productIds.includes(o2.value) ? -1 : 1;
-
-						return o1v - o2v;
-					})}
-					selectedItems={productIds}
-					onSelect={(value) => toggleProduct(value)}
-				/>
-			</div>
+			<ProductPicker />
 
 			<ChartHeightPicker />
 
@@ -95,5 +58,3 @@ export const SettingsDialog = () => {
 		</Dialog>
 	);
 };
-
-export default Settings;
