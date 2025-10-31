@@ -7,10 +7,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getChange = (open: number, close: number) => {
+	const percentChange = close ? close / open - 1 : 0;
 	return {
-		isPositive: close > open,
-		percentChange: close ? close / open - 1 : 0,
-	};
+		direction: percentChange === 0 ? 'UNK' : percentChange > 0 ? 'POS' : 'NEG',
+		percentChange,
+	} as const;
 };
 
 export const aggregateCandleStats = (candles: Candle[]) => {
@@ -18,7 +19,7 @@ export const aggregateCandleStats = (candles: Candle[]) => {
 	const low = Math.min(...candles.map((o) => o.low));
 	const open = candles.at(-1)?.open || 0;
 	const close = candles[0]?.close || 0;
-	const { isPositive, percentChange } = getChange(open, close);
+	const { direction, percentChange } = getChange(open, close);
 
-	return { open, close, low, high, isPositive, percentChange };
+	return { open, close, low, high, direction, percentChange };
 };

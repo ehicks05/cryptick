@@ -28,7 +28,7 @@ const BG_COLORS = {
 		'dark:via-[rgba(150,60,60,.1)]',
 		'dark:to-[rgba(150,60,60,.1)]',
 	),
-	UND: clsx(
+	UNK: clsx(
 		'from-[rgba(90,90,90,.15)]',
 		'via-[rgba(90,90,90,.1)]',
 		'to-[rgba(90,90,90,.08)]',
@@ -43,7 +43,13 @@ const BG_COLORS = {
 const BORDER_COLORS = {
 	POS: 'border-green-200 dark:border-green-950',
 	NEG: 'border-red-200 dark:border-red-950',
-	UND: 'border-neutral-200 dark:border-neutral-800',
+	UNK: 'border-neutral-200 dark:border-neutral-800',
+} as const;
+
+const TEXT_COLORS = {
+	POS: 'text-green-700 dark:text-green-500',
+	NEG: 'text-red-600 dark:text-red-500',
+	UNK: 'text-neutral-600 dark:text-neutral-500',
 } as const;
 
 interface Props {
@@ -54,16 +60,14 @@ const Product = ({ productId }: Props) => {
 	const { data } = useCandles([productId]);
 	const candles = data?.[productId].slice(0, 96) || [];
 	const stats = aggregateCandleStats(candles);
-	const { isPositive } = stats;
-
-	const colorKey = isPositive === undefined ? 'UND' : isPositive ? 'POS' : 'NEG';
+	const { direction } = stats;
 
 	return (
 		<div
 			className={clsx(
 				'rounded-lg shadow-sm border bg-radial',
-				BG_COLORS[colorKey],
-				BORDER_COLORS[colorKey],
+				BG_COLORS[direction],
+				BORDER_COLORS[direction],
 			)}
 		>
 			<div className="p-4 pt-2 pb-0">
@@ -106,17 +110,26 @@ const Performance = ({ productId }: { productId: string }) => {
 	return (
 		<div className="p-4 py-2 grid grid-cols-3 justify-between items-center">
 			{changes.map((change) => {
-				const color = change.isPositive
-					? 'text-green-700 dark:text-green-500'
-					: 'text-red-600 dark:text-red-500';
+				const { direction } = change;
+
 				return (
 					<div
 						key={change.label}
-						className={clsx('flex items-baseline gap-2', change.class)}
+						className={clsx(
+							'flex items-baseline gap-2',
+							change.class,
+							BG_COLORS[direction],
+						)}
 					>
 						<span className="text-xs text-muted-foreground">{change.label}</span>
-						<span className={clsx(change.class, color, 'text-sm font-mono')}>
-							{change.isPositive ? '+' : ''}
+						<span
+							className={clsx(
+								change.class,
+								TEXT_COLORS[direction],
+								'text-sm font-mono',
+							)}
+						>
+							{direction === 'POS' ? '+' : ''}
 							{nf.format(change.percentChange)}
 						</span>
 					</div>

@@ -64,9 +64,8 @@ export const useChartData = ({ productId, isDebug }: Props) => {
 	};
 
 	const stats = aggregateCandleStats(candles);
-	const { isPositive } = stats;
-	const colorKey = isPositive === undefined ? 'UND' : isPositive ? 'POS' : 'NEG';
-	const strokeColor = STROKE[colorKey];
+	const { direction } = stats;
+	const strokeColor = STROKE[direction];
 
 	const points =
 		candles.length !== 0
