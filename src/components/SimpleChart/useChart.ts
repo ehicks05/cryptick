@@ -1,9 +1,9 @@
+import { STROKE } from 'directionalStyles';
 import { useMeasure } from '@uidotdev/usehooks';
 import { useCandles } from 'api';
 import { aggregateCandleStats } from 'lib/utils';
 import { useState } from 'react';
 import { usePrice } from 'store';
-import { STROKE } from './constants';
 import { round } from './round';
 import { useIdealCandleWidth } from './useIdealCandleWidth';
 

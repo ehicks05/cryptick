@@ -1,30 +1,6 @@
-import { aggregateCandleStats } from 'lib/utils';
 import { useThrottledPrice } from 'store';
-import { useCandles, useCurrencies, useProducts } from '../../api';
+import { useCurrencies, useProducts } from '../../api';
 import type { Product } from '../../api/types/product';
-import { formatPercent, formatPrice } from '../../utils';
-
-interface ProductSummaryProps {
-	productId: string;
-}
-
-const ProductSummary = ({ productId }: ProductSummaryProps) => {
-	const productsQuery = useProducts();
-	const product = productsQuery.data?.[productId];
-
-	if (!product) {
-		return '';
-	}
-	return (
-		<div className="flex justify-between">
-			<Name product={product} />
-			<div className="flex gap-2">
-				<Price productId={productId} />
-				{/* <Stats product={product} /> */}
-			</div>
-		</div>
-	);
-};
 
 interface NameProps {
 	product: Product;
@@ -37,11 +13,9 @@ const Name = ({ product }: NameProps) => {
 		: undefined;
 
 	return (
-		<div className="">
-			<div className="flex flex-col text-xl items-baseline">
-				{product.display_name}
-				<span className="text-xs text-muted-foreground">{currency?.name}</span>
-			</div>
+		<div className="flex flex-col text-xl items-baseline">
+			{product.display_name}
+			<span className="text-xs text-muted-foreground">{currency?.name}</span>
 		</div>
 	);
 };
@@ -62,33 +36,18 @@ const Price = ({ productId }: PriceProps) => {
 	);
 };
 
-interface StatsProps {
-	product: Product;
-}
+export const ProductSummary = ({ productId }: { productId: string }) => {
+	const productsQuery = useProducts();
+	const product = productsQuery.data?.[productId];
 
-const Stats = ({ product: { id, minimumQuoteDigits } }: StatsProps) => {
-	const { data: candleMap } = useCandles([id]);
-	const candles = candleMap?.[id].slice(0, 96) || [];
-	const stats = aggregateCandleStats(candles);
-
-	const { high = 0, low = 0, isPositive, percentChange } = stats;
-
-	const color = isPositive ? 'text-green-500' : 'text-red-500';
-	const _low = formatPrice(low, minimumQuoteDigits);
-	const _high = formatPrice(high, minimumQuoteDigits);
-	const range =
-		low > 100 && high > 100
-			? `${_low.split('.')[0]} -  ${_high.split('.')[0]}`
-			: `${_low} - ${_high}`;
+	if (!product) {
+		return '';
+	}
 
 	return (
-		<div className="flex flex-col font-mono">
-			<span className="text-xs">{range}</span>
-			<span className={`whitespace-nowrap text-xs ${color}`}>
-				{percentChange && formatPercent(percentChange)}
-			</span>
+		<div className="flex justify-between p-4 pt-2 pb-0">
+			<Name product={product} />
+			<Price productId={productId} />
 		</div>
 	);
 };
-
-export default ProductSummary;

@@ -1,56 +1,12 @@
+import { BG_COLORS, BORDER_COLORS, TEXT_COLORS } from 'directionalStyles';
 import { useHistoricPerformance } from 'api/useCandles';
-import clsx from 'clsx';
-import { aggregateCandleStats, getChange } from 'lib/utils';
+import { aggregateCandleStats, cn, getChange } from 'lib/utils';
 import React from 'react';
 import { useThrottledPrice } from 'store';
+import { formatPercent } from 'utils';
 import { use24HourStats, useCandles } from '../../api';
 import Chart from '../SimpleChart/Chart';
-import ProductSummary from './ProductSummary';
-
-const BG_COLORS = {
-	POS: clsx(
-		'from-[rgba(60,120,60,.08)]',
-		'via-[rgba(60,120,60,.08)]',
-		'to-[rgba(60,120,60,.01)]',
-		'via-[40%]',
-		'to-[70%]',
-		'dark:from-[rgba(60,120,60,.15)]',
-		'dark:via-[rgba(60,120,60,.1)]',
-		'dark:to-[rgba(60,120,60,.1)]',
-	),
-	NEG: clsx(
-		'from-[rgba(150,60,60,.08)]',
-		'via-[rgba(150,60,60,.08)]',
-		'to-[rgba(150,60,60,.01)]',
-		'via-[40%]',
-		'to-[70%]',
-		'dark:from-[rgba(150,60,60,.15)]',
-		'dark:via-[rgba(150,60,60,.1)]',
-		'dark:to-[rgba(150,60,60,.1)]',
-	),
-	UNK: clsx(
-		'from-[rgba(90,90,90,.15)]',
-		'via-[rgba(90,90,90,.1)]',
-		'to-[rgba(90,90,90,.08)]',
-		'via-[40%]',
-		'to-[70%]',
-		'dark:from-[rgba(90,90,90,.15)]',
-		'dark:via-[rgba(90,90,90,.1)]',
-		'dark:to-[rgba(90,90,90,.08)]',
-	),
-} as const;
-
-const BORDER_COLORS = {
-	POS: 'border-green-200 dark:border-green-950',
-	NEG: 'border-red-200 dark:border-red-950',
-	UNK: 'border-neutral-200 dark:border-neutral-800',
-} as const;
-
-const TEXT_COLORS = {
-	POS: 'text-green-700 dark:text-green-500',
-	NEG: 'text-red-600 dark:text-red-500',
-	UNK: 'text-neutral-600 dark:text-neutral-500',
-} as const;
+import { ProductSummary } from './ProductSummary';
 
 interface Props {
 	productId: string;
@@ -62,27 +18,20 @@ const Product = ({ productId }: Props) => {
 	const stats = aggregateCandleStats(candles);
 	const { direction } = stats;
 
+	const className = cn(
+		'rounded-lg shadow-sm border bg-radial',
+		BG_COLORS[direction],
+		BORDER_COLORS[direction],
+	);
+
 	return (
-		<div
-			className={clsx(
-				'rounded-lg shadow-sm border bg-radial',
-				BG_COLORS[direction],
-				BORDER_COLORS[direction],
-			)}
-		>
-			<div className="p-4 pt-2 pb-0">
-				<ProductSummary productId={productId} />
-			</div>
+		<div className={className}>
+			<ProductSummary productId={productId} />
 			<Chart productId={productId} />
 			<Performance productId={productId} />
 		</div>
 	);
 };
-
-const nf = new Intl.NumberFormat('en-US', {
-	style: 'percent',
-	minimumFractionDigits: 2,
-});
 
 const Performance = ({ productId }: { productId: string }) => {
 	const _price = useThrottledPrice(productId);
@@ -97,8 +46,8 @@ const Performance = ({ productId }: { productId: string }) => {
 	const day7Change = getChange(day7, Number(price));
 	const day30Change = getChange(day30, Number(price));
 
-	const { data: _stats } = use24HourStats();
-	const day1 = _stats?.[productId]?.open || 0;
+	const { data: stats } = use24HourStats();
+	const day1 = stats?.[productId]?.open || 0;
 	const day1Change = getChange(day1, Number(price));
 
 	const changes = [
@@ -115,7 +64,7 @@ const Performance = ({ productId }: { productId: string }) => {
 				return (
 					<div
 						key={change.label}
-						className={clsx(
+						className={cn(
 							'flex items-baseline gap-2',
 							change.class,
 							BG_COLORS[direction],
@@ -123,14 +72,13 @@ const Performance = ({ productId }: { productId: string }) => {
 					>
 						<span className="text-xs text-muted-foreground">{change.label}</span>
 						<span
-							className={clsx(
+							className={cn(
 								change.class,
 								TEXT_COLORS[direction],
 								'text-sm font-mono',
 							)}
 						>
-							{direction === 'POS' ? '+' : ''}
-							{nf.format(change.percentChange)}
+							{formatPercent(change.percentChange)}
 						</span>
 					</div>
 				);
