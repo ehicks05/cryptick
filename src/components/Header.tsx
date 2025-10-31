@@ -1,6 +1,6 @@
 import { Link } from 'wouter';
-import { APP_NAME } from '../constants';
-import { SettingsDialog } from './Settings';
+import { APP } from '../constants';
+import { SettingsDialog } from './Settings/Settings';
 
 const Logo = () => {
 	return (
@@ -9,17 +9,15 @@ const Logo = () => {
 				<div className="px-2 py-[3.5px] rounded-sm bg-neutral-600 text-neutral-200">
 					ct
 				</div>
-				<div className="hidden sm:block">{APP_NAME}</div>
+				<div className="hidden sm:block">{APP.NAME}</div>
 			</div>
 		</Link>
 	);
 };
 
-const Header = () => (
+export const Header = () => (
 	<header className="flex p-4 pb-0 justify-between text-neutral-600 dark:text-neutral-400">
 		<Logo />
 		<SettingsDialog />
 	</header>
 );
-
-export default Header;
