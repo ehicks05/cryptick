@@ -22,8 +22,27 @@ const defaultPercentFormat = new Intl.NumberFormat('en-US', {
 	minimumFractionDigits: 2,
 	maximumFractionDigits: 2,
 });
+const smallValuePercentFormat = new Intl.NumberFormat('en-US', {
+	style: 'percent',
+	signDisplay: 'always',
+	minimumFractionDigits: 2,
+	maximumFractionDigits: 3,
+});
+const largeValuePercentFormat = new Intl.NumberFormat('en-US', {
+	style: 'percent',
+	signDisplay: 'always',
+	minimumFractionDigits: 1,
+	maximumFractionDigits: 1,
+});
 
 const formatPercent = (percent: number) => {
+	if (Math.abs(percent) < 0.0001) {
+		return smallValuePercentFormat.format(percent);
+	}
+	if (Math.abs(percent) >= 0.1) {
+		return largeValuePercentFormat.format(percent);
+	}
+	
 	return defaultPercentFormat.format(percent);
 };
 
