@@ -1,7 +1,5 @@
 import { useChartHeight } from 'hooks/useStorage';
 import React from 'react';
-import { Link, useSearch } from 'wouter';
-import { Debug } from './Debug';
 import { useChartData } from './useChart';
 
 interface Props {
@@ -11,16 +9,10 @@ interface Props {
 
 const Chart = ({ productId, isDebug = false }: Props) => {
 	const [chartHeight] = useChartHeight();
-	const {
-		points,
-		strokeColor,
-		debug,
-		ref,
-		height,
-		width,
-		idealCandleWidth,
-		setIdealCandleWidth,
-	} = useChartData({ productId, isDebug });
+	const { points, strokeColor, ref, height, width } = useChartData({
+		productId,
+		isDebug,
+	});
 
 	return (
 		<div className={chartHeight} ref={ref}>
@@ -42,29 +34,8 @@ const Chart = ({ productId, isDebug = false }: Props) => {
 					/>
 				</svg>
 			</div>
-
-			{isDebug && (
-				<Debug
-					idealCandleWidth={idealCandleWidth}
-					setIdealCandleWidth={setIdealCandleWidth}
-					debug={JSON.stringify(debug, null, 2)}
-				/>
-			)}
 		</div>
 	);
 };
 
-const DebugWrapper = ({ productId }: { productId: string }) => {
-	const search = useSearch();
-	const debug = search.includes('debug=true');
-
-	return debug ? (
-		<Chart productId={productId} isDebug />
-	) : (
-		<Link to={`/${productId}`}>
-			<Chart productId={productId} />
-		</Link>
-	);
-};
-
-export default React.memo(DebugWrapper);
+export default React.memo(Chart);
