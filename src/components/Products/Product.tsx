@@ -5,8 +5,8 @@ import React from 'react';
 import { useThrottledPrice } from 'store';
 import { formatPercent } from 'utils';
 import { use24HourStats, useCandles } from '../../api';
-import Chart from '../SimpleChart/Chart';
 import { ProductSummary } from './ProductSummary';
+import Chart from './SimpleChart/Chart';
 
 interface Props {
 	productId: string;
