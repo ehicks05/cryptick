@@ -54,10 +54,10 @@ const Performance = ({ productId }: { productId: string }) => {
 	const day1Change = getChange(day1, Number(price));
 
 	const changes = [
-		{ ...day1Change, label: '1D', align: 'justify-start' },
-		{ ...day7Change, label: '1W', align: 'justify-center' },
-		{ ...day30Change, label: '1M', align: 'justify-center' },
-		{ ...day365Change, label: '1Y', align: 'justify-end' },
+		{ ...day1Change, label: 'D', align: 'justify-start' },
+		{ ...day7Change, label: 'W', align: 'justify-center' },
+		{ ...day30Change, label: 'M', align: 'justify-center' },
+		{ ...day365Change, label: 'Y', align: 'justify-end' },
 	];
 
 	return (
