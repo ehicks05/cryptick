@@ -1,31 +1,17 @@
 import { STROKE } from 'directionalStyles';
 import { useMeasure } from '@uidotdev/usehooks';
 import { useCandles } from 'api';
-import { aggregateCandleStats } from 'lib/utils';
+import { chunk } from 'es-toolkit';
+import { mergeCandles } from 'lib/utils';
 import { useState } from 'react';
 import { usePrice } from 'store';
 import { round } from './round';
-import { useIdealCandleWidth } from './useIdealCandleWidth';
 
-interface Props {
-	productId: string;
-	isDebug: boolean;
-}
-
-export const useChartData = ({ productId, isDebug }: Props) => {
-	const [ref, { height: containerHeight, width: containerWidth }] = useMeasure();
-
+export const useCandlesWithLivePrice = ({ productId }: Props) => {
 	const candlesQuery = useCandles([productId]);
 	const _candles = candlesQuery.data?.[productId] || [];
-
-	const [idealCandleWidth, setIdealCandleWidth] = useState(3.7);
-	const { debug, idealCandles } = useIdealCandleWidth(
-		_candles,
-		containerWidth || 0,
-		idealCandleWidth,
-	);
-
-	const candles = isDebug ? idealCandles : _candles.slice(0, 96);
+	const chunked = chunk(_candles, 1).map(mergeCandles);
+	const candles = _candles.length > 192 ? chunked : _candles;
 
 	// set current candle's current price
 	const price = usePrice(productId);
@@ -38,6 +24,19 @@ export const useChartData = ({ productId, isDebug }: Props) => {
 			if (currentPrice > candle.high) candle.high = currentPrice;
 		}
 	}
+
+	return { candles };
+};
+
+interface Props {
+	productId: string;
+}
+
+export const useChartData = ({ productId }: Props) => {
+	const [ref, { height: containerHeight, width: containerWidth }] = useMeasure();
+	const { candles } = useCandlesWithLivePrice({ productId });
+
+	const [idealCandleWidth, setIdealCandleWidth] = useState(3.7);
 
 	const step = (candles[0]?.timestamp || 0) - (candles[1]?.timestamp || 0);
 	const start = candles[candles.length - 1]?.timestamp || 0;
@@ -63,7 +62,7 @@ export const useChartData = ({ productId, isDebug }: Props) => {
 		return round(fraction, 4);
 	};
 
-	const stats = aggregateCandleStats(candles);
+	const stats = mergeCandles(candles);
 	const { direction } = stats;
 	const strokeColor = STROKE[direction];
 
@@ -82,7 +81,6 @@ export const useChartData = ({ productId, isDebug }: Props) => {
 	return {
 		points: points.join(' '),
 		strokeColor,
-		debug,
 		ref,
 		height,
 		width,
