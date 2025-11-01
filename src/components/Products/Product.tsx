@@ -54,22 +54,19 @@ const Performance = ({ productId }: { productId: string }) => {
 	const day1Change = getChange(day1, Number(price));
 
 	const changes = [
-		{ ...day1Change, label: 'D', align: 'justify-start' },
-		{ ...day7Change, label: 'W', align: 'justify-center' },
-		{ ...day30Change, label: 'M', align: 'justify-center' },
-		{ ...day365Change, label: 'Y', align: 'justify-end' },
+		{ ...day1Change, label: 'D' },
+		{ ...day7Change, label: 'W' },
+		{ ...day30Change, label: 'M' },
+		{ ...day365Change, label: 'Y' },
 	];
 
 	return (
-		<div className="p-4 py-2 grid grid-cols-4 justify-between items-center">
+		<div className="p-4 py-2 flex justify-between items-center">
 			{changes.map((change) => {
 				const { direction } = change;
 
 				return (
-					<div
-						key={change.label}
-						className={cn('flex items-baseline gap-1', change.align)}
-					>
+					<div key={change.label} className="flex items-baseline gap-1">
 						<span className="text-xs text-muted-foreground">{change.label}</span>
 						<span className={cn(TEXT_COLORS[direction], 'text-sm font-mono')}>
 							{formatPercent(change.percentChange)}
