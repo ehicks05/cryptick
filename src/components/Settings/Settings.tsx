@@ -1,3 +1,4 @@
+import { ChartTimespanPicker } from 'components/ChartTimespanPicker';
 import { SettingsIcon } from 'lucide-react';
 import { CandleGranularityPicker } from '../CandleGranularityPicker';
 import { ThemeToggle } from '../Theme/ThemeToggle';
@@ -26,6 +27,11 @@ const Settings = () => (
 		<div>
 			Candle Granularity
 			<CandleGranularityPicker />
+		</div>
+
+		<div>
+			Chart Timespan
+			<ChartTimespanPicker />
 		</div>
 
 		<div className="flex flex-col">

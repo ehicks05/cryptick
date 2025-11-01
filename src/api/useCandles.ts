@@ -115,20 +115,24 @@ const getHistoricPerformanceForProducts = async (productIds: string[]) => {
 	const granularity = CandleGranularity.ONE_MINUTE;
 	const SEVEN_DAYS = 60 * 60 * 24 * 7;
 	const THIRTY_DAYS = 60 * 60 * 24 * 30;
+	const ONE_YEAR = 60 * 60 * 24 * 365;
 
 	// if there are no candles exactly 30 days ago, look for anything in the next hour
 	const WINDOW = 60 * 60;
 
 	const days7Start = subSeconds(new Date(), SEVEN_DAYS).toISOString();
 	const days7End = subSeconds(new Date(), SEVEN_DAYS - WINDOW).toISOString();
-	const days30Start = subSeconds(new Date(), THIRTY_DAYS).toISOString();
-	const days30End = subSeconds(new Date(), THIRTY_DAYS - WINDOW).toISOString();
+
 	const day7Candles = await getCandlesForProducts(
 		productIds,
 		granularity,
 		days7Start,
 		days7End,
 	);
+
+	const days30Start = subSeconds(new Date(), THIRTY_DAYS).toISOString();
+	const days30End = subSeconds(new Date(), THIRTY_DAYS - WINDOW).toISOString();
+
 	const day30Candles = await getCandlesForProducts(
 		productIds,
 		granularity,
@@ -136,7 +140,17 @@ const getHistoricPerformanceForProducts = async (productIds: string[]) => {
 		days30End,
 	);
 
-	return { day7Candles, day30Candles };
+	const days365Start = subSeconds(new Date(), ONE_YEAR).toISOString();
+	const days365End = subSeconds(new Date(), ONE_YEAR - WINDOW).toISOString();
+
+	const day365Candles = await getCandlesForProducts(
+		productIds,
+		granularity,
+		days365Start,
+		days365End,
+	);
+
+	return { day7Candles, day30Candles, day365Candles };
 };
 
 export const useHistoricPerformance = (productIds: string[]) => {

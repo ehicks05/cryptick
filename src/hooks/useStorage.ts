@@ -6,8 +6,13 @@ import { APP, DEFAULT } from '../constants';
 const useStorage = <T>(key: string, initialValue: T) =>
 	useLocalStorage<T>(`${APP.NAME}-${key}`, initialValue);
 
+// set granularity for productDetail chart
 export const useCandleGranularity = () =>
 	useStorage('candle-granularity', DEFAULT.CANDLE_GRANULARITY);
+
+// set timespan for products view
+export const useChartTimespan = () =>
+	useStorage('chart-timespan', DEFAULT.CHART_TIMESPAN);
 
 export const useChartHeight = () => useStorage('chart-height', DEFAULT.CHART_HEIGHT);
 
