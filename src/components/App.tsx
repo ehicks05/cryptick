@@ -1,4 +1,5 @@
 import { useTicker } from 'api';
+import ErrorBoundary from './ErrorBoundary';
 import { Routes } from './Routes';
 import { Footer, Header } from './Shell';
 
@@ -7,11 +8,13 @@ export function App() {
 
 	return (
 		<div className="flex flex-col h-dvh">
-			<Header />
-			<div className="grow flex flex-col h-full overflow-y-auto p-4">
-				<Routes />
-			</div>
-			<Footer />
+			<ErrorBoundary>
+				<Header />
+				<div className="grow flex flex-col h-full overflow-y-auto p-4">
+					<Routes />
+				</div>
+				<Footer />
+			</ErrorBoundary>
 		</div>
 	);
 }
