@@ -1,4 +1,4 @@
-import { CHART_TIMESPAN_SECONDS_AGO, type ChartTimespan } from 'types';
+import { CHART_TIMESPAN_SECONDS, type ChartTimespan } from 'types';
 import type { Candle } from './types/product';
 
 export const keyById = <T extends { id: string }>(list: T[]) =>
@@ -30,7 +30,7 @@ export const subSeconds = (date: Date, n: number) =>
 export const toUnixTimestamp = (date: Date) => Math.round(date.getTime() / 1000);
 
 export const getTimeAgo = (timespan: ChartTimespan) => {
-	const secondsAgo = CHART_TIMESPAN_SECONDS_AGO[timespan];
+	const secondsAgo = CHART_TIMESPAN_SECONDS[timespan];
 	const date = subSeconds(new Date(), secondsAgo);
 	const roundedDate = new Date(
 		date.setMinutes(Math.floor(date.getMinutes() / 15) * 15, 0, 0),

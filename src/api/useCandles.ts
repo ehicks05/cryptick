@@ -1,85 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { useChartTimespan } from 'hooks/useStorage';
-import pThrottle from 'p-throttle';
 import { useEffect } from 'react';
 import { CHART_TIMESPAN_GRANULARITIES } from 'types';
-import { PRODUCT_URL } from './constants';
-import { type Candle, CandleGranularity, type RawCandle } from './types/product';
+import { getCandlesForProducts } from './endpoints/candles';
+import { CandleGranularity } from './types/product';
 import {
 	getMsToNextMinuteStart,
 	getTimeAgo,
-	keyByProductId,
 	subSeconds,
 	toUnixTimestamp,
 } from './utils';
-
-interface Params {
-	productId: string;
-	granularity: CandleGranularity;
-	start?: number;
-	end?: number;
-}
-
-const getCandlesForProduct = async ({
-	productId,
-	granularity,
-	start,
-	end,
-}: Params): Promise<Candle[]> => {
-	const url = `${PRODUCT_URL}/${productId}/candles`;
-	const query = new URLSearchParams({
-		granularity: String(granularity),
-		start: String(start) || '',
-		end: String(end) || '',
-	});
-
-	try {
-		const response = await fetch(`${url}?${query}`);
-		const json: RawCandle[] = await response.json();
-		return json.map((candle) => ({
-			productId,
-			timestamp: candle[0] * 1000,
-			low: candle[1],
-			high: candle[2],
-			open: candle[3],
-			close: candle[4],
-			volume: candle[5],
-		}));
-	} catch (err) {
-		console.log(err);
-		return [];
-	}
-};
-
-const throttle = pThrottle({
-	limit: 10,
-	interval: 1000,
-});
-
-const getCandlesForProducts = async (
-	productIds: string[],
-	granularity: CandleGranularity,
-	start: number,
-	end: number,
-) => {
-	const throttledFetch = throttle(
-		async (productId: string, start: number, end?: number) => {
-			const candles = await getCandlesForProduct({
-				productId,
-				granularity,
-				start,
-				end,
-			});
-			return { productId, candles };
-		},
-	);
-
-	const data = (
-		await Promise.all(productIds.map((id) => throttledFetch(id, start, end)))
-	).flat();
-
-	return keyByProductId(data);
-};
 
 export const useCandles = (productIds: string[]) => {
 	const [timespan] = useChartTimespan();
@@ -89,7 +19,7 @@ export const useCandles = (productIds: string[]) => {
 
 	const query = useQuery({
 		queryKey: ['candles', productIds],
-		queryFn: () => getCandlesForProducts(productIds, granularity, start, end),
+		queryFn: () => getCandlesForProducts({ productIds, granularity, start, end }),
 		staleTime: 1000 * 60,
 		refetchInterval: getMsToNextMinuteStart,
 	});
@@ -114,42 +44,42 @@ const getHistoricPerformanceForProducts = async (productIds: string[]) => {
 	const days1Start = toUnixTimestamp(subSeconds(new Date(), ONE_DAY));
 	const days1End = toUnixTimestamp(subSeconds(new Date(), ONE_DAY - WINDOW));
 
-	const day1Candles = await getCandlesForProducts(
+	const day1Candles = await getCandlesForProducts({
 		productIds,
 		granularity,
-		days1Start,
-		days1End,
-	);
+		start: days1Start,
+		end: days1End,
+	});
 
 	const days7Start = toUnixTimestamp(subSeconds(new Date(), SEVEN_DAYS));
 	const days7End = toUnixTimestamp(subSeconds(new Date(), SEVEN_DAYS - WINDOW));
 
-	const day7Candles = await getCandlesForProducts(
+	const day7Candles = await getCandlesForProducts({
 		productIds,
 		granularity,
-		days7Start,
-		days7End,
-	);
+		start: days7Start,
+		end: days7End,
+	});
 
 	const days30Start = toUnixTimestamp(subSeconds(new Date(), THIRTY_DAYS));
 	const days30End = toUnixTimestamp(subSeconds(new Date(), THIRTY_DAYS - WINDOW));
 
-	const day30Candles = await getCandlesForProducts(
+	const day30Candles = await getCandlesForProducts({
 		productIds,
 		granularity,
-		days30Start,
-		days30End,
-	);
+		start: days30Start,
+		end: days30End,
+	});
 
 	const days365Start = toUnixTimestamp(subSeconds(new Date(), ONE_YEAR));
 	const days365End = toUnixTimestamp(subSeconds(new Date(), ONE_YEAR - WINDOW));
 
-	const day365Candles = await getCandlesForProducts(
+	const day365Candles = await getCandlesForProducts({
 		productIds,
 		granularity,
-		days365Start,
-		days365End,
-	);
+		start: days365Start,
+		end: days365End,
+	});
 
 	console.log({
 		days1Start,

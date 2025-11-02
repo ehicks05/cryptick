@@ -21,7 +21,7 @@ const SEVEN_DAYS = 60 * 60 * 24 * 7;
 const THIRTY_DAYS = 60 * 60 * 24 * 30;
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
-export const CHART_TIMESPAN_SECONDS_AGO = {
+export const CHART_TIMESPAN_SECONDS = {
 	'24H': ONE_DAY,
 	'7D': SEVEN_DAYS,
 	'30D': THIRTY_DAYS,
