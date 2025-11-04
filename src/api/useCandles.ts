@@ -31,22 +31,16 @@ export const useCandles = (productIds: string[]) => {
 	return query;
 };
 
-// if there are no candles exactly 30 days ago, look for anything in the next hour
-const WINDOW = 60 * 60;
-
 const getHistoricPerformanceForProducts = async (productIds: string[]) => {
-	const granularity = CandleGranularity.ONE_MINUTE;
+	const WINDOW = CandleGranularity.ONE_MINUTE * 300;
 
 	const promises = Object.entries(CHART_TIMESPAN_SECONDS).map(
-		async ([timespan, seconds]) => {
-			const start = toUnixTimestamp(subSeconds(new Date(), seconds));
-			const end = toUnixTimestamp(subSeconds(new Date(), seconds - WINDOW));
-
+		async ([, seconds]) => {
 			const candles = await getCandlesForProducts({
 				productIds,
-				granularity,
-				start,
-				end,
+				granularity: CandleGranularity.ONE_MINUTE,
+				start: toUnixTimestamp(subSeconds(new Date(), seconds + WINDOW)),
+				end: toUnixTimestamp(subSeconds(new Date(), seconds)),
 			});
 
 			return candles;

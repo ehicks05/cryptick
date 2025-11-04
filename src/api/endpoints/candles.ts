@@ -1,7 +1,8 @@
-import pThrottle from 'p-throttle';
+import { range } from 'es-toolkit';
 import { PRODUCT_URL } from '../constants';
 import type { Candle, CandleGranularity, RawCandle } from '../types/product';
 import { keyByProductId } from '../utils';
+import { throttle } from './throttle';
 
 const rawCandleToCandle = (candle: RawCandle, productId: string) => ({
 	productId,
@@ -16,8 +17,8 @@ const rawCandleToCandle = (candle: RawCandle, productId: string) => ({
 interface Params {
 	productId: string;
 	granularity: CandleGranularity;
-	start?: number;
-	end?: number;
+	start: number;
+	end: number;
 }
 
 const getCandles = async ({
@@ -43,15 +44,32 @@ const getCandles = async ({
 	}
 };
 
-const throttle = pThrottle({
-	limit: 10,
-	interval: 1000,
-});
+const throttledFetch = throttle(async (params: Params) => getCandles(params));
 
-const throttledFetch = throttle(async (params: Params) => {
-	const candles = await getCandles(params);
-	return { productId: params.productId, candles };
-});
+const RESPONSE_LIMIT = 300;
+
+// responsible for splitting requests for >350 candles into batches
+const getCandlesForProduct = async ({
+	productId,
+	granularity,
+	start,
+	end,
+}: Params) => {
+	const estimatedCandleCount = Math.ceil((end - start) / granularity);
+	const batches = Math.ceil(estimatedCandleCount / RESPONSE_LIMIT);
+
+	const promises = range(batches).map((i) =>
+		throttledFetch({
+			productId,
+			granularity,
+			start: start + granularity * RESPONSE_LIMIT * i,
+			end: Math.min(start + granularity * RESPONSE_LIMIT * (i + 1), end),
+		}),
+	);
+	const results = await Promise.all(promises);
+
+	return { productId, candles: results.toReversed().flat() };
+};
 
 interface ParamsMulti extends Omit<Params, 'productId'> {
 	productIds: string[];
@@ -59,7 +77,8 @@ interface ParamsMulti extends Omit<Params, 'productId'> {
 
 export const getCandlesForProducts = async (_params: ParamsMulti) => {
 	const { productIds, ...params } = _params;
-	const toPromise = (productId: string) => throttledFetch({ productId, ...params });
+	const toPromise = (productId: string) =>
+		getCandlesForProduct({ productId, ...params });
 	const data = await Promise.all(productIds.map(toPromise));
 
 	return keyByProductId(data.flat());

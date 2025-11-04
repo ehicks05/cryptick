@@ -75,16 +75,16 @@ const Performance = ({ productId }: { productId: string }) => {
 
 	const { data } = useHistoricPerformance([productId]);
 
-	const day1 = data?.day1Candles[productId].at(-1)?.open || 0;
+	const day1 = data?.day1Candles[productId][0]?.open || 0;
 	const day1Change = getChange(day1, Number(price));
 
-	const day7 = data?.day7Candles[productId].at(-1)?.open || 0;
+	const day7 = data?.day7Candles[productId][0]?.open || 0;
 	const day7Change = getChange(day7, Number(price));
 
-	const day30 = data?.day30Candles[productId].at(-1)?.open || 0;
+	const day30 = data?.day30Candles[productId][0]?.open || 0;
 	const day30Change = getChange(day30, Number(price));
 
-	const day365 = data?.day365Candles[productId].at(-1)?.open || 0;
+	const day365 = data?.day365Candles[productId][0]?.open || 0;
 	const day365Change = getChange(day365, Number(price));
 
 	const changes = [
