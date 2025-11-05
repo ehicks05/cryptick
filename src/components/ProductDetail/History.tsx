@@ -18,29 +18,21 @@ const normalize = (value: number) => {
 	return 0.8;
 };
 
-const getAlpha = (
-	tradeSize: string,
-	formattedPrice: string,
-	side: 'buy' | 'sell',
-) => {
+const getAlpha = (tradeSize: string, formattedPrice: string) => {
 	const price = Number(formattedPrice.replaceAll(',', ''));
 	const value = Number(tradeSize) * price;
 	const intensity = normalize(value);
 	const clampedIntensity = Math.min(Math.max(intensity, 0), 1);
-	// bright green seems brighter than bright red
-	const colorPerception = clampedIntensity > 0.5 && side === 'buy' ? 0.7 : 1;
-	return clampedIntensity * colorPerception;
+	return clampedIntensity;
 };
 
 const SIDES = {
 	buy: {
 		highlight: 'green-bold',
-		borderColor: 'border-emerald-500',
 		textColor: 'text-emerald-700 dark:text-emerald-500',
 	},
 	sell: {
 		highlight: 'red-bold',
-		borderColor: 'border-red-500',
 		textColor: 'text-red-700 dark:text-red-500',
 	},
 };
@@ -69,11 +61,15 @@ const TickerRow = ({
 	sizeUnit,
 	format,
 }: TickerRowProps) => {
+	const alpha = getAlpha(last_size, price);
+
 	const style = {
-		backgroundColor: `rgba(${
-			side === 'buy' ? '0,255,150' : '255,25,0'
-		},${getAlpha(last_size, price, side)})`,
+		backgroundColor:
+			side === 'buy'
+				? `oklch(0.8 .29 162 / ${alpha * 100}%)`
+				: `oklch(0.8 .29  30 / ${alpha * 100}%)`,
 	};
+
 	const tradeSize =
 		sizeUnit === 'base'
 			? last_size
