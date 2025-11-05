@@ -15,6 +15,9 @@ export const getChange = (open: number, close: number) => {
 	} as const;
 };
 
+/**
+ * Combine any number of candles into an unstoppable super candle
+ */
 export const mergeCandles = (candles: Candle[]) => {
 	const high = Math.max(...candles.map((o) => o.high), 0);
 	const low = Math.min(...candles.map((o) => o.low));

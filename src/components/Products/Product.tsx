@@ -8,14 +8,14 @@ import { CHART_TIMESPANS, type ChartTimespan, type Direction } from 'types';
 import { formatPercent } from 'utils';
 import { ProductSummary } from './ProductSummary';
 import Chart from './SimpleChart/Chart';
-import { useCandlesWithLivePrice } from './SimpleChart/useChart';
+import { useLiveCandles } from './SimpleChart/useLiveCandles';
 
 interface Props {
 	productId: string;
 }
 
 const Product = ({ productId }: Props) => {
-	const { candles } = useCandlesWithLivePrice({ productId });
+	const { candles } = useLiveCandles({ productId });
 	const stats = mergeCandles(candles);
 	const { direction } = stats;
 
@@ -47,13 +47,14 @@ const TimespanPerformance = ({
 	const [timespan, setTimespan] = useChartTimespan();
 
 	return (
-		<div
-			key={change.label}
-			className={cn('flex items-baseline gap-1', {
-				'font-bold': change.name === timespan,
-			})}
-		>
-			<span className="text-xs text-muted-foreground">{change.label}</span>
+		<div key={change.label} className="flex items-baseline gap-1">
+			<span
+				className={cn('text-xs', {
+					'text-muted-foreground': change.name !== timespan,
+				})}
+			>
+				{change.label}
+			</span>
 			<button
 				type="button"
 				onClick={() => setTimespan(change.name)}

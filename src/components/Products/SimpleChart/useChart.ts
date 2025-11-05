@@ -1,31 +1,45 @@
 import { STROKE } from 'directionalStyles';
 import { useMeasure } from '@uidotdev/usehooks';
-import { useCandles } from 'api';
+import { type Candle, CandleGranularity } from 'api/types/product';
 import { chunk } from 'es-toolkit';
 import { mergeCandles } from 'lib/utils';
 import { useState } from 'react';
-import { usePrice } from 'store';
 import { round } from './round';
+import { useLiveCandles } from './useLiveCandles';
 
-export const useCandlesWithLivePrice = ({ productId }: Props) => {
-	const candlesQuery = useCandles([productId]);
-	const _candles = candlesQuery.data?.[productId] || [];
-	const chunked = chunk(_candles, 1).map(mergeCandles);
-	const candles = _candles.length > 192 ? chunked : _candles;
+/**
+ * The simple chart was designed around 96 15-minute candles. Way more or fewer
+ * candles looks weird. We now support more timespans including 365 1-day
+ * candles. We merge them down to look better. We can't naively chunk them. Each
+ * chunk must be composed of the same candles.
+ */
+const handleTooManyCandles = (candles: Candle[]) => {
+	const mergeFactor = Math.floor(candles.length / 82);
+	if (mergeFactor < 2) return candles;
 
-	// set current candle's current price
-	const price = usePrice(productId);
-	if (candles?.[0]?.close && price) {
-		const candle = candles[0];
-		const currentPrice = Number(price.replace(/,/g, ''));
-		if (currentPrice !== 0) {
-			candle.close = currentPrice;
-			if (currentPrice < candle.low) candle.low = currentPrice;
-			if (currentPrice > candle.high) candle.high = currentPrice;
-		}
-	}
+	const granularity = (candles[0].timestamp - candles[1].timestamp) / 1000;
 
-	return { candles };
+	const firstIndexFinder = (candle: Candle) => {
+		const date = new Date(candle.timestamp * 1000);
+
+		if (granularity === CandleGranularity.ONE_DAY) return date.getDay();
+		if (granularity === CandleGranularity.SIX_HOURS) return date.getHours() / 6;
+		if (granularity === CandleGranularity.ONE_HOUR) return date.getHours();
+		if (granularity === CandleGranularity.FIFTEEN_MINUTES)
+			return date.getMinutes() / 15;
+
+		return date.getDay();
+	};
+
+	const firstMergeIndex =
+		candles.findIndex((o) => firstIndexFinder(o) % mergeFactor === 0) || 0;
+
+	const head = candles.slice(0, firstMergeIndex);
+	const rest = chunk(candles.slice(firstMergeIndex), mergeFactor);
+	const chunks = [...(head.length ? [head] : []), ...rest];
+
+	const mergedCandles = chunks.map((chunk) => mergeCandles(chunk));
+	return mergedCandles;
 };
 
 interface Props {
@@ -34,7 +48,9 @@ interface Props {
 
 export const useChartData = ({ productId }: Props) => {
 	const [ref, { height: containerHeight, width: containerWidth }] = useMeasure();
-	const { candles } = useCandlesWithLivePrice({ productId });
+	const { candles: _candles } = useLiveCandles({ productId });
+
+	const candles = handleTooManyCandles(_candles);
 
 	const [idealCandleWidth, setIdealCandleWidth] = useState(3.7);
 
