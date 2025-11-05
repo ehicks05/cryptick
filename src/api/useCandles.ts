@@ -31,7 +31,7 @@ export const useCandles = (productIds: string[]) => {
 	return query;
 };
 
-const getHistoricPerformanceForProducts = async (productIds: string[]) => {
+const getHistoricPricesForProducts = async (productIds: string[]) => {
 	const WINDOW = CandleGranularity.ONE_MINUTE * 300;
 
 	const promises = Object.entries(CHART_TIMESPAN_SECONDS).map(
@@ -53,10 +53,10 @@ const getHistoricPerformanceForProducts = async (productIds: string[]) => {
 	return { day1Candles, day7Candles, day30Candles, day365Candles };
 };
 
-export const useHistoricPerformance = (productIds: string[]) => {
+export const useHistoricPrices = (productIds: string[]) => {
 	const query = useQuery({
 		queryKey: ['historicCandles', productIds],
-		queryFn: () => getHistoricPerformanceForProducts(productIds),
+		queryFn: () => getHistoricPricesForProducts(productIds),
 		staleTime: 1000 * 60,
 		refetchInterval: getMsToNextMinuteStart,
 	});

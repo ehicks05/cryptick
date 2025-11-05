@@ -1,5 +1,5 @@
 import { BG_COLORS, BORDER_COLORS, TEXT_COLORS } from 'directionalStyles';
-import { useHistoricPerformance } from 'api/useCandles';
+import { useHistoricPrices } from 'api/useCandles';
 import { useChartTimespan } from 'hooks/useStorage';
 import { cn, getChange, mergeCandles } from 'lib/utils';
 import React from 'react';
@@ -74,7 +74,7 @@ const Performance = ({ productId }: { productId: string }) => {
 	const cleanPriceString = _price.replace(/[$,]/g, ''); // Removes '$' and ','
 	const price = Number.parseFloat(cleanPriceString);
 
-	const { data } = useHistoricPerformance([productId]);
+	const { data } = useHistoricPrices([productId]);
 
 	const day1 = data?.day1Candles[productId][0]?.open || 0;
 	const day1Change = getChange(day1, Number(price));

@@ -1,6 +1,10 @@
 import type { Candle } from 'api/types/product';
 import { round } from './round';
 
+/**
+ * Might only useful on charts where users pick candle width, not
+ * timespan...
+ */
 export const useIdealCandleWidth = (
 	_candles: Candle[],
 	containerWidth: number,
