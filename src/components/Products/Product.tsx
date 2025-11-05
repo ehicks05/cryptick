@@ -39,10 +39,12 @@ const TimespanPerformance = ({
 	const [timespan, setTimespan] = useChartTimespan();
 
 	return (
-		<div
+		<button
 			key={label}
+			type="button"
+			onClick={() => setTimespan(name)}
 			className={cn(
-				'flex items-baseline gap-1 px-4 w-1/4 py-2 justify-center',
+				'flex items-baseline gap-1 px-4 w-1/4 py-2 justify-center cursor-pointer',
 				BG_SOLIDS[direction],
 			)}
 		>
@@ -53,14 +55,10 @@ const TimespanPerformance = ({
 			>
 				{label}
 			</span>
-			<button
-				type="button"
-				onClick={() => setTimespan(name)}
-				className={cn(TEXT_COLORS[direction], 'text-sm font-mono cursor-pointer')}
-			>
+			<div className={cn(TEXT_COLORS[direction], 'text-sm font-mono')}>
 				{formatPercent(percentChange)}
-			</button>
-		</div>
+			</div>
+		</button>
 	);
 };
 
