@@ -47,7 +47,7 @@ const formatPercent = (percent: number) => {
 };
 
 const buildSubscribeMessage = (type: string, product_ids: string[]) => {
-	return { type, product_ids, channels: ['ticker'] };
+	return JSON.stringify({ type, product_ids, channels: ['ticker'] });
 };
 
 const clamp = (value: number, min: number, max: number) => {
