@@ -1,8 +1,9 @@
 import { useMeasure } from '@uidotdev/usehooks';
+import { useCandlesByGranularity } from 'api/useCandles';
 import { RotateCcw } from 'lucide-react';
 import React, { useState } from 'react';
 import { useParams } from 'wouter';
-import { use24HourStats, useCandles } from '../../api';
+import { use24HourStats } from '../../api';
 import CandleChart from '../CandleChart';
 import { CandleGranularityPicker } from '../CandleGranularityPicker';
 import { Button } from '../ui/button';
@@ -18,7 +19,7 @@ const ProductDetail = () => {
 	const innerHeight = _innerHeight || 0;
 
 	const { productId } = useParams();
-	const { data: _candles } = useCandles([productId || '']);
+	const { data: _candles } = useCandlesByGranularity([productId || '']);
 	const candles = _candles?.[productId || ''];
 
 	const { data: stats } = use24HourStats();

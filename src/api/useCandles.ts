@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useChartTimespan } from 'hooks/useStorage';
+import { useCandleGranularity, useChartTimespan } from 'hooks/useStorage';
 import { useEffect } from 'react';
 import { CHART_TIMESPAN_GRANULARITIES, CHART_TIMESPAN_SECONDS } from 'types';
 import { getCandlesForProducts } from './endpoints/candles';
@@ -19,6 +19,25 @@ export const useCandles = (productIds: string[]) => {
 
 	const query = useQuery({
 		queryKey: ['candles', productIds],
+		queryFn: () => getCandlesForProducts({ productIds, granularity, start, end }),
+		staleTime: 1000 * 60,
+		refetchInterval: getMsToNextMinuteStart,
+	});
+
+	useEffect(() => {
+		if (granularity) query.refetch();
+	}, [granularity, query.refetch]);
+
+	return query;
+};
+
+export const useCandlesByGranularity = (productIds: string[]) => {
+	const [granularity] = useCandleGranularity();
+	const start = getTimeAgo(granularity * 300);
+	const end = toUnixTimestamp(new Date());
+
+	const query = useQuery({
+		queryKey: ['candlesByGranularity', productIds],
 		queryFn: () => getCandlesForProducts({ productIds, granularity, start, end }),
 		staleTime: 1000 * 60,
 		refetchInterval: getMsToNextMinuteStart,

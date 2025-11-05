@@ -1,3 +1,4 @@
+import { cn } from 'lib/utils';
 import React from 'react';
 import type { Candle as ICandle } from '../../api/types/product';
 import { VolumeBar } from './VolumeBar';
@@ -32,8 +33,8 @@ const Candle = ({
 
 	const classes =
 		close >= open
-			? 'transition-[height,y] stroke-emerald-600 fill-emerald-600'
-			: 'transition-[height,y] stroke-red-500 fill-red-500';
+			? 'stroke-emerald-600 fill-emerald-600'
+			: 'stroke-red-500 fill-red-500';
 
 	return (
 		<React.Fragment key={timestamp}>
@@ -57,7 +58,7 @@ const Candle = ({
 			/>
 			{/* wick */}
 			<rect
-				className={classes}
+				className={cn(classes, { 'transition-[height,y]': i === 0 })}
 				x={getX(i * candleWidth + candlestickWidth / 2)}
 				y={getY(high)}
 				width={candlestickWidth}
@@ -66,7 +67,7 @@ const Candle = ({
 			{/* body */}
 			{candleWidth >= 6 && (
 				<rect
-					className={classes}
+					className={cn(classes, { 'transition-[height,y]': i === 0 })}
 					x={getX(i * candleWidth) - candleWidth / rectXDivisor}
 					y={getY(Math.max(open, close))}
 					width={candleWidth / (rectXDivisor / 2)}
