@@ -96,6 +96,7 @@ export const useChartData = ({ productId }: Props) => {
 
 	return {
 		points: points.join(' '),
+		direction,
 		strokeColor,
 		ref,
 		height,
