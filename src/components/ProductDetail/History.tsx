@@ -1,8 +1,7 @@
 import { useThrottle } from '@uidotdev/usehooks';
 import type { TickerMessage } from 'api/types/ws-types';
-import clsx from 'clsx';
 import { useHistoryUnit } from 'hooks/useStorage';
-import type { ComponentPropsWithoutRef } from 'react';
+import { cn } from 'lib/utils';
 import { useStore } from 'store';
 
 const normalize = (value: number) => {
@@ -59,18 +58,6 @@ const getFormat = (currency: string) => {
 	return newFormat;
 };
 
-const TR = ({ children, ...props }: ComponentPropsWithoutRef<'tr'>) => {
-	return <tr {...props}>{children}</tr>;
-};
-
-const TD = ({ children, className, ...props }: ComponentPropsWithoutRef<'td'>) => {
-	return (
-		<td {...props} className={clsx('px-2 w-full', className)}>
-			{children}
-		</td>
-	);
-};
-
 interface TickerRowProps {
 	tickerMessage: TickerMessage;
 	sizeUnit: string;
@@ -99,14 +86,19 @@ const TickerRow = ({
 	];
 
 	return (
-		<TR key={sequence} className={SIDES[side].highlight}>
-			<TD style={style} className="text-right">
+		<div
+			key={sequence}
+			className={cn('flex justify-between font-mono', SIDES[side].highlight)}
+		>
+			<div style={style} className="w-22 text-right">
 				<span className="text-neutral-500 dark:text-neutral-300">{faded}</span>
 				{base}
-			</TD>
-			<TD className={clsx('font-bold', SIDES[side].textColor)}>{price}</TD>
-			<TD className="opacity-50">{time}</TD>
-		</TR>
+			</div>
+			<div className={cn('w-16 text-right font-bold', SIDES[side].textColor)}>
+				{price}
+			</div>
+			<div className="w-14 text-right opacity-50">{time}</div>
+		</div>
 	);
 };
 
@@ -122,30 +114,26 @@ export const History = ({ productId }: { productId: string }) => {
 
 	return (
 		<div className="w-64 text-xs">
-			<table className="w-full">
-				<thead className="text-neutral-600 dark:text-neutral-300">
-					<tr>
-						<TD colSpan={4}>History</TD>
-					</tr>
-					<tr>
-						<TD className="text-right cursor-pointer" onClick={toggleSizeUnit}>
-							Trade Size
-						</TD>
-						<TD className="text-right">Price</TD>
-						<TD className="text-right">Time</TD>
-					</tr>
-				</thead>
-				<tbody className="font-mono">
-					{throttledTicker.map((tickerMessage) => (
-						<TickerRow
-							key={tickerMessage.sequence}
-							tickerMessage={tickerMessage}
-							sizeUnit={sizeUnit}
-							format={format}
-						/>
-					))}
-				</tbody>
-			</table>
+			<div>History</div>
+			<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+				<button
+					type="button"
+					className="w-22 text-right cursor-pointer"
+					onClick={toggleSizeUnit}
+				>
+					Trade Size
+				</button>
+				<div className="w-16 text-right">Price</div>
+				<div className="w-14 text-right">Time</div>
+			</div>
+			{throttledTicker.map((tickerMessage) => (
+				<TickerRow
+					key={tickerMessage.sequence}
+					tickerMessage={tickerMessage}
+					sizeUnit={sizeUnit}
+					format={format}
+				/>
+			))}
 		</div>
 	);
 };

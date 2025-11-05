@@ -71,7 +71,7 @@ const ProductDetail = () => {
 				</div>
 			</div>
 			<div
-				className="hidden md:block overflow-y-hidden h-full shrink-0"
+				className="hidden md:block overflow-y-auto h-full shrink-0 border rounded"
 				style={{ maxHeight: height }}
 			>
 				<History productId={productId} />
