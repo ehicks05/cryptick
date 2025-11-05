@@ -9,7 +9,7 @@ export const STROKE: DirectionalStyle = {
 	UNK: 'stroke-neutral-500 dark:stroke-neutral-400',
 };
 
-export const BG_COLORS = {
+export const BG_GRADIENTS = {
 	POS: cn(
 		'from-[rgba(60,120,60,.08)]',
 		'via-[rgba(60,120,60,.08)]',
@@ -25,7 +25,7 @@ export const BG_COLORS = {
 		'via-[rgba(150,60,60,.08)]',
 		'to-[rgba(150,60,60,.01)]',
 		'via-[40%]',
-		'to-[70%]', 
+		'to-[70%]',
 		'dark:from-[rgba(150,60,60,.15)]',
 		'dark:via-[rgba(150,60,60,.1)]',
 		'dark:to-[rgba(150,60,60,.1)]',
@@ -42,9 +42,17 @@ export const BG_COLORS = {
 	),
 } as const;
 
+export const BG_SOLIDS = {
+	POS: cn('bg-[rgba(60,120,60,.08)]', 'dark:bg-[rgba(60,120,60,.15)]'),
+	NEG: cn('bg-[rgba(150,60,60,.08)]', 'dark:bg-[rgba(150,60,60,.15)]'),
+	UNK: cn('bg-[rgba(90,90,90,.15)]', 'dark:bg-[rgba(90,90,90,.15)]'),
+} as const;
+
 export const BORDER_COLORS = {
-	POS: 'border-green-200 dark:border-green-950',
-	NEG: 'border-red-200 dark:border-red-950',
+	POS: 'border-green-100 dark:border-[#022010]',
+	NEG: 'border-red-100 dark:border-[#281002]',
+	// POS: 'border-green-200 dark:border-green-950',
+	// NEG: 'border-red-200 dark:border-red-950',
 	UNK: 'border-neutral-200 dark:border-neutral-800',
 } as const;
 

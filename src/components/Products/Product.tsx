@@ -1,4 +1,4 @@
-import { BG_COLORS, BORDER_COLORS, TEXT_COLORS } from 'directionalStyles';
+import { BG_SOLIDS, BORDER_COLORS, TEXT_COLORS } from 'directionalStyles';
 import { useChartTimespan } from 'hooks/useStorage';
 import { cn, mergeCandles } from 'lib/utils';
 import React from 'react';
@@ -19,7 +19,6 @@ const Product = ({ productId }: Props) => {
 
 	const className = cn(
 		'rounded-lg shadow-sm border bg-radial',
-		BG_COLORS[direction],
 		BORDER_COLORS[direction],
 	);
 
@@ -40,7 +39,13 @@ const TimespanPerformance = ({
 	const [timespan, setTimespan] = useChartTimespan();
 
 	return (
-		<div key={label} className="flex items-baseline gap-1">
+		<div
+			key={label}
+			className={cn(
+				'flex items-baseline gap-1 px-4 w-1/4 py-2 justify-center',
+				BG_SOLIDS[direction],
+			)}
+		>
 			<span
 				className={cn('text-xs', {
 					'text-muted-foreground': name !== timespan,
@@ -63,7 +68,7 @@ const Performances = ({ productId }: { productId: string }) => {
 	const { performances } = useHistoricPerformance({ productId });
 
 	return (
-		<div className="p-4 py-2 flex justify-between items-center">
+		<div className="flex justify-between items-center">
 			{performances.map((performance) => (
 				<TimespanPerformance key={performance.name} change={performance} />
 			))}
