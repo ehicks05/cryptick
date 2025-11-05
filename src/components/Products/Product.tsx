@@ -8,7 +8,7 @@ import { CHART_TIMESPANS, type ChartTimespan, type Direction } from 'types';
 import { formatPercent } from 'utils';
 import { ProductSummary } from './ProductSummary';
 import Chart from './SimpleChart/Chart';
-import { useLiveCandles } from './SimpleChart/useLiveCandles';
+import { useLiveCandles } from './useLiveCandles';
 
 interface Props {
 	productId: string;

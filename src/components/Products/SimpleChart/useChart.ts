@@ -4,8 +4,8 @@ import { type Candle, CandleGranularity } from 'api/types/product';
 import { chunk } from 'es-toolkit';
 import { mergeCandles } from 'lib/utils';
 import { useState } from 'react';
+import { useLiveCandles } from '../useLiveCandles';
 import { round } from './round';
-import { useLiveCandles } from './useLiveCandles';
 
 /**
  * The simple chart was designed around 96 15-minute candles. Way more or fewer
