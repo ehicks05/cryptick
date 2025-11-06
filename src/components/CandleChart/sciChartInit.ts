@@ -48,7 +48,7 @@ export const initChart = async (rootElement: HTMLDivElement) => {
 		const y = Math.random() * 10;
 		xValues.push(x);
 		yValues.push(y);
-		mountainSeries.dataSeries.append(x, y);
+		// mountainSeries.dataSeries.append(x, y);
 
 		sciChartSurface.zoomExtents(500);
 	};
