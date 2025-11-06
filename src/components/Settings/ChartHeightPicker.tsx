@@ -1,35 +1,27 @@
+import { Slider } from '@base-ui-components/react';
 import { useChartHeight } from 'hooks/useStorage';
-import { Button } from '../ui/button';
-
-const OPTIONS = [
-	{ label: '0', value: 'h-0' },
-	{ label: '8', value: 'h-8' },
-	{ label: '16', value: 'h-16' },
-	{ label: '20', value: 'h-20' },
-	{ label: '24', value: 'h-24' },
-	{ label: '28', value: 'h-28' },
-	{ label: '32', value: 'h-32' },
-	{ label: '40', value: 'h-40' },
-];
 
 export const ChartHeightPicker = () => {
 	const [chartHeight, setChartHeight] = useChartHeight();
 
 	return (
-		<div className="flex flex-col">
-			Chart Height
+		<div className="flex flex-col">		
+			Chart Height: {chartHeight}
 			<div className="flex gap-2">
-				{OPTIONS.map(({ label, value }) => (
-					<Button
-						variant="outline"
-						size="icon"
-						key={value}
-						className={value === chartHeight ? 'text-green-500' : ''}
-						onClick={() => setChartHeight(value)}
-					>
-						{label}
-					</Button>
-				))}
+				<Slider.Root
+					value={Number(chartHeight.slice(2))}
+					onValueChange={(e) => setChartHeight(`h-${e}`)}
+					min={0}
+					max={40}
+					step={4}
+				>
+					<Slider.Control className="flex w-56 touch-none items-center py-3 select-none">
+						<Slider.Track className="h-1 w-full rounded bg-gray-200 shadow-[inset_0_0_0_1px] shadow-gray-200 select-none">
+							<Slider.Indicator className="rounded bg-green-600 select-none" />
+							<Slider.Thumb className="size-4 rounded-full bg-white outline outline-gray-300 select-none has-[:focus-visible]:outline has-[:focus-visible]:outline-blue-800" />
+						</Slider.Track>
+					</Slider.Control>
+				</Slider.Root>
 			</div>
 		</div>
 	);

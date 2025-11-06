@@ -1,7 +1,4 @@
-import { ChartTimespanPicker } from 'components/ChartTimespanPicker';
 import { SettingsIcon } from 'lucide-react';
-import { CandleGranularityPicker } from '../CandleGranularityPicker';
-import { ThemeToggle } from '../Theme/ThemeToggle';
 import { Button } from '../ui/button';
 import {
 	Dialog,
@@ -23,21 +20,6 @@ const Settings = () => (
 
 		<ProductPicker />
 		<ChartHeightPicker />
-
-		<div>
-			Candle Granularity
-			<CandleGranularityPicker />
-		</div>
-
-		<div>
-			Chart Timespan
-			<ChartTimespanPicker />
-		</div>
-
-		<div className="flex flex-col">
-			<div>Theme</div>
-			<ThemeToggle />
-		</div>
 
 		<DialogClose asChild>
 			<Button variant="secondary">Close</Button>
