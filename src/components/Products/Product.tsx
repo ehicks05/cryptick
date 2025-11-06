@@ -18,7 +18,7 @@ const Product = ({ productId }: Props) => {
 	const { direction } = stats;
 
 	const className = cn(
-		'rounded-lg shadow-sm border bg-radial',
+		'rounded-lg shadow-sm border-2 bg-radial',
 		BORDER_COLORS[direction],
 	);
 
