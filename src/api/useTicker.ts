@@ -25,12 +25,6 @@ export const useTicker = () => {
 	});
 
 	const handleMessage = (message: WebSocketTickerMessage) => {
-		// if (
-		// 	ticker[message.product_id]?.map((t) => t.sequence).includes(message.sequence)
-		// ) {
-		// 	return;
-		// }
-
 		const { product_id: productId, price: rawPrice } = message;
 		const product = products?.[productId];
 		if (!product) return;
