@@ -3,7 +3,6 @@ import { useCandlesByGranularity } from 'api/useCandles';
 import { RotateCcw } from 'lucide-react';
 import React, { useState } from 'react';
 import { useParams } from 'wouter';
-import { use24HourStats } from '../../api';
 import CandleChart from '../CandleChart';
 import { CandleGranularityPicker } from '../CandleGranularityPicker';
 import { Button } from '../ui/button';
@@ -22,9 +21,6 @@ const ProductDetail = () => {
 	const { data: _candles } = useCandlesByGranularity([productId || '']);
 	const candles = _candles?.[productId || ''];
 
-	const { data: stats } = use24HourStats();
-	const productStats = stats?.[productId || ''];
-
 	const [candleWidthMulti, setCandleWidthMulti] = useState(
 		DEFAULT_CANDLE_WIDTH_MULTI,
 	);
@@ -36,7 +32,6 @@ const ProductDetail = () => {
 	};
 
 	if (!productId) return <div>ProductId is missing...</div>;
-	if (!productStats) return <div>productStats is missing...</div>;
 	if (!candles) return <div>candles is missing...</div>;
 
 	return (
