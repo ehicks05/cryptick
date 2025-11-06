@@ -12,6 +12,7 @@ export function App() {
 				<Header />
 				<div className="grow flex flex-col h-full overflow-y-auto p-4 pt-0">
 					<Routes />
+					<div className="grow" />
 					<Footer />
 				</div>
 			</ErrorBoundary>

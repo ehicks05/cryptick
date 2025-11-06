@@ -1,5 +1,5 @@
 import type { WebSocketTickerMessage } from 'api/types/ws-types';
-import useWebSocket from 'react-use-websocket-lite';
+import useWebSocket from 'react-use-websocket';
 import { useStore } from 'store';
 import { useProductIds } from '../hooks/useStorage';
 import { buildSubscribeMessage, formatPrice, formatTime } from '../utils';
@@ -13,14 +13,13 @@ export const useTicker = () => {
 
 	const addTickerMessage = useStore((state) => state.addTickerMessage);
 
-	const { sendMessage } = useWebSocket({
-		url: WS_URL,
+	const { sendMessage } = useWebSocket(WS_URL, {
 		onOpen: () => sendMessage(buildSubscribeMessage('subscribe', productIds)),
 		onMessage: (event) => handleMessage(JSON.parse(event.data)),
 		onError: (event) => console.log(event),
 		shouldReconnect: () => true,
 		retryOnError: true,
-		maxReconnectAttempts: 50,
+		reconnectAttempts: 50,
 		reconnectInterval: 2000,
 	});
 
