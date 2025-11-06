@@ -1,12 +1,13 @@
 import { useCoinbaseWebsocket } from 'api/useCoinbaseWebsocket';
-import { Button } from 'components/ui/button';
+import { cn } from 'lib/utils';
+import { ReadyState } from 'react-use-websocket';
 
 export interface SocketStatus {
 	name: string;
 	class: { text: string; bg: string };
 }
 
-const SOCKET_STATUSES: Record<string, SocketStatus> = {
+const SOCKET_STATUSES: Record<ReadyState, SocketStatus> = {
 	'-1': {
 		name: 'Uninstantiated',
 		class: { text: 'text-red-500', bg: 'bg-red-500' },
@@ -27,7 +28,11 @@ export const SocketStatus = () => {
 			className="flex items-center justify-center w-9 h-9 border rounded-md"
 		>
 			<div className="flex items-center justify-center h-4 w-4">
-				<div className={`rounded-full h-2 w-2 ${socketStatus.class.bg}`} />
+				<div
+					className={cn('rounded-full h-2 w-2', socketStatus.class.bg, {
+						'animate-pulse': readyState !== ReadyState.OPEN,
+					})}
+				/>
 			</div>
 		</div>
 	);

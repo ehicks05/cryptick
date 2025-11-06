@@ -10,7 +10,7 @@ export function App() {
 		<div className="flex flex-col h-dvh">
 			<ErrorBoundary>
 				<Header />
-				<div className="grow flex flex-col h-full overflow-y-auto p-4">
+				<div className="grow flex flex-col h-full overflow-y-auto p-4 pt-0">
 					<Routes />
 				</div>
 				<Footer />

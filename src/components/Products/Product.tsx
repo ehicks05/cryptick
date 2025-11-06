@@ -17,15 +17,16 @@ const Product = ({ productId }: Props) => {
 	const stats = mergeCandles(candles);
 	const { direction } = stats;
 
-	const className = cn(
-		'rounded-lg shadow-sm border-2 bg-radial',
-		BORDER_COLORS[direction],
-	);
+	const className = cn('rounded-lg shadow-sm bg-radial');
 
 	return (
 		<div className={className}>
-			<ProductSummary productId={productId} />
-			<Chart productId={productId} />
+			<div className={cn('border-2 border-b-0 rounded-t-lg', BORDER_COLORS[direction])}>
+				<ProductSummary productId={productId} />
+			</div>
+			<div className={cn('border-x-2', BORDER_COLORS[direction])}>
+				<Chart productId={productId} />
+			</div>
 			<Performances productId={productId} />
 		</div>
 	);
@@ -70,7 +71,7 @@ const Performances = ({ productId }: { productId: string }) => {
 	const { performances } = useHistoricPerformance({ productId });
 
 	return (
-		<div className="flex justify-between items-center">
+		<div className="flex justify-between items-center rounded-b-med">
 			{performances.map((performance, i) => (
 				<TimespanPerformance key={performance.name} index={i} change={performance} />
 			))}

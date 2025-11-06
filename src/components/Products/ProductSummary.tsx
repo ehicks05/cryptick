@@ -15,7 +15,7 @@ const Name = ({ product }: NameProps) => {
 	return (
 		<div className="flex flex-col text-xl items-baseline leading-tight">
 			{product.display_name}
-			<span className="text-xs text-muted-foreground">{currency?.name}</span>
+			<span className="text-xs">{currency?.name}</span>
 		</div>
 	);
 };
@@ -29,7 +29,7 @@ const Price = ({ productId }: PriceProps) => {
 
 	return (
 		<div className="flex gap-2 mb-4 font-mono">
-			<span className="text-xl font-semibold" id={`${productId}Price`}>
+			<span className="text-xl font-semibold leading-tight" id={`${productId}Price`}>
 				{price}
 			</span>
 		</div>
@@ -45,7 +45,7 @@ export const ProductSummary = ({ productId }: { productId: string }) => {
 	}
 
 	return (
-		<div className="flex justify-between p-4 pt-2 pb-0">
+		<div className="flex justify-between p-4 pt-2 pb-0 text-muted-foreground">
 			<Name product={product} />
 			<Price productId={productId} />
 		</div>
