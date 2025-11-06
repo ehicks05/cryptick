@@ -33,8 +33,10 @@ const Product = ({ productId }: Props) => {
 
 const TimespanPerformance = ({
 	change: { name, label, direction, percentChange },
+	index,
 }: {
 	change: Performance;
+	index: number;
 }) => {
 	const [timespan, setTimespan] = useChartTimespan();
 
@@ -46,6 +48,8 @@ const TimespanPerformance = ({
 			className={cn(
 				'flex items-baseline gap-1 px-4 w-1/4 py-2 justify-center cursor-pointer',
 				BG_SOLIDS[direction],
+				{ 'rounded-bl-md': index === 0 },
+				{ 'rounded-br-md': index === 3 },
 			)}
 		>
 			<span
@@ -67,8 +71,8 @@ const Performances = ({ productId }: { productId: string }) => {
 
 	return (
 		<div className="flex justify-between items-center">
-			{performances.map((performance) => (
-				<TimespanPerformance key={performance.name} change={performance} />
+			{performances.map((performance, i) => (
+				<TimespanPerformance key={performance.name} index={i} change={performance} />
 			))}
 		</div>
 	);
