@@ -15,7 +15,7 @@ const Name = ({ product }: NameProps) => {
 	return (
 		<div className="flex flex-col text-xl items-baseline leading-tight">
 			{product.display_name}
-			<span className="text-xs">{currency?.name}</span>
+			<span className="text-xs text-muted-foreground">{currency?.name}</span>
 		</div>
 	);
 };
@@ -45,7 +45,7 @@ export const ProductSummary = ({ productId }: { productId: string }) => {
 	}
 
 	return (
-		<div className="flex justify-between p-4 pt-2 pb-0 text-muted-foreground">
+		<div className="flex justify-between p-4 pt-2 pb-0">
 			<Name product={product} />
 			<Price productId={productId} />
 		</div>
