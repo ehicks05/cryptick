@@ -1,21 +1,7 @@
-import {
-	closestCenter,
-	DndContext,
-	type DragEndEvent,
-	KeyboardSensor,
-	PointerSensor,
-	useSensor,
-	useSensors,
-} from '@dnd-kit/core';
-import {
-	arrayMove,
-	rectSortingStrategy,
-	SortableContext,
-	sortableKeyboardCoordinates,
-	useSortable,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import React, { type CSSProperties } from 'react';
+import { arrayMove } from '@dnd-kit/helpers';
+import { DragDropProvider, PointerSensor } from '@dnd-kit/react';
+import { isSortable, useSortable } from '@dnd-kit/react/sortable';
+import React from 'react';
 import { useScreen } from 'usehooks-ts';
 import { useProductIds } from '../../hooks/useStorage';
 import Product from './Product';
@@ -23,75 +9,54 @@ import Product from './Product';
 const Products = () => {
 	const [productIds, setProductIds] = useProductIds();
 
-	const pointerSensor = useSensor(PointerSensor, {
-		activationConstraint: {
-			distance: 10,
-		},
-	});
-
-	const sensors = useSensors(
-		pointerSensor,
-		useSensor(KeyboardSensor, {
-			coordinateGetter: sortableKeyboardCoordinates,
-		}),
-	);
-
-	const handleDragEnd = (event: DragEndEvent) => {
-		const { active, over } = event;
-
-		if (over && active.id !== over.id) {
-			const oldIndex = productIds.indexOf(active.id.toString());
-			const newIndex = productIds.indexOf(over.id.toString());
-			const updated = arrayMove(productIds, oldIndex, newIndex);
-			setProductIds(updated);
-		}
-	};
-
 	const { width = 0 } = useScreen();
 	const minColumnWidth = width < 400 ? width - 16 - 16 - 16 - 16 : 380;
+	const style = {
+		gridTemplateColumns: `repeat( auto-fill, minmax(${minColumnWidth}px, 1fr))`,
+	};
+
+	const sensors = [
+		PointerSensor.configure({ activationConstraints: { distance: { value: 10 } } }),
+	];
 
 	return (
-		<DndContext
+		<DragDropProvider
 			sensors={sensors}
-			collisionDetection={closestCenter}
-			onDragEnd={handleDragEnd}
+			onDragEnd={(event) => {
+				const { operation, canceled } = event;
+				const { source, target } = operation;
+
+				if (canceled || !isSortable(source) || !isSortable(target)) {
+					return;
+				}
+
+				const from = source.sortable.initialIndex;
+				const to = target.sortable.index;
+				setProductIds(arrayMove(productIds, from, to));
+			}}
 		>
-			<SortableContext items={productIds} strategy={rectSortingStrategy}>
-				<div className="w-full mx-auto">
-					<div
-						className="grid gap-2"
-						style={{
-							gridTemplateColumns: `repeat( auto-fill, minmax(${minColumnWidth}px, 1fr))`,
-						}}
-					>
-						{productIds.map((productId) => {
-							return <SortableItem key={productId} id={productId} />;
-						})}
-					</div>
-				</div>
-			</SortableContext>
-		</DndContext>
+			<div className="w-full grid gap-2" style={style}>
+				{productIds.map((productId, i) => {
+					return <SortableItem key={productId} id={productId} index={i} />;
+				})}
+			</div>
+		</DragDropProvider>
 	);
 };
 
 interface SortableItemProps {
 	id: string;
+	index: number;
 }
 
-const SortableItem = ({ id }: SortableItemProps) => {
-	const { setNodeRef, transform, transition, attributes, listeners, isDragging } =
-		useSortable({ id });
+const SortableItem = ({ id, index }: SortableItemProps) => {
+	const { isDragging, ...sortable } = useSortable({ id, index });
 
-	const style: CSSProperties = {
-		transform: CSS.Transform.toString(transform),
-		transition,
-		...(isDragging && {
-			pointerEvents: 'none', // prevent link clicks while dragging
-		}),
-	};
+	// prevent link clicks while dragging
+	const classes = isDragging ? 'pointer-events-none' : '';
 
 	return (
-		<div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+		<div ref={sortable.ref} className={classes}>
 			<Product productId={id} />
 		</div>
 	);
