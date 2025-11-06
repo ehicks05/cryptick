@@ -2,6 +2,7 @@ import { ThemeToggle } from 'components/Theme/ThemeToggle';
 import { Link } from 'wouter';
 import { APP } from '../../constants';
 import { SettingsDialog } from '../Settings/Settings';
+import { SocketStatus } from './SocketStatus';
 
 const Logo = () => {
 	return (
@@ -20,7 +21,8 @@ export const Header = () => (
 	<header className="flex p-4 justify-between text-neutral-600 dark:text-neutral-400">
 		<Logo />
 
-		<div className='flex gap-2'>
+		<div className="flex gap-2">
+			<SocketStatus />
 			<ThemeToggle />
 			<SettingsDialog />
 		</div>

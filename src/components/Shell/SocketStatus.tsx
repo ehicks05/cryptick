@@ -1,4 +1,5 @@
 import { useCoinbaseWebsocket } from 'api/useCoinbaseWebsocket';
+import { Button } from 'components/ui/button';
 
 export interface SocketStatus {
 	name: string;
@@ -21,7 +22,10 @@ export const SocketStatus = () => {
 	const socketStatus = SOCKET_STATUSES[readyState];
 
 	return (
-		<div title={socketStatus.name} className="flex items-center justify-center">
+		<div
+			title={socketStatus.name}
+			className="flex items-center justify-center w-9 h-9 border rounded-md"
+		>
 			<div className="flex items-center justify-center h-4 w-4">
 				<div className={`rounded-full h-2 w-2 ${socketStatus.class.bg}`} />
 			</div>
