@@ -30,8 +30,5 @@ export const toUnixTimestamp = (date: Date) => Math.round(date.getTime() / 1000)
 
 export const getTimeAgo = (seconds: number) => {
 	const date = subSeconds(new Date(), seconds);
-	const roundedDate = new Date(
-		date.setMinutes(Math.floor(date.getMinutes() / 15) * 15, 0, 0),
-	);
-	return toUnixTimestamp(roundedDate);
+	return toUnixTimestamp(date);
 };
