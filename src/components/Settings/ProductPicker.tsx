@@ -1,6 +1,6 @@
-import { useCoinbaseWebsocket } from 'api/useCoinbaseWebsocket';
-import { useProducts } from '../../api';
+import { useCoinbaseWebsocket } from 'services/cbp/useCoinbaseWebsocket';
 import { useProductIds } from '../../hooks/useStorage';
+import { useProducts } from '../../services/cbp';
 import { buildSubscribeMessage } from '../../utils';
 import { ComboboxDemo } from '../ui/combobox';
 

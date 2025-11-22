@@ -1,6 +1,6 @@
 import { cn } from 'lib/utils';
 import React from 'react';
-import type { Candle as ICandle } from '../../api/types/product';
+import type { Candle as ICandle } from '../../services/cbp/types/product';
 import { VolumeBar } from './VolumeBar';
 
 interface Props {

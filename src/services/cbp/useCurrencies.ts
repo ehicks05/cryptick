@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { Currency } from 'api/types/currency';
+import type { Currency } from 'services/cbp/types/currency';
 import { CURRENCY_URL } from './constants';
 import { keyById } from './utils';
 

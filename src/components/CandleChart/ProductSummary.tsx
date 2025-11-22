@@ -1,5 +1,5 @@
+import { useCurrencies, useProducts } from 'services/cbp';
 import { useThrottledPrice } from 'store';
-import { useCurrencies, useProducts } from '../../api';
 
 interface Props {
 	productId: string;

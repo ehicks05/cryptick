@@ -1,7 +1,7 @@
 import { useThrottle } from '@uidotdev/usehooks';
-import { use24HourStats, useProducts } from 'api';
-import type { TickerMessage } from 'api/types/ws-types';
 import { useEffect, useState } from 'react';
+import { use24HourStats, useProducts } from 'services/cbp';
+import type { TickerMessage } from 'services/cbp/types/ws-types';
 import { formatPrice } from 'utils';
 import { create } from 'zustand';
 

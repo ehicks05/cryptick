@@ -1,6 +1,6 @@
-import type { Candle } from 'api/types/product';
 import { type ClassValue, clsx } from 'clsx';
 import { sum } from 'es-toolkit';
+import type { Candle } from 'services/cbp/types/product';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {

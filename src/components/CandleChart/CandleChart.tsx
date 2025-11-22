@@ -2,7 +2,7 @@ import { useMeasure } from '@uidotdev/usehooks';
 import { ProductSummary } from 'components/CandleChart/ProductSummary';
 import React, { useEffect, useState } from 'react';
 import { usePrice } from 'store';
-import type { Candle as ICandle } from '../../api/types/product';
+import type { Candle as ICandle } from '../../services/cbp/types/product';
 import { clamp } from '../../utils';
 import Candle from './Candle';
 import { Crosshair } from './Crosshair';

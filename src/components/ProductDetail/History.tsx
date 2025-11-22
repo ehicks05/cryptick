@@ -1,5 +1,5 @@
 import { useThrottle } from '@uidotdev/usehooks';
-import type { TickerMessage } from 'api/types/ws-types';
+import type { TickerMessage } from 'services/cbp/types/ws-types';
 import { useHistoryUnit } from 'hooks/useStorage';
 import { cn } from 'lib/utils';
 import { useStore } from 'store';

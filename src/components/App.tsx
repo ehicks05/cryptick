@@ -1,4 +1,4 @@
-import { useTicker } from 'api';
+import { useTicker } from 'services/cbp';
 import ErrorBoundary from './ErrorBoundary';
 import { Routes } from './Routes';
 import { Footer, Header } from './Shell';

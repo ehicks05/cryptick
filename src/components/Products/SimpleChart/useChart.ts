@@ -1,9 +1,9 @@
 import { STROKE } from 'directionalStyles';
 import { useMeasure } from '@uidotdev/usehooks';
-import { type Candle, CandleGranularity } from 'api/types/product';
 import { chunk } from 'es-toolkit';
 import { mergeCandles } from 'lib/utils';
 import { useState } from 'react';
+import { type Candle, CandleGranularity } from 'services/cbp/types/product';
 import { useLiveCandles } from '../useLiveCandles';
 import { round } from './round';
 

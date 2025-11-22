@@ -1,4 +1,4 @@
-import { useCandles } from 'api';
+import { useCandles } from 'services/cbp';
 import { usePrice } from 'store';
 
 interface Props {

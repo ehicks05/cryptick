@@ -1,4 +1,4 @@
-import { CandleGranularity } from 'api/types/product';
+import { CandleGranularity } from 'services/cbp/types/product';
 import { clsx } from 'clsx';
 import { useCandleGranularity } from 'hooks/useStorage';
 import { ChevronDown } from 'lucide-react';

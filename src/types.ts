@@ -1,4 +1,4 @@
-import { CandleGranularity } from 'api/types/product';
+import { CandleGranularity } from 'services/cbp/types/product';
 
 export type Direction = 'POS' | 'NEG' | 'UNK';
 

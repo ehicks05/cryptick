@@ -1,5 +1,5 @@
-import { useHistoricPrices } from 'api/useCandles';
 import { getChange } from 'lib/utils';
+import { useHistoricPrices } from 'services/cbp/useCandles';
 import { useThrottledPrice } from 'store';
 import { CHART_TIMESPANS, type ChartTimespan, type Direction } from 'types';
 

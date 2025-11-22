@@ -1,4 +1,4 @@
-import type { Candle } from '../../api/types/product';
+import type { Candle } from '../../services/cbp/types/product';
 import { BOTTOM_GUTTER_HEIGHT } from './CandleChart';
 
 const mm = Intl.DateTimeFormat('en-US', {

@@ -1,4 +1,4 @@
-import type { ISO_8601_MS_UTC, OrderSide } from 'api/types/common';
+import type { ISO_8601_MS_UTC, OrderSide } from 'services/cbp/types/common';
 
 export interface Product {
 	base_currency: string;

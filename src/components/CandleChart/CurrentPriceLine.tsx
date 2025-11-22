@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { motion } from 'motion/react';
-import type { Candle } from '../../api/types/product';
+import type { Candle } from '../../services/cbp/types/product';
 
 const nf = Intl.NumberFormat('en-US', { minimumFractionDigits: 2 });
 

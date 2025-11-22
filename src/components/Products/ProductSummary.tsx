@@ -1,6 +1,6 @@
+import { useCurrencies, useProducts } from 'services/cbp';
 import { useThrottledPrice } from 'store';
-import { useCurrencies, useProducts } from '../../api';
-import type { Product } from '../../api/types/product';
+import type { Product } from '../../services/cbp/types/product';
 
 interface NameProps {
 	product: Product;

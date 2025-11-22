@@ -21,7 +21,9 @@ const Product = ({ productId }: Props) => {
 
 	return (
 		<div className={className}>
-			<div className={cn('border-2 border-b-0 rounded-t-lg', BORDER_COLORS[direction])}>
+			<div
+				className={cn('border-2 border-b-0 rounded-t-lg', BORDER_COLORS[direction])}
+			>
 				<ProductSummary productId={productId} />
 			</div>
 			<div className={cn('border-x-2', BORDER_COLORS[direction])}>

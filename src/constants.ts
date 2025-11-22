@@ -1,4 +1,4 @@
-import { CandleGranularity } from 'api/types/product';
+import { CandleGranularity } from 'services/cbp/types/product';
 import { CHART_TIMESPANS, type ChartTimespan } from 'types';
 
 const APP = {

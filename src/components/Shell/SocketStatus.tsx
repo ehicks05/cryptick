@@ -1,6 +1,6 @@
-import { useCoinbaseWebsocket } from 'api/useCoinbaseWebsocket';
 import { cn } from 'lib/utils';
 import { ReadyState } from 'react-use-websocket';
+import { useCoinbaseWebsocket } from 'services/cbp/useCoinbaseWebsocket';
 
 export interface SocketStatus {
 	name: string;
