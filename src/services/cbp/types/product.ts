@@ -126,14 +126,13 @@ export type Stats24Hour = {
 	volume: Volume;
 };
 
-export type BulkProductStats = Record<
-	string,
-	{
-		stats_30day: {
-			volume: Volume;
-		};
-		stats_24hour: Stats24Hour;
-	}
->;
+export type BulkProductStat = {
+	stats_30day: {
+		volume: Volume;
+	};
+	stats_24hour: Stats24Hour;
+};
+
+export type BulkProductStats = Record<string, BulkProductStat>;
 
 export type RawCandle = [Timestamp, Low, High, Open, Close, Volume];

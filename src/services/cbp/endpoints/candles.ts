@@ -1,8 +1,8 @@
 import { range } from 'es-toolkit';
-import { PRODUCT_URL } from '../constants';
 import type { Candle, CandleGranularity, RawCandle } from '../types/product';
-import { keyByProductId } from '../utils';
+import { PRODUCT_URL } from './constants';
 import { throttle } from './throttle';
+import { keyByProductId } from './utils';
 
 const rawCandleToCandle = (candle: RawCandle, productId: string) => ({
 	productId,
