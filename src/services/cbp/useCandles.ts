@@ -4,12 +4,7 @@ import { useEffect } from 'react';
 import { CHART_TIMESPAN_GRANULARITIES, CHART_TIMESPAN_SECONDS } from 'types';
 import { getCandlesForProducts } from './endpoints/candles';
 import { CandleGranularity } from './types/product';
-import {
-	getMsToNextMinuteStart,
-	getTimeAgo,
-	subSeconds,
-	toUnixTimestamp,
-} from './utils';
+import { getTimeAgo, msToNextMinute, subSeconds, toUnixTimestamp } from './utils';
 
 export const useCandles = (productIds: string[]) => {
 	const [timespan] = useChartTimespan();
@@ -21,7 +16,7 @@ export const useCandles = (productIds: string[]) => {
 		queryKey: ['candles', productIds],
 		queryFn: () => getCandlesForProducts({ productIds, granularity, start, end }),
 		staleTime: 1000 * 60,
-		refetchInterval: getMsToNextMinuteStart,
+		refetchInterval: msToNextMinute,
 	});
 
 	useEffect(() => {
@@ -40,7 +35,7 @@ export const useCandlesByGranularity = (productIds: string[]) => {
 		queryKey: ['candlesByGranularity', productIds],
 		queryFn: () => getCandlesForProducts({ productIds, granularity, start, end }),
 		staleTime: 1000 * 60,
-		refetchInterval: getMsToNextMinuteStart,
+		refetchInterval: msToNextMinute,
 	});
 
 	useEffect(() => {
@@ -77,7 +72,7 @@ export const useHistoricPrices = (productIds: string[]) => {
 		queryKey: ['historicCandles', productIds],
 		queryFn: () => getHistoricPricesForProducts(productIds),
 		staleTime: 1000 * 60,
-		refetchInterval: getMsToNextMinuteStart,
+		refetchInterval: msToNextMinute,
 	});
 
 	return query;

@@ -4,7 +4,7 @@ import type { WebSocketTickerMessage } from 'services/cbp/types/ws-types';
 import { useStore } from 'store';
 import { buildSubscribeMessage, formatPrice, formatTime } from 'utils';
 import { WS_URL } from './constants';
-import { useProducts } from './useProducts';
+import { useProducts } from './hooks';
 
 // Singleton
 export const useTicker = () => {

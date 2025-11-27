@@ -1,5 +1,5 @@
 // used to align refetches to be just after the start of each new minute
-export const getMsToNextMinuteStart = () => (62 - new Date().getSeconds()) * 1000;
+export const msToNextMinute = () => (62 - new Date().getSeconds()) * 1000;
 
 export const subSeconds = (date: Date, n: number) =>
 	new Date(date.setSeconds(date.getSeconds() - n));
