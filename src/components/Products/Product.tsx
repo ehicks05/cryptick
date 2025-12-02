@@ -17,10 +17,12 @@ const Product = ({ productId }: Props) => {
 	const stats = mergeCandles(candles);
 	const { direction } = stats;
 
-	const className = cn('rounded-lg shadow-sm bg-radial');
-
 	return (
-		<div className={className}>
+		<div
+			className={
+				'rounded-lg shadow-sm bg-linear-to-br from-white to-white dark:from-neutral-900 dark:to-neutral-950'
+			}
+		>
 			<div
 				className={cn('border-2 border-b-0 rounded-t-lg', BORDER_COLORS[direction])}
 			>
