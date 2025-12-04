@@ -60,16 +60,6 @@ export enum CandleGranularity {
 	ONE_DAY = 86400,
 }
 
-export interface Candle {
-	close: number;
-	high: number;
-	low: number;
-	open: number;
-	productId: string;
-	timestamp: number;
-	volume: number;
-}
-
 export type Stats24Hour = {
 	open: number;
 	high: number;
