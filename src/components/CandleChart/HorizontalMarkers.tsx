@@ -1,4 +1,4 @@
-import type { Candle } from '../../services/cbp/types/product';
+import type { CryptickCandle } from 'types';
 import { BOTTOM_GUTTER_HEIGHT } from './CandleChart';
 import { getHorizontalLines } from './utils';
 
@@ -7,7 +7,7 @@ const nf = Intl.NumberFormat();
 interface Props {
 	height: number;
 	width: number;
-	viewableCandles: Candle[];
+	viewableCandles: CryptickCandle[];
 	dragOffsetPixels: number;
 	getY: (y: number) => number;
 }

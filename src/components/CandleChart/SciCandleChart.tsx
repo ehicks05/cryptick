@@ -10,10 +10,10 @@ import {
 } from 'scichart';
 import { SciChartReact } from 'scichart-react';
 import { usePrice } from 'store';
-import type { Candle as ICandle } from '../../services/cbp/types/product';
+import type { CryptickCandle } from 'types';
 
 interface CandleChartProps {
-	candles: ICandle[];
+	candles: CryptickCandle[];
 	productId: string;
 }
 

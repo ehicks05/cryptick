@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import { motion } from 'motion/react';
-import type { Candle } from '../../services/cbp/types/product';
+import type { CryptickCandle } from 'types';
 
 const nf = Intl.NumberFormat('en-US', { minimumFractionDigits: 2 });
 
 interface Props {
 	height: number;
 	width: number;
-	viewableCandles: Candle[];
+	viewableCandles: CryptickCandle[];
 	getY: (y: number) => number;
 }
 

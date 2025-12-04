@@ -1,4 +1,4 @@
-import type { Candle } from 'services/cbp/types/product';
+import type { CryptickCandle } from 'types';
 import { round } from './round';
 
 /**
@@ -6,7 +6,7 @@ import { round } from './round';
  * timespan...
  */
 export const useIdealCandleWidth = (
-	_candles: Candle[],
+	_candles: CryptickCandle[],
 	containerWidth: number,
 	idealCandleWidth: number,
 ) => {

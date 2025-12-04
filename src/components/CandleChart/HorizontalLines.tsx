@@ -1,10 +1,10 @@
-import type { Candle } from '../../services/cbp/types/product';
+import type { CryptickCandle } from 'types';
 import { getHorizontalLines } from './utils';
 
 interface Props {
 	height: number;
 	width: number;
-	viewableCandles: Candle[];
+	viewableCandles: CryptickCandle[];
 	dragOffsetPixels: number;
 	getY: (y: number) => number;
 }

@@ -1,4 +1,4 @@
-import type { Candle } from '../types/product';
+import type { CryptickCandle } from 'types';
 
 export const keyById = <T extends { id: string }>(list: T[]) =>
 	list.reduce(
@@ -9,7 +9,9 @@ export const keyById = <T extends { id: string }>(list: T[]) =>
 		{} as Record<string, T>,
 	);
 
-export const keyByProductId = <T extends { productId: string; candles: Candle[] }>(
+export const keyByProductId = <
+	T extends { productId: string; candles: CryptickCandle[] },
+>(
 	data: T[],
 ) =>
 	data.reduce(

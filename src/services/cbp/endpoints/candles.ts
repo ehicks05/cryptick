@@ -1,10 +1,14 @@
 import { range } from 'es-toolkit';
-import type { Candle, CandleGranularity, CoinbaseCandle } from '../types/product';
+import type { CryptickCandle } from 'types';
+import type { CandleGranularity, CoinbaseCandle } from '../types/product';
 import { PRODUCT_URL } from './constants';
 import { throttle } from './throttle';
 import { keyByProductId } from './utils';
 
-const rawCandleToCandle = (candle: CoinbaseCandle, productId: string): Candle => ({
+const toCryptickCandle = (
+	candle: CoinbaseCandle,
+	productId: string,
+): CryptickCandle => ({
 	productId,
 	timestamp: candle[0] * 1000,
 	low: candle[1],
@@ -26,7 +30,7 @@ const getCandles = async ({
 	granularity,
 	start,
 	end,
-}: Params): Promise<Candle[]> => {
+}: Params): Promise<CryptickCandle[]> => {
 	const url = `${PRODUCT_URL}/${productId}/candles`;
 	const query = new URLSearchParams({
 		granularity: String(granularity),
@@ -37,7 +41,7 @@ const getCandles = async ({
 	try {
 		const response = await fetch(`${url}?${query}`);
 		const json: CoinbaseCandle[] = await response.json();
-		return json.map((candle) => rawCandleToCandle(candle, productId));
+		return json.map((candle) => toCryptickCandle(candle, productId));
 	} catch (err) {
 		console.log(err);
 		return [];

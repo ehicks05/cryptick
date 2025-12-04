@@ -1,4 +1,4 @@
-import type { Candle } from '../../services/cbp/types/product';
+import type { CryptickCandle } from 'types';
 import { BOTTOM_GUTTER_HEIGHT } from './CandleChart';
 
 const mm = Intl.DateTimeFormat('en-US', {
@@ -14,7 +14,7 @@ const yyyy = Intl.DateTimeFormat('en-US', { timeZone: 'utc', year: 'numeric' });
 interface CandleChartProps {
 	height: number;
 	width: number;
-	viewableCandles: Candle[];
+	viewableCandles: CryptickCandle[];
 	candleWidth: number;
 	getX: (x: number) => number;
 	dragOffset: number;
@@ -143,7 +143,7 @@ export const VerticalLines = ({
 			? option.filter(date)
 			: (candle.timestamp / 1000 / 60) % option.minutes === 0;
 		if (!passesMinutesFilter) {
-			return;
+			return null;
 		}
 
 		const format = isYearBoundary

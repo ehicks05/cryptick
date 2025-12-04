@@ -1,7 +1,7 @@
 import { useThrottle } from '@uidotdev/usehooks';
-import type { TickerMessage } from 'services/cbp/types/ws-types';
 import { useHistoryUnit } from 'hooks/useStorage';
 import { cn } from 'lib/utils';
+import type { TickerMessage } from 'services/cbp/types/ws-types';
 import { useStore } from 'store';
 
 const normalize = (value: number) => {

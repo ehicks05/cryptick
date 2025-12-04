@@ -1,10 +1,10 @@
 import { cn } from 'lib/utils';
 import React from 'react';
-import type { Candle as ICandle } from '../../services/cbp/types/product';
+import type { CryptickCandle } from 'types';
 import { VolumeBar } from './VolumeBar';
 
 interface Props {
-	candle: ICandle;
+	candle: CryptickCandle;
 	i: number;
 	height: number;
 	maxVolume: number;

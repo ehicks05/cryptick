@@ -3,7 +3,8 @@ import { useMeasure } from '@uidotdev/usehooks';
 import { chunk } from 'es-toolkit';
 import { mergeCandles } from 'lib/utils';
 import { useState } from 'react';
-import { type Candle, CandleGranularity } from 'services/cbp/types/product';
+import { CandleGranularity } from 'services/cbp/types/product';
+import type { CryptickCandle } from 'types';
 import { useLiveCandles } from '../useLiveCandles';
 import { round } from './round';
 
@@ -13,13 +14,13 @@ import { round } from './round';
  * candles. We merge them down to look better. We can't naively chunk them. Each
  * chunk must be composed of the same candles.
  */
-const handleTooManyCandles = (candles: Candle[]) => {
+const handleTooManyCandles = (candles: CryptickCandle[]) => {
 	const mergeFactor = Math.floor(candles.length / 82);
 	if (mergeFactor < 2) return candles;
 
 	const granularity = (candles[0].timestamp - candles[1].timestamp) / 1000;
 
-	const firstIndexFinder = (candle: Candle) => {
+	const firstIndexFinder = (candle: CryptickCandle) => {
 		const date = new Date(candle.timestamp * 1000);
 
 		if (granularity === CandleGranularity.ONE_DAY) return date.getDay();
