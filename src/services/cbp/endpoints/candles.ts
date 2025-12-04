@@ -48,7 +48,7 @@ const throttledFetch = throttle(async (params: Params) => getCandles(params));
 
 const RESPONSE_LIMIT = 300;
 
-// responsible for splitting requests for >350 candles into batches
+// honor RESPONSE_LIMIT by splitting request into batches as needed
 const getCandlesForProduct = async ({
 	productId,
 	granularity,
