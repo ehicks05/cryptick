@@ -1,3 +1,4 @@
+import type { CryptickProduct } from '../../../types';
 import type { Product } from '../types/product';
 import { PRODUCT_URL } from './constants';
 import { keyById } from './utils';
@@ -8,7 +9,7 @@ const sort = (o1: Product, o2: Product) => {
 	return o1.base_currency.localeCompare(o2.base_currency);
 };
 
-const annotate = (product: Product) => ({
+const annotate = (product: Product): CryptickProduct => ({
 	...product,
 	minimumQuoteDigits: product.quote_increment.substring(
 		product.quote_increment.indexOf('.') + 1,

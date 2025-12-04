@@ -4,7 +4,7 @@ import { PRODUCT_URL } from './constants';
 import { throttle } from './throttle';
 import { keyByProductId } from './utils';
 
-const rawCandleToCandle = (candle: CoinbaseCandle, productId: string) => ({
+const rawCandleToCandle = (candle: CoinbaseCandle, productId: string): Candle => ({
 	productId,
 	timestamp: candle[0] * 1000,
 	low: candle[1],
