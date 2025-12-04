@@ -1,9 +1,7 @@
-import { arrayMove } from '@dnd-kit/helpers';
-import { DragDropProvider, PointerSensor } from '@dnd-kit/react';
-import { isSortable, useSortable } from '@dnd-kit/react/sortable';
 import React from 'react';
 import { useScreen } from 'usehooks-ts';
 import { useProductIds } from '../../hooks/useStorage';
+import { DndProvider, SortableItem } from './Dnd';
 import Product from './Product';
 
 const Products = () => {
@@ -15,50 +13,18 @@ const Products = () => {
 		gridTemplateColumns: `repeat( auto-fill, minmax(${minColumnWidth}px, 1fr))`,
 	};
 
-	const sensors = [
-		PointerSensor.configure({ activationConstraints: { distance: { value: 10 } } }),
-	];
-
 	return (
-		<DragDropProvider
-			sensors={sensors}
-			onDragEnd={(event) => {
-				const { operation, canceled } = event;
-				const { source, target } = operation;
-
-				if (canceled || !isSortable(source) || !isSortable(target)) {
-					return;
-				}
-
-				const from = source.sortable.initialIndex;
-				const to = target.sortable.index;
-				setProductIds(arrayMove(productIds, from, to));
-			}}
-		>
+		<DndProvider ids={productIds} setIds={setProductIds}>
 			<div className="w-full grid gap-2" style={style}>
 				{productIds.map((productId, i) => {
-					return <SortableItem key={productId} id={productId} index={i} />;
+					return (
+						<SortableItem key={productId} id={productId} index={i}>
+							<Product productId={productId} />
+						</SortableItem>
+					);
 				})}
 			</div>
-		</DragDropProvider>
-	);
-};
-
-interface SortableItemProps {
-	id: string;
-	index: number;
-}
-
-const SortableItem = ({ id, index }: SortableItemProps) => {
-	const { isDragging, ...sortable } = useSortable({ id, index });
-
-	// prevent link clicks while dragging
-	const classes = isDragging ? 'pointer-events-none' : '';
-
-	return (
-		<div ref={sortable.ref} className={classes}>
-			<Product productId={id} />
-		</div>
+		</DndProvider>
 	);
 };
 
