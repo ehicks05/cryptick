@@ -1,10 +1,10 @@
 import { range } from 'es-toolkit';
-import type { Candle, CandleGranularity, RawCandle } from '../types/product';
+import type { Candle, CandleGranularity, CoinbaseCandle } from '../types/product';
 import { PRODUCT_URL } from './constants';
 import { throttle } from './throttle';
 import { keyByProductId } from './utils';
 
-const rawCandleToCandle = (candle: RawCandle, productId: string) => ({
+const rawCandleToCandle = (candle: CoinbaseCandle, productId: string) => ({
 	productId,
 	timestamp: candle[0] * 1000,
 	low: candle[1],
@@ -36,7 +36,7 @@ const getCandles = async ({
 
 	try {
 		const response = await fetch(`${url}?${query}`);
-		const json: RawCandle[] = await response.json();
+		const json: CoinbaseCandle[] = await response.json();
 		return json.map((candle) => rawCandleToCandle(candle, productId));
 	} catch (err) {
 		console.log(err);

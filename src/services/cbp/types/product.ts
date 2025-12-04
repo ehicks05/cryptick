@@ -135,4 +135,4 @@ export type BulkProductStat = {
 
 export type BulkProductStats = Record<string, BulkProductStat>;
 
-export type RawCandle = [Timestamp, Low, High, Open, Close, Volume];
+export type CoinbaseCandle = [Timestamp, Low, High, Open, Close, Volume];
