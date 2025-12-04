@@ -2,13 +2,14 @@ export const clamp = (value: number, min: number, max: number) => {
 	return Math.min(Math.max(value, min), max);
 };
 
-export const getPercentChange = (from: number, to: number) => {
+const getPercentChange = (from: number, to: number) => {
+  if (!from || !to) return 0;
 	const delta = to - from;
 	return delta / from;
 };
 
 export const getChange = (open: number, close: number) => {
-	const percentChange = close ? close / open - 1 : 0;
+	const percentChange = getPercentChange(open, close)
 	return {
 		direction: percentChange === 0 ? 'UNK' : percentChange > 0 ? 'POS' : 'NEG',
 		percentChange,
