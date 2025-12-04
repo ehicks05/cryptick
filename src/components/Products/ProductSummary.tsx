@@ -1,9 +1,10 @@
 import { useCurrencies, useProducts } from 'services/cbp';
 import { useThrottledPrice } from 'store';
-import type { Product } from '../../services/cbp/types/product';
+import type { CryptickProduct } from 'types';
+import { ExchangeIcon } from './ExchangeIcon';
 
 interface NameProps {
-	product: Product;
+	product: CryptickProduct;
 }
 
 const Name = ({ product }: NameProps) => {
@@ -14,7 +15,10 @@ const Name = ({ product }: NameProps) => {
 
 	return (
 		<div className="flex flex-col text-xl items-baseline leading-tight">
-			{product.display_name}
+			<div className="flex gap-1 items-center">
+				{product.display_name}
+				<ExchangeIcon name={'coinbase'} />
+			</div>
 			<span className="text-xs text-muted-foreground">{currency?.name}</span>
 		</div>
 	);
