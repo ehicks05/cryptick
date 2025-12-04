@@ -1,3 +1,5 @@
+export * from './timespan';
+
 export interface CryptickProduct {
 	base_currency: string;
 	base_increment: string;
@@ -20,3 +22,5 @@ export interface CryptickCandle {
 	timestamp: number;
 	volume: number;
 }
+
+export type Direction = 'POS' | 'NEG' | 'UNK';

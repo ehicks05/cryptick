@@ -16,18 +16,10 @@ export interface Product {
 	min_market_funds: string;
 	post_only: boolean;
 	quote_currency: string;
-	/**
-	 * Increment steps for min/max order size. The order price must be a multiple of this increment (i.e. if the
-	 * increment is 0.01, order prices of 0.001 or 0.021 would be rejected).
-	 */
 	quote_increment: string;
 	status: 'delisted' | 'online';
 	status_message: string;
 	trading_disabled: boolean;
-
-	// ADDED LOCALLY
-	minimumQuoteDigits: number;
-	minimumBaseDigits: number;
 }
 
 // Snapshot information about the last trade (tick), best bid/ask and 24h volume.
@@ -68,71 +60,31 @@ export enum CandleGranularity {
 	ONE_DAY = 86400,
 }
 
-export interface BaseHistoricRateRequest {
-	/** Desired time slice in seconds. */
-	granularity: CandleGranularity;
-}
-
-export interface HistoricRateRequestWithTimeSpan extends BaseHistoricRateRequest {
-	/** Opening time (ISO 8601) of last candle, i.e. "2020-04-28T23:00:00.000Z" */
-	end: ISO_8601_MS_UTC;
-	/** Opening time (ISO 8601) of first candle, i.e. "2020-04-28T00:00:00.000Z" */
-	start: ISO_8601_MS_UTC;
-}
-
-export type HistoricRateRequest =
-	| BaseHistoricRateRequest
-	| HistoricRateRequestWithTimeSpan;
-
-type Close = number;
-type High = number;
-type Low = number;
-type Open = number;
-type Timestamp = number;
-type Volume = number;
-
 export interface Candle {
-	/** ID of base asset */
-	// base: string;
-	/** Closing price (last trade) in the bucket interval */
-	close: Close;
-	/** ID of quote asset */
-	// counter: string;
-	/** Highest price during the bucket interval */
-	high: High;
-	/** Lowest price during the bucket interval */
-	low: Low;
-	/** Opening price (first trade) in the bucket interval */
-	open: Open;
-	/** Bucket start time in simplified extended ISO 8601 format */
-	// openTimeInISO: ISO_8601_MS_UTC;
-	/** Bucket start time converted to milliseconds (note: Coinbase Pro actually uses seconds) */
-	// openTimeInMillis: number;
-	/** Product ID / Symbol */
+	close: number;
+	high: number;
+	low: number;
+	open: number;
 	productId: string;
-	/** Candle size in milliseconds */
-	// sizeInMillis: number;
-	/** timestamp millis */
 	timestamp: number;
-	/** Volume of trading activity during the bucket interval */
-	volume: Volume;
+	volume: number;
 }
 
 export type Stats24Hour = {
-	open: Open;
-	high: High;
-	low: Low;
-	last: Close;
-	volume: Volume;
+	open: number;
+	high: number;
+	low: number;
+	last: number;
+	volume: number;
 };
 
 export type BulkProductStat = {
 	stats_30day: {
-		volume: Volume;
+		volume: number;
 	};
 	stats_24hour: Stats24Hour;
 };
 
 export type BulkProductStats = Record<string, BulkProductStat>;
 
-export type CoinbaseCandle = [Timestamp, Low, High, Open, Close, Volume];
+export type CoinbaseCandle = [number, number, number, number, number, number];

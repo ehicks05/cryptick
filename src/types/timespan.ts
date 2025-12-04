@@ -1,7 +1,5 @@
 import { CandleGranularity } from 'services/cbp/types/product';
 
-export type Direction = 'POS' | 'NEG' | 'UNK';
-
 export const CHART_TIMESPANS = {
 	'24H': '24H',
 	'7D': '7D',
