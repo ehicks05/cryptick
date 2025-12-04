@@ -2,7 +2,7 @@ import { useThrottle } from '@uidotdev/usehooks';
 import { useEffect, useState } from 'react';
 import { use24HourStats, useProducts } from 'services/cbp';
 import type { TickerMessage } from 'services/cbp/types/ws-types';
-import { formatPrice } from 'utils';
+import { formatPrice  } from 'lib/format';
 import { create } from 'zustand';
 
 export interface AppState {

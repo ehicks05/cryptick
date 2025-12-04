@@ -1,8 +1,8 @@
 import { useCoinbaseWebsocket } from 'services/cbp/useCoinbaseWebsocket';
 import { useProductIds } from '../../hooks/useStorage';
 import { useProducts } from '../../services/cbp';
-import { buildSubscribeMessage } from '../../utils';
 import { ComboboxDemo } from '../ui/combobox';
+import { buildSubscribeMessage } from 'services/cbp/utils';
 
 export const ProductPicker = () => {
 	const { sendJsonMessage } = useCoinbaseWebsocket();

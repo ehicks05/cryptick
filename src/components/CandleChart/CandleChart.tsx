@@ -3,7 +3,7 @@ import { ProductSummary } from 'components/CandleChart/ProductSummary';
 import React, { useEffect, useState } from 'react';
 import { usePrice } from 'store';
 import type { CryptickCandle } from 'types';
-import { clamp } from '../../utils';
+import { clamp } from 'lib/math';
 import Candle from './Candle';
 import { Crosshair } from './Crosshair';
 import { HorizontalLines } from './HorizontalLines';

@@ -1,4 +1,4 @@
-import { getPercentChange } from 'utils';
+import { getPercentChange } from 'lib/math';
 import type {
 	BulkProductStat,
 	BulkProductStats,

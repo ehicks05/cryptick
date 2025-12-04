@@ -2,7 +2,8 @@ import { useProductIds } from 'hooks/useStorage';
 import useWebSocket from 'react-use-websocket';
 import type { WebSocketTickerMessage } from 'services/cbp/types/ws-types';
 import { useStore } from 'store';
-import { buildSubscribeMessage, formatPrice, formatTime } from 'utils';
+import { buildSubscribeMessage } from './utils';
+import { formatPrice, formatTime } from 'lib/format';
 import { WS_URL } from './constants';
 import { useProducts } from './hooks';
 

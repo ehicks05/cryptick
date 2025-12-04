@@ -2,7 +2,7 @@ import { BG_SOLIDS, BORDER_COLORS, TEXT_COLORS } from 'directionalStyles';
 import { useChartTimespan } from 'hooks/useStorage';
 import { cn, mergeCandles } from 'lib/utils';
 import React from 'react';
-import { formatPercent } from 'utils';
+import { formatPercent } from 'lib/format';
 import { ProductSummary } from './ProductSummary';
 import Chart from './SimpleChart/Chart';
 import { type Performance, useHistoricPerformance } from './useHistoricPerformance';
