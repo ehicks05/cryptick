@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { client } from './client';
+import { exchangeInfo } from './exchangeInfo';
 
 export const useExchangeInfo = () =>
 	useQuery({
 		queryKey: ['exchangeInfo'],
-		queryFn: () => client.restAPI.exchangeInfo(),
+		queryFn: () => exchangeInfo(),
 		staleTime: 1000 * 60 * 60 * 24,
 	});

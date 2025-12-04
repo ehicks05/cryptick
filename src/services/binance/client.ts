@@ -1,5 +1,5 @@
-import { type ConfigurationSpot, Spot } from "@binance/spot";
+const baseUrl = 'https://api.binance.us';
 
-const configuration: ConfigurationSpot = {};
-
-export const client = new Spot(configuration);
+export const client = ({ path }: { path: string }) => {
+	return fetch(`${baseUrl}${path}`);
+};
