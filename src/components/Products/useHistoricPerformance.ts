@@ -1,4 +1,4 @@
-import { getChange } from 'lib/utils';
+import { getChange } from 'lib/math';
 import { useHistoricPrices } from 'services/cbp/useCandles';
 import { useThrottledPrice } from 'store';
 import { CHART_TIMESPANS, type ChartTimespan, type Direction } from 'types';

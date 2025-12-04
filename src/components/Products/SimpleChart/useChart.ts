@@ -1,7 +1,7 @@
 import { STROKE } from 'directionalStyles';
 import { useMeasure } from '@uidotdev/usehooks';
 import { chunk } from 'es-toolkit';
-import { mergeCandles } from 'lib/utils';
+import { mergeCandles } from 'lib/candles';
 import { useState } from 'react';
 import { CandleGranularity } from 'services/cbp/types/product';
 import type { CryptickCandle } from 'types';
