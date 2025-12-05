@@ -1,7 +1,7 @@
-import { CandleGranularity } from 'services/cbp/types/product';
 import { clsx } from 'clsx';
 import { useCandleGranularity } from 'hooks/useStorage';
 import { ChevronDown } from 'lucide-react';
+import { CandleGranularity } from 'services/cbp/types/product';
 import { Button } from './ui/button';
 import {
 	DropdownMenu,

@@ -9,13 +9,11 @@ interface NameProps {
 
 const Name = ({ product }: NameProps) => {
 	const currenciesQuery = useCurrencies();
-	const currency = product
-		? currenciesQuery.data?.[product.base_currency]
-		: undefined;
+	const currency = product ? currenciesQuery.data?.[product.baseAsset] : undefined;
 
 	return (
 		<div className="flex flex-col text-xl items-baseline leading-tight">
-			{product.display_name}
+			{product.displayName}
 			<div className="flex gap-1 items-center">
 				<span className="text-xs text-muted-foreground">{currency?.name}</span>
 				<span className="text-xs text-muted-foreground">·</span>

@@ -1,11 +1,11 @@
 import { useProductIds } from 'hooks/useStorage';
+import { formatPrice, formatTime } from 'lib/format';
 import useWebSocket from 'react-use-websocket';
 import type { WebSocketTickerMessage } from 'services/cbp/types/ws-types';
 import { useStore } from 'store';
-import { buildSubscribeMessage } from './utils';
-import { formatPrice, formatTime } from 'lib/format';
 import { WS_URL } from './constants';
 import { useProducts } from './hooks';
+import { buildSubscribeMessage } from './utils';
 
 // Singleton
 export const useTicker = () => {
@@ -30,7 +30,7 @@ export const useTicker = () => {
 		const product = products?.[productId];
 		if (!product) return;
 
-		const price = formatPrice(Number(rawPrice), product.minimumQuoteDigits);
+		const price = formatPrice(Number(rawPrice), product.minQuoteDigits);
 
 		const { sequence, time, side, last_size } = message;
 
@@ -40,7 +40,7 @@ export const useTicker = () => {
 			time: formatTime(new Date(time)),
 			side,
 			price,
-			last_size: formatPrice(Number(last_size), product.minimumBaseDigits),
+			last_size: formatPrice(Number(last_size), product.minBaseDigits),
 		});
 
 		if (productId === productIds[0]) {

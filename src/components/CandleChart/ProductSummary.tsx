@@ -10,9 +10,7 @@ export const ProductSummary = ({ productId }: Props) => {
 	const product = productsQuery.data?.[productId];
 
 	const currenciesQuery = useCurrencies();
-	const currency = product
-		? currenciesQuery.data?.[product.base_currency]
-		: undefined;
+	const currency = product ? currenciesQuery.data?.[product.baseAsset] : undefined;
 
 	const price = useThrottledPrice(productId);
 
@@ -20,7 +18,7 @@ export const ProductSummary = ({ productId }: Props) => {
 		return '';
 	}
 
-	const name = `${currency?.name ? `${currency.name} · ` : ''}${product.display_name}`;
+	const name = `${currency?.name ? `${currency.name} · ` : ''}${product.displayName}`;
 
 	return (
 		<div className="absolute bg-linear-to-b from-white dark:from-black via-white dark:via-black via-50% to-transparent">

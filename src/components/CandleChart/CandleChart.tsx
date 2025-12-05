@@ -1,9 +1,9 @@
 import { useMeasure } from '@uidotdev/usehooks';
 import { ProductSummary } from 'components/CandleChart/ProductSummary';
+import { clamp } from 'lib/math';
 import React, { useEffect, useState } from 'react';
 import { usePrice } from 'store';
 import type { CryptickCandle } from 'types';
-import { clamp } from 'lib/math';
 import Candle from './Candle';
 import { Crosshair } from './Crosshair';
 import { HorizontalLines } from './HorizontalLines';
