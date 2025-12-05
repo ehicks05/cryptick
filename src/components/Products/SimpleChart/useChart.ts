@@ -2,11 +2,11 @@ import { STROKE } from 'directionalStyles';
 import { useMeasure } from '@uidotdev/usehooks';
 import { chunk } from 'es-toolkit';
 import { mergeCandles } from 'lib/candles';
+import { round } from 'lib/math';
 import { useState } from 'react';
 import { CandleGranularity } from 'services/cbp/types/product';
 import type { CryptickCandle } from 'types';
 import { useLiveCandles } from '../useLiveCandles';
-import { round } from './round';
 
 /**
  * The simple chart was designed around 96 15-minute candles. Way more or fewer
