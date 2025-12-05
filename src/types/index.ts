@@ -1,14 +1,12 @@
 export * from './timespan';
 
 export interface CryptickProduct {
-	base_currency: string;
-	base_increment: string;
-	display_name: string;
 	id: string;
+	display_name: string;
+	
+	base_currency: string;
 	quote_currency: string;
-	status: 'delisted' | 'online';
-	status_message: string;
-	trading_disabled: boolean;
+			
 	minimumQuoteDigits: number;
 	minimumBaseDigits: number;
 }
