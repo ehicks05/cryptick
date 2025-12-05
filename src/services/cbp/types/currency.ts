@@ -4,7 +4,7 @@ export interface Currency {
 	max_precision: string;
 	min_size: string;
 	name: string;
-	status: string;
+	status: 'online' | 'delisted';
 }
 
 export enum CurrencyType {
