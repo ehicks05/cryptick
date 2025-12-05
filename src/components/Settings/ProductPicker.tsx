@@ -21,10 +21,11 @@ export const ProductPicker = () => {
 		);
 	};
 
-	const items = Object.values(products).map(({ id, display_name }) => ({
-		label: display_name,
-		value: id,
-	}));
+	const items = Object.values(products)
+		.map(({ id, displayName }) => ({
+			label: displayName,
+			value: id,
+		}));
 
 	return (
 		<div className="flex flex-col">
