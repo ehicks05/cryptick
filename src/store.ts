@@ -33,7 +33,7 @@ export const usePrice = (productId: string) => {
 	const product = products?.[productId];
 	const last = formatPrice(
 		stats?.[productId]?.stats_24hour.last || 0,
-		product?.minimumQuoteDigits || 0,
+		product?.minQuoteDigits || 0,
 	);
 	return price || last;
 };
