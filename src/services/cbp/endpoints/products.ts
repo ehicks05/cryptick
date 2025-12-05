@@ -14,7 +14,7 @@ const incrementToMinimumDigits = (increment: string) =>
 
 // The number of digits to show is based on increment. An increment of .01
 // results in 12.34, an increment of .001 results in 12.345, etc...
-const annotate = (product: Product): CryptickProduct => ({
+const toCryptickProduct = (product: Product): CryptickProduct => ({
 	...product,
 	minimumQuoteDigits: incrementToMinimumDigits(product.quote_increment),
 	minimumBaseDigits: incrementToMinimumDigits(product.base_increment),
@@ -27,6 +27,6 @@ export const getProducts = async () => {
 		data
 			.toSorted(sort)
 			.filter((o) => o.status === 'online')
-			.map(annotate),
+			.map(toCryptickProduct),
 	);
 };
