@@ -1,16 +1,18 @@
 import { TbBrandBinance, TbBrandCoinbase } from 'react-icons/tb';
 
+const size = 12;
+
 const CbIcon = () => (
 	<TbBrandCoinbase
 		title="coinbase"
-		size={16}
+		size={size}
 		className="fill-blue-500 stroke-blue-500 stroke-1"
 	/>
 );
 const BiIcon = () => (
 	<TbBrandBinance
 		title="binance"
-		size={16}
+		size={size}
 		className="fill-yellow-500 stroke-yellow-500 stroke-1"
 	/>
 );

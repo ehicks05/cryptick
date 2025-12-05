@@ -15,11 +15,12 @@ const Name = ({ product }: NameProps) => {
 
 	return (
 		<div className="flex flex-col text-xl items-baseline leading-tight">
+			{product.display_name}
 			<div className="flex gap-1 items-center">
-				{product.display_name}
+				<span className="text-xs text-muted-foreground">{currency?.name}</span>
+				<span className="text-xs text-muted-foreground">·</span>
 				<ExchangeIcon name={'coinbase'} />
 			</div>
-			<span className="text-xs text-muted-foreground">{currency?.name}</span>
 		</div>
 	);
 };
