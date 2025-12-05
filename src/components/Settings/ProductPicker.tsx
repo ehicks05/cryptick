@@ -22,7 +22,7 @@ export const ProductPicker = () => {
 	};
 
 	const items = Object.values(products)
-		.map(({ id, displayName }) => ({
+		.map(({ id, displayName, exchange }) => ({
 			label: displayName,
 			value: id,
 		}));

@@ -1,5 +1,6 @@
 'use client';
 
+import { ExchangeIcon } from 'components/Products/ExchangeIcon';
 import { Button } from 'components/ui/button';
 import {
 	Command,
@@ -13,9 +14,10 @@ import { Popover, PopoverContent, PopoverTrigger } from 'components/ui/popover';
 import { cn } from 'lib/utils';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import * as React from 'react';
+import type { Exchange } from 'types';
 
 interface Props {
-	items: { label: string; value: string }[];
+	items: { label: string; value: string; exchange: Exchange }[];
 	selectedItems: string[];
 	onSelect: (value: string) => void;
 }
@@ -49,12 +51,16 @@ export function ComboboxDemo({ items, selectedItems, onSelect }: Props) {
 									onSelect={(currentValue) => {
 										onSelect(currentValue);
 									}}
-									className={
-										selectedItems.includes(item.value)
-											? 'text-green-600 data-[selected=true]:text-green-600'
-											: ''
-									}
+									className={cn('flex w-full', {
+										'text-green-600 data-[selected=true]:text-green-600':
+											selectedItems.includes(item.value),
+									})}
 								>
+									<ExchangeIcon name={item.exchange} />
+
+									{item.label}
+									<div className="grow" />
+
 									<Check
 										className={cn(
 											'mr-2 h-4 w-4',
@@ -63,7 +69,6 @@ export function ComboboxDemo({ items, selectedItems, onSelect }: Props) {
 												: 'opacity-0',
 										)}
 									/>
-									{item.label}
 								</CommandItem>
 							))}
 						</CommandGroup>
