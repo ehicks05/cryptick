@@ -25,6 +25,7 @@ export const ProductPicker = () => {
 		.map(({ id, displayName, exchange }) => ({
 			label: displayName,
 			value: id,
+			exchange,
 		}));
 
 	return (
