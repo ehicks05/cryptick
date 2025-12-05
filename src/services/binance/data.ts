@@ -52120,15 +52120,30 @@ const data = {
   ],
 };
 
-console.log(
-  data.symbols.reduce(
-    (agg, curr) => {
-      const status = curr.status;
-      agg[status] = agg[status] ? agg[status] + 1 : 1;
-      return agg;
-    },
-    {} as Record<string, number>,
-  ),
+const trading = data.symbols.filter(symbol => symbol.status === 'TRADING');
+
+const summary = {
+  hasPriceFilter: 0,
+  noPriceFilter: 0
+}
+
+trading.reduce(
+  (agg, symbol) => {
+    const { filters } = symbol;
+    const priceFilter = filters.find(filter => filter.filterType === 'PRICE_FILTER');
+    
+    const { minPrice, tickSize } = priceFilter;
+
+    if (minPrice === tickSize) {
+      agg.hasPriceFilter += 1;
+    } else {
+      agg.noPriceFilter += 1;
+      console.log(symbol.symbol)
+    }
+
+    return agg;
+  },
+  summary,
 );
 
-console.log(data.symbols.find((o) => o.symbol === "BTCUSDT"));
+console.log(summary);
