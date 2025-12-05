@@ -52132,7 +52132,7 @@ trading.reduce(
     const { filters } = symbol;
     const priceFilter = filters.find(filter => filter.filterType === 'PRICE_FILTER');
     
-    const { minPrice, tickSize } = priceFilter;
+    const { minPrice, tickSize } = priceFilter || {};
 
     if (minPrice === tickSize) {
       agg.hasPriceFilter += 1;
