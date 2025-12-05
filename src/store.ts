@@ -1,8 +1,8 @@
 import { useThrottle } from '@uidotdev/usehooks';
+import { formatPrice } from 'lib/format';
 import { useEffect, useState } from 'react';
 import { use24HourStats, useProducts } from 'services/cbp';
 import type { TickerMessage } from 'services/cbp/types/ws-types';
-import { formatPrice  } from 'lib/format';
 import { create } from 'zustand';
 
 export interface AppState {
@@ -32,7 +32,7 @@ export const usePrice = (productId: string) => {
 	const { data: stats } = use24HourStats();
 	const product = products?.[productId];
 	const last = formatPrice(
-		stats?.[productId]?.last || 0,
+		stats?.[productId]?.stats_24hour.last || 0,
 		product?.minimumQuoteDigits || 0,
 	);
 	return price || last;
