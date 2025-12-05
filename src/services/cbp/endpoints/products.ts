@@ -9,14 +9,15 @@ const sort = (o1: Product, o2: Product) => {
 	return o1.base_currency.localeCompare(o2.base_currency);
 };
 
+const incrementToMinimumDigits = (increment: string) =>
+	increment.substring(increment.indexOf('.') + 1).length;
+
+// The number of digits to show is based on increment. An increment of .01
+// results in 12.34, an increment of .001 results in 12.345, etc...
 const annotate = (product: Product): CryptickProduct => ({
 	...product,
-	minimumQuoteDigits: product.quote_increment.substring(
-		product.quote_increment.indexOf('.') + 1,
-	).length,
-	minimumBaseDigits: product.base_increment.substring(
-		product.base_increment.indexOf('.') + 1,
-	).length,
+	minimumQuoteDigits: incrementToMinimumDigits(product.quote_increment),
+	minimumBaseDigits: incrementToMinimumDigits(product.base_increment),
 });
 
 export const getProducts = async () => {
