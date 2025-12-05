@@ -24,6 +24,7 @@ const toCryptickProduct = (symbol: Symbol): CryptickProduct => {
 	return {
 		id: symbol.symbol || '',
 		displayName: symbol.symbol || '',
+		exchange: 'binance',
 		baseAsset: symbol.baseAsset || '',
 		quoteAsset: symbol.quoteAsset || '',
 		minBaseDigits: toMinimumDigits(tickSize), // do we need this?

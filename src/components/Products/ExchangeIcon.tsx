@@ -1,4 +1,5 @@
 import { TbBrandBinance, TbBrandCoinbase } from 'react-icons/tb';
+import type { Exchange } from 'types';
 
 const size = 12;
 
@@ -16,8 +17,6 @@ const BiIcon = () => (
 		className="fill-yellow-500 stroke-yellow-500 stroke-1"
 	/>
 );
-
-export type Exchange = 'coinbase' | 'binance';
 
 export const ExchangeIcon = ({ name }: { name: Exchange }) => {
 	if (name === 'coinbase') return <CbIcon />;

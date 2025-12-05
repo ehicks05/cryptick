@@ -3,10 +3,11 @@ export * from './timespan';
 export interface CryptickProduct {
 	id: string;
 	displayName: string;
-	
+	exchange: Exchange;
+
 	baseAsset: string;
 	quoteAsset: string;
-			
+
 	minBaseDigits: number;
 	minQuoteDigits: number;
 }
@@ -22,3 +23,5 @@ export interface CryptickCandle {
 }
 
 export type Direction = 'POS' | 'NEG' | 'UNK';
+
+export type Exchange = 'coinbase' | 'binance';

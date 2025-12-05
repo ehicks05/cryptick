@@ -17,6 +17,7 @@ const toMinimumDigits = (increment: string) =>
 const toCryptickProduct = (product: Product): CryptickProduct => ({
 	id: product.id,
 	displayName: product.display_name,
+	exchange: 'coinbase',
 	baseAsset: product.base_currency,
 	quoteAsset: product.quote_currency,
 	minBaseDigits: toMinimumDigits(product.base_increment),
