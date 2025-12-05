@@ -2,13 +2,13 @@ export * from './timespan';
 
 export interface CryptickProduct {
 	id: string;
-	display_name: string;
+	displayName: string;
 	
-	base_currency: string;
-	quote_currency: string;
+	baseAsset: string;
+	quoteAsset: string;
 			
-	minimumQuoteDigits: number;
-	minimumBaseDigits: number;
+	minBaseDigits: number;
+	minQuoteDigits: number;
 }
 
 export interface CryptickCandle {

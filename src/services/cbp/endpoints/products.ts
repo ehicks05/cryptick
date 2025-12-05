@@ -9,15 +9,18 @@ const sort = (o1: Product, o2: Product) => {
 	return o1.base_currency.localeCompare(o2.base_currency);
 };
 
-const incrementToMinimumDigits = (increment: string) =>
-	increment.substring(increment.indexOf('.') + 1).length;
-
 // The number of digits to show is based on increment. An increment of .01
 // results in 12.34, an increment of .001 results in 12.345, etc...
+const toMinimumDigits = (increment: string) =>
+	increment.substring(increment.indexOf('.') + 1).length;
+
 const toCryptickProduct = (product: Product): CryptickProduct => ({
-	...product,
-	minimumQuoteDigits: incrementToMinimumDigits(product.quote_increment),
-	minimumBaseDigits: incrementToMinimumDigits(product.base_increment),
+	id: product.id,
+	displayName: product.display_name,
+	baseAsset: product.base_currency,
+	quoteAsset: product.quote_currency,
+	minBaseDigits: toMinimumDigits(product.base_increment),
+	minQuoteDigits: toMinimumDigits(product.quote_increment),
 });
 
 export const getProducts = async () => {
@@ -25,8 +28,8 @@ export const getProducts = async () => {
 	const data: Product[] = await response.json();
 	return keyById(
 		data
-			.toSorted(sort)
 			.filter((o) => o.status === 'online')
+			.toSorted(sort)
 			.map(toCryptickProduct),
 	);
 };
