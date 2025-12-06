@@ -7,7 +7,7 @@ const Foo = () => {
 
 	return (
 		<div>
-			<Button type="button" onClick={clear}>
+			<Button type="button" onClick={() => clear()}>
 				Clear Query Cache
 			</Button>
 		</div>

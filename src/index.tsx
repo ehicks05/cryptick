@@ -21,14 +21,17 @@ const persister = createAsyncStoragePersister({
 	key: `${APP.NAME}-react_query_offline_cache`,
 });
 
+const persistOptions = {
+	persister,
+	maxAge: 1000 * 60 * 60 * 24,
+	buster: __COMMIT_HASH__,
+};
+
 const container = document.getElementById('root');
 const root = createRoot(container as Element);
 root.render(
 	<StrictMode>
-		<PersistQueryClientProvider
-			client={queryClient}
-			persistOptions={{ persister, maxAge: 1000 * 60 * 60 * 24 }}
-		>
+		<PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
 			<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
 				<App />
 			</ThemeProvider>
