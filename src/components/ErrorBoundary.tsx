@@ -1,4 +1,18 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Button } from './ui/button';
+
+const Foo = () => {
+	const { clear } = useQueryClient();
+
+	return (
+		<div>
+			<Button type="button" onClick={clear}>
+				Clear Query Cache
+			</Button>
+		</div>
+	);
+};
 
 interface Props {
 	children?: ReactNode;
@@ -28,12 +42,14 @@ class ErrorBoundary extends Component<Props, State> {
 	public render() {
 		if (this.state.hasError) {
 			return (
-				<>
+				<div className="flex flex-col gap-2 p-2">
 					<h1>Sorry.. there was an error</h1>
+
 					<code className="text-sm whitespace-pre-wrap">
-						{this.state.errorInfo?.componentStack}
+						{this.state.errorInfo?.componentStack?.trim()}
 					</code>
-				</>
+					<Foo />
+				</div>
 			);
 		}
 
