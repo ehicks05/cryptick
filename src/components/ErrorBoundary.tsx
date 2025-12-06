@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { Button } from './ui/button';
 
-const Foo = () => {
+const ClearQueryCacheButton = () => {
 	const { clear } = useQueryClient();
 
 	return (
@@ -48,7 +48,8 @@ class ErrorBoundary extends Component<Props, State> {
 					<code className="text-xs whitespace-pre-wrap">
 						{this.state.errorInfo?.componentStack?.trim()}
 					</code>
-					<Foo />
+
+					<ClearQueryCacheButton />
 				</div>
 			);
 		}
