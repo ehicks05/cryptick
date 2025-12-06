@@ -45,7 +45,7 @@ class ErrorBoundary extends Component<Props, State> {
 				<div className="flex flex-col gap-2 p-2">
 					<h1>Sorry.. there was an error</h1>
 
-					<code className="text-sm whitespace-pre-wrap">
+					<code className="text-xs whitespace-pre-wrap">
 						{this.state.errorInfo?.componentStack?.trim()}
 					</code>
 					<Foo />
