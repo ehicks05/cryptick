@@ -1,18 +1,5 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { Button } from './ui/button';
-
-const ClearQueryCacheButton = () => {
-	const { clear } = useQueryClient();
-
-	return (
-		<div>
-			<Button type="button" onClick={() => clear()}>
-				Clear Query Cache
-			</Button>
-		</div>
-	);
-};
+import { ClearQueryCacheButton } from './ClearQueryCacheButton';
 
 interface Props {
 	children?: ReactNode;
