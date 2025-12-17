@@ -12,7 +12,7 @@ const CbIcon = () => (
 );
 const BiIcon = () => (
 	<TbBrandBinance
-		title="binance"
+		title="binance.us"
 		size={size}
 		className="fill-yellow-500 stroke-yellow-500 stroke-1"
 	/>
