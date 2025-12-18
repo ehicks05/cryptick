@@ -1,6 +1,6 @@
 'use client';
 
-import { ExchangeIcon } from 'components/Products/ExchangeIcon';
+import { ExchangeIcon } from 'components/ExchangeIcon';
 import { Button } from 'components/ui/button';
 import {
 	Command,
