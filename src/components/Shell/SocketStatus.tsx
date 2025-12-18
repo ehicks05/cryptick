@@ -1,3 +1,4 @@
+import { useProductIds } from 'hooks/useStorage';
 import { cn } from 'lib/utils';
 import { ReadyState } from 'react-use-websocket';
 import { useBinanceWebsocket } from 'services/binance/useBinanceWebsocket';
@@ -22,8 +23,19 @@ const SOCKET_STATUSES: Record<ReadyState, SocketStatus> = {
 export const SocketStatus = () => {
 	const { readyState: coinbaseStatus } = useCoinbaseWebsocket();
 	const { readyState: binanceStatus } = useBinanceWebsocket();
+	const { productIds } = useProductIds();
 
-	const mergedStatus = coinbaseStatus === binanceStatus ? coinbaseStatus : 0;
+	const isCoinbaseProductSelected = productIds.some((id) => id.includes('coinbase'));
+	const isBinanceProductSelected = productIds.some((id) => id.includes('binance'));
+
+	const enabledSockets = [
+		...(isCoinbaseProductSelected ? [coinbaseStatus] : []),
+		...(isBinanceProductSelected ? [binanceStatus] : []),
+	];
+
+	const mergedStatus = enabledSockets.every((s) => s === enabledSockets[0])
+		? enabledSockets[0]
+		: ReadyState.CONNECTING;
 
 	const socketStatus = SOCKET_STATUSES[mergedStatus];
 
