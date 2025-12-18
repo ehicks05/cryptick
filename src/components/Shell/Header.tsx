@@ -1,3 +1,4 @@
+import { AnnouncementsDialog } from 'components/Announcements/Announcements';
 import { ThemeToggle } from 'components/Theme/ThemeToggle';
 import { Link } from 'wouter';
 import { APP } from '../../constants';
@@ -25,6 +26,7 @@ export const Header = () => (
 
 		<div className="flex gap-2">
 			<SocketStatus />
+			<AnnouncementsDialog />
 			<ThemeToggle />
 			<SettingsDialog />
 		</div>
