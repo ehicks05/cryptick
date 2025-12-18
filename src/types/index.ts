@@ -27,6 +27,7 @@ export type Direction = 'POS' | 'NEG' | 'UNK';
 export const EXCHANGES = {
 	coinbase: 'coinbase',
 	binance: 'binance',
+	kraken: 'kraken',
 };
 export type Exchange = keyof typeof EXCHANGES;
 

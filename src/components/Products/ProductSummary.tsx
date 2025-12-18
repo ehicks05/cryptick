@@ -1,7 +1,7 @@
 import { useExchangeInfo } from 'services/useExchangeInfo';
 import { useThrottledPrice } from 'store';
 import type { CryptickProduct } from 'types';
-import { ExchangeIcon } from './ExchangeIcon';
+import { ExchangeIcon } from '../ExchangeIcon';
 
 interface NameProps {
 	product: CryptickProduct;

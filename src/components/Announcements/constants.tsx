@@ -1,4 +1,4 @@
-import { ExchangeIcon } from 'components/Products/ExchangeIcon';
+import { ExchangeIcon } from 'components/ExchangeIcon';
 import { CircleCheck, CirclePlus } from 'lucide-react';
 
 export interface Announcement {
