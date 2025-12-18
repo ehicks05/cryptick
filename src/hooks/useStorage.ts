@@ -44,6 +44,15 @@ const useCryptickStore = create<CryptickStore>()(
 			version: 1,
 			migrate: (persistedState, version) => {
 				if (version === 0) {
+					if (
+						persistedState === null ||
+						typeof persistedState !== 'object' ||
+						'productIds' in persistedState === false ||
+						persistedState.productIds === null ||
+						Array.isArray(persistedState.productIds) === false
+					)
+						return;
+
 					persistedState.productIds = persistedState.productIds.map(
 						(productId: string) => `coinbase:${productId}`,
 					);
