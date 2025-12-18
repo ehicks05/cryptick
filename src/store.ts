@@ -1,8 +1,8 @@
 import { useThrottle } from '@uidotdev/usehooks';
 import { formatPrice } from 'lib/format';
-import { useEffect, useState } from 'react';
-import { use24HourStats, useProducts } from 'services/cbp';
 import type { TickerMessage } from 'services/cbp/types/ws-types';
+import { useCandles } from 'services/useCandles';
+import { useExchangeInfo } from 'services/useExchangeInfo';
 import { create } from 'zustand';
 
 export interface AppState {
@@ -26,33 +26,20 @@ const mergeTicker = (
 
 export const usePrice = (productId: string) => {
 	const price = useStore((state) => state.ticker[productId]?.[0]?.price);
+	const { data: candles } = useCandles([productId]);
 
-	// fall back to 24-hour stats in case ticker is empty
-	const { data: products } = useProducts();
-	const { data: stats } = use24HourStats();
-	const product = products?.[productId];
-	const last = formatPrice(
-		stats?.[productId]?.stats_24hour.last || 0,
-		product?.minQuoteDigits || 0,
-	);
+	const { data: exchangeInfo } = useExchangeInfo();
+	const product = exchangeInfo?.products?.[productId];
+
+	// use candle data until a ticker trade comes in
+	const _last = candles?.[productId]?.[0].close || 0;
+	const last = _last ? formatPrice(_last, product?.minQuoteDigits || 0) : '';
+
 	return price || last;
 };
 
-export const subscribeToPrice = (productId: string) => {
-	// Fetch initial state
-	const [price, setPrice] = useState(usePrice(productId));
-	// Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
-	useEffect(
-		() =>
-			useStore.subscribe((state) => setPrice(state.ticker[productId]?.[0]?.price)),
-		[productId],
-	);
-
-	return price;
-};
-
 export const useThrottledPrice = (productId: string) => {
-	const _price = subscribeToPrice(productId);
+	const _price = usePrice(productId);
 	const price = useThrottle(_price || '0', 500);
 	return price;
 };

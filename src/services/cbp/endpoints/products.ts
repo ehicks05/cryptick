@@ -1,7 +1,7 @@
 import type { CryptickProduct } from '../../../types';
+import { keyById } from '../../utils';
 import type { Product } from '../types/product';
 import { PRODUCT_URL } from './constants';
-import { keyById } from './utils';
 
 const sort = (o1: Product, o2: Product) => {
 	const qc = o1.quote_currency.localeCompare(o2.quote_currency);
@@ -15,7 +15,7 @@ const toMinimumDigits = (increment: string) =>
 	increment.substring(increment.indexOf('.') + 1).length;
 
 const toCryptickProduct = (product: Product): CryptickProduct => ({
-	id: product.id,
+	id: `coinbase:${product.id}`,
 	displayName: product.display_name,
 	exchange: 'coinbase',
 	baseAsset: product.base_currency,

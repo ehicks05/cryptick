@@ -1,6 +1,6 @@
+import { keyById } from '../../utils';
 import type { Currency } from '../types/currency';
 import { CURRENCY_URL } from './constants';
-import { keyById } from './utils';
 
 const sort = (o1: Currency, o2: Currency) => {
 	return o1.name.localeCompare(o2.name);

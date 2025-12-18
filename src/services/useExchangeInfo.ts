@@ -1,31 +1,26 @@
-import { useQuery } from "@tanstack/react-query";
-import { getExchangeInfo } from "services/binance/exchangeInfo";
-import { getCurrencies } from "./cbp/endpoints/currencies";
-import { getProducts } from "./cbp/endpoints/products";
+import { useQuery } from '@tanstack/react-query';
+import { keyBy } from 'es-toolkit';
+import { getExchangeInfo } from 'services/binance/exchangeInfo';
+import { getCurrencies } from './cbp/endpoints/currencies';
+import { getProducts } from './cbp/endpoints/products';
 
 export const collectExchangeInfo = async () => {
-  const [currencies, products, exchangeInfo] = await Promise.all([
-    getCurrencies(),
-    getProducts(),
-    getExchangeInfo(),
-  ]);
+	const [currencies, _products, exchangeInfo] = await Promise.all([
+		getCurrencies(),
+		getProducts(),
+		getExchangeInfo(),
+	]);
 
-  const combinedProducts = [
-    ...Object.values(products),
-    ...exchangeInfo.symbols,
-  ];
+	const combinedProducts = [...Object.values(_products), ...exchangeInfo.symbols];
 
-  return {
-    currencies,
-    products: combinedProducts,
-    _coinbase: { currencies, products },
-    _binance: { exchangeInfo },
-  };
+	const products = keyBy(combinedProducts, (item) => item.id);
+
+	return { currencies, products };
 };
 
 export const useExchangeInfo = () =>
-  useQuery({
-    queryKey: ["exchangeInfo"],
-    queryFn: collectExchangeInfo,
-    staleTime: 1000 * 60 * 60 * 24,
-  });
+	useQuery({
+		queryKey: ['exchangeInfo'],
+		queryFn: collectExchangeInfo,
+		staleTime: 1000 * 60 * 60 * 24,
+	});

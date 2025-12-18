@@ -4,9 +4,12 @@ import { mergeCandles } from 'lib/candles';
 import { formatPercent } from 'lib/format';
 import { cn } from 'lib/utils';
 import React from 'react';
+import {
+	type Performance,
+	useHistoricPerformance,
+} from 'services/useHistoricPerformance';
 import { ProductSummary } from './ProductSummary';
 import Chart from './SimpleChart/Chart';
-import { type Performance, useHistoricPerformance } from './useHistoricPerformance';
 import { useLiveCandles } from './useLiveCandles';
 
 interface Props {
@@ -15,8 +18,7 @@ interface Props {
 
 const Product = ({ productId }: Props) => {
 	const { candles } = useLiveCandles({ productId });
-	const stats = mergeCandles(candles);
-	const { direction } = stats;
+	const { direction } = mergeCandles(candles);
 
 	return (
 		<div
@@ -37,14 +39,16 @@ const Product = ({ productId }: Props) => {
 	);
 };
 
+interface TimespanPerformanceProps {
+	change: Performance;
+	index: number;
+}
+
 const TimespanPerformance = ({
 	change: { name, label, direction, percentChange },
 	index,
-}: {
-	change: Performance;
-	index: number;
-}) => {
-	const [timespan, setTimespan] = useChartTimespan();
+}: TimespanPerformanceProps) => {
+	const { timespan, setTimespan } = useChartTimespan();
 
 	return (
 		<button

@@ -13,7 +13,7 @@ const OPTIONS = Object.entries(CHART_TIMESPANS).map(
 );
 
 export const ChartTimespanPicker = () => {
-	const [timespan, setTimespan] = useChartTimespan();
+	const { timespan, setTimespan } = useChartTimespan();
 
 	const handleClick = (value: ChartTimespan) => {
 		if (value === timespan) return;

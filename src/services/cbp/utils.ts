@@ -1,16 +1,17 @@
-// used to align refetches to be just after the start of each new minute
-export const msToNextMinute = () => (62 - new Date().getSeconds()) * 1000;
+import { removeExchange } from 'services/utils';
 
-export const subSeconds = (date: Date, n: number) =>
-	new Date(date.setSeconds(date.getSeconds() - n));
+type MessageType = 'subscribe' | 'unsubscribe';
 
-export const toUnixTimestamp = (date: Date) => Math.round(date.getTime() / 1000);
+export const buildCoinbaseMessage = (isAdding: boolean, productIds: string[]) => {
+	const type: MessageType = isAdding ? 'subscribe' : 'unsubscribe';
 
-export const getTimeAgo = (seconds: number) => {
-	const date = subSeconds(new Date(), seconds);
-	return toUnixTimestamp(date);
-};
+	const product_ids = productIds
+		.filter((o) => o.startsWith('coinbase'))
+		.map(removeExchange);
 
-export const buildSubscribeMessage = (type: string, product_ids: string[]) => {
-	return JSON.stringify({ type, product_ids, channels: ['ticker'] });
+	return JSON.stringify({
+		type,
+		product_ids,
+		channels: ['ticker'],
+	});
 };

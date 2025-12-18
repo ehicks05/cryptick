@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Chart = ({ productId }: Props) => {
-	const [chartHeight] = useChartHeight();
+	const { chartHeight } = useChartHeight();
 	const { points, strokeColor, ref, height, width } = useChartData({
 		productId,
 	});

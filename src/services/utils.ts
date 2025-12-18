@@ -1,4 +1,4 @@
-import type { CryptickCandle } from 'types';
+import { type CryptickCandle, EXCHANGES } from 'types';
 
 export const keyById = <T extends { id: string }>(list: T[]) =>
 	list.reduce(
@@ -21,3 +21,8 @@ export const keyByProductId = <
 		},
 		{} as Record<string, T['candles']>,
 	);
+
+export const removeExchange = (productId: string) =>
+	productId
+		.replace(`${EXCHANGES.coinbase}:`, '')
+		.replace(`${EXCHANGES.binance}:`, '');

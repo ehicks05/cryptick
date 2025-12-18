@@ -1,15 +1,15 @@
 import { range } from 'es-toolkit';
 import type { CryptickCandle } from 'types';
+import { keyByProductId } from '../../utils';
 import type { CandleGranularity, CoinbaseCandle } from '../types/product';
 import { PRODUCT_URL } from './constants';
 import { throttle } from './throttle';
-import { keyByProductId } from './utils';
 
 const toCryptickCandle = (
 	candle: CoinbaseCandle,
 	productId: string,
 ): CryptickCandle => ({
-	productId,
+	productId: `coinbase:${productId}`,
 	timestamp: candle[0] * 1000,
 	low: candle[1],
 	high: candle[2],
@@ -72,7 +72,10 @@ const getCandlesForProduct = async ({
 	);
 	const results = await Promise.all(promises);
 
-	return { productId, candles: results.toReversed().flat() };
+	return {
+		productId: `coinbase:${productId}`,
+		candles: results.toReversed().flat(),
+	};
 };
 
 interface ParamsMulti extends Omit<Params, 'productId'> {

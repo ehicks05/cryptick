@@ -24,4 +24,10 @@ export interface CryptickCandle {
 
 export type Direction = 'POS' | 'NEG' | 'UNK';
 
-export type Exchange = 'coinbase' | 'binance';
+export const EXCHANGES = {
+	coinbase: 'coinbase',
+	binance: 'binance',
+};
+export type Exchange = keyof typeof EXCHANGES;
+
+export type SizeUnit = 'base' | 'quote';

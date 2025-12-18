@@ -2,20 +2,21 @@ import { useProductIds } from 'hooks/useStorage';
 import { formatPrice, formatTime } from 'lib/format';
 import useWebSocket from 'react-use-websocket';
 import type { WebSocketTickerMessage } from 'services/cbp/types/ws-types';
+import { useExchangeInfo } from 'services/useExchangeInfo';
 import { useStore } from 'store';
 import { WS_URL } from './constants';
-import { useProducts } from './hooks';
-import { buildSubscribeMessage } from './utils';
+import { buildCoinbaseMessage } from './utils';
 
 // Singleton
-export const useTicker = () => {
-	const [productIds] = useProductIds();
-	const { data: products } = useProducts();
+export const useCoinbaseTicker = () => {
+	const { productIds } = useProductIds();
+	const { data } = useExchangeInfo();
+	const products = data?.products;
 
 	const addTickerMessage = useStore((state) => state.addTickerMessage);
 
 	const { sendMessage } = useWebSocket(WS_URL, {
-		onOpen: () => sendMessage(buildSubscribeMessage('subscribe', productIds)),
+		onOpen: () => sendMessage(buildCoinbaseMessage(true, productIds)),
 		onMessage: (event) => handleMessage(JSON.parse(event.data)),
 		onError: (event) => console.log(event),
 		shouldReconnect: () => true,
@@ -26,7 +27,8 @@ export const useTicker = () => {
 	});
 
 	const handleMessage = (message: WebSocketTickerMessage) => {
-		const { product_id: productId, price: rawPrice } = message;
+		const { product_id, price: rawPrice } = message;
+		const productId = `coinbase:${product_id}`;
 		const product = products?.[productId];
 		if (!product) return;
 
@@ -44,7 +46,7 @@ export const useTicker = () => {
 		});
 
 		if (productId === productIds[0]) {
-			document.title = `${price} ${productId}`;
+			document.title = `${price} ${product_id}`;
 		}
 	};
 };

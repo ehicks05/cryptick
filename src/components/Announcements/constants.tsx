@@ -8,7 +8,7 @@ export interface Announcement {
 	Icon: React.ReactNode;
 }
 
-export const ANNOUNCEMENTS = [
+export const ANNOUNCEMENTS: Announcement[] = [
 	{
 		id: 2,
 		date: new Date(2025, 11, 18),

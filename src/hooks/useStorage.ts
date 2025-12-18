@@ -1,29 +1,94 @@
-import { useLocalStorage } from 'usehooks-ts';
-import { APP, DEFAULT } from '../constants';
+import type { CandleGranularity } from 'services/cbp/types/product';
+import type { ChartTimespan, SizeUnit } from 'types';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { useShallow } from 'zustand/react/shallow';
+import { APP } from '../constants';
+import { DEFAULT } from './constants';
 
-// convenience function to prepend app name to any localStorage values,
-// mainly useful on localhost
-const useStorage = <T>(key: string, initialValue: T) =>
-	useLocalStorage<T>(`${APP.NAME}-${key}`, initialValue);
+interface CryptickStore {
+	candleGranularity: CandleGranularity; // granularity for productDetail chart
+	chartTimespan: ChartTimespan; // timespan for products view
+	chartHeight: string;
+	productIds: string[];
+	historySizeUnit: SizeUnit;
 
-// set granularity for productDetail chart
+	setCandleGranularity: (candleGranularity: CandleGranularity) => void;
+	setChartTimespan: (chartTimespan: ChartTimespan) => void;
+	setChartHeight: (chartHeight: string) => void;
+	setProductIds: (productIds: string[]) => void;
+	toggleHistorySizeUnit: () => void;
+}
+
+const useCryptickStore = create<CryptickStore>()(
+	persist(
+		(set) => ({
+			candleGranularity: DEFAULT.CANDLE_GRANULARITY,
+			chartTimespan: DEFAULT.CHART_TIMESPAN,
+			chartHeight: DEFAULT.CHART_HEIGHT,
+			productIds: DEFAULT.SELECTED_PRODUCT_IDS,
+			historySizeUnit: 'base',
+
+			setCandleGranularity: (candleGranularity: CandleGranularity) =>
+				set({ candleGranularity }),
+			setChartTimespan: (chartTimespan: ChartTimespan) => set({ chartTimespan }),
+			setChartHeight: (chartHeight: string) => set({ chartHeight }),
+			setProductIds: (productIds: string[]) => set({ productIds }),
+			toggleHistorySizeUnit: () =>
+				set((store) => ({
+					historySizeUnit: store.historySizeUnit === 'base' ? 'quote' : 'base',
+				})),
+		}),
+		{
+			name: `${APP.NAME}-storage`,
+			version: 1,
+			migrate: (persistedState, version) => {
+				if (version === 0) {
+					persistedState.productIds = persistedState.productIds.map(
+						(productId: string) => `coinbase:${productId}`,
+					);
+				}
+			},
+		},
+	),
+);
+
 export const useCandleGranularity = () =>
-	useStorage('candle-granularity', DEFAULT.CANDLE_GRANULARITY);
+	useCryptickStore(
+		useShallow((state) => ({
+			granularity: state.candleGranularity,
+			setGranularity: state.setCandleGranularity,
+		})),
+	);
 
-// set timespan for products view
 export const useChartTimespan = () =>
-	useStorage('chart-timespan', DEFAULT.CHART_TIMESPAN);
+	useCryptickStore(
+		useShallow((state) => ({
+			timespan: state.chartTimespan,
+			setTimespan: state.setChartTimespan,
+		})),
+	);
 
-export const useChartHeight = () => useStorage('chart-height', DEFAULT.CHART_HEIGHT);
+export const useChartHeight = () =>
+	useCryptickStore(
+		useShallow((state) => ({
+			chartHeight: state.chartHeight,
+			setChartHeight: state.setChartHeight,
+		})),
+	);
 
 export const useProductIds = () =>
-	useStorage('product-ids', DEFAULT.SELECTED_PRODUCT_IDS);
+	useCryptickStore(
+		useShallow((state) => ({
+			productIds: state.productIds,
+			setProductIds: state.setProductIds,
+		})),
+	);
 
-export type SizeUnit = 'base' | 'quote';
-
-export const useHistoryUnit = () => {
-	const [sizeUnit, setSizeUnit] = useStorage<SizeUnit>('history-size-unit', 'base');
-	const toggleSizeUnit = () => setSizeUnit(sizeUnit === 'base' ? 'quote' : 'base');
-
-	return { sizeUnit, toggleSizeUnit };
-};
+export const useHistorySizeUnit = () =>
+	useCryptickStore(
+		useShallow((state) => ({
+			sizeUnit: state.historySizeUnit,
+			toggleSizeUnit: state.toggleHistorySizeUnit,
+		})),
+	);

@@ -1,7 +1,8 @@
 import { useThrottle } from '@uidotdev/usehooks';
-import { useHistoryUnit } from 'hooks/useStorage';
+import { useHistorySizeUnit } from 'hooks/useStorage';
 import { cn } from 'lib/utils';
 import type { TickerMessage } from 'services/cbp/types/ws-types';
+import { useExchangeInfo } from 'services/useExchangeInfo';
 import { useStore } from 'store';
 
 const normalize = (value: number) => {
@@ -102,10 +103,17 @@ export const History = ({ productId }: { productId: string }) => {
 	const ticker = useStore((state) => state.ticker[productId]) || [];
 	const throttledTicker = useThrottle(ticker, 333);
 
-	const { sizeUnit, toggleSizeUnit } = useHistoryUnit();
+	const { sizeUnit, toggleSizeUnit } = useHistorySizeUnit();
 
-	const [base, quote] = productId.split('-');
-	const selectedSizeUnit = sizeUnit === 'base' ? base : quote;
+	const { data: exchangeInfo } = useExchangeInfo();
+
+	if (!exchangeInfo) {
+		return null;
+	}
+
+	const { baseAsset, quoteAsset } = exchangeInfo?.products[productId] || {};
+
+	const selectedSizeUnit = sizeUnit === 'base' ? baseAsset : quoteAsset;
 	const format = getFormat(selectedSizeUnit);
 
 	return (

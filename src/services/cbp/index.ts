@@ -1,5 +1,4 @@
-import { use24HourStats, useCurrencies, useProducts } from './hooks';
-import { useCandles } from './useCandles';
-import { useTicker } from './useTicker';
+import { useCoinbaseTicker } from './useCoinbaseTicker';
+import { use24HourStats } from './useStats';
 
-export { use24HourStats, useCandles, useCurrencies, useProducts, useTicker };
+export { use24HourStats, useCoinbaseTicker };

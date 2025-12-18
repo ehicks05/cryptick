@@ -1,4 +1,4 @@
-import { useCandles } from 'services/cbp';
+import { useCandles } from 'services/useCandles';
 import { usePrice } from 'store';
 
 interface Props {

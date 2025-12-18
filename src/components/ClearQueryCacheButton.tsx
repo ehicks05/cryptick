@@ -9,6 +9,7 @@ export const ClearQueryCacheButton = () => {
 			<Button
 				type="button"
 				variant="destructive"
+				className="inline-flex"
 				onClick={() => queryClient.clear()}
 			>
 				Clear Query Cache

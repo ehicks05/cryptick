@@ -1,10 +1,12 @@
-import { useTicker } from 'services/cbp';
+import { useBinanceTicker } from 'services/binance/useBinanceTicker';
+import { useCoinbaseTicker } from 'services/cbp';
 import ErrorBoundary from './ErrorBoundary';
 import { Routes } from './Routes';
 import { Footer, Header } from './Shell';
 
 export function App() {
-	useTicker();
+	useCoinbaseTicker();
+	useBinanceTicker();
 
 	return (
 		<div className="flex flex-col h-dvh">

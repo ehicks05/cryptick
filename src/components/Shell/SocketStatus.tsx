@@ -1,5 +1,6 @@
 import { cn } from 'lib/utils';
 import { ReadyState } from 'react-use-websocket';
+import { useBinanceWebsocket } from 'services/binance/useBinanceWebsocket';
 import { useCoinbaseWebsocket } from 'services/cbp/useCoinbaseWebsocket';
 
 export interface SocketStatus {
@@ -19,8 +20,12 @@ const SOCKET_STATUSES: Record<ReadyState, SocketStatus> = {
 } as const;
 
 export const SocketStatus = () => {
-	const { readyState } = useCoinbaseWebsocket();
-	const socketStatus = SOCKET_STATUSES[readyState];
+	const { readyState: coinbaseStatus } = useCoinbaseWebsocket();
+	const { readyState: binanceStatus } = useBinanceWebsocket();
+
+	const mergedStatus = coinbaseStatus === binanceStatus ? coinbaseStatus : 0;
+
+	const socketStatus = SOCKET_STATUSES[mergedStatus];
 
 	return (
 		<div
@@ -30,7 +35,7 @@ export const SocketStatus = () => {
 			<div className="flex items-center justify-center h-4 w-4">
 				<div
 					className={cn('rounded-full h-2 w-2', socketStatus.class.bg, {
-						'animate-pulse': readyState !== ReadyState.OPEN,
+						'animate-pulse': mergedStatus !== ReadyState.OPEN,
 					})}
 				/>
 			</div>

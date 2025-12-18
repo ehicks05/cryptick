@@ -5,7 +5,7 @@ import { DndProvider, SortableItem } from './Dnd';
 import Product from './Product';
 
 const Products = () => {
-	const [productIds, setProductIds] = useProductIds();
+	const { productIds, setProductIds } = useProductIds();
 
 	const { width = 0 } = useScreen();
 	const minColumnWidth = width < 400 ? width - 16 - 16 - 16 - 16 : 380;

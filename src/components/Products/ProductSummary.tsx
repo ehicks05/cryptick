@@ -1,4 +1,4 @@
-import { useCurrencies, useProducts } from 'services/cbp';
+import { useExchangeInfo } from 'services/useExchangeInfo';
 import { useThrottledPrice } from 'store';
 import type { CryptickProduct } from 'types';
 import { ExchangeIcon } from './ExchangeIcon';
@@ -8,8 +8,8 @@ interface NameProps {
 }
 
 const Name = ({ product }: NameProps) => {
-	const currenciesQuery = useCurrencies();
-	const currency = product ? currenciesQuery.data?.[product.baseAsset] : undefined;
+	const { data } = useExchangeInfo();
+	const currency = data?.currencies?.[product.baseAsset];
 
 	return (
 		<div className="flex flex-col text-xl items-baseline leading-tight">
@@ -17,7 +17,7 @@ const Name = ({ product }: NameProps) => {
 			<div className="flex gap-1 items-center">
 				<span className="text-xs text-muted-foreground">{currency?.name}</span>
 				<span className="text-xs text-muted-foreground">·</span>
-				<ExchangeIcon name={'coinbase'} />
+				<ExchangeIcon name={product.exchange} />
 			</div>
 		</div>
 	);
@@ -40,8 +40,8 @@ const Price = ({ productId }: PriceProps) => {
 };
 
 export const ProductSummary = ({ productId }: { productId: string }) => {
-	const productsQuery = useProducts();
-	const product = productsQuery.data?.[productId];
+	const { data } = useExchangeInfo();
+	const product = data?.products?.[productId];
 
 	if (!product) {
 		return '';

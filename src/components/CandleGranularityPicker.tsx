@@ -36,7 +36,7 @@ const EXTRA_OPTIONS = Object.entries(EXTRA_GRANULARITY_LABELS).map(
 );
 
 export const CandleGranularityPicker = () => {
-	const [granularity, setGranularity] = useCandleGranularity();
+	const { granularity, setGranularity } = useCandleGranularity();
 
 	const handleClick = (value: CandleGranularity) => {
 		if (value === granularity) return;

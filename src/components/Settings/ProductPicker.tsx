@@ -1,13 +1,18 @@
+import { useBinanceWebsocket } from 'services/binance/useBinanceWebsocket';
+import { buildBinanceMessage } from 'services/binance/utils';
 import { useCoinbaseWebsocket } from 'services/cbp/useCoinbaseWebsocket';
-import { buildSubscribeMessage } from 'services/cbp/utils';
+import { buildCoinbaseMessage } from 'services/cbp/utils';
 import { useProductIds } from '../../hooks/useStorage';
-import { useProducts } from '../../services/cbp';
+import { useExchangeInfo } from '../../services/useExchangeInfo';
 import { ComboboxDemo } from '../ui/combobox';
 
 export const ProductPicker = () => {
-	const { sendJsonMessage } = useCoinbaseWebsocket();
-	const [productIds, setProductIds] = useProductIds();
-	const { data: products = {} } = useProducts();
+	const { sendCoinbaseMessage } = useCoinbaseWebsocket();
+	const { sendBinanceMessage } = useBinanceWebsocket();
+	const { productIds, setProductIds } = useProductIds();
+
+	const { data } = useExchangeInfo();
+	const products = Object.values(data?.products || {});
 
 	const toggleProduct = (productId: string) => {
 		const isAdding = !productIds.includes(productId);
@@ -16,17 +21,15 @@ export const ProductPicker = () => {
 		const newProducts = [...stable, ...(isAdding ? [productId] : [])];
 
 		setProductIds(newProducts);
-		sendJsonMessage(
-			buildSubscribeMessage(isAdding ? 'subscribe' : 'unsubscribe', [productId]),
-		);
+		sendCoinbaseMessage(buildCoinbaseMessage(isAdding, [productId]));
+		sendBinanceMessage(buildBinanceMessage(isAdding, [productId]));
 	};
 
-	const items = Object.values(products)
-		.map(({ id, displayName, exchange }) => ({
-			label: displayName,
-			value: id,
-			exchange,
-		}));
+	const items = products.map(({ id, displayName, exchange }) => ({
+		label: displayName,
+		value: id,
+		exchange,
+	}));
 
 	return (
 		<div className="flex flex-col">
