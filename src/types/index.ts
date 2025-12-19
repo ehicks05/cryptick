@@ -1,5 +1,10 @@
 export * from './timespan';
 
+export interface CryptickCurrency {
+  id: string;
+  displayName: string;
+}
+
 export interface CryptickProduct {
 	id: string;
 	displayName: string;
