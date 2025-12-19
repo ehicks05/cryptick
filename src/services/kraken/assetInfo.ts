@@ -20,8 +20,8 @@ const toCryptickProduct = ([id, assetPair]: [
 
 const _assetInfo = async () => {
 	const [_assetsResponse, _assetPairsResponse] = await Promise.all([
-		client({ path: '/assets' }),
-		client({ path: '/assetpairs' }),
+		client({ path: '/Assets' }),
+		client({ path: '/AssetPairs' }),
 	]);
 	const assetsResponse: AssetsResponse = await _assetsResponse.json();
 	const assetPairsResponse: AssetPairsResponse = await _assetPairsResponse.json();
