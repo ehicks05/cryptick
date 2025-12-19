@@ -28,22 +28,28 @@ const toTickerMessage = (
 
 // Singleton
 export const useBinanceTicker = () => {
-	const { productIds } = useProductIds();
 	const { data } = useExchangeInfo();
 	const products = data?.products;
 
+	const { productIds } = useProductIds();
+	const shouldConnect = productIds.some((id) => id.includes('binance'));
+
 	const addTickerMessage = useStore((state) => state.addTickerMessage);
 
-	const { sendMessage } = useWebSocket(WS_URL, {
-		onOpen: () => sendMessage(buildBinanceMessage(true, productIds)),
-		onMessage: (event) => handleMessage(JSON.parse(event.data)),
-		onError: (event) => console.log(event),
-		shouldReconnect: () => true,
-		retryOnError: true,
-		reconnectAttempts: 50,
-		reconnectInterval: 2000,
-		share: true,
-	});
+	const { sendMessage } = useWebSocket(
+		WS_URL,
+		{
+			onOpen: () => sendMessage(buildBinanceMessage(true, productIds)),
+			onMessage: (event) => handleMessage(JSON.parse(event.data)),
+			onError: (event) => console.log(event),
+			shouldReconnect: () => true,
+			retryOnError: true,
+			reconnectAttempts: 50,
+			reconnectInterval: 2000,
+			share: true,
+		},
+		shouldConnect,
+	);
 
 	const handleMessage = (message: WebSocketTickerMessage) => {
 		const { s: symbol } = message;

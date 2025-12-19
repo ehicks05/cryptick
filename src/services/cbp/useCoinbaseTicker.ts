@@ -9,22 +9,28 @@ import { buildCoinbaseMessage } from './utils';
 
 // Singleton
 export const useCoinbaseTicker = () => {
-	const { productIds } = useProductIds();
 	const { data } = useExchangeInfo();
 	const products = data?.products;
 
+	const { productIds } = useProductIds();
+	const shouldConnect = productIds.some((id) => id.includes('coinbase'));
+
 	const addTickerMessage = useStore((state) => state.addTickerMessage);
 
-	const { sendMessage } = useWebSocket(WS_URL, {
-		onOpen: () => sendMessage(buildCoinbaseMessage(true, productIds)),
-		onMessage: (event) => handleMessage(JSON.parse(event.data)),
-		onError: (event) => console.log(event),
-		shouldReconnect: () => true,
-		retryOnError: true,
-		reconnectAttempts: 50,
-		reconnectInterval: 2000,
-		share: true,
-	});
+	const { sendMessage } = useWebSocket(
+		WS_URL,
+		{
+			onOpen: () => sendMessage(buildCoinbaseMessage(true, productIds)),
+			onMessage: (event) => handleMessage(JSON.parse(event.data)),
+			onError: (event) => console.log(event),
+			shouldReconnect: () => true,
+			retryOnError: true,
+			reconnectAttempts: 50,
+			reconnectInterval: 2000,
+			share: true,
+		},
+		shouldConnect,
+	);
 
 	const handleMessage = (message: WebSocketTickerMessage) => {
 		const { product_id, price: rawPrice } = message;
