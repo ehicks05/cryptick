@@ -30,7 +30,8 @@ export const Header = () => (
 			<AnnouncementsDialog />
 			<ThemeToggle />
 			<SettingsDialog />
-			<DebugDialog />
+
+			{import.meta.env.DEV && <DebugDialog />}
 		</div>
 	</header>
 );
