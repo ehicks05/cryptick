@@ -3,6 +3,7 @@ import { ThemeToggle } from 'components/Theme/ThemeToggle';
 import { Link } from 'wouter';
 import { APP } from '../../constants';
 import { SettingsDialog } from '../Settings/Settings';
+import { DebugDialog } from './Debug';
 import { SocketStatus } from './SocketStatus';
 
 const Icon = () => (
@@ -29,6 +30,7 @@ export const Header = () => (
 			<AnnouncementsDialog />
 			<ThemeToggle />
 			<SettingsDialog />
+			<DebugDialog />
 		</div>
 	</header>
 );

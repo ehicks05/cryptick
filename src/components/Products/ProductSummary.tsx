@@ -15,7 +15,9 @@ const Name = ({ product }: NameProps) => {
 		<div className="flex flex-col text-xl items-baseline leading-tight">
 			{product.displayName}
 			<div className="flex gap-1 items-center">
-				<span className="text-xs text-muted-foreground">{currency?.name}</span>
+				<span className="text-xs text-muted-foreground">
+					{currency?.displayName}
+				</span>
 				<span className="text-xs text-muted-foreground">·</span>
 				<ExchangeIcon name={product.exchange} />
 			</div>

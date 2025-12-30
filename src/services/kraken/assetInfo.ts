@@ -1,7 +1,11 @@
-import type { CryptickProduct } from 'types';
+import type { CryptickCurrency, CryptickProduct } from 'types';
 import { client } from './client';
 import { throttle } from './throttle';
-import type { AssetPair, AssetPairsResponse, AssetsResponse } from './types';
+import type { Asset, AssetPair, AssetPairsResponse, AssetsResponse } from './types';
+
+const toCryptickCurrency = ([id]: [id: string, value: Asset]): CryptickCurrency => {
+	return { id, displayName: id };
+};
 
 const toCryptickProduct = ([id, assetPair]: [
 	id: string,
@@ -26,12 +30,12 @@ const _assetInfo = async () => {
 	const assetsResponse: AssetsResponse = await _assetsResponse.json();
 	const assetPairsResponse: AssetPairsResponse = await _assetPairsResponse.json();
 
-	const { results: _assets } = assetsResponse;
-	const { results: _assetPairs } = assetPairsResponse;
-
+	const { result: _assets } = assetsResponse;
+	const { result: _assetPairs } = assetPairsResponse;
+	
 	const assets = Object.entries(_assets)
 		.filter(([, asset]) => asset.status === 'enabled')
-		.map(([id]) => ({ id, displayName: id }));
+		.map(toCryptickCurrency);
 
 	const assetPairs = Object.entries(_assetPairs)
 		.filter(([, assetPair]) => assetPair.status === 'online')
@@ -44,3 +48,5 @@ const _assetInfo = async () => {
 };
 
 export const getAssetInfo = throttle(_assetInfo);
+
+await getAssetInfo();
