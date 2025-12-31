@@ -59,7 +59,7 @@ export interface OhlcResponse {
 	result: OhlcResult;
 }
 
-export interface TickerResponse {
+export interface WsTickerResponse {
 	channel: string;
 	type: 'snapshot' | 'update';
 	data: {
@@ -80,7 +80,7 @@ export interface TickerResponse {
 	};
 }
 
-export interface TradesResponse {
+export interface WsTradesResponse {
 	channel: 'trade';
 	type: 'snapshot' | 'update';
 	data: {
@@ -94,4 +94,16 @@ export interface TradesResponse {
 	}[];
 }
 
-export type Trade = TradesResponse['data'][number];
+export type WsTrade = WsTradesResponse['data'][number];
+
+export type Trade = [string, string, number, 'b' | 's', 'm' | 'l', string, number];
+
+interface TradeResult {
+	// last: number;
+	[key: string]: Trade[];
+}
+
+export interface TradesResponse {
+	error: string[];
+	result: TradeResult;
+}

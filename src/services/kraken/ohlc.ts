@@ -46,12 +46,12 @@ const _ohlc = async ({ pair, interval, since }: Params) => {
 
 export const ohlc = throttle(_ohlc);
 
-interface ParamsMulti extends Omit<Params, 'symbol'> {
+interface ParamsMulti extends Omit<Params, 'pair'> {
 	pairs: string[];
 }
 
-export const getKlinesForProducts = async (_params: ParamsMulti) => {
-	const { pairs, pair: _pair, ...params } = _params;
+export const getOhlcsForProducts = async (_params: ParamsMulti) => {
+	const { pairs, ...params } = _params;
 	const toPromise = async (pair: string) => {
 		const result = await ohlc({ pair, ...params });
 		return { productId: `kraken:${pair}`, candles: result };
