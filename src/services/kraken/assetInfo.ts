@@ -48,5 +48,3 @@ const _assetInfo = async () => {
 };
 
 export const getAssetInfo = throttle(_assetInfo);
-
-await getAssetInfo();
