@@ -14,8 +14,8 @@ export const collectExchangeInfo = async () => {
 	]);
 
 	const combinedCurrencies = [
-	...assetInfo.assets,
-	...Object.values(_currencies), // will overwrite previous
+		...assetInfo.assets,
+		...Object.values(_currencies), // will overwrite previous
 	];
 
 	const currencies = keyBy(combinedCurrencies, (item) => item.id);
@@ -23,7 +23,7 @@ export const collectExchangeInfo = async () => {
 	const combinedProducts = [
 		...Object.values(_products),
 		...exchangeInfo.symbols,
-		// ...assetInfo.assetPairs,
+		...assetInfo.assetPairs,
 	];
 
 	const products = keyBy(combinedProducts, (item) => item.id);
@@ -35,6 +35,5 @@ export const useExchangeInfo = () =>
 	useQuery({
 		queryKey: ['exchangeInfo'],
 		queryFn: collectExchangeInfo,
-		// staleTime: 1000 * 60 * 60 * 24,
-		staleTime: 1000,
+		staleTime: 1000 * 60 * 60 * 24,
 	});

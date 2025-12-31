@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { merge } from 'es-toolkit';
 import { msToNextMinute, subSeconds, toUnixTimestamp } from 'lib/date';
 import { CHART_TIMESPAN_SECONDS, EXCHANGES } from 'types';
 import { getKlinesForProducts } from './binance/klines';
 import { getCandlesForProducts } from './cbp/endpoints/candles';
 import { CandleGranularity } from './cbp/types/product';
+import { getOhlcsForProducts } from './kraken/ohlc';
+import { getTradesForProducts } from './kraken/trades';
 import { removeExchange } from './utils';
 
 const getHistoricPricesForProducts = async (productIds: string[]) => {
@@ -12,7 +13,7 @@ const getHistoricPricesForProducts = async (productIds: string[]) => {
 
 	const promises = [0, ...Object.values(CHART_TIMESPAN_SECONDS)].map(
 		async (seconds) => {
-			const [coinbaseCandles, binanceCandles] = await Promise.all([
+			const [coinbaseCandles, binanceCandles, krakenCandles] = await Promise.all([
 				getCandlesForProducts({
 					productIds: productIds
 						.filter((p) => p.startsWith(EXCHANGES.coinbase))
@@ -29,9 +30,28 @@ const getHistoricPricesForProducts = async (productIds: string[]) => {
 					startTime: toUnixTimestamp(subSeconds(new Date(), seconds + WINDOW)),
 					endTime: toUnixTimestamp(subSeconds(new Date(), seconds)),
 				}),
+				seconds === 0
+					? getOhlcsForProducts({
+							pairs: productIds
+								.filter((p) => p.startsWith(EXCHANGES.kraken))
+								.map(removeExchange),
+							interval: CandleGranularity.ONE_MINUTE,
+							since: toUnixTimestamp(subSeconds(new Date(), seconds + WINDOW)),
+						})
+					: getTradesForProducts({
+							pairs: productIds
+								.filter((p) => p.startsWith(EXCHANGES.kraken))
+								.map(removeExchange),
+							since: toUnixTimestamp(subSeconds(new Date(), seconds + WINDOW)),
+							count: 1,
+						}),
 			]);
 
-			return merge(coinbaseCandles, binanceCandles);
+			return {
+				...coinbaseCandles,
+				...binanceCandles,
+				...krakenCandles,
+			};
 		},
 	);
 

@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { merge } from 'es-toolkit';
 import { useCandleGranularity, useChartTimespan } from 'hooks/useStorage';
 import { getTimeAgo, msToNextMinute, toUnixTimestamp } from 'lib/date';
 import { useEffect } from 'react';
@@ -11,6 +10,7 @@ import {
 import { getKlinesForProducts } from './binance/klines';
 import { getCandlesForProducts } from './cbp/endpoints/candles';
 import type { CandleGranularity } from './cbp/types/product';
+import { getOhlcsForProducts } from './kraken/ohlc';
 import { removeExchange } from './utils';
 
 interface Params {
@@ -21,7 +21,7 @@ interface Params {
 }
 
 const queryExchanges = async ({ productIds, granularity, start, end }: Params) => {
-	const [coinbaseCandles, binanceCandles] = await Promise.all([
+	const [coinbaseCandles, binanceCandles, krakenCandles] = await Promise.all([
 		getCandlesForProducts({
 			productIds: productIds
 				.filter((p) => p.startsWith(EXCHANGES.coinbase))
@@ -38,14 +38,25 @@ const queryExchanges = async ({ productIds, granularity, start, end }: Params) =
 			startTime: start,
 			endTime: end,
 		}),
+		getOhlcsForProducts({
+			pairs: productIds
+				.filter((p) => p.startsWith(EXCHANGES.kraken))
+				.map(removeExchange),
+			interval: granularity,
+			since: toUnixTimestamp(new Date(start)),
+		}),
 	]);
 
-	return merge(coinbaseCandles, binanceCandles);
+	return {
+		...coinbaseCandles,
+		...binanceCandles,
+		...krakenCandles,
+	};
 };
 
 /**
  * Uses the selected chartTimespan (1d, 1w, etc...) to pick a granularity
- * and time range to fetch.
+ * and time range to fetch. 
  */
 export const useCandles = (productIds: string[]) => {
 	const { timespan } = useChartTimespan();
