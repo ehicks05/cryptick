@@ -19,7 +19,9 @@ const Name = ({ product }: NameProps) => {
 					{currency?.displayName}
 				</span>
 				<span className="text-xs text-muted-foreground">·</span>
-				<ExchangeIcon name={product.exchange} />
+				<div className='size-4'>
+					<ExchangeIcon name={product.exchange} />
+				</div>
 			</div>
 		</div>
 	);
