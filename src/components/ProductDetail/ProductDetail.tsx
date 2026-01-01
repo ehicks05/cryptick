@@ -6,7 +6,7 @@ import { useParams } from 'wouter';
 import { CandleGranularityPicker } from '../CandleGranularityPicker';
 import { Button } from '../ui/button';
 import CandleChart from './CandleChart';
-import { History } from './History';
+import { History } from './History/History';
 
 const DEFAULT_CANDLE_WIDTH_MULTI = 1;
 const DEFAULT_DRAG_OFFSET = 0;
