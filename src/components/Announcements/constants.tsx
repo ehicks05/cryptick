@@ -10,12 +10,25 @@ export interface Announcement {
 
 export const ANNOUNCEMENTS: Announcement[] = [
 	{
+		id: 3,
+		date: new Date(2026, 0, 1),
+		text: (
+			<div className="flex items-center gap-2">
+				Added support for Kraken.
+				<div className="size-8">
+					<ExchangeIcon name="kraken" />
+				</div>
+			</div>
+		),
+		Icon: <CircleCheck className="text-green-500" />,
+	},
+	{
 		id: 2,
 		date: new Date(2025, 11, 18),
 		text: (
 			<div className="flex items-center gap-2">
 				Added support for Binance US.
-				<div className="scale-150">
+				<div className="size-8">
 					<ExchangeIcon name="binance" />
 				</div>
 			</div>
