@@ -11,6 +11,10 @@ const toCryptickProduct = ([id, assetPair]: [
 	id: string,
 	assetPair: AssetPair,
 ]): CryptickProduct => {
+  
+  // deal with kraken naming inconsistencies
+	const wsName = assetPair.wsname === 'XBT/USD' ? 'BTC/USD' : assetPair.wsname;
+
 	return {
 		id: `kraken:${id}`,
 		displayName: id,
@@ -19,6 +23,7 @@ const toCryptickProduct = ([id, assetPair]: [
 		quoteAsset: assetPair.quote,
 		minBaseDigits: assetPair.cost_decimals,
 		minQuoteDigits: assetPair.pair_decimals,
+		wsName,
 	};
 };
 
@@ -32,7 +37,7 @@ const _assetInfo = async () => {
 
 	const { result: _assets } = assetsResponse;
 	const { result: _assetPairs } = assetPairsResponse;
-	
+
 	const assets = Object.entries(_assets)
 		.filter(([, asset]) => asset.status === 'enabled')
 		.map(toCryptickCurrency);
