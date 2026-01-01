@@ -3,9 +3,9 @@ import { RotateCcw } from 'lucide-react';
 import React, { useState } from 'react';
 import { useCandlesByGranularity } from 'services/useCandles';
 import { useParams } from 'wouter';
-import CandleChart from '../CandleChart';
 import { CandleGranularityPicker } from '../CandleGranularityPicker';
 import { Button } from '../ui/button';
+import CandleChart from './CandleChart';
 import { History } from './History';
 
 const DEFAULT_CANDLE_WIDTH_MULTI = 1;

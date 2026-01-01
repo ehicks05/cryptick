@@ -1,5 +1,5 @@
 import { useMeasure } from '@uidotdev/usehooks';
-import { ProductSummary } from 'components/CandleChart/ProductSummary';
+import { ProductSummary } from 'components/ProductDetail/CandleChart/ProductSummary';
 import { clamp } from 'lib/math';
 import React, { useEffect, useState } from 'react';
 import { usePrice } from 'store';
