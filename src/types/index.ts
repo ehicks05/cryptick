@@ -15,6 +15,8 @@ export interface CryptickProduct {
 
 	minBaseDigits: number;
 	minQuoteDigits: number;
+	
+  wsName?: string; // kraken
 }
 
 export interface CryptickCandle {

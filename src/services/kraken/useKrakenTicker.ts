@@ -7,12 +7,15 @@ import { useExchangeInfo } from 'services/useExchangeInfo';
 import { useStore } from 'store';
 import type { CryptickProduct } from 'types';
 import { WS_URL } from './constants';
-import type { Trade, TradesResponse } from './types';
+import type { WsTrade, WsTradesResponse } from './types';
 import { buildKrakenMessage } from './utils';
 
-const toTickerMessage = (trade: Trade, product: CryptickProduct): TickerMessage => {
+const toTickerMessage = (
+	trade: WsTrade,
+	product: CryptickProduct,
+): TickerMessage => {
 	return {
-		productId: `kraken:${trade.symbol}`,
+		productId: product.id,
 		sequence: 0,
 		time: formatTime(new Date(trade.timestamp)),
 		side: trade.side === 'buy' ? OrderSide.BUY : OrderSide.SELL,
@@ -27,14 +30,18 @@ export const useKrakenTicker = () => {
 	const products = data?.products;
 
 	const { productIds } = useProductIds();
-	const shouldConnect = productIds.some((id) => id.includes('kraken'));
+	const krakenProductIds = productIds.filter((id) => id.includes('kraken'));
+	const shouldConnect = krakenProductIds.length > 0;
+	const wsProductIds = krakenProductIds.map(
+		(productId) => `kraken:${products?.[productId].wsName || ''}`,
+	);
 
 	const addTickerMessage = useStore((state) => state.addTickerMessage);
 
 	const { sendMessage } = useWebSocket(
 		WS_URL,
 		{
-			onOpen: () => sendMessage(buildKrakenMessage(true, productIds)),
+			onOpen: () => sendMessage(buildKrakenMessage(true, wsProductIds)),
 			onMessage: (event) => handleMessage(JSON.parse(event.data)),
 			onError: (event) => console.log(event),
 			shouldReconnect: () => true,
@@ -46,10 +53,13 @@ export const useKrakenTicker = () => {
 		shouldConnect,
 	);
 
-	const handleTrade = (trade: Trade) => {
+	const findByWsName = (products: Record<string, CryptickProduct>, wsName: string) =>
+		Object.values(products).find((product) => product.wsName === wsName);
+
+	const handleTrade = (trade: WsTrade) => {
 		const { symbol } = trade;
 		const productId = `kraken:${symbol}`;
-		const product = products?.[productId];
+		const product = findByWsName(products || {}, symbol);
 		if (!product) return;
 
 		const tickerMessage = toTickerMessage(trade, product);
@@ -61,7 +71,9 @@ export const useKrakenTicker = () => {
 		}
 	};
 
-	const handleMessage = (tradesResponse: TradesResponse) => {
-		tradesResponse.data.forEach(handleTrade);
+	const handleMessage = (tradesResponse: WsTradesResponse) => {
+		if (tradesResponse.channel === 'trade') {
+			tradesResponse.data.forEach(handleTrade);
+		}
 	};
 };

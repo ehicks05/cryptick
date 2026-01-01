@@ -9,5 +9,5 @@ export const buildKrakenMessage = (isAdding: boolean, productIds: string[]) => {
 
 	const method: Method = isAdding ? 'subscribe' : 'unsubscribe';
 
-	return JSON.stringify({ method, params: { channel: 'ticker', symbol } });
+	return JSON.stringify({ method, params: { channel: 'trade', symbol } });
 };
