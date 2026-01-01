@@ -1,12 +1,12 @@
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
-// import { useTickers } from 'services/useTickers';
+import { useTickers } from 'services/useTickers';
 import ErrorBoundary from './ErrorBoundary';
 import { Routes } from './Routes';
 import { Footer, Header } from './Shell';
 
 export function App() {
-	// useTickers();
+	useTickers();
 
 	return (
 		<div className="flex flex-col h-dvh">
