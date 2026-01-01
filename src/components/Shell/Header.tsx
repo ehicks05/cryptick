@@ -4,7 +4,7 @@ import { Link } from 'wouter';
 import { APP } from '../../constants';
 import { SettingsDialog } from '../Settings/Settings';
 import { DebugDialog } from './Debug';
-import { SocketStatus } from './SocketStatus';
+import { SocketStatusDialog } from './SocketStatusDialog';
 
 const Icon = () => (
 	<div className="flex items-center justify-center h-9 w-9 rounded-sm bg-neutral-500 dark:bg-neutral-700">
@@ -26,7 +26,7 @@ export const Header = () => (
 		<Logo />
 
 		<div className="flex gap-2">
-			<SocketStatus />
+			<SocketStatusDialog />
 			<AnnouncementsDialog />
 			<ThemeToggle />
 			<SettingsDialog />
