@@ -16,7 +16,7 @@ const toTickerMessage = (
 ): TickerMessage => {
 	return {
 		productId: product.id,
-		sequence: 0,
+		sequence: trade.trade_id,
 		time: formatTime(new Date(trade.timestamp)),
 		side: trade.side === 'buy' ? OrderSide.BUY : OrderSide.SELL,
 		price: formatPrice(trade.price, product.minQuoteDigits),
