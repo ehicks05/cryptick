@@ -1,0 +1,1 @@
+export { ExchangeIcon } from './ExchangeIcon';
