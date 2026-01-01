@@ -24,6 +24,7 @@ const EXCHANGE_ICONS = {
 	coinbase: CbIcon,
 	binance: BiIcon,
 	kraken: KrIcon,
+	krakenAlt: KrIconAlt,
 } as const;
 
 export const ExchangeIcon = ({ name }: { name: Exchange; size?: number }) => {
