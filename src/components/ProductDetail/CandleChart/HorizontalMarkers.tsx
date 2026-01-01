@@ -36,7 +36,7 @@ export const HorizontalMarkers = ({
 				width={rectWidth}
 				y={-16} // ??
 				height={height - BOTTOM_GUTTER_HEIGHT + 16}
-				className="fill-white dark:fill-black"
+				className="fill-background"
 			/>
 			{lines.map(({ value, y }) => (
 				<text
