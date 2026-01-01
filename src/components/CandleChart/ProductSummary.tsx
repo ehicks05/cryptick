@@ -22,7 +22,9 @@ export const ProductSummary = ({ productId }: Props) => {
 		return '';
 	}
 
-	const name = `${currency?.name ? `${currency.name} · ` : ''}${product.displayName}`;
+	const name = `${
+		currency?.displayName ? `${currency.displayName} · ` : ''
+	}${product.displayName}`;
 
 	return (
 		<div className={outer}>
