@@ -1,6 +1,7 @@
 import { ClearQueryCacheButton } from 'components/ClearQueryCacheButton';
 import { Bug } from 'lucide-react';
 import { useExchangeInfo } from 'services/useExchangeInfo';
+import { useLocalStorage } from 'usehooks-ts';
 import { Button } from '../ui/button';
 import {
 	Dialog,
@@ -13,6 +14,24 @@ import {
 
 const Debug = () => {
 	const { data } = useExchangeInfo();
+	const [_filter, setFilter] = useLocalStorage('filter', '');
+	const filter = _filter.toLowerCase();
+
+	const filteredData = {
+		currencies: Object.values(data?.currencies || {}).filter(
+			(currency) =>
+				currency.id.toLowerCase().includes(filter) ||
+				currency.displayName.toLowerCase().includes(filter),
+		),
+		products: Object.values(data?.products || {}).filter(
+			(product) =>
+				product.id.toLowerCase().includes(filter) ||
+				product.displayName.toLowerCase().includes(filter) ||
+				product.baseAsset.toLowerCase().includes(filter) ||
+				product.quoteAsset.toLowerCase().includes(filter) ||
+				(product.wsName?.toLowerCase() || '').includes(filter),
+		),
+	};
 
 	return (
 		<div className="flex flex-col items-start gap-8 overflow-y-auto">
@@ -21,8 +40,9 @@ const Debug = () => {
 				<DialogDescription>hmm...</DialogDescription>
 			</div>
 
-			<pre className='text-xs h-96 overflow-auto'>
-				<code>{JSON.stringify(data, null, 2)}</code>
+			<input type='text' className='p-1 bg-neutral-900' value={filter} onChange={(e) => setFilter(e.target.value)} />
+			<pre className="text-xs h-96 overflow-auto">
+				<code>{JSON.stringify(filteredData, null, 2)}</code>
 			</pre>
 
 			<ClearQueryCacheButton />
