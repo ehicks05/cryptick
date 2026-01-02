@@ -1,3 +1,4 @@
+import { PointerActivationConstraints } from '@dnd-kit/dom';
 import { arrayMove } from '@dnd-kit/helpers';
 import { DragDropProvider, PointerSensor } from '@dnd-kit/react';
 import { isSortable, useSortable } from '@dnd-kit/react/sortable';
@@ -11,7 +12,11 @@ interface DndProviderProps {
 
 export const DndProvider = ({ ids, setIds, children }: DndProviderProps) => {
 	const sensors = [
-		PointerSensor.configure({ activationConstraints: { distance: { value: 10 } } }),
+		PointerSensor.configure({
+			activationConstraints: [
+				new PointerActivationConstraints.Distance({ value: 10 }),
+			],
+		}),
 	];
 
 	return (
