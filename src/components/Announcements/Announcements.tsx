@@ -4,6 +4,7 @@ import {
 	Dialog,
 	DialogClose,
 	DialogContent,
+	DialogDescription,
 	DialogTitle,
 	DialogTrigger,
 } from '../ui/dialog';
@@ -31,6 +32,7 @@ const Announcements = () => (
 	<div className="flex flex-col items-start gap-8 overflow-y-auto">
 		<div>
 			<DialogTitle>Announcements</DialogTitle>
+			<DialogDescription>and recent changes</DialogDescription>
 		</div>
 
 		<div>

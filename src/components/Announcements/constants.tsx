@@ -15,7 +15,7 @@ export const ANNOUNCEMENTS: Announcement[] = [
 		text: (
 			<div className="flex items-center gap-2">
 				Added support for Kraken.
-				<div className="size-8">
+				<div className="size-6">
 					<ExchangeIcon name="kraken" />
 				</div>
 			</div>
@@ -28,7 +28,7 @@ export const ANNOUNCEMENTS: Announcement[] = [
 		text: (
 			<div className="flex items-center gap-2">
 				Added support for Binance US.
-				<div className="size-8">
+				<div className="size-6">
 					<ExchangeIcon name="binance" />
 				</div>
 			</div>
