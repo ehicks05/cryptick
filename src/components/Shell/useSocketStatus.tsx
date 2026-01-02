@@ -14,8 +14,8 @@ export interface SocketStatus {
 export const SOCKET_STATUSES: Record<ReadyState, SocketStatus> = {
 	'-1': {
 		code: -1,
-		name: 'Uninstantiated',
-		class: { bg: 'bg-red-500' },
+		name: 'Unused',
+		class: { bg: 'bg-neutral-500' },
 	},
 	'0': {
 		code: 0,

@@ -38,7 +38,7 @@ const SocketStatus = () => {
 	const EXCHANGES = ['coinbase', 'binance', 'kraken'] as const;
 
 	return (
-		<div className="flex flex-col items-start gap-8 overflow-y-auto">
+		<div className="flex flex-col items-start gap-2 overflow-y-auto">
 			<div>
 				<DialogTitle>Socket Status</DialogTitle>
 				<DialogDescription>hmm...</DialogDescription>
@@ -46,7 +46,7 @@ const SocketStatus = () => {
 
 			{EXCHANGES.map((exchange) => (
 				<div key={exchange} className="flex items-center gap-2">
-					<div className="size-8">
+					<div className="size-6">
 						<ExchangeIcon name={exchange} />
 					</div>
 					<SocketStatusButton exchange={exchange} />
