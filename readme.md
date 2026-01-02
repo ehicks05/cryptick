@@ -2,7 +2,9 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/a5cdb7e5-9abd-42a7-946c-b17cfa51284e/deploy-status)](https://app.netlify.com/sites/admiring-jang-089013/deploys)
 
-Display price of Bitcoin and other cryptos from the coinbase pro api. Includes live-updating charts!
+Display price of Bitcoin and other cryptos with live-updating charts!
+
+Supports cryptos from Coinbase, Binance US, and Kraken.
 
 [crypto.ehicks.net](https://crypto.ehicks.net)
 
@@ -13,18 +15,18 @@ Display price of Bitcoin and other cryptos from the coinbase pro api. Includes l
 
 ### data notes
 
-data from cbpro includes:
+data from exchange apis includes:
 
 1. currencies and products - fetched once on pageload
-2. 24-stats and candles - fetched every minute
+2. candles and historic performance - fetched every minute
 3. ticker data - streams in constantly
 
 ### todos
 
 1. when hovering over a candle
-  - display stats for that candle somewhere
+   - display stats for that candle somewhere
 2. drag x
-  - when dragging to the past, fetch more candles. note: old candles don't change
+   - when dragging to the past, fetch more candles. note: old candles don't change
 3. 1w, 1m candles
 
 ### binance api notes
