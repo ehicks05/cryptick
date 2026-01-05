@@ -14,7 +14,7 @@ import {
 import { useSocketStatus } from './useSocketStatus';
 
 const SocketStatusButton = ({ exchange }: { exchange: Exchange | 'all' }) => {
-	const { socketStatus } = useSocketStatus(exchange);
+	const { [exchange]: socketStatus } = useSocketStatus();
 
 	return (
 		<div

@@ -3,7 +3,6 @@ import { ReadyState } from 'react-use-websocket';
 import { useBinanceWebsocket } from 'services/binance/useBinanceWebsocket';
 import { useCoinbaseWebsocket } from 'services/cbp/useCoinbaseWebsocket';
 import { useKrakenWebsocket } from 'services/kraken/useKrakenWebsocket';
-import type { Exchange } from 'types';
 
 export interface SocketStatus {
 	code: number;
@@ -39,7 +38,7 @@ export const SOCKET_STATUSES: Record<ReadyState, SocketStatus> = {
 	},
 } as const;
 
-export const useSocketStatus = (exchange: Exchange | 'all') => {
+export const useSocketStatus = () => {
 	const { readyState: coinbaseStatus } = useCoinbaseWebsocket();
 	const { readyState: binanceStatus } = useBinanceWebsocket();
 	const { readyState: krakenStatus } = useKrakenWebsocket();
@@ -59,20 +58,10 @@ export const useSocketStatus = (exchange: Exchange | 'all') => {
 		? enabledSockets[0]
 		: ReadyState.CONNECTING;
 
-	const _socketStatus =
-		exchange === 'all'
-			? mergedStatus
-			: exchange === 'coinbase'
-				? coinbaseStatus
-				: exchange === 'binance'
-					? binanceStatus
-					: exchange === 'kraken'
-						? krakenStatus
-						: mergedStatus;
-
-	const socketStatus = SOCKET_STATUSES[_socketStatus];
-
 	return {
-		socketStatus,
+		all: SOCKET_STATUSES[mergedStatus],
+		coinbase: SOCKET_STATUSES[coinbaseStatus],
+		binance: SOCKET_STATUSES[binanceStatus],
+		kraken: SOCKET_STATUSES[krakenStatus],
 	};
 };
