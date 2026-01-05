@@ -1,4 +1,3 @@
-import { ClearQueryCacheButton } from 'components/ClearQueryCacheButton';
 import { SettingsIcon } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
@@ -21,7 +20,6 @@ const Settings = () => (
 
 		<ProductPicker />
 		<ChartHeightPicker />
-		<ClearQueryCacheButton />
 
 		<DialogClose asChild>
 			<Button variant="secondary">Close</Button>
