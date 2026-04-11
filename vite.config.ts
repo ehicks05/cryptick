@@ -22,7 +22,7 @@ export default defineConfig({
   legacy: {
     inconsistentCjsInterop: true
   },
-  esbuild: {
-    keepNames: true
+  build: {
+    minify: false
   }
 });
