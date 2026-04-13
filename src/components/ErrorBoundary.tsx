@@ -30,16 +30,16 @@ class ErrorBoundary extends Component<Props, State> {
 		if (this.state.hasError) {
 			return (
 				<div className="flex flex-col gap-2 p-2">
-					<h1 className='text-2xl'>Sorry.. there was an error</h1>
+					<h1 className="text-2xl">Sorry.. there was an error</h1>
 					<p>Possible Fixes:</p>
 					<ol className="list-inside list-decimal">
 						<li>Refresh the page</li>
 						<li>Clear local storage</li>
 					</ol>
 					<ClearQueryCacheButton />
-
-					<div className='h-24'/>
+					<div className="h-24" />
 					Error Details:
+					<div>{this.state.error?.message}</div>
 					<code className="text-xs whitespace-pre-wrap">
 						{this.state.errorInfo?.componentStack?.trim()}
 					</code>
