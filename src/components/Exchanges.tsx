@@ -8,7 +8,7 @@ const ExchangeInfo = ({ exchange }: { exchange: Exchange }) => {
 			return {
 				currencies: exchange.currencies,
 				markets: exchange.markets,
-				ohlcv: await exchange.fetchOHLCV('BTC/USD', '15m'),
+				ohlcv: await exchange.fetchOHLCV('BTC/USD', '15m', exchange.parse8601('2020-01-01')),
 				ticker: await exchange.fetchTicker('BTC/USD'),
 			};
 		},
@@ -35,12 +35,12 @@ const ExchangeInfo = ({ exchange }: { exchange: Exchange }) => {
 			ohlcv:
 			<pre className="text-xs">{JSON.stringify(ohlcv?.length, null, 2)}</pre>
 			<pre className="text-xs">{JSON.stringify(ohlcv?.[0], null, 2)}</pre>
-			ticker:
-			<pre className="text-xs">{JSON.stringify(ticker, null, 2)}</pre>
-			Currency:
-			<pre className="text-xs">{JSON.stringify(currencies?.['BTC'], null, 2)}</pre>
-			Market:
-			<pre className="text-xs">{JSON.stringify(markets?.['BTC/USD'], null, 2)}</pre>
+			ticker.close:
+			<pre className="text-xs">{JSON.stringify(ticker.close, null, 2)}</pre>
+			Currency.id:
+			<pre className="text-xs">{JSON.stringify(currencies?.['BTC'].id, null, 2)}</pre>
+			Market.id:
+			<pre className="text-xs">{JSON.stringify(markets?.['BTC/USD'].id, null, 2)}</pre>
 		</div>
 	);
 };
