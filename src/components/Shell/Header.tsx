@@ -1,5 +1,7 @@
 import { AnnouncementsDialog } from 'components/Announcements/Announcements';
 import { ThemeToggle } from 'components/Theme/ThemeToggle';
+import { Button } from 'components/ui/button';
+import { Store } from 'lucide-react';
 import { Link } from 'wouter';
 import { APP } from '../../constants';
 import { SettingsDialog } from '../Settings/Settings';
@@ -26,6 +28,11 @@ export const Header = () => (
 		<Logo />
 
 		<div className="flex gap-2">
+			<Link to="/exchanges">
+				<Button size="icon" variant="outline">
+					<Store />
+				</Button>
+			</Link>
 			<SocketStatusDialog />
 			<AnnouncementsDialog />
 			<ThemeToggle />
