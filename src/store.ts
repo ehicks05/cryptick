@@ -32,7 +32,7 @@ export const usePrice = (productId: string) => {
 	const product = exchangeInfo?.products?.[productId];
 
 	// use candle data until a ticker trade comes in
-	const _last = candles?.[productId]?.[0].close || 0;
+	const _last = candles?.[productId]?.[0]?.close || 0;
 	const last = _last ? formatPrice(_last, product?.minQuoteDigits || 0) : '';
 
 	return price || last;
