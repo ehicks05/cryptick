@@ -56,7 +56,7 @@ const queryExchanges = async ({ productIds, granularity, start, end }: Params) =
 
 /**
  * Uses the selected chartTimespan (1d, 1w, etc...) to pick a granularity
- * and time range to fetch. 
+ * and time range to fetch.
  */
 export const useCandles = (productIds: string[]) => {
 	const { timespan } = useChartTimespan();
@@ -68,6 +68,7 @@ export const useCandles = (productIds: string[]) => {
 		queryKey: ['candles', productIds],
 		queryFn: () => queryExchanges({ productIds, granularity, start, end }),
 		staleTime: 1000 * 60,
+		refetchOnWindowFocus: 'always',
 		refetchInterval: msToNextMinute,
 	});
 
