@@ -1,8 +1,8 @@
-import type { CandleGranularity } from '@/services/cbp/types/product';
-import type { ChartTimespan, SizeUnit } from '@/types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { useShallow } from 'zustand/react/shallow';
+import type { CandleGranularity } from '@/services/cbp/types/product';
+import type { ChartTimespan, SizeUnit } from '@/types';
 import { APP } from '../constants';
 import { DEFAULT } from './constants';
 

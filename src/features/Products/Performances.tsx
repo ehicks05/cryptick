@@ -1,7 +1,7 @@
+import { cn } from 'cn';
 import { BG_SOLIDS, TEXT_COLORS } from '@/directionalStyles';
 import { useChartTimespan } from '@/hooks/useStorage';
 import { formatPercent } from '@/lib/format';
-import { cn } from 'cn';
 import {
 	type Performance,
 	useHistoricPerformance,

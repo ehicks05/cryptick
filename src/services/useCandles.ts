@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useCandleGranularity, useChartTimespan } from '@/hooks/useStorage';
 import { getTimeAgo, msToNextMinute, toUnixTimestamp } from '@/lib/date';
-import { useEffect } from 'react';
 import {
 	CHART_TIMESPAN_GRANULARITIES,
 	CHART_TIMESPAN_SECONDS,

@@ -1,5 +1,5 @@
-import { useProductIds } from '@/hooks/useStorage';
 import useWebSocket from 'react-use-websocket';
+import { useProductIds } from '@/hooks/useStorage';
 import { WS_URL } from './constants';
 
 export const useCoinbaseWebsocket = () => {

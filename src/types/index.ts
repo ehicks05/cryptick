@@ -1,8 +1,8 @@
 export * from './timespan';
 
 export interface CryptickCurrency {
-  id: string;
-  displayName: string;
+	id: string;
+	displayName: string;
 }
 
 export interface CryptickProduct {
@@ -15,8 +15,8 @@ export interface CryptickProduct {
 
 	minBaseDigits: number;
 	minQuoteDigits: number;
-	
-  wsName?: string; // kraken
+
+	wsName?: string; // kraken
 }
 
 export interface CryptickCandle {

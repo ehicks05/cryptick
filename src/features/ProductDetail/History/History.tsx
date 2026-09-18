@@ -1,6 +1,6 @@
 import { useThrottle } from '@uidotdev/usehooks';
-import { useHistorySizeUnit } from '@/hooks/useStorage';
 import { cn } from 'cn';
+import { useHistorySizeUnit } from '@/hooks/useStorage';
 import type { TickerMessage } from '@/services/cbp/types/ws-types';
 import { useExchangeInfo } from '@/services/useExchangeInfo';
 import { useStore } from '@/store';

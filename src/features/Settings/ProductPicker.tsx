@@ -40,7 +40,7 @@ export const ProductPicker = () => {
 		<div className="grid gap-4">
 			<div className="w-fit">
 				<div>Toggle Products</div>
-				<Combobox items={items}  limit={10}>
+				<Combobox items={items} limit={10}>
 					<ComboboxInput placeholder="Search products..." />
 					<ComboboxContent>
 						<ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -48,7 +48,7 @@ export const ProductPicker = () => {
 							{(product) => (
 								<ComboboxItem
 									key={product.value}
-                  value={product}
+									value={product}
 									onClick={() => toggleProduct(product.value)}
 								>
 									<ExchangeIcon name={product.exchange} />

@@ -1,6 +1,6 @@
+import useWebSocket from 'react-use-websocket';
 import { useProductIds } from '@/hooks/useStorage';
 import { formatPrice, formatTime } from '@/lib/format';
-import useWebSocket from 'react-use-websocket';
 import { OrderSide } from '@/services/cbp/types/common';
 import type { TickerMessage } from '@/services/cbp/types/ws-types';
 import { useExchangeInfo } from '@/services/useExchangeInfo';

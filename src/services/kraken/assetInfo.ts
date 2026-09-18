@@ -11,8 +11,7 @@ const toCryptickProduct = ([id, assetPair]: [
 	id: string,
 	assetPair: AssetPair,
 ]): CryptickProduct => {
-  
-  // deal with kraken naming inconsistencies
+	// deal with kraken naming inconsistencies
 	const wsName = assetPair.wsname === 'XBT/USD' ? 'BTC/USD' : assetPair.wsname;
 
 	return {

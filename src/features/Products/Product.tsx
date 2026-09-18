@@ -1,7 +1,7 @@
-import { BORDER_COLORS } from '@/directionalStyles';
-import { mergeCandles } from '@/lib/candles';
 import { cn } from 'cn';
 import React from 'react';
+import { BORDER_COLORS } from '@/directionalStyles';
+import { mergeCandles } from '@/lib/candles';
 import { Performances } from './Performances';
 import { ProductSummary } from './ProductSummary';
 import Chart from './SimpleChart/Chart';

@@ -1,9 +1,9 @@
 import { useThrottle } from '@uidotdev/usehooks';
+import { create } from 'zustand';
 import { formatPrice } from '@/lib/format';
 import type { TickerMessage } from '@/services/cbp/types/ws-types';
 import { useCandles } from '@/services/useCandles';
 import { useExchangeInfo } from '@/services/useExchangeInfo';
-import { create } from 'zustand';
 
 export interface AppState {
 	ticker: Record<string, TickerMessage[]>;
