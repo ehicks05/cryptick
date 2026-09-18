@@ -1,8 +1,8 @@
 import { Link } from 'wouter';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { APP } from '@/constants';
-import { AnnouncementsDialog } from '@/features/Announcements/Announcements';
 import { SettingsDialog } from '@/features/Settings/Settings';
+import { AnnouncementsDialog } from './Announcements/Announcements';
 import { DebugDialog } from './Debug';
 import { SocketStatusDialog } from './SocketStatusDialog';
 
