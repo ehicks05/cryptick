@@ -1,36 +1,86 @@
+import { X } from 'lucide-react';
+import { ExchangeIcon } from '@/components/ExchangeIcon';
+import { Button } from '@/components/ui/button';
+import {
+	Combobox,
+	ComboboxContent,
+	ComboboxEmpty,
+	ComboboxInput,
+	ComboboxItem,
+	ComboboxList,
+} from '@/components/ui/combobox';
+import {
+	Item,
+	ItemActions,
+	ItemContent,
+	ItemGroup,
+	ItemMedia,
+	ItemTitle,
+} from '@/components/ui/item';
 import { useProductIds } from '@/hooks/useStorage';
 import { useExchangeInfo } from '@/services/useExchangeInfo';
 import { useToggleProducts } from '@/services/useToggleProducts';
-import { ComboboxDemo } from '../../components/ui/combobox';
 
 export const ProductPicker = () => {
 	const { toggleProduct } = useToggleProducts();
 	const { productIds } = useProductIds();
 
 	const { data } = useExchangeInfo();
-	const products = Object.values(data?.products || {});
+	const products = data?.products || {};
 
-	const items = products
+	const items = Object.values(products)
+		.filter((product) => !productIds.includes(product.id))
 		.map(({ id, displayName, exchange }) => ({
 			label: displayName,
 			value: id,
 			exchange,
-		}))
-		.toSorted((o1, o2) => {
-			const o1v = productIds.includes(o1.value) ? -1 : 1;
-			const o2v = productIds.includes(o2.value) ? -1 : 1;
-
-			return o1v - o2v;
-		});
+		}));
 
 	return (
-		<div className="flex flex-col">
+		<div className="flex flex-col gap-4">
 			<div>Toggle Products</div>
-			<ComboboxDemo
-				items={items}
-				selectedItems={productIds}
-				onSelect={(value) => toggleProduct(value)}
-			/>
+			<Combobox items={items} limit={10}>
+				<ComboboxInput placeholder="Search products..." />
+				<ComboboxContent>
+					<ComboboxEmpty>No items found.</ComboboxEmpty>
+					<ComboboxList>
+						{(product) => (
+							<ComboboxItem
+								key={product.value}
+								value={product}
+								onClick={() => toggleProduct(product.value)}
+							>
+								<ExchangeIcon name={product.exchange} />
+								{product.label}
+							</ComboboxItem>
+						)}
+					</ComboboxList>
+				</ComboboxContent>
+			</Combobox>
+
+			<ItemGroup>
+				{productIds
+					.map((productId) => products[productId])
+					.map((product) => (
+						<Item key={product.id} variant="muted" size="xs">
+							<ItemMedia variant="image">
+								<ExchangeIcon name={product.exchange} />
+							</ItemMedia>
+							<ItemContent>
+								<ItemTitle>{product.displayName}</ItemTitle>
+							</ItemContent>
+							<ItemActions>
+								<Button
+									variant="destructive"
+									size="icon"
+									onClick={() => toggleProduct(product.id)}
+								>
+									<X />
+								</Button>
+							</ItemActions>
+						</Item>
+					))}
+			</ItemGroup>
 		</div>
 	);
 };

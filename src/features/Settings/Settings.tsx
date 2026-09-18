@@ -1,5 +1,5 @@
 import { SettingsIcon } from 'lucide-react';
-import { Button } from '../../components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
 	Dialog,
 	DialogClose,
@@ -9,14 +9,13 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '../../components/ui/dialog';
+} from '@/components/ui/dialog';
 import { ChartHeightPicker } from './ChartHeightPicker';
-
-// import { ProductPicker } from './ProductPicker';
+import { ProductPicker } from './ProductPicker';
 
 const Settings = () => (
 	<div className="flex flex-col items-start gap-8 overflow-y-auto">
-		{/*<ProductPicker />*/}
+		<ProductPicker />
 		<ChartHeightPicker />
 	</div>
 );
