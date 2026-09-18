@@ -7,7 +7,6 @@ import {
 	CHART_TIMESPAN_SECONDS,
 	EXCHANGES,
 } from '@/types';
-import { getKlinesForProducts } from './binance/klines';
 import { getCandlesForProducts } from './cbp/endpoints/candles';
 import type { CandleGranularity } from './cbp/types/product';
 import { getOhlcsForProducts } from './kraken/ohlc';
@@ -21,7 +20,7 @@ interface Params {
 }
 
 const queryExchanges = async ({ productIds, granularity, start, end }: Params) => {
-	const [coinbaseCandles, binanceCandles, krakenCandles] = await Promise.all([
+	const [coinbaseCandles, krakenCandles] = await Promise.all([
 		getCandlesForProducts({
 			productIds: productIds
 				.filter((p) => p.startsWith(EXCHANGES.coinbase))
@@ -29,14 +28,6 @@ const queryExchanges = async ({ productIds, granularity, start, end }: Params) =
 			granularity,
 			start,
 			end,
-		}),
-		getKlinesForProducts({
-			symbols: productIds
-				.filter((p) => p.startsWith(EXCHANGES.binance))
-				.map(removeExchange),
-			interval: granularity,
-			startTime: start,
-			endTime: end,
 		}),
 		getOhlcsForProducts({
 			pairs: productIds
@@ -49,7 +40,6 @@ const queryExchanges = async ({ productIds, granularity, start, end }: Params) =
 
 	return {
 		...coinbaseCandles,
-		...binanceCandles,
 		...krakenCandles,
 	};
 };

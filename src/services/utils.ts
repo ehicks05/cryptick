@@ -25,5 +25,4 @@ export const keyByProductId = <
 export const removeExchange = (productId: string) =>
 	productId
 		.replace(`${EXCHANGES.coinbase}:`, '')
-		.replace(`${EXCHANGES.binance}:`, '')
 		.replace(`${EXCHANGES.kraken}:`, '');

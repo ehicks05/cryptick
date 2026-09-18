@@ -1,6 +1,5 @@
 import { ReadyState } from 'react-use-websocket';
 import { useProductIds } from '@/hooks/useStorage';
-import { useBinanceWebsocket } from '@/services/binance/useBinanceWebsocket';
 import { useCoinbaseWebsocket } from '@/services/cbp/useCoinbaseWebsocket';
 import { useKrakenWebsocket } from '@/services/kraken/useKrakenWebsocket';
 
@@ -40,17 +39,14 @@ export const SOCKET_STATUSES: Record<ReadyState, SocketStatus> = {
 
 export const useSocketStatus = () => {
 	const { readyState: coinbaseStatus } = useCoinbaseWebsocket();
-	const { readyState: binanceStatus } = useBinanceWebsocket();
 	const { readyState: krakenStatus } = useKrakenWebsocket();
 	const { productIds } = useProductIds();
 
 	const isCoinbaseProductSelected = productIds.some((id) => id.includes('coinbase'));
-	const isBinanceProductSelected = productIds.some((id) => id.includes('binance'));
 	const isKrakenProductSelected = productIds.some((id) => id.includes('kraken'));
 
 	const enabledSockets = [
 		...(isCoinbaseProductSelected ? [coinbaseStatus] : []),
-		...(isBinanceProductSelected ? [binanceStatus] : []),
 		...(isKrakenProductSelected ? [krakenStatus] : []),
 	];
 
@@ -61,7 +57,6 @@ export const useSocketStatus = () => {
 	return {
 		all: SOCKET_STATUSES[mergedStatus],
 		coinbase: SOCKET_STATUSES[coinbaseStatus],
-		binance: SOCKET_STATUSES[binanceStatus],
 		kraken: SOCKET_STATUSES[krakenStatus],
 	};
 };

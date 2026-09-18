@@ -12,7 +12,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog';
-import type { Exchange } from '@/types';
+import { EXCHANGES, type Exchange } from '@/types';
 import { useSocketStatus } from './useSocketStatus';
 
 const SocketStatusDot = ({ exchange }: { exchange: Exchange | 'all' }) => {
@@ -37,11 +37,9 @@ const SocketStatusDot = ({ exchange }: { exchange: Exchange | 'all' }) => {
 };
 
 const SocketStatus = () => {
-	const EXCHANGES = ['coinbase', 'binance', 'kraken'] as const;
-
 	return (
 		<div className="flex flex-col items-start gap-2 overflow-y-auto">
-			{EXCHANGES.map((exchange) => (
+			{Object.values(EXCHANGES).map((exchange) => (
 				<div key={exchange} className="flex items-center gap-2">
 					<div className="size-6">
 						<ExchangeIcon name={exchange} />

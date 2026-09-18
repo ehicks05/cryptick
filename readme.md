@@ -4,7 +4,7 @@
 
 Display price of Bitcoin and other cryptos with live-updating charts!
 
-Supports cryptos from Coinbase, Binance US, and Kraken.
+Supports cryptos from Coinbase and Kraken.
 
 [crypto.ehicks.net](https://crypto.ehicks.net)
 
@@ -28,25 +28,3 @@ data from exchange apis includes:
 2. drag x
    - when dragging to the past, fetch more candles. note: old candles don't change
 3. 1w, 1m candles
-
-### binance api notes
-
-1. Higher rate limits
-2. More candle granularities:
-
-CB: 1m, 5m, 15m, 1h, 6h, and 1d
-
-Binance:
-
-| Interval | `interval` value                    |
-| -------- | ----------------------------------- |
-| seconds  | `1s`                                |
-| minutes  | `1m`, `3m`, `5m`, `15m`, `30m`      |
-| hours    | `1h`, `2h`, `4h`, `6h`, `8h`, `12h` |
-| days     | `1d`, `3d`                          |
-| weeks    | `1w`                                |
-| months   | `1M`                                |
-3. larger candle counts per request
-
-CB: 300
-Binance: 1000

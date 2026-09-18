@@ -1,4 +1,4 @@
-import { CircleCheck, CirclePlus } from 'lucide-react';
+import { CircleCheck, CirclePlus, CircleX } from 'lucide-react';
 import { ExchangeIcon } from '@/components/ExchangeIcon';
 
 export interface Announcement {
@@ -9,6 +9,14 @@ export interface Announcement {
 }
 
 export const ANNOUNCEMENTS: Announcement[] = [
+	{
+		id: 4,
+		date: new Date(2026, 8, 18),
+		text: (
+			<div className="flex items-center gap-2">Remove support for Binance US.</div>
+		),
+		Icon: <CircleX className="text-red-500" />,
+	},
 	{
 		id: 3,
 		date: new Date(2026, 0, 1),
@@ -26,12 +34,7 @@ export const ANNOUNCEMENTS: Announcement[] = [
 		id: 2,
 		date: new Date(2025, 11, 18),
 		text: (
-			<div className="flex items-center gap-2">
-				Added support for Binance US.
-				<div className="size-6">
-					<ExchangeIcon name="binance" />
-				</div>
-			</div>
+			<div className="flex items-center gap-2">Added support for Binance US.</div>
 		),
 		Icon: <CircleCheck className="text-green-500" />,
 	},

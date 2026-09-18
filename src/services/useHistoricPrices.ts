@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { msToNextMinute, subSeconds, toUnixTimestamp } from '@/lib/date';
 import { CHART_TIMESPAN_SECONDS, EXCHANGES } from '@/types';
-import { getKlinesForProducts } from './binance/klines';
 import { getCandlesForProducts } from './cbp/endpoints/candles';
 import { CandleGranularity } from './cbp/types/product';
 import { getOhlcsForProducts } from './kraken/ohlc';
@@ -13,7 +12,7 @@ const getHistoricPricesForProducts = async (productIds: string[]) => {
 
 	const promises = [0, ...Object.values(CHART_TIMESPAN_SECONDS)].map(
 		async (seconds) => {
-			const [coinbaseCandles, binanceCandles, krakenCandles] = await Promise.all([
+			const [coinbaseCandles, krakenCandles] = await Promise.all([
 				getCandlesForProducts({
 					productIds: productIds
 						.filter((p) => p.startsWith(EXCHANGES.coinbase))
@@ -21,14 +20,6 @@ const getHistoricPricesForProducts = async (productIds: string[]) => {
 					granularity: CandleGranularity.ONE_MINUTE,
 					start: toUnixTimestamp(subSeconds(new Date(), seconds + WINDOW)),
 					end: toUnixTimestamp(subSeconds(new Date(), seconds)),
-				}),
-				getKlinesForProducts({
-					symbols: productIds
-						.filter((p) => p.startsWith(EXCHANGES.binance))
-						.map(removeExchange),
-					interval: CandleGranularity.ONE_MINUTE,
-					startTime: toUnixTimestamp(subSeconds(new Date(), seconds + WINDOW)),
-					endTime: toUnixTimestamp(subSeconds(new Date(), seconds)),
 				}),
 				seconds === 0
 					? getOhlcsForProducts({
@@ -49,7 +40,6 @@ const getHistoricPricesForProducts = async (productIds: string[]) => {
 
 			return {
 				...coinbaseCandles,
-				...binanceCandles,
 				...krakenCandles,
 			};
 		},
