@@ -1,6 +1,5 @@
 import { Bug } from 'lucide-react';
 import { useLocalStorage } from 'usehooks-ts';
-import { ClearQueryCacheButton } from '@/components/ClearQueryCacheButton';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
@@ -14,6 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useExchangeInfo } from '@/services/useExchangeInfo';
+import { ClearQueryCacheButton } from './ClearQueryCacheButton';
 
 const Debug = () => {
 	const { data } = useExchangeInfo();

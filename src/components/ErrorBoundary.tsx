@@ -1,5 +1,4 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { ClearQueryCacheButton } from './ClearQueryCacheButton';
 
 interface Props {
 	children?: ReactNode;
@@ -36,7 +35,6 @@ class ErrorBoundary extends Component<Props, State> {
 						<li>Refresh the page</li>
 						<li>Clear local storage</li>
 					</ol>
-					<ClearQueryCacheButton />
 					<div className="h-24" />
 					Error Details:
 					<div>{this.state.error?.message}</div>

@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 
 export const ClearQueryCacheButton = () => {
 	const queryClient = useQueryClient();
