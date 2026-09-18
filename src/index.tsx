@@ -4,8 +4,8 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from '@/components/ui/theme-provider';
-import { App } from './features/App';
 import { APP } from './constants';
+import { App } from './features/App';
 import './index.css';
 
 const queryClient = new QueryClient({

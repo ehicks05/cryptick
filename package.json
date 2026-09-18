@@ -15,6 +15,8 @@
 		"@dnd-kit/helpers": "^0.5.0",
 		"@dnd-kit/react": "^0.5.0",
 		"@fontsource-variable/geist": "^5.3.0",
+		"@fontsource/cal-sans": "^5.3.0",
+		"@fontsource/righteous": "^5.3.0",
 		"@tanstack/devtools-vite": "^0.6.0",
 		"@tanstack/query-async-storage-persister": "^5.99.0",
 		"@tanstack/react-devtools": "^0.10.2",
