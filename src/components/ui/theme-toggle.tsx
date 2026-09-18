@@ -15,11 +15,10 @@ export function ThemeToggle() {
 		<DropdownMenu>
 			<DropdownMenuTrigger
 				render={
-          <Button variant="outline" className='w-full flex items-center gap-1' size="icon">
+          <Button variant="outline" size="icon">
             {theme === 'light' && <Sun />}
             {theme === 'dark' && <Moon />}
             {theme === 'system' && <Laptop />}
-            {`${theme[0].toUpperCase()}${theme.slice(1)}`}
 					</Button>
 				}
 			/>
