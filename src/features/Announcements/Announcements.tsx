@@ -5,6 +5,8 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
+	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog';
@@ -31,41 +33,41 @@ const AnnouncementItem = ({ announcement: { date, text, Icon } }: Props) => {
 const Announcements = () => (
 	<div className="flex flex-col items-start gap-8 overflow-y-auto">
 		<div>
-			<DialogTitle>Announcements</DialogTitle>
-			<DialogDescription>and recent changes</DialogDescription>
-		</div>
-
-		<div>
 			{ANNOUNCEMENTS.map((announcement, i) => (
 				<div key={announcement.id}>
 					<AnnouncementItem announcement={announcement} />
 					{i < ANNOUNCEMENTS.length - 1 && (
 						<div className="h-8">
-							<div className="h-8 w-0.5 ml-[11px] bg-muted" />
+							<div className="h-8 w-0.5 ml-2.75 bg-muted" />
 						</div>
 					)}
 				</div>
 			))}
 		</div>
-
-		<DialogClose asChild>
-			<Button variant="secondary">Close</Button>
-		</DialogClose>
 	</div>
 );
 
 export const AnnouncementsDialog = () => {
 	return (
 		<Dialog modal>
-			<DialogTrigger asChild>
-				<Button variant="outline" size="icon">
-					<Bell />
-				</Button>
-			</DialogTrigger>
+			<DialogTrigger
+				render={
+					<Button variant="outline" size="icon">
+						<Bell />
+					</Button>
+				}
+			/>
 			<DialogContent>
-				<div>
-					<Announcements />
-				</div>
+				<DialogHeader>
+					<DialogTitle>Announcements</DialogTitle>
+					<DialogDescription>and recent changes</DialogDescription>
+				</DialogHeader>
+
+				<Announcements />
+
+				<DialogFooter>
+					<DialogClose render={<Button variant="outline">Close</Button>} />
+				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	);

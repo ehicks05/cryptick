@@ -5,40 +5,42 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
+	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from '../../components/ui/dialog';
 import { ChartHeightPicker } from './ChartHeightPicker';
+
 // import { ProductPicker } from './ProductPicker';
 
 const Settings = () => (
 	<div className="flex flex-col items-start gap-8 overflow-y-auto">
-		<div>
-			<DialogTitle>Settings</DialogTitle>
-			<DialogDescription>Adjust your settings here</DialogDescription>
-		</div>
-
 		{/*<ProductPicker />*/}
 		<ChartHeightPicker />
-
-		<DialogClose asChild>
-			<Button variant="secondary">Close</Button>
-		</DialogClose>
 	</div>
 );
 
 export const SettingsDialog = () => {
 	return (
 		<Dialog modal>
-			<DialogTrigger asChild>
-				<Button variant="outline" size="icon">
-					<SettingsIcon />
-				</Button>
-			</DialogTrigger>
+			<DialogTrigger
+				render={
+					<Button variant="outline" size="icon">
+						<SettingsIcon />
+					</Button>
+				}
+			/>
 			<DialogContent>
-				<div>
-					<Settings />
-				</div>
+				<DialogHeader>
+					<DialogTitle>Settings</DialogTitle>
+					<DialogDescription>Adjust your settings here</DialogDescription>
+				</DialogHeader>
+				<Settings />
+
+				<DialogFooter>
+					<DialogClose render={<Button variant="secondary">Close</Button>} />
+				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	);

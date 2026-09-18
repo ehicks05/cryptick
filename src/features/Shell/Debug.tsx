@@ -7,6 +7,8 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
+	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog';
@@ -35,11 +37,6 @@ const Debug = () => {
 
 	return (
 		<div className="flex flex-col items-start gap-8 overflow-y-auto">
-			<div>
-				<DialogTitle>Debug</DialogTitle>
-				<DialogDescription>hmm...</DialogDescription>
-			</div>
-
 			<input
 				type="text"
 				className="p-1 bg-neutral-900"
@@ -51,25 +48,29 @@ const Debug = () => {
 			</pre>
 
 			<ClearQueryCacheButton />
-			<DialogClose asChild>
-				<Button variant="secondary">Close</Button>
-			</DialogClose>
 		</div>
 	);
 };
 
 export const DebugDialog = () => {
 	return (
-		<Dialog modal>
-			<DialogTrigger asChild>
-				<Button variant="outline" size="icon">
-					<Bug />
-				</Button>
-			</DialogTrigger>
+		<Dialog>
+			<DialogTrigger
+				render={
+					<Button variant="outline" size="icon">
+						<Bug />
+					</Button>
+				}
+			/>
 			<DialogContent>
-				<div>
-					<Debug />
-				</div>
+				<DialogHeader>
+					<DialogTitle>Debug</DialogTitle>
+					<DialogDescription>hmm...</DialogDescription>
+				</DialogHeader>
+				<Debug />
+				<DialogFooter>
+					<DialogClose render={<Button variant="outline">Close</Button>} />
+				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	);
