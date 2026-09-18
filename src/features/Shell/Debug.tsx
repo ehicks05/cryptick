@@ -12,6 +12,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import { useExchangeInfo } from '@/services/useExchangeInfo';
 
 const Debug = () => {
@@ -37,9 +38,8 @@ const Debug = () => {
 
 	return (
 		<div className="flex flex-col items-start gap-8 overflow-y-auto">
-			<input
+			<Input
 				type="text"
-				className="p-1 bg-neutral-900"
 				value={filter}
 				onChange={(e) => setFilter(e.target.value)}
 			/>
