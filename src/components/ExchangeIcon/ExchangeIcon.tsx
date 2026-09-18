@@ -1,6 +1,6 @@
 import { TbBrandCoinbase } from 'react-icons/tb';
+import Kraken from '@/assets/kraken-logo.svg?react';
 import type { Exchange } from '@/types';
-import Kraken from '../../assets/kraken-logo.svg?react';
 
 const CbIcon = () => (
 	<TbBrandCoinbase

@@ -1,4 +1,13 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Button } from './ui/button';
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from './ui/card';
 
 interface Props {
 	children?: ReactNode;
@@ -28,20 +37,36 @@ class ErrorBoundary extends Component<Props, State> {
 	public render() {
 		if (this.state.hasError) {
 			return (
-				<div className="flex flex-col gap-2 p-2">
-					<h1 className="text-2xl">Sorry.. there was an error</h1>
-					<p>Possible Fixes:</p>
-					<ol className="list-inside list-decimal">
-						<li>Refresh the page</li>
-						<li>Clear local storage</li>
-					</ol>
-					<div className="h-24" />
-					Error Details:
-					<div>{this.state.error?.message}</div>
-					<code className="text-xs whitespace-pre-wrap">
-						{this.state.errorInfo?.componentStack?.trim()}
-					</code>
-				</div>
+				<Card className="w-fit mx-auto my-auto">
+					<CardHeader>
+						<CardTitle>Sorry...</CardTitle>
+						<CardDescription>Something went wrong</CardDescription>
+					</CardHeader>
+					<CardContent className="overflow-auto grid gap-4">
+						<div>
+							Error: {this.state.error?.message}
+							<pre>
+								<code className="text-xs whitespace-pre-wrap">
+									{this.state.errorInfo?.componentStack?.trim()}
+								</code>
+							</pre>
+						</div>
+					</CardContent>
+					<CardFooter className="gap-2">
+						<Button variant="outline" onClick={() => location.reload()}>
+							Reload Page
+						</Button>
+						<Button
+							variant="destructive"
+							onClick={() => {
+								localStorage.clear();
+								location.reload();
+							}}
+						>
+							Clear Local Storage
+						</Button>
+					</CardFooter>
+				</Card>
 			);
 		}
 
