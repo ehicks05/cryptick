@@ -4,7 +4,6 @@ import {
 	Dialog,
 	DialogClose,
 	DialogContent,
-	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
@@ -60,7 +59,6 @@ export const AnnouncementsDialog = () => {
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Announcements</DialogTitle>
-					<DialogDescription>and recent changes</DialogDescription>
 				</DialogHeader>
 
 				<Announcements />

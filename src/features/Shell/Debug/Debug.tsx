@@ -5,7 +5,6 @@ import {
 	Dialog,
 	DialogClose,
 	DialogContent,
-	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
@@ -65,7 +64,6 @@ export const DebugDialog = () => {
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Debug</DialogTitle>
-					<DialogDescription>hmm...</DialogDescription>
 				</DialogHeader>
 				<Debug />
 				<DialogFooter>
