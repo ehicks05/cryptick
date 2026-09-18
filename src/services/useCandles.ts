@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { useCandleGranularity, useChartTimespan } from 'hooks/useStorage';
-import { getTimeAgo, msToNextMinute, toUnixTimestamp } from 'lib/date';
+import { useCandleGranularity, useChartTimespan } from '@/hooks/useStorage';
+import { getTimeAgo, msToNextMinute, toUnixTimestamp } from '@/lib/date';
 import { useEffect } from 'react';
 import {
 	CHART_TIMESPAN_GRANULARITIES,
 	CHART_TIMESPAN_SECONDS,
 	EXCHANGES,
-} from 'types';
+} from '@/types';
 import { getKlinesForProducts } from './binance/klines';
 import { getCandlesForProducts } from './cbp/endpoints/candles';
 import type { CandleGranularity } from './cbp/types/product';

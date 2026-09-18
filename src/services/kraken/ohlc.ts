@@ -1,6 +1,6 @@
-import { CandleGranularity } from 'services/cbp/types/product';
-import { keyByProductId } from 'services/utils';
-import type { CryptickCandle } from 'types';
+import { CandleGranularity } from '@/services/cbp/types/product';
+import { keyByProductId } from '@/services/utils';
+import type { CryptickCandle } from '@/types';
 import { client } from './client';
 import { throttle } from './throttle';
 import type { Ohlc, OhlcResponse } from './types';

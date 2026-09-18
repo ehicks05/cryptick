@@ -1,8 +1,8 @@
-import { ExchangeIcon } from 'components/ExchangeIcon';
-import { Button } from 'components/ui/button';
-import { cn } from 'lib/utils';
+import { ExchangeIcon } from '@/components/ExchangeIcon';
+import { Button } from '@/components/ui/button';
+import { cn } from 'cn';
 import { ReadyState } from 'react-use-websocket';
-import type { Exchange } from 'types';
+import type { Exchange } from '@/types';
 import {
 	Dialog,
 	DialogClose,

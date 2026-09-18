@@ -1,8 +1,8 @@
-import { useProductIds } from 'hooks/useStorage';
+import { useProductIds } from '@/hooks/useStorage';
 import { ReadyState } from 'react-use-websocket';
-import { useBinanceWebsocket } from 'services/binance/useBinanceWebsocket';
-import { useCoinbaseWebsocket } from 'services/cbp/useCoinbaseWebsocket';
-import { useKrakenWebsocket } from 'services/kraken/useKrakenWebsocket';
+import { useBinanceWebsocket } from '@/services/binance/useBinanceWebsocket';
+import { useCoinbaseWebsocket } from '@/services/cbp/useCoinbaseWebsocket';
+import { useKrakenWebsocket } from '@/services/kraken/useKrakenWebsocket';
 
 export interface SocketStatus {
 	code: number;

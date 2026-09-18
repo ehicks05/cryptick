@@ -1,6 +1,6 @@
-import { ClearQueryCacheButton } from 'components/ClearQueryCacheButton';
+import { ClearQueryCacheButton } from '@/components/ClearQueryCacheButton';
 import { Bug } from 'lucide-react';
-import { useExchangeInfo } from 'services/useExchangeInfo';
+import { useExchangeInfo } from '@/services/useExchangeInfo';
 import { useLocalStorage } from 'usehooks-ts';
 import { Button } from '../ui/button';
 import {

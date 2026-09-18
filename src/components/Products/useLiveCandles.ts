@@ -1,5 +1,5 @@
-import { useCandles } from 'services/useCandles';
-import { usePrice } from 'store';
+import { useCandles } from '@/services/useCandles';
+import { usePrice } from '@/store';
 
 interface Props {
 	productId: string;

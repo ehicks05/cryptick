@@ -1,5 +1,5 @@
 import { range } from 'es-toolkit';
-import type { CryptickCandle } from 'types';
+import type { CryptickCandle } from '@/types';
 import { keyByProductId } from '../../utils';
 import type { CandleGranularity, CoinbaseCandle } from '../types/product';
 import { PRODUCT_URL } from './constants';

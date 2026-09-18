@@ -1,6 +1,6 @@
-import { getChange } from 'lib/math';
-import { useThrottledPrice } from 'store';
-import { CHART_TIMESPANS, type ChartTimespan, type Direction } from 'types';
+import { getChange } from '@/lib/math';
+import { useThrottledPrice } from '@/store';
+import { CHART_TIMESPANS, type ChartTimespan, type Direction } from '@/types';
 import { useHistoricPrices } from './useHistoricPrices';
 
 export interface Performance {

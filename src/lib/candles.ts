@@ -1,5 +1,5 @@
 import { sum } from 'es-toolkit';
-import type { CryptickCandle } from 'types';
+import type { CryptickCandle } from '@/types';
 import { getChange } from './math';
 
 /**

@@ -1,11 +1,11 @@
-import { BG_SOLIDS, TEXT_COLORS } from 'directionalStyles';
-import { useChartTimespan } from 'hooks/useStorage';
-import { formatPercent } from 'lib/format';
-import { cn } from 'lib/utils';
+import { BG_SOLIDS, TEXT_COLORS } from '@/directionalStyles';
+import { useChartTimespan } from '@/hooks/useStorage';
+import { formatPercent } from '@/lib/format';
+import { cn } from 'cn';
 import {
 	type Performance,
 	useHistoricPerformance,
-} from 'services/useHistoricPerformance';
+} from '@/services/useHistoricPerformance';
 
 interface TimespanPerformanceProps {
 	change: Performance;

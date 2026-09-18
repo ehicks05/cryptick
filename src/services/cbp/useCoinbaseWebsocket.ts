@@ -1,4 +1,4 @@
-import { useProductIds } from 'hooks/useStorage';
+import { useProductIds } from '@/hooks/useStorage';
 import useWebSocket from 'react-use-websocket';
 import { WS_URL } from './constants';
 

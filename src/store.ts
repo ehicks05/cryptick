@@ -1,8 +1,8 @@
 import { useThrottle } from '@uidotdev/usehooks';
-import { formatPrice } from 'lib/format';
-import type { TickerMessage } from 'services/cbp/types/ws-types';
-import { useCandles } from 'services/useCandles';
-import { useExchangeInfo } from 'services/useExchangeInfo';
+import { formatPrice } from '@/lib/format';
+import type { TickerMessage } from '@/services/cbp/types/ws-types';
+import { useCandles } from '@/services/useCandles';
+import { useExchangeInfo } from '@/services/useExchangeInfo';
 import { create } from 'zustand';
 
 export interface AppState {

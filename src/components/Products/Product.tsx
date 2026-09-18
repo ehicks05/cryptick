@@ -1,6 +1,6 @@
-import { BORDER_COLORS } from 'directionalStyles';
-import { mergeCandles } from 'lib/candles';
-import { cn } from 'lib/utils';
+import { BORDER_COLORS } from '@/directionalStyles';
+import { mergeCandles } from '@/lib/candles';
+import { cn } from 'cn';
 import React from 'react';
 import { Performances } from './Performances';
 import { ProductSummary } from './ProductSummary';

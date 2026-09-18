@@ -1,4 +1,4 @@
-import type { CryptickCandle } from 'types';
+import type { CryptickCandle } from '@/types';
 import { getHorizontalLines } from './utils';
 
 interface Props {

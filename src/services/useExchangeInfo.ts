@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { keyBy } from 'es-toolkit';
-import { getExchangeInfo } from 'services/binance/exchangeInfo';
+import { getExchangeInfo } from '@/services/binance/exchangeInfo';
 import { getCurrencies } from './cbp/endpoints/currencies';
 import { getProducts } from './cbp/endpoints/products';
 import { getAssetInfo } from './kraken/assetInfo';

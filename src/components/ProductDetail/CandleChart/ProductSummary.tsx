@@ -1,5 +1,5 @@
-import { useExchangeInfo } from 'services/useExchangeInfo';
-import { useThrottledPrice } from 'store';
+import { useExchangeInfo } from '@/services/useExchangeInfo';
+import { useThrottledPrice } from '@/store';
 
 const outer =
 	'absolute bg-linear-to-b from-white dark:from-black via-white dark:via-black via-50% to-transparent';

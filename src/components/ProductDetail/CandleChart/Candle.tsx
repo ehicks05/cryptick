@@ -1,6 +1,6 @@
-import { cn } from 'lib/utils';
+import { cn } from 'cn';
 import React from 'react';
-import type { CryptickCandle } from 'types';
+import type { CryptickCandle } from '@/types';
 import { VolumeBar } from './VolumeBar';
 
 interface Props {

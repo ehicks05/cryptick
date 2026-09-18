@@ -1,11 +1,11 @@
-import { useProductIds } from 'hooks/useStorage';
-import { formatPrice, formatTime } from 'lib/format';
+import { useProductIds } from '@/hooks/useStorage';
+import { formatPrice, formatTime } from '@/lib/format';
 import useWebSocket from 'react-use-websocket';
-import { OrderSide } from 'services/cbp/types/common';
-import type { TickerMessage } from 'services/cbp/types/ws-types';
-import { useExchangeInfo } from 'services/useExchangeInfo';
-import { useStore } from 'store';
-import type { CryptickProduct } from 'types';
+import { OrderSide } from '@/services/cbp/types/common';
+import type { TickerMessage } from '@/services/cbp/types/ws-types';
+import { useExchangeInfo } from '@/services/useExchangeInfo';
+import { useStore } from '@/store';
+import type { CryptickProduct } from '@/types';
 import { WS_URL } from './constants';
 import type { WsTrade, WsTradesResponse } from './types';
 import { buildKrakenMessage } from './utils';

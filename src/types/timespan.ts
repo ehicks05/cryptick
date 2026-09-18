@@ -1,4 +1,4 @@
-import { CandleGranularity } from 'services/cbp/types/product';
+import { CandleGranularity } from '@/services/cbp/types/product';
 
 export const CHART_TIMESPANS = {
 	'24H': '24H',

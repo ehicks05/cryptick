@@ -1,9 +1,9 @@
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import { ThemeProvider } from 'components/Theme/ThemeProvider';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { ThemeProvider } from '@/components/ui/theme-provider';
 import { App } from './components/App';
 import { APP } from './constants';
 import './index.css';

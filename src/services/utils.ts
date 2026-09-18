@@ -1,4 +1,4 @@
-import { type CryptickCandle, EXCHANGES } from 'types';
+import { type CryptickCandle, EXCHANGES } from '@/types';
 
 export const keyById = <T extends { id: string }>(list: T[]) =>
 	list.reduce(

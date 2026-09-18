@@ -1,5 +1,5 @@
 import { TbBrandBinance, TbBrandCoinbase } from 'react-icons/tb';
-import type { Exchange } from 'types';
+import type { Exchange } from '@/types';
 import Kraken from '../../assets/kraken-logo.svg?react';
 import Kraken2 from '../../assets/kraken-logo-2.svg?react';
 

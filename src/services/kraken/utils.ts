@@ -1,4 +1,4 @@
-import { removeExchange } from 'services/utils';
+import { removeExchange } from '@/services/utils';
 
 type Method = 'subscribe' | 'unsubscribe';
 

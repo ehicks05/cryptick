@@ -1,9 +1,9 @@
-import { useProductIds } from 'hooks/useStorage';
-import { formatPrice, formatTime } from 'lib/format';
+import { useProductIds } from '@/hooks/useStorage';
+import { formatPrice, formatTime } from '@/lib/format';
 import useWebSocket from 'react-use-websocket';
-import type { WebSocketTickerMessage } from 'services/cbp/types/ws-types';
-import { useExchangeInfo } from 'services/useExchangeInfo';
-import { useStore } from 'store';
+import type { WebSocketTickerMessage } from '@/services/cbp/types/ws-types';
+import { useExchangeInfo } from '@/services/useExchangeInfo';
+import { useStore } from '@/store';
 import { WS_URL } from './constants';
 import { buildCoinbaseMessage } from './utils';
 

@@ -1,4 +1,4 @@
-import type { CryptickCurrency, CryptickProduct } from 'types';
+import type { CryptickCurrency, CryptickProduct } from '@/types';
 import { client } from './client';
 import { throttle } from './throttle';
 import type { Asset, AssetPair, AssetPairsResponse, AssetsResponse } from './types';

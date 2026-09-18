@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
-import { useChartTimespan } from 'hooks/useStorage';
-import { CHART_TIMESPANS, type ChartTimespan } from 'types';
+import { useChartTimespan } from '@/hooks/useStorage';
+import { CHART_TIMESPANS, type ChartTimespan } from '@/types';
 import { Button } from './ui/button';
 
 interface Option {

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { motion } from 'motion/react';
-import type { CryptickCandle } from 'types';
+import type { CryptickCandle } from '@/types';
 
 const nf = Intl.NumberFormat('en-US', { minimumFractionDigits: 2 });
 

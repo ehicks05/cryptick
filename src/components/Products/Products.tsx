@@ -1,6 +1,6 @@
 import React from 'react';
 import { useScreen } from 'usehooks-ts';
-import { useProductIds } from '../../hooks/useStorage';
+import { useProductIds } from '@/hooks/useStorage';
 import { DndProvider, SortableItem } from './Dnd';
 import Product from './Product';
 

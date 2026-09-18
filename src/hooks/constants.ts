@@ -1,5 +1,5 @@
-import { CandleGranularity } from 'services/cbp/types/product';
-import { CHART_TIMESPANS, type ChartTimespan, type SizeUnit } from 'types';
+import { CandleGranularity } from '@/services/cbp/types/product';
+import { CHART_TIMESPANS, type ChartTimespan, type SizeUnit } from '@/types';
 
 export const DEFAULT = {
 	CANDLE_GRANULARITY: CandleGranularity.FIFTEEN_MINUTES as CandleGranularity,

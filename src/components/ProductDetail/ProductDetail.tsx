@@ -1,7 +1,7 @@
 import { useMeasure } from '@uidotdev/usehooks';
 import { RotateCcw } from 'lucide-react';
 import React, { useState } from 'react';
-import { useCandlesByGranularity } from 'services/useCandles';
+import { useCandlesByGranularity } from '@/services/useCandles';
 import { useParams } from 'wouter';
 import { CandleGranularityPicker } from '../CandleGranularityPicker';
 import { Button } from '../ui/button';

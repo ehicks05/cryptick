@@ -1,5 +1,5 @@
 import { Slider } from '@base-ui/react';
-import { useChartHeight } from 'hooks/useStorage';
+import { useChartHeight } from '@/hooks/useStorage';
 
 export const HEIGHTS =
 	'h-0 h-4 h-8 h-12 h-16 h-20 h-24 h-28 h-32 h-36 h-40 h-44 h-48 h-52 h-56 h-60 h-64';

@@ -1,5 +1,5 @@
 import type { SpotRestAPI } from '@binance/spot';
-import type { CryptickProduct } from 'types';
+import type { CryptickProduct } from '@/types';
 import { client } from './client';
 import { throttle } from './throttle';
 

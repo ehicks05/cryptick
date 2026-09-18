@@ -1,5 +1,5 @@
-import { keyByProductId } from 'services/utils';
-import type { CryptickCandle } from 'types';
+import { keyByProductId } from '@/services/utils';
+import type { CryptickCandle } from '@/types';
 import { client } from './client';
 import { throttle } from './throttle';
 import type { Trade, TradesResponse } from './types';

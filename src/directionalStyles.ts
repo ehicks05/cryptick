@@ -1,5 +1,5 @@
-import { cn } from 'lib/utils';
-import type { Direction } from 'types';
+import { cn } from 'cn';
+import type { Direction } from '@/types';
 
 type DirectionalStyle = Record<Direction, string>;
 

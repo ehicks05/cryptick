@@ -1,5 +1,5 @@
-import { round } from 'lib/math';
-import type { CryptickCandle } from 'types';
+import { round } from '@/lib/math';
+import type { CryptickCandle } from '@/types';
 
 /**
  * Might only useful on charts where users pick candle width, not

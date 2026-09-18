@@ -1,4 +1,4 @@
-import type { CryptickCurrency } from 'types';
+import type { CryptickCurrency } from '@/types';
 import { keyById } from '../../utils';
 import type { Currency } from '../types/currency';
 import { CURRENCY_URL } from './constants';

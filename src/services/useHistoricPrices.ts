@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { msToNextMinute, subSeconds, toUnixTimestamp } from 'lib/date';
-import { CHART_TIMESPAN_SECONDS, EXCHANGES } from 'types';
+import { msToNextMinute, subSeconds, toUnixTimestamp } from '@/lib/date';
+import { CHART_TIMESPAN_SECONDS, EXCHANGES } from '@/types';
 import { getKlinesForProducts } from './binance/klines';
 import { getCandlesForProducts } from './cbp/endpoints/candles';
 import { CandleGranularity } from './cbp/types/product';

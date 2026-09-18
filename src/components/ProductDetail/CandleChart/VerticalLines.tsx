@@ -1,4 +1,4 @@
-import type { CryptickCandle } from 'types';
+import type { CryptickCandle } from '@/types';
 import { BOTTOM_GUTTER_HEIGHT } from './CandleChart';
 
 const mm = Intl.DateTimeFormat('en-US', {
