@@ -4,7 +4,6 @@ import {
 	Dialog,
 	DialogClose,
 	DialogContent,
-	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
@@ -14,7 +13,7 @@ import { ChartHeightPicker } from './ChartHeightPicker';
 import { ProductPicker } from './ProductPicker';
 
 const Settings = () => (
-	<div className="flex flex-col items-start gap-8 overflow-y-auto">
+	<div className="grid gap-8 max-h-[60vh] overflow-auto w-full">
 		<ProductPicker />
 		<ChartHeightPicker />
 	</div>
@@ -33,8 +32,8 @@ export const SettingsDialog = () => {
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Settings</DialogTitle>
-					<DialogDescription>Adjust your settings here</DialogDescription>
 				</DialogHeader>
+
 				<Settings />
 
 				<DialogFooter>

@@ -37,28 +37,30 @@ export const ProductPicker = () => {
 		}));
 
 	return (
-		<div className="flex flex-col gap-4">
-			<div>Toggle Products</div>
-			<Combobox items={items} limit={10}>
-				<ComboboxInput placeholder="Search products..." />
-				<ComboboxContent>
-					<ComboboxEmpty>No items found.</ComboboxEmpty>
-					<ComboboxList>
-						{(product) => (
-							<ComboboxItem
-								key={product.value}
-								value={product}
-								onClick={() => toggleProduct(product.value)}
-							>
-								<ExchangeIcon name={product.exchange} />
-								{product.label}
-							</ComboboxItem>
-						)}
-					</ComboboxList>
-				</ComboboxContent>
-			</Combobox>
+		<div className="grid gap-4">
+			<div className="w-fit">
+				<div>Toggle Products</div>
+				<Combobox items={items}  limit={10}>
+					<ComboboxInput placeholder="Search products..." />
+					<ComboboxContent>
+						<ComboboxEmpty>No items found.</ComboboxEmpty>
+						<ComboboxList>
+							{(product) => (
+								<ComboboxItem
+									key={product.value}
+                  value={product}
+									onClick={() => toggleProduct(product.value)}
+								>
+									<ExchangeIcon name={product.exchange} />
+									{product.label}
+								</ComboboxItem>
+							)}
+						</ComboboxList>
+					</ComboboxContent>
+				</Combobox>
+			</div>
 
-			<ItemGroup>
+			<ItemGroup className="grid grid-cols-2">
 				{productIds
 					.map((productId) => products[productId])
 					.map((product) => (
