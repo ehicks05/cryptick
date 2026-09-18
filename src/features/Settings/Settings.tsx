@@ -37,7 +37,7 @@ export const SettingsDialog = () => {
 				<Settings />
 
 				<DialogFooter>
-					<DialogClose render={<Button variant="secondary">Close</Button>} />
+					<DialogClose render={<Button variant="outline">Close</Button>} />
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
