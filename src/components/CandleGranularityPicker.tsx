@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
-import { useCandleGranularity } from '@/hooks/useStorage';
 import { ChevronDown } from 'lucide-react';
+import { useCandleGranularity } from '@/hooks/useStorage';
 import { CandleGranularity } from '@/services/cbp/types/product';
 import { Button } from './ui/button';
 import {
@@ -63,11 +63,13 @@ export const CandleGranularityPicker = () => {
 					</Button>
 				))}
 				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" size="icon" className="w-5">
-							<ChevronDown />
-						</Button>
-					</DropdownMenuTrigger>
+					<DropdownMenuTrigger
+						render={
+							<Button variant="ghost" size="icon" className="w-5">
+								<ChevronDown />
+							</Button>
+						}
+					/>
 					<DropdownMenuContent>
 						{EXTRA_OPTIONS.map(({ label, value }) => (
 							<DropdownMenuItem
