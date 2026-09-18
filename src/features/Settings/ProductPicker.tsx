@@ -1,7 +1,7 @@
 import { useProductIds } from '@/hooks/useStorage';
 import { useExchangeInfo } from '@/services/useExchangeInfo';
 import { useToggleProducts } from '@/services/useToggleProducts';
-import { ComboboxDemo } from '../ui/combobox';
+import { ComboboxDemo } from '../../components/ui/combobox';
 
 export const ProductPicker = () => {
 	const { toggleProduct } = useToggleProducts();

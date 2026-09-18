@@ -1,13 +1,13 @@
 import { useMeasure } from '@uidotdev/usehooks';
-import { ProductSummary } from '@/components/ProductDetail/CandleChart/ProductSummary';
-import { clamp } from '@/lib/math';
 import React, { useEffect, useState } from 'react';
+import { clamp } from '@/lib/math';
 import { usePrice } from '@/store';
 import type { CryptickCandle } from '@/types';
 import Candle from './Candle';
 import { Crosshair } from './Crosshair';
 import { HorizontalLines } from './HorizontalLines';
 import { HorizontalMarkers } from './HorizontalMarkers';
+import { ProductSummary } from './ProductSummary';
 import { VerticalLines } from './VerticalLines';
 
 const DEFAULT_CANDLE_WIDTH = 12;

@@ -1,8 +1,7 @@
-import { ExchangeIcon } from '@/components/ExchangeIcon';
-import { Button } from '@/components/ui/button';
 import { cn } from 'cn';
 import { ReadyState } from 'react-use-websocket';
-import type { Exchange } from '@/types';
+import { ExchangeIcon } from '@/components/ExchangeIcon';
+import { Button } from '@/components/ui/button';
 import {
 	Dialog,
 	DialogClose,
@@ -10,7 +9,8 @@ import {
 	DialogDescription,
 	DialogTitle,
 	DialogTrigger,
-} from '../ui/dialog';
+} from '@/components/ui/dialog';
+import type { Exchange } from '@/types';
 import { useSocketStatus } from './useSocketStatus';
 
 const SocketStatusButton = ({ exchange }: { exchange: Exchange | 'all' }) => {

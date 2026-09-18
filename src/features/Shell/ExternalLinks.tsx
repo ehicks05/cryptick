@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { APP } from '../../constants';
+import { APP } from '@/constants';
 
 interface LinkProps {
 	href: string;

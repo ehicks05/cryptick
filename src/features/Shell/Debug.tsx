@@ -1,8 +1,7 @@
-import { ClearQueryCacheButton } from '@/components/ClearQueryCacheButton';
 import { Bug } from 'lucide-react';
-import { useExchangeInfo } from '@/services/useExchangeInfo';
 import { useLocalStorage } from 'usehooks-ts';
-import { Button } from '../ui/button';
+import { ClearQueryCacheButton } from '@/components/ClearQueryCacheButton';
+import { Button } from '@/components/ui/button';
 import {
 	Dialog,
 	DialogClose,
@@ -10,7 +9,8 @@ import {
 	DialogDescription,
 	DialogTitle,
 	DialogTrigger,
-} from '../ui/dialog';
+} from '@/components/ui/dialog';
+import { useExchangeInfo } from '@/services/useExchangeInfo';
 
 const Debug = () => {
 	const { data } = useExchangeInfo();
@@ -40,7 +40,12 @@ const Debug = () => {
 				<DialogDescription>hmm...</DialogDescription>
 			</div>
 
-			<input type='text' className='p-1 bg-neutral-900' value={filter} onChange={(e) => setFilter(e.target.value)} />
+			<input
+				type="text"
+				className="p-1 bg-neutral-900"
+				value={filter}
+				onChange={(e) => setFilter(e.target.value)}
+			/>
 			<pre className="text-xs h-96 overflow-auto">
 				<code>{JSON.stringify(filteredData, null, 2)}</code>
 			</pre>

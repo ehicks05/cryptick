@@ -1,5 +1,5 @@
 import { Bell } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import {
 	Dialog,
 	DialogClose,
@@ -7,7 +7,7 @@ import {
 	DialogDescription,
 	DialogTitle,
 	DialogTrigger,
-} from '../ui/dialog';
+} from '@/components/ui/dialog';
 import { ANNOUNCEMENTS, type Announcement } from './constants';
 
 interface Props {
