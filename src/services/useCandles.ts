@@ -57,7 +57,6 @@ export const useCandles = (productIds: string[]) => {
 		queryKey: ['candles', granularity, productIds],
 		queryFn: () => queryExchanges({ productIds, granularity, start, end }),
 		staleTime: 1000 * 60,
-		refetchOnWindowFocus: 'always',
 		refetchInterval: msToNextMinute,
 	});
 };
