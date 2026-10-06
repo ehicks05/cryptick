@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from 'cn';
 import { motion } from 'motion/react';
 import type { CryptickCandle } from '@/types';
 
@@ -22,7 +22,7 @@ export const CurrentPriceLine = ({
 	return (
 		<g className="">
 			<rect
-				className={clsx(
+				className={cn(
 					'transition-all',
 					isPositive ? 'stroke-emerald-600' : 'stroke-red-600',
 				)}
@@ -33,7 +33,7 @@ export const CurrentPriceLine = ({
 				height={0.01}
 			/>
 			<rect
-				className={clsx(
+				className={cn(
 					'transition-all',
 					isPositive ? 'fill-emerald-600' : 'fill-red-600',
 				)}

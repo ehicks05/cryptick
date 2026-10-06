@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import { cn } from 'cn';
 import { useChartTimespan } from '@/hooks/useStorage';
 import { CHART_TIMESPANS, type ChartTimespan } from '@/types';
 import { Button } from './ui/button';
@@ -30,7 +30,7 @@ export const ChartTimespanPicker = () => {
 					key={value}
 					variant="ghost"
 					size="icon"
-					className={clsx('text-neutral-400', {
+					className={cn('text-neutral-400', {
 						[selectedClasses]: value === timespan,
 					})}
 					onClick={() => handleClick(value)}

@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import { cn } from 'cn';
 import { ChevronDown } from 'lucide-react';
 import { useCandleGranularity } from '@/hooks/useStorage';
 import { CandleGranularity } from '@/services/cbp/types/product';
@@ -54,7 +54,7 @@ export const CandleGranularityPicker = () => {
 						key={value}
 						variant="ghost"
 						size="icon"
-						className={clsx('text-neutral-400', {
+						className={cn('text-neutral-400', {
 							[selectedClasses]: value === granularity,
 						})}
 						onClick={() => handleClick(value)}
@@ -74,7 +74,7 @@ export const CandleGranularityPicker = () => {
 						{EXTRA_OPTIONS.map(({ label, value }) => (
 							<DropdownMenuItem
 								key={value}
-								className={clsx('text-neutral-400', {
+								className={cn('text-neutral-400', {
 									[selectedClasses]: value === granularity,
 								})}
 								onClick={() => handleClick(value)}
