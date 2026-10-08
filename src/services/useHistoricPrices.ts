@@ -7,7 +7,7 @@ import { getTradesForProducts } from './kraken/trades';
 import { removeExchange } from './utils';
 
 const getHistoricPricesForProducts = async (productIds: string[]) => {
-	const WINDOW = CandleGranularity.ONE_MINUTE * 600;
+	const WINDOW = CandleGranularity.ONE_MINUTE * 300;
 
 	const promises = Object.values(CHART_TIMESPAN_SECONDS).map(async (seconds) => {
 		const start = toUnixTimestamp(subSeconds(new Date(), seconds + WINDOW));
