@@ -12,7 +12,7 @@ const Products = () => {
 			<div
 				className={cn(
 					'w-full grid gap-2',
-					'grid-cols-[repeat(auto-fill,minmax(320px,1fr))]',
+					'grid-cols-[repeat(auto-fill,minmax(288px,1fr))]',
 					'[min-w-400px]:grid-cols-[repeat(auto-fill,minmax(380px,1fr))]',
 				)}
 			>

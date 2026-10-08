@@ -30,14 +30,10 @@ const TimespanPerformance = ({
 				{ 'rounded-br-lg': index === 3 },
 			)}
 		>
-			<span
-				className={cn('text-xs', {
-					'text-muted-foreground': name !== timespan,
-				})}
-			>
+			<span className={cn({ 'text-muted-foreground': name !== timespan })}>
 				{label}
 			</span>
-			<div className={cn(TEXT_COLORS[direction], 'text-sm font-mono')}>
+			<div className={cn(TEXT_COLORS[direction])}>
 				{formatPercent(percentChange)}
 			</div>
 		</button>
@@ -48,7 +44,7 @@ export const Performances = ({ productId }: { productId: string }) => {
 	const { performances } = useHistoricPerformance({ productId });
 
 	return (
-		<div className="flex justify-between items-center">
+		<div className="flex justify-between items-center font-mono text-sm">
 			{performances.map((performance, i) => (
 				<TimespanPerformance key={performance.name} index={i} change={performance} />
 			))}
