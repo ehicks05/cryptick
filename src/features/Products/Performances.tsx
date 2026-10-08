@@ -26,8 +26,8 @@ const TimespanPerformance = ({
 			className={cn(
 				'flex items-baseline gap-1 px-4 w-1/4 py-2 justify-center cursor-pointer',
 				BG_SOLIDS[direction],
-				{ 'rounded-bl-md': index === 0 },
-				{ 'rounded-br-md': index === 3 },
+				{ 'rounded-bl-lg': index === 0 },
+				{ 'rounded-br-lg': index === 3 },
 			)}
 		>
 			<span
@@ -48,7 +48,7 @@ export const Performances = ({ productId }: { productId: string }) => {
 	const { performances } = useHistoricPerformance({ productId });
 
 	return (
-		<div className="flex justify-between items-center rounded-b-med">
+		<div className="flex justify-between items-center">
 			{performances.map((performance, i) => (
 				<TimespanPerformance key={performance.name} index={i} change={performance} />
 			))}

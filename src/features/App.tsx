@@ -9,7 +9,7 @@ export function App() {
 	useTickers();
 
 	return (
-		<div className="flex flex-col h-dvh">
+		<div className="flex flex-col h-dvh bg-background">
 			<ErrorBoundary>
 				<Header />
 				<div className="grow flex flex-col h-full overflow-y-auto p-4 pt-0">
