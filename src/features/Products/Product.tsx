@@ -17,9 +17,10 @@ const Product = ({ productId }: Props) => {
 
 	return (
 		<div
-			className={
-				'rounded-lg shadow-sm bg-linear-to-br from-white to-white dark:from-neutral-900 dark:to-neutral-950'
-			}
+			className={cn(
+				'rounded-lg shadow-sm bg-white',
+				'dark:bg-linear-to-br dark:from-neutral-900 dark:to-neutral-950',
+			)}
 		>
 			<div
 				className={cn('border-2 border-b-0 rounded-t-lg', BORDER_COLORS[direction])}

@@ -30,9 +30,9 @@ export const useHistoricPerformance = ({ productId }: { productId: string }) => 
 	const day365Change = getChange(day365, Number(price));
 
 	const performances: Performance[] = [
-		{ name: CHART_TIMESPANS['24H'], label: 'D', ...day1Change },
-		{ name: CHART_TIMESPANS['7D'], label: 'W', ...day7Change },
-		{ name: CHART_TIMESPANS['30D'], label: 'M', ...day30Change },
+		{ name: CHART_TIMESPANS['1D'], label: 'D', ...day1Change },
+		{ name: CHART_TIMESPANS['1W'], label: 'W', ...day7Change },
+		{ name: CHART_TIMESPANS['1M'], label: 'M', ...day30Change },
 		{ name: CHART_TIMESPANS['1Y'], label: 'Y', ...day365Change },
 	];
 
