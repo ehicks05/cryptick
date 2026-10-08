@@ -44,6 +44,6 @@
 		}
 	},
 	"files": {
-		"includes": ["src/**", "!src/components/ui"]
+		"includes": ["src/**", "vite.config.ts", "!src/components/ui"]
 	}
 }
