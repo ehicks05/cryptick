@@ -1,13 +1,8 @@
-import { TbBrandCoinbase } from 'react-icons/tb';
+import Coinbase from '@/assets/coinbase-logo.svg?react';
 import Kraken from '@/assets/kraken-logo.svg?react';
 import type { Exchange } from '@/types';
 
-const CbIcon = () => (
-	<TbBrandCoinbase
-		title="coinbase"
-		className="w-full h-full fill-blue-500 stroke-blue-500 stroke-1"
-	/>
-);
+const CbIcon = () => <Coinbase title="coinbase" className="w-full h-full" />;
 const KrIcon = () => <Kraken title="kraken" className="w-full h-full" />;
 
 const EXCHANGE_ICONS = {
