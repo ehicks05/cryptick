@@ -2,8 +2,6 @@ import { Link } from 'wouter';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { APP } from '@/constants';
 import { SettingsDialog } from '@/features/Settings/Settings';
-import { AnnouncementsDialog } from './Announcements/Announcements';
-import { DebugDialog } from './Debug/Debug';
 import { SocketStatusDialog } from './SocketStatusDialog';
 
 const Icon = () => (
@@ -27,11 +25,8 @@ export const Header = () => (
 
 		<div className="flex gap-2">
 			<SocketStatusDialog />
-			<AnnouncementsDialog />
 			<ThemeToggle />
 			<SettingsDialog />
-
-			{import.meta.env.DEV && <DebugDialog />}
 		</div>
 	</header>
 );
