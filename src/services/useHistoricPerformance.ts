@@ -17,23 +17,23 @@ export const useHistoricPerformance = ({ productId }: { productId: string }) => 
 
 	const { data } = useHistoricPrices([productId]);
 
-	const day1 = data?.day1Candles[productId]?.[0]?.open || 0;
-	const day1Change = getChange(day1, Number(price));
+	const oneDayAgo = data?.oneDayAgoCandles[productId]?.[0]?.open || 0;
+	const oneDayChange = getChange(oneDayAgo, Number(price));
 
-	const day7 = data?.day7Candles[productId]?.[0]?.open || 0;
-	const day7Change = getChange(day7, Number(price));
+	const oneWeekAgo = data?.oneWeekAgoCandles[productId]?.[0]?.open || 0;
+	const oneWeekChange = getChange(oneWeekAgo, Number(price));
 
-	const day30 = data?.day30Candles[productId]?.[0]?.open || 0;
-	const day30Change = getChange(day30, Number(price));
+	const oneMonthAgo = data?.oneMonthAgoCandles[productId]?.[0]?.open || 0;
+	const oneMonthChange = getChange(oneMonthAgo, Number(price));
 
-	const day365 = data?.day365Candles[productId]?.[0]?.open || 0;
-	const day365Change = getChange(day365, Number(price));
+	const oneYearAgo = data?.oneYearAgoCandles[productId]?.[0]?.open || 0;
+	const oneYearChange = getChange(oneYearAgo, Number(price));
 
 	const performances: Performance[] = [
-		{ name: CHART_TIMESPANS['1D'], label: 'D', ...day1Change },
-		{ name: CHART_TIMESPANS['1W'], label: 'W', ...day7Change },
-		{ name: CHART_TIMESPANS['1M'], label: 'M', ...day30Change },
-		{ name: CHART_TIMESPANS['1Y'], label: 'Y', ...day365Change },
+		{ name: CHART_TIMESPANS['1D'], label: 'D', ...oneDayChange },
+		{ name: CHART_TIMESPANS['1W'], label: 'W', ...oneWeekChange },
+		{ name: CHART_TIMESPANS['1M'], label: 'M', ...oneMonthChange },
+		{ name: CHART_TIMESPANS['1Y'], label: 'Y', ...oneYearChange },
 	];
 
 	return { performances };

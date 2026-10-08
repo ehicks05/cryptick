@@ -3,52 +3,47 @@ import { msToNextMinute, subSeconds, toUnixTimestamp } from '@/lib/date';
 import { CHART_TIMESPAN_SECONDS, EXCHANGES } from '@/types';
 import { getCandlesForProducts } from './cbp/endpoints/candles';
 import { CandleGranularity } from './cbp/types/product';
-import { getOhlcsForProducts } from './kraken/ohlc';
 import { getTradesForProducts } from './kraken/trades';
 import { removeExchange } from './utils';
 
 const getHistoricPricesForProducts = async (productIds: string[]) => {
-	const WINDOW = CandleGranularity.ONE_MINUTE * 300;
+	const WINDOW = CandleGranularity.ONE_MINUTE * 600;
 
-	const promises = [0, ...Object.values(CHART_TIMESPAN_SECONDS)].map(
-		async (seconds) => {
-			const [coinbaseCandles, krakenCandles] = await Promise.all([
-				getCandlesForProducts({
-					productIds: productIds
-						.filter((p) => p.startsWith(EXCHANGES.coinbase))
-						.map(removeExchange),
-					granularity: CandleGranularity.ONE_MINUTE,
-					start: toUnixTimestamp(subSeconds(new Date(), seconds + WINDOW)),
-					end: toUnixTimestamp(subSeconds(new Date(), seconds)),
-				}),
-				seconds === 0
-					? getOhlcsForProducts({
-							pairs: productIds
-								.filter((p) => p.startsWith(EXCHANGES.kraken))
-								.map(removeExchange),
-							interval: CandleGranularity.ONE_MINUTE,
-							since: toUnixTimestamp(subSeconds(new Date(), seconds + WINDOW)),
-						})
-					: getTradesForProducts({
-							pairs: productIds
-								.filter((p) => p.startsWith(EXCHANGES.kraken))
-								.map(removeExchange),
-							since: toUnixTimestamp(subSeconds(new Date(), seconds + WINDOW)),
-							count: 1,
-						}),
-			]);
+	const promises = Object.values(CHART_TIMESPAN_SECONDS).map(async (seconds) => {
+		const start = toUnixTimestamp(subSeconds(new Date(), seconds + WINDOW));
+		const end = toUnixTimestamp(subSeconds(new Date(), seconds));
 
-			return {
-				...coinbaseCandles,
-				...krakenCandles,
-			};
-		},
-	);
+		const [cbProductIds, krProductIds] = [
+			productIds.filter((p) => p.startsWith(EXCHANGES.coinbase)).map(removeExchange),
+			productIds.filter((p) => p.startsWith(EXCHANGES.kraken)).map(removeExchange),
+		];
 
-	const [latestCandles, day1Candles, day7Candles, day30Candles, day365Candles] =
-		await Promise.all(promises);
+		const [coinbaseCandles, krakenCandles] = await Promise.all([
+			getCandlesForProducts({
+				productIds: cbProductIds,
+				granularity: CandleGranularity.ONE_MINUTE,
+				start,
+				end,
+			}),
+			getTradesForProducts({ pairs: krProductIds, since: start, count: 1 }),
+		]);
 
-	return { latestCandles, day1Candles, day7Candles, day30Candles, day365Candles };
+		return { ...coinbaseCandles, ...krakenCandles };
+	});
+
+	const [
+		oneDayAgoCandles,
+		oneWeekAgoCandles,
+		oneMonthAgoCandles,
+		oneYearAgoCandles,
+	] = await Promise.all(promises);
+
+	return {
+		oneDayAgoCandles,
+		oneWeekAgoCandles,
+		oneMonthAgoCandles,
+		oneYearAgoCandles,
+	};
 };
 
 export const useHistoricPrices = (productIds: string[]) => {
